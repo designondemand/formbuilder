@@ -668,7 +668,7 @@ class fbForm {
 				$oneset->deletelink = $mod->CreateLink($id, 'admin_delete_formbuilder_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif','delete','','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),$mod->Lang('are_you_sure_delete_field',$thisField->GetName()));
 				($currow == "row1"?$currow="row2":$currow="row1");
 				$count++;
-				if ($thisField->GetOrder() > $maxOrder)
+				if ($thisField->GetOrder() >= $maxOrder)
 					{
 					$maxOrder = $thisField->GetOrder() + 1;
 					}
