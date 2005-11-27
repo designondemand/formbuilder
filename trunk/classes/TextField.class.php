@@ -3,11 +3,11 @@
 // A Module for CMS Made Simple, (c)2005 by Ted Kulp (wishy@cmsmadesimple.org)
 // This project's homepage is: http://www.cmsmadesimple.org
 
-class fbTextField extends fbField {
+class fbTextField extends fbFieldBase {
 
 	function fbTextField(&$form_ptr, &$params)
 	{
-        $this->fbField($form_ptr, $params);
+        $this->fbFieldBase($form_ptr, $params);
         $mod = $form_ptr->module_ptr;
 		$this->Type = 'TextField';
 		$this->DisplayType = $mod->Lang('field_type_text_input');

@@ -1,7 +1,7 @@
 <?php
 #-------------------------------------------------------------------------
 # Module: FormBuilder
-# Version: 0.1, released 10 July 2005
+# Version: 0.1, released  2005
 #
 # Copyright (c) 2005, Samuel Goldstein <sjg@cmsmodules.com>
 # For Information, Support, Bug Reports, etc, please visit SjG's
@@ -44,7 +44,7 @@ class FormBuilder extends CMSModule
         $this->dbHandle = &$this->cms->db;
 
 		require_once 'classes/Form.class.php';
-		require_once 'classes/Field.class.php';
+		require_once 'classes/FieldBase.class.php';
 		require_once 'classes/Option.class.php';
 	}
 
@@ -60,6 +60,10 @@ class FormBuilder extends CMSModule
        			continue;
        			}
        		$shortname = substr($filespec,0,strpos($filespec,'.'));
+       		if (substr($shortname,-4) == 'Base')
+       			{
+       			continue;
+       			}
        		$this->field_types[$this->Lang('field_type_'.$shortname)] = $shortname;
 			}        
 		
