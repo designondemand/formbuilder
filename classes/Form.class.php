@@ -734,7 +734,7 @@ class fbForm {
 
 	function &NewField($params)
 	{
-		$aefield = new fbField($this,$params);
+		$aefield = new fbFieldBase($this,$params);
         if ($aefield->GetId() != -1 )
             {
             // we're loading an extant field

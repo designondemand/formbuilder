@@ -3,7 +3,7 @@
 // A Module for CMS Made Simple, (c)2005 by Ted Kulp (wishy@cmsmadesimple.org)
 // This project's homepage is: http://www.cmsmadesimple.org
 
-class fbField {
+class fbFieldBase {
 
     var $Id=-1;
     var $FormId;
@@ -24,7 +24,7 @@ class fbField {
     var $Options;
     var $loaded;
 
-	function fbField(&$form_ptr, $params=array())
+	function fbFieldBase(&$form_ptr, $params=array())
 	{
 	   $this->form_ptr = $form_ptr;
 	   $mod = $form_ptr->module_ptr;
