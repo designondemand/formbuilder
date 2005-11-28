@@ -94,11 +94,14 @@ class fbFieldBase {
 	}
 
 	// override me with a form input string or something
-	function WriteToPublicForm($id, &$params, $return_id)
+	// this should just be the input portion. The title
+	// and any wrapping divs will be provided by the form
+	// renderer.
+	function GetFieldInput($id, &$params, $returnid)
 	{
 		return '';
 	}
-
+	
 	// override me with something to show users
 	function StatusInfo()
 	{
@@ -236,17 +239,12 @@ class fbFieldBase {
 			}
 	}
 
-	// override me, but call me first!. Returns an array: first value is a true or
+	// override me. Returns an array: first value is a true or
     // false (whether or not the value is valid), the second is a message
 	function AdminValidate()
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$ret = array(true,'');
-/*		if ($this->AliasExists())
-		  {
-		  $ret = array(false,$mod->Lang('field_name_in_use1').' "'.$this->Name.'" '. $mod->Lang('field_name_in_use2'));
-		  }
-*/
 		return $ret;
 	}
 
@@ -254,12 +252,10 @@ class fbFieldBase {
 	// override me if you're a Form Disposition pseudo-field.
 	// This method can do just
 	// about anything you want it to, in order to handle form contents.
-	// it receives the rest of the form as an array of name/value arrays.
-	function DisposeForm($formName, &$config, $results)
+	function DisposeForm(&$form_ptr)
 	{
 		return false;
-	}
-	
+	}	
 
 	function GetOptionNames()
 	{
@@ -351,20 +347,6 @@ class fbFieldBase {
 		return true;
     }
 
-
-/*    function AliasExists()
-    {
-        $sql = 'SELECT field_id FROM ' . cms_db_prefix() . 'module_fb_field WHERE alias=? and form_id=?';
-	    $rs = $this->form_ptr->module_ptr->dbHandle->Execute($sql, array($this->Alias,$this->form_ptr->GetId()));
-        if ($rs && $rs->RowCount()>0)
-            {
-            error_log('alias exists');
-            return true;
-            }
-            error_log('alias doesn');
-        return false;
-    }
-*/
 
     function Store($storeDeep=false)
     {

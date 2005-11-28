@@ -372,37 +372,34 @@ class FormBuilder extends CMSModule
         	   }
         	}
 	}
-
+*/
 	function PublicShowForm($id, &$params, $returnid)
 	{
 //debug_display($params);
-        if (! ffUtilityFunctions::def($params['form_id']) &&
-            ffUtilityFunctions::def($params['form']))
+        if (! isset($params['form_id']) && isset($params['form']))
             {
             // get the form by name, not ID
             $params['form_id'] = $this->GetFormIDFromAlias($params['form']);
             }
-        $aeform = new ffForm($this->mod_globals,$params);
-        $aeform->LoadForm($params);
-        $aeform->RenderFormHeader($this->GetVersion());
-        if ($aeform->formTotalPages > 1 && ffUtilityFunctions::def($aeform->thisPage) && $aeform->thisPage > 0)
+        $aeform = new fbForm($this,$params,true);
+        echo $aeform->RenderFormHeader();
+        if ($aeform->GetPageCount() > 1 && $aeform->GetPage() > 0)
             {
 //echo "validating page :".$aeform->thisPage."<br/>";
             $res = $aeform->Validate();
             if ($res[0] === false)
                 {
                 echo $res[1]."\n";
-                $aeform->thisPage--;
+                $aeform->PageBack();
                 }
             }
 //echo "not validating page :".$aeform->thisPage.": ".$aeform->formTotalPages." ".ffUtilityFunctions::def($aeform->thisPage).":".$aeform->thisPage."<br/>";
         echo $this->CreateFormStart($id, 'submit_form', $returnid);
         //, 'post', 'multipart/form-data');
-        $aeform->RenderForm($id, $params, $returnid);
+        echo $aeform->RenderForm($id, $params, $returnid);
         echo $this->CreateFormEnd();
-        $aeform->RenderFormFooter();
+        echo $aeform->RenderFormFooter();
         }
-*/
 
 	function CheckAccess($permission='Modify Forms')
 	{
