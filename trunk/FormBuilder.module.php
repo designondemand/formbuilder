@@ -313,67 +313,14 @@ class FormBuilder extends CMSModule
  				     }
 			     break;
 		    case 'default':
-			    $this->PublicShowForm($id, $params, $returnid);
-				break;
 			case 'submit_form':
-				// handle multipart forms
-				if (! ffUtilityFunctions::def($params['done']))
-					{
-					$this->PublicShowForm($id, $params, $returnid);
-					}
-				else
-					{
-			    	$this->PublicSubmitForm($id, $params, $returnid);
-			    	}
+			    $this->HandlePublicForm($id, $params, $returnid);
 				break;
 		}
 	}
-/*
-	function PublicSubmitForm($id, &$params, $returnid)
-	{
-        if (! ffUtilityFunctions::def($params['form_id']) &&
-            ffUtilityFunctions::def($params['form']))
-            {
-            // get the form by name, not ID
-            $params['form_id'] = $this->GetFormIDFromAlias($params['form']);
-            }
-        $aeform = new ffForm($this->mod_globals,$params);
-        $aeform->LoadForm($params);
-        $res = $aeform->Validate();
-        if ($res[0] === false)
-        	{
-        	$aeform->RenderFormHeader($this->GetVersion());
-            $aeform->thisPage--;
-        	echo $res[1]."\n";
-        	echo $this->CreateFormStart($id, 'submit_form', $returnid, 'post', 'multipart/form-data');
-        	$aeform->RenderForm($id, $params, $returnid);
-        	echo $this->CreateFormEnd();
-        	$aeform->RenderFormFooter();
-        	}
-        else
-        	{
-        	$aeconf = &$this->mod_globals;
-        	$aeconf->Load();
-        	if ($aeform->CSSClass != '')
-        	   {
-        	   echo "<div class=\"" . $aeform->CSSClass . "\">";
-        	   }
-        	if ($aeform->Dispose($aeconf))
-        	   {
-        	   echo $aeform->ThanksMessage;
-        	   }
-        	else
-        	   {
-        	   echo $this->Lang('submission_error');
-        	   }
-        	if ($aeform->CSSClass != '')
-        	   {
-        	   echo "</div>";
-        	   }
-        	}
-	}
-*/
-	function PublicShowForm($id, &$params, $returnid)
+
+
+	function HandlePublicForm($id, &$params, $returnid)
 	{
 //debug_display($params);
         if (! isset($params['form_id']) && isset($params['form']))
@@ -382,22 +329,49 @@ class FormBuilder extends CMSModule
             $params['form_id'] = $this->GetFormIDFromAlias($params['form']);
             }
         $aeform = new fbForm($this,$params,true);
+//debug_display($params);
         echo $aeform->RenderFormHeader();
-        if ($aeform->GetPageCount() > 1 && $aeform->GetPage() > 0)
+        $finished = false;
+        if (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber() > 0) ||
+        	(isset($params['done'])))
             {
-//echo "validating page :".$aeform->thisPage."<br/>";
-            $res = $aeform->Validate();
+//error_log( "validating page :".$aeform->GetPageNumber());            
+        	$res = $aeform->Validate();
+
             if ($res[0] === false)
                 {
                 echo $res[1]."\n";
                 $aeform->PageBack();
                 }
+            else if (isset($params['done']))
+            	{
+            	$finished = true;
+            	$results = $aeform->Dispose();
+            	}
             }
-//echo "not validating page :".$aeform->thisPage.": ".$aeform->formTotalPages." ".ffUtilityFunctions::def($aeform->thisPage).":".$aeform->thisPage."<br/>";
-        echo $this->CreateFormStart($id, 'submit_form', $returnid);
-        //, 'post', 'multipart/form-data');
-        echo $aeform->RenderForm($id, $params, $returnid);
-        echo $this->CreateFormEnd();
+//error_log('Finished is '.$finished);
+
+		if (! $finished)
+			{
+        	echo $this->CreateFormStart($id, 'submit_form', $returnid, 'post', 'multipart/form-data');
+        	echo $aeform->RenderForm($id, $params, $returnid);
+        	echo $this->CreateFormEnd();
+        	}
+        else
+        	{
+        	if ($results[0] == true)
+        		{
+        		echo $aeform->GetAttr('thanks_message');
+        		}
+        	else
+        		{
+        		echo "Error!: ";
+        		foreach ($results[1] as $thisRes)
+        			{
+        			echo $thisRes . '<br />';
+        			}
+        		}
+        	}
         echo $aeform->RenderFormFooter();
         }
 

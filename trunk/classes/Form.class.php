@@ -43,7 +43,7 @@ class fbForm {
 	   $this->formTotalPages = 1;
 	   if ($this->Id != -1)
 	   		{
-	   		$this->Load($this->Id, $loadDeep);
+	   		$this->Load($this->Id, $params, $loadDeep);
 	   		}
 	   	foreach ($params as $thisParamKey=>$thisParamVal)
 	   		{
@@ -115,6 +115,15 @@ class fbForm {
 	{
 		$this->Alias = $alias;
 	}
+
+	function DebugDisplay()
+	{
+		$tmp = $this->module_ptr;
+		$this->module_ptr = '';
+		debug_display($this);
+		$this->module_ptr = $tmp;
+	}
+
 	
 	function GetAttr($attrname, $default)
 	{
@@ -133,7 +142,7 @@ class fbForm {
 		return count($this->Fields);
 	}
 
-/*
+
 	function Validate()
 	{
         $validated = true;
@@ -141,20 +150,21 @@ class fbForm {
         $formPageCount=1;
         for($i=0;$i<count($this->Fields);$i++)
         	{
-        	if ($this->Fields[$i]->Type == 'PageBreak')
+        	if ($this->Fields[$i]->GetFieldType() == 'PageBreak')
         		{
         		$formPageCount++;
         		}
-        	if (ffUtilityFunctions::def($this->thisPage) && $this->thisPage != $formPageCount)
+        	if (isset($this->Page) && $this->Page != $formPageCount)
         		{
         		continue;
         		}
-//echo 'validating '. $thisField->Name.'<br>';
-        	if (! $this->Fields[$i]->IsDisposition &&
-        		 $this->Fields[$i]->Required &&
-        		 ! ffUtilityFunctions::def($this->Fields[$i]->Value))
+//error_log('validating field: '. $this->Fields[$i]->GetName());
+        	if (! $this->Fields[$i]->IsDisposition() &&
+        		 $this->Fields[$i]->IsRequired() &&
+        		 	$this->Fields[$i]->GetValue() ==
+        		 	$this->module_ptr->Lang('unspecified'))
         		{
-        			$message .= "<h4>".$this->mod_globals->Lang('please_enter_a_value').' "'. $this->Fields[$i]->Name."\"</h4>\n";
+        			$message .= "<h4>".$this->module_ptr->Lang('please_enter_a_value').' "'. $this->Fields[$i]->GetName()."\"</h4>\n";
         			$validated = false;
         		
         		}
@@ -171,7 +181,7 @@ class fbForm {
 		return array($validated, $message);
 	}
 
-*/
+
     function HasDisposition()
     {
     	$hasDisp = false;
@@ -184,38 +194,29 @@ class fbForm {
         	}
         return $hasDisp;
     }
-/*
-	function Dispose(&$config)
+
+	// return an array: element 0 is true for success, false for failure
+	// element 1 is an array of reasons, in the event of failure.
+	function Dispose()
 	{
 		$resArray = array();
-		// build a results array of field names/field values
-        for($i=0;$i<count($this->Fields);$i++)
-        	{
-//debug_display($config->FromAddress);
-        	if (! $this->Fields[$i]->IsDisposition)
-				{
-        		$resArray[] = array($this->Fields[$i]->Name,
-        			$this->Fields[$i]->GetValue());
-        		}
-//debug_display($config->FromAddress);
-
-        	}
-        
         $retCode = true;
         // for each form disposition pseudo-field, dispose the form results
         for($i=0;$i<count($this->Fields);$i++)
         	{
-        	if ($this->Fields[$i]->IsDisposition)
+        	if ($this->Fields[$i]->IsDisposition())
         		{
-        		if (! $this->Fields[$i]->DisposeForm($this->Name, $config, $resArray))
-        			{
-        			$retCode = false;
-        			}
+        		$res = $this->Fields[$i]->DisposeForm();
+				if ($res[0] == false)
+					{
+					$retCode = false;
+					array_push($resArray,$res[1]);
+					}
         		}
         	}
-        return $retCode;		
+        return array($retCode,$resArray);		
 	}
-*/
+
     function RenderFormHeader()
     {
     	if ($this->module_ptr->GetPreference('show_version',0) == 1)
@@ -555,14 +556,12 @@ class fbForm {
         $this->Fields[] = new $className($this->mod_globals, $fieldInfo);
     }
 
-
-
     function LoadForm()
     {
     	return $this->Load($this->Id, true);
     }
 
-    function Load($formId, $loadDeep=false)
+    function Load($formId, &$params, $loadDeep=false)
     {
         $sql = 'SELECT * FROM '.cms_db_prefix().'module_fb_form WHERE form_id=?';
 	    $rs = $this->module_ptr->dbHandle->Execute($sql, array($formId));
@@ -605,6 +604,7 @@ class fbForm {
                     {
                     $className = $this->MakeClassName($thisRes['type'], '');
                     // create the field object
+                    $thisRes = array_merge($thisRes, $params);
                     $this->Fields[$fieldCount] = $this->NewField($thisRes);
                     // load its options
                  //   $this->Fields[$fieldCount]->LoadOptions($params);
