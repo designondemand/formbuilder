@@ -11,6 +11,7 @@ class fbForm {
     var $Alias = '';
     var $loaded = 'not';
 	var $formTotalPages = 0;
+	var $Page;
     var $Attrs;
     var $Fields;
 
@@ -31,6 +32,14 @@ class fbForm {
 	       {
 	       $this->Name = $params['form_name'];
 	       }
+	   if (isset($params['continue']))
+	       {
+	       $this->Page = $params['continue'];
+	       }
+	   else
+	   	  {
+	   	  $this->Page = 0;
+	   	  }
 	   $this->formTotalPages = 1;
 	   if ($this->Id != -1)
 	   		{
@@ -75,6 +84,22 @@ class fbForm {
 	{
 		return $this->Name;
 	}
+	
+	function GetPageCount()
+	{
+		return $this->formTotalPages;
+	}
+	
+	function GetPageNumber()
+	{
+		return $this->Page;
+	}
+
+	function PageBack()
+	{
+		$this->Page--;
+	}
+
 
 	function SetName($name)
 	{
@@ -191,11 +216,11 @@ class fbForm {
         return $retCode;		
 	}
 */
-    function RenderFormHeader($version)
+    function RenderFormHeader()
     {
     	if ($this->module_ptr->GetPreference('show_version',0) == 1)
     	   {
-    	   echo "\n<!-- Start FeedbackForm Module (".$version.") -->\n";
+    	   return "\n<!-- Start FeedbackForm Module (".$this->module_ptr->GetVersion().") -->\n";
     	   }
     }
 
@@ -203,12 +228,166 @@ class fbForm {
     {
     	if ($this->module_ptr->GetPreference('show_version',0) == 1)
     	   {
-    	   echo "\n<!-- End FeedbackForm Module -->\n";
+    	   return "\n<!-- End FeedbackForm Module -->\n";
     	   }
     }
 
+
+	// now returns a string
+	function RenderForm($id, &$params, $returnid)
+	{
+		switch ($this->GetAttr('form_displaytype','tab')) {
+			case 'tab':
+				{
+				return $this->RenderFormTable($id, $params, $returnid);
+				break;
+				}
+			case 'cssonly':
+				{
+				break;
+				}
+			case 'template':
+				{
+				break;
+				}		
+		}
+	}
+
+    function RenderFormTable($id, &$params, $returnid)
+    {
+		$mod = $this->module_ptr;
+    	if ($this->Id == -1)
+			{
+			return "<!-- no form -->\n";
+			}
+		if ($this->loaded != 'full')
+			{
+			$this->LoadForm($params);
+			}
+		$this->thisPage++;
+		$retStr = '<table';
+		if ($this->GetAttr('css_class','') != '')
+			{
+			$retStr .= ' class="'.$this->GetAttr('css_class').'">';
+			}
+		$retStr .= '<tr><td colspan="2">';
+        if ($this->formTotalPages > 1)
+        	{
+        	$retStr .= 'Page '.$this->thisPage.' of ';
+        	$retStr .= $this->formTotalPages;
+        	}
+		$retStr .= $mod->CreateInputHidden($id, 'form_id', $this->Id);
+	    $retStr .= $mod->CreateInputHidden($id, 'continue', $this->thisPage);
+    	if ($this->thisPage == $this->formTotalPages)
+			{
+			$retStr .= $mod->CreateInputHidden($id, 'done', 1);
+			}
+		$retStr .= '</td></tr>';
+        $formPageCount = 1;
+    	for ($i=0; $i < count($this->Fields); $i++)
+			{
+			$thisField = &$this->Fields[$i];
+			if ($thisField->GetFieldType() == 'PageBreak')
+				{
+				$formPageCount++;
+				}
+			if ($formPageCount != $this->thisPage)
+				{
+				if (is_array($params[$this->Fields[$i]->GetId()]))
+					{
+					foreach ($params[$this->Fields[$i]->GetId()] as $val)
+						{
+						$retStr .= $mod->CreateInputHidden($id,
+							$this->Fields[$i]->GetId().'[]',
+							htmlspecialchars($val,ENT_QUOTES));
+						}
+				}
+				else
+					{
+					$retStr .= $mod->CreateInputHidden($id,
+						$this->Fields[$i]->GetId(),
+						htmlspecialchars($params[$this->Fields[$i]->GetId()],ENT_QUOTES));
+					}
+				continue;
+				}
+			if ($thisField->DisplayInForm())
+				{
+				if ($this->GetAttr('title_position','left') == 'left')
+					{
+    	       		$retStr .= "<tr><td align=\"right\" valign=\"top\"";
+    	       		}
+    	       	else if ($this->GetAttr('title_position','left') == 'top')
+    	       		{
+    	       		$retStr .= "<tr><td";
+    	       		}
+    	        if ($thisField->IsRequired())
+					{
+					$retStr .= ' class="required';
+					if ($thisField->GetOption('css_class') != '')
+						{
+						$retStr .= ' '.$thisField->GetOption('css_class');
+						}
+					$retStr .= '"';
+					}
+				else if ($thisField->GetOption('css_class') != '')
+					{
+					$retStr .= ' class="'.
+						$thisField->GetOption('css_class').'"';
+					}
+				$retStr .= ">";
+				if (!$thisField->HideLabel())
+					{
+					$retStr .= $thisField->GetName();
+					if ($thisField->IsRequired() &&
+						strlen($this->GetAttr('required_field_symbol','*'))>0)
+						{
+						$retStr .= " ".
+							$this->GetAttr('required_field_symbol','*');
+						}
+					}
+				if ($this->GetAttr('title_position','left') == 'left')
+					{
+					$retStr .= "</td><td align=\"left\" valign=\"top\">";
+					}
+				else if ($this->GetAttr('title_position','left') == 'top')
+					{
+					$retStr .= "</td></tr><tr><td>";
+					}
+				$retStr .= $thisField->GetFieldInput($id, $params, $returnid);
+				$retStr .= "</td></tr>\n";
+				}
+			else if ($thisField->GetFieldType() == 'FunctionCallInput')
+				{
+				$retStr .= $thisField->GetFieldInput($id, $params, $returnid);
+				}
+			}
+		$retStr .= "<tr>";
+    	if ($this->GetAttr('title_position','left') == 'left')
+			{
+			$retStr .= "<td>&nbsp;</td><td>";
+			}
+		else
+			{
+    		$retStr .= "<td>";
+    		}
+		if ($this->thisPage < $formPageCount)
+			{
+    	   	$retStr .= $mod->CreateInputSubmit($id, 'submit',
+    	   		$this->GetAttr('next_button_text'),
+    	   		$this->GetAttr('use_id_and_name','')==''?'class="fbsubmit"':'id="'.$this->Alias.'_sub" class="fbsubmit"');
+			}
+		else
+			{
+            $retStr .= $mod->CreateInputSubmit($id, 'submit',
+            	$this->GetAttr('submit_button_text'),
+            	$this->GetAttr('use_id_and_name','')==''?'class="fbsubmit"':'id="'.$this->Alias.'_sub" class="fbsubmit"');
+			}
+    	$retStr .= "</td></tr></table>\n";
+		return $retStr;
+    }
+
 /*
-    function RenderForm($id, &$params, $return_id)
+    function RenderFormOrig($id, &$params, $return_id)
     {
     	if ($this->Id == -1)
     	   {
@@ -366,8 +545,8 @@ class fbForm {
     		echo "</td></tr></table>\n";
     		}
     }
-
 */
+
 
     function AddField($fieldInfo=array())
     {
@@ -721,10 +900,10 @@ class fbForm {
 				$this->GetAttr('css_id_and_name','0')).$mod->Lang('title_css_id_and_name'));
 		$mod->smarty->assign('title_title_position',
 			$mod->Lang('title_title_position'));
-		$pos = array($mod->Lang('title_table_layout_left')=>0,$mod->Lang('title_table_layout_above')=>1);	
+		$pos = array($mod->Lang('title_table_layout_left')=>'left',$mod->Lang('title_table_layout_above')=>'top');	
 		$mod->smarty->assign('input_title_position',
 			$mod->CreateInputRadioGroup($id, 'forma_title_position',
-				$pos, $this->GetAttr('title_position','0')));		
+				$pos, $this->GetAttr('title_position','left')));		
 		$mod->smarty->assign('input_form_template',
 			$mod->CreateTextArea(false, $id,
 				$this->GetAttr('form_template','default form template'), 'forma_form_template'));

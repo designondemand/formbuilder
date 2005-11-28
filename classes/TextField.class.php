@@ -11,6 +11,7 @@ class fbTextField extends fbFieldBase {
         $mod = $form_ptr->module_ptr;
 		$this->Type = 'TextField';
 		$this->DisplayType = $mod->Lang('field_type_text_input');
+		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
             $mod->Lang('validation_none')=>'none',
             $mod->Lang('validation_numeric')=>'numeric',
@@ -21,23 +22,18 @@ class fbTextField extends fbFieldBase {
             );
 
 	}
-/*
-	function WriteToPublicForm($id, &$params, $return_id)
+
+	function GetFieldInput($id, &$params, $returnid)
 	{
-	   if (strlen($this->CSSClass)>0)
-        	{
-        	echo "<div class=\"".$this->CSSClass."\">";
-        	}
-		echo CMSModule::CreateInputText($id, $this->Alias, $this->NerfHTML($this->Value),
-            $this->Length<$this->DisplayLength?$this->Length:$this->DisplayLength,
-            $this->Length,$this->mod_globals->UseIDAndName?'id="'.$this->Alias.'"':'');
-	   if (strlen($this->CSSClass)>0)
-        	{
-        	echo "</div>";
-        	}
+		$mod = $this->form_ptr->module_ptr;
+		return $mod->CreateInputText($id, $this->Id,
+			htmlspecialchars($this->Value, ENT_QUOTES),
+            $this->GetOption('length')<25?$this->GetOption('length'):25,
+            $this->GetOption('length'));
+            
+            /*,$this->mod_globals->UseIDAndName?'id="'.$this->Alias.'"':'');*/
 	}
 
-*/
 	function StatusInfo()
 	{
 		$ret = $this->form_ptr->module_ptr->Lang('abbreviation_length',$this->GetOption('length','80'));
