@@ -73,10 +73,14 @@ class fbFieldBase {
 	       {
 	       $this->ValidationType = $params['validation_type'];
 	       }
-	   if (isset($params[$this->Id]))
+	   if (isset($params['_'.$this->Id]) && strlen($params['_'.$this->Id]) > 0)
 	   		{
-	   		$this->Value = $params[$this->Id];
+//	   		error_log('Setting '.'_'.$this->Id.' value to '.$params['_'.$this->Id]);
+	   		$this->Value = $params['_'.$this->Id];
 	   		}
+//	   else {echo 'no value to set for '.'_'.$this->Id;
+//	   debug_display($params);
+//	   }
 	   $this->DisplayInForm = true;
 	   $this->IsDisposition = false;
 	   $this->ValidationTypes = array($mod->Lang('validation_none')=>'none');
@@ -223,7 +227,7 @@ class fbFieldBase {
 			}
 		else
 			{
-			return $this->mod_globals->Lang('unspecified');
+			return $this->form_ptr->module_ptr->Lang('unspecified');
 			}
 	}
 
@@ -252,9 +256,12 @@ class fbFieldBase {
 	// override me if you're a Form Disposition pseudo-field.
 	// This method can do just
 	// about anything you want it to, in order to handle form contents.
-	function DisposeForm(&$form_ptr)
+	// it returns an array, where the first element is true on success,
+	// or false on failure, and the second element is explanatory
+	// text for the failure
+	function DisposeForm()
 	{
-		return false;
+		return array(true, '');
 	}	
 
 	function GetOptionNames()
