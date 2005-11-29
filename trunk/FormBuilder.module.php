@@ -380,7 +380,7 @@ class FormBuilder extends CMSModule
 
 		$access = $this->CheckPermission($permission);
 		if (!$access)  {
-			echo "<p class=\"error\">".$this->Lang('you_need_permission1').$permission.$this->Lang('you_need_permission2')."</p>";
+			echo "<p class=\"error\">".$this->Lang('you_need_permission',$permission)."</p>";
 			return false;
 		}
 		else return true;
