@@ -57,56 +57,64 @@ class fbTextField extends fbFieldBase {
             		$this->GetOption('regex'),25,255),$mod->Lang('title_regex_help'))));
 	}
 
-/*
+
 	function Validate()
 	{
 		$result = true;
 		$message = '';
+		$mod = $this->form_ptr->module_ptr;
 		switch ($this->ValidationType)
 		  {
 		  	   case 'none':
 		  	       break;
-		  	   case 'nonempty':
-		  	       if (! ffUtilityFunctions::def($this->Value))
-		  	           {
-		  	           $result = false;
-		  	           $message = $this->mod_globals->Lang('please_enter_a_value').' "'.$this->Name.'"';
-		  	           }
-		  	       break;
 		  	   case 'numeric':
-                  if (ffUtilityFunctions::def($this->Value) &&
+                  if ($this->Value === false ||
                       ! preg_match("/^([\d\.\,])+$/i", $this->Value))
                       {
                       $result = false;
-                      $message = $this->mod_globals->Lang('please_enter_a_number').' "'.$this->Name.'"';
+                      $message = $mod->Lang('please_enter_a_number',$this->Name);
                       }
 		  	       break;
 		  	   case 'integer':
-                  if (ffUtilityFunctions::def($this->Value) &&
+                  if ($this->Value === false ||
                       intval($this->Value) != $this->Value)
                     {
                     $result = false;
-                    $message = $this->mod_globals->Lang('please_enter_an_integer').' "'.$this->Name.'"';
+                    $message = $mod->Lang('please_enter_an_integer',$this->Name);
                     }
 		  	       break;
 		  	   case 'email':
-                  if (ffUtilityFunctions::def($this->Value) &&
+                  if ($this->Value === false ||
                       ! preg_match("/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i", $this->Value))
                     {
                     $result = false;
-                    $message = $this->mod_globals->Lang('please_enter_an_email').' "'.$this->Name.'"';
+                    $message = $mod->Lang('please_enter_an_email',$this->Name);
                     }
 		  	       break;
+		  	   case 'regex_match':
+                  if ($this->Value === false ||
+                      ! preg_match($this->GetOption('regex','/.*/'), $this->Value))
+                    {
+                    $result = false;
+                    $message = $mod->Lang('please_enter_valid',$this->Name);
+                    }
+		  	   	   break;
+		  	   case 'regex_nomatch':
+                  if ($this->Value === false ||
+                       preg_match($this->GetOption('regex','/.*/'), $this->Value))
+                    {
+                    $result = false;
+                    $message = $mod->Lang('please_enter_valid',$this->Name);
+                    }
+		  	   	   break;
 		  }
-		if ($this->Length > 0 && strlen($this->Value) > $this->Length)
+		if ($this->GetOption('length',0) > 0 && strlen($this->Value) > $this->GetOption('length',0))
 			{
 			$result = false;
-			$message = $this->mod_globals->Lang('please_enter_no_longer').$this->Length." ".
-                $this->mod_globals->Lang('characters') . "!";
+			$message = $mod->Lang('please_enter_no_longer',$this->GetOption('length',0));
 			}
 		return array($result, $message);
 	}
-*/
 }
 
 ?>
