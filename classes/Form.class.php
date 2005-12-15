@@ -604,7 +604,11 @@ class fbForm {
                     {
                     $className = $this->MakeClassName($thisRes['type'], '');
                     // create the field object
-                    $thisRes = array_merge($thisRes, $params);
+                    if (isset($params['field_id']) && isset($thisRes['field_id']) &&
+                        $params['field_id'] == $thisRes['field_id'])
+                        {
+                        $thisRes = array_merge($thisRes,$params);
+                        }
                     $this->Fields[$fieldCount] = $this->NewField($thisRes);
                     // load its options
                  //   $this->Fields[$fieldCount]->LoadOptions($params);
