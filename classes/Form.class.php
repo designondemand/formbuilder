@@ -794,7 +794,8 @@ class fbForm {
 		$mod->smarty->assign('title_order',$mod->Lang('order'));    
 		$mod->smarty->assign('title_form_displaytype', $mod->Lang('title_form_displaytype'));
         $mod->smarty->assign('title_field_required_abbrev',$mod->Lang('title_field_required_abbrev'));
-		$mod->smarty->assign('link_notready',"<strong>".$mod->Lang('title_not_ready1')."</strong>".$mod->Lang('title_not_ready2')." ".$mod->CreateLink($id, 'admin_add_formbuilder_field', $returnid,$mod->Lang('title_not_ready_link'),array('form_id'=>$this->Id, 'order_by'=>$this->GetFieldCount(),'dispose_only'=>1), '', false)." ".$mod->Lang('title_not_ready3'));
+		$mod->smarty->assign('link_notready',"<strong>".$mod->Lang('title_not_ready1')."</strong>".$mod->Lang('title_not_ready2')." ".$mod->CreateLink($id, 'admin_add_formbuilder_field', $returnid,$mod->Lang('title_not_ready_link'),array('form_id'=>$this->Id, 'order_by'=>$this->GetFieldCount(),'dispose_only'=>1), '', false)." ".$mod->Lang('title_not_ready3')
+		);
 		$mod->smarty->assign('hasdisposition',$this->HasDisposition()?1:0);
 
 		if($this->Id > 0)
