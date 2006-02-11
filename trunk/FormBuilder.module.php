@@ -1,14 +1,14 @@
 <?php
 #-------------------------------------------------------------------------
 # Module: FormBuilder
-# Version: 0.1, released  2005
+# Version: 0.1, released  2006
 #
-# Copyright (c) 2005, Samuel Goldstein <sjg@cmsmodules.com>
-# For Information, Support, Bug Reports, etc, please visit SjG's
-# module homepage at http://www.cmsmodules.com
+# Copyright (c) 2006, Samuel Goldstein <sjg@cmsmodules.com>
+# For Information, Support, Bug Reports, etc, please visit the
+# CMS Made Simple tracker at http://dev.cmsmadesimple.org
 #
 #-------------------------------------------------------------------------
-# CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
+# CMS - CMS Made Simple is (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
 # This project's homepage is: http://www.cmsmadesimple.org
 #
 #-------------------------------------------------------------------------
@@ -142,8 +142,8 @@ class FormBuilder extends CMSModule
 			name C(255),
 			type C(50),
 			validation_type C(50),
-			required L,
-			hide_label L,
+			required I1,
+			hide_label I1,
 			order_by I
 		";
 		$sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_fb_field', $flds, $taboptarray);
@@ -582,15 +582,20 @@ class FormBuilder extends CMSModule
     }
 
 
+	/*
+	DO NOT allow parameters to be used for passing the order_by! It is not escaped before
+	database access. 
+	*/
 	function GetForms($order_by='name')
 	{
 		$db = &$this->cms->db;
-		$sql = "SELECT * FROM ".cms_db_prefix().'module_fb_form ORDER BY ?';
-
+		$sql = "SELECT * FROM ".cms_db_prefix().'module_fb_form ORDER BY '.$order_by;
 	    $result = array();
-	    $rs = $db->Execute($sql,array($order_by));
-	    if($rs && $rs->RowCount() > 0)
+	    $rs = $db->Execute($sql);
+	    if($rs && $rs->RecordCount() > 0)
+	    	{
 	        $result = $rs->GetArray();
+	    	}
 	    return $result;
 	}	
 

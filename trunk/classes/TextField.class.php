@@ -23,6 +23,7 @@ class fbTextField extends fbFieldBase {
 
 	}
 
+
 	function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = $this->form_ptr->module_ptr;

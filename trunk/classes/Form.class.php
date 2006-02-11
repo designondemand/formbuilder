@@ -125,7 +125,7 @@ class fbForm {
 	}
 
 	
-	function GetAttr($attrname, $default)
+	function GetAttr($attrname, $default="")
 	{
 		if (isset($this->Attrs[$attrname]))
 			{
@@ -245,6 +245,7 @@ class fbForm {
 				}
 			case 'cssonly':
 				{
+				return $this->RenderFormCSS($id, $params, $returnid);
 				break;
 				}
 			case 'template':
@@ -386,6 +387,120 @@ class fbForm {
     	$retStr .= "</td></tr></table>\n";
 		return $retStr;
     }
+
+    function RenderFormCSS($id, &$params, $returnid)
+    {
+		$mod = $this->module_ptr;
+    	if ($this->Id == -1)
+			{
+			return "<!-- no form -->\n";
+			}
+		if ($this->loaded != 'full')
+			{
+			$this->LoadForm($params);
+			}
+		$this->thisPage++;
+		$retStr = '<div';
+		if ($this->GetAttr('css_class','') != '')
+			{
+			$retStr .= ' class="'.$this->GetAttr('css_class').'">';
+			}
+		$retStr .= '<div class="header">';
+        if ($this->formTotalPages > 1)
+        	{
+        	$retStr .= 'Page '.$this->thisPage.' of ';
+        	$retStr .= $this->formTotalPages;
+        	}
+		$retStr .= $mod->CreateInputHidden($id, 'form_id', $this->Id);
+	    $retStr .= $mod->CreateInputHidden($id, 'continue', $this->thisPage);
+    	if ($this->thisPage == $this->formTotalPages)
+			{
+			$retStr .= $mod->CreateInputHidden($id, 'done', 1);
+			}
+		$retStr .= '</div>';
+        $formPageCount = 1;
+    	for ($i=0; $i < count($this->Fields); $i++)
+			{
+			$thisField = &$this->Fields[$i];
+			if ($thisField->GetFieldType() == 'PageBreak')
+				{
+				$formPageCount++;
+				}
+			if ($formPageCount != $this->thisPage)
+				{
+				if (is_array($params[$this->Fields[$i]->GetId()]))
+					{
+					foreach ($params[$this->Fields[$i]->GetId()] as $val)
+						{
+						$retStr .= $mod->CreateInputHidden($id,
+							$this->Fields[$i]->GetId().'[]',
+							htmlspecialchars($val,ENT_QUOTES));
+						}
+				}
+				else
+					{
+					$retStr .= $mod->CreateInputHidden($id,
+						$this->Fields[$i]->GetId(),
+						htmlspecialchars($params[$this->Fields[$i]->GetId()],ENT_QUOTES));
+					}
+				continue;
+				}
+			if ($thisField->DisplayInForm())
+				{
+    	       	$retStr .= "<div";
+    	        if ($thisField->IsRequired())
+					{
+					$retStr .= ' class="required';
+					if ($thisField->GetOption('css_class') != '')
+						{
+						$retStr .= ' '.$thisField->GetOption('css_class');
+						}
+					$retStr .= '"';
+					}
+				else if ($thisField->GetOption('css_class') != '')
+					{
+					$retStr .= ' class="'.
+						$thisField->GetOption('css_class').'"';
+					}
+				$retStr .= ">";
+				if (!$thisField->HideLabel())
+					{
+					$retStr .= "<label for=\"";
+					$retStr .= $thisField->GetFieldInputId($id, $params, $returnid);
+					$retStr .= "\">";
+					$retStr .= $thisField->GetName();
+					if ($thisField->IsRequired() &&
+						strlen($this->GetAttr('required_field_symbol','*'))>0)
+						{
+						$retStr .= " ".
+							$this->GetAttr('required_field_symbol','*');
+						}
+					$retStr .= "</label>";
+					}
+				$retStr .= $thisField->GetFieldInput($id, $params, $returnid);
+				$retStr .= "</div>\n";
+				}
+			else if ($thisField->GetFieldType() == 'FunctionCallInput')
+				{
+				$retStr .= $thisField->GetFieldInput($id, $params, $returnid);
+				}
+			}
+		if ($this->thisPage < $formPageCount)
+			{
+    	   	$retStr .= $mod->CreateInputSubmit($id, 'submit',
+    	   		$this->GetAttr('next_button_text'),
+    	   		$this->GetAttr('use_id_and_name','')==''?'class="fbsubmit"':'id="'.$this->Alias.'_sub" class="fbsubmit"');
+			}
+		else
+			{
+            $retStr .= $mod->CreateInputSubmit($id, 'submit',
+            	$this->GetAttr('submit_button_text'),
+            	$this->GetAttr('use_id_and_name','')==''?'class="fbsubmit"':'id="'.$this->Alias.'_sub" class="fbsubmit"');
+			}
+    	$retStr .= "</div>\n";
+		return $retStr;
+    }
+
 
 /*
     function RenderFormOrig($id, &$params, $return_id)

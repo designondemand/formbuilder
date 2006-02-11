@@ -192,6 +192,7 @@ $lang['title_callback_help']='Help';
 $lang['title_form_template']='Template to use to Display Form';
 $lang['title_css_id_and_name'] = 'Use ID and Name for CSS inputs';
 $lang['title_date_format']='Date Format (standard <a href="http://www.php.net/manual/en/function.date.php">PHP Date Formats</a>)';
+$lang['title_use_wysiwyg']='Use WYSIWYG editor for text Area?';
 $lang['title_callback_helplong']='<p>You specify a module and method. This method signature should be:</p><br />
 function whatever($id, &$params, $returnid, &$cms)<br /><br />
 <p>This function should output something that makes sense in a form, <i>e.g.</i> probably hidden fields containing
