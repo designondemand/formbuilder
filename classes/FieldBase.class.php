@@ -97,6 +97,12 @@ class fbFieldBase {
 
 	}
 
+	function GetFieldInputId($id, &$params, $returnid)
+	{
+		return $id.'_'.$this->Id;
+	}
+
+
 	// override me with a form input string or something
 	// this should just be the input portion. The title
 	// and any wrapping divs will be provided by the form
