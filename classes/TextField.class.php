@@ -49,13 +49,17 @@ class fbTextField extends fbFieldBase {
 	function RenderAdminForm($formDescriptor)
 	{
 		$mod = $this->form_ptr->module_ptr;
-		return array('main'=>
-			array($mod->Lang('title_maximum_length')=>
+		$main = array(
+			array($mod->Lang('title_maximum_length'),
             		$mod->CreateInputText($formDescriptor, 'opt_length',
-            		$this->GetOption('length','80'),25,25)),
-            'adv'=>array($mod->Lang('title_field_regex')=>
+            		$this->GetOption('length','80'),25,25))
+		);
+		$adv = array(
+			array($mod->Lang('title_field_regex'),
                array($mod->CreateInputText($formDescriptor, 'opt_regex',
-            		$this->GetOption('regex'),25,255),$mod->Lang('title_regex_help'))));
+            		$this->GetOption('regex'),25,255),$mod->Lang('title_regex_help')))	
+		);
+		return array('main'=>$main,'adv'=>$adv);
 	}
 
 

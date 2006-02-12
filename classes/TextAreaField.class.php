@@ -51,9 +51,9 @@ class fbTextAreaField extends fbFieldBase {
 	   $mod = $this->form_ptr->module_ptr;
 		return array(
 			'main'=>
-				array($mod->Lang('title_use_wysiwyg')=>
+				array(array($mod->Lang('title_use_wysiwyg'),
             		$mod->CreateInputCheckbox($formDescriptor, 'opt_wysiwyg',
-            		'1',$this->GetOption('wysiwyg','0')))
+            		'1',$this->GetOption('wysiwyg','0'))))
          	);
 	}
 
