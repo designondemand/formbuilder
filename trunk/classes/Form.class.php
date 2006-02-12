@@ -1062,15 +1062,19 @@ class fbForm {
 		$mod = $this->module_ptr;
 		
 		$mod->smarty->assign('message',$message);
+		$mainList = array();
+		$advList = array();
+		$baseList = $aefield->BaseAdminForm($id,
+			isset($params['dispose_only'])?$params['dispose_only']:0);
 		if ($aefield->GetFieldType() == '')
 			{
-			$mod->smarty->assign('start_form',$mod->CreateFormStart($id, 'admin_field_update', $returnid));
-			$mod->smarty->assign('type_set',0);
+			$mod->smarty->assign('start_form',$mod->CreateFormStart($id, 'admin_edit_formbuilder_field', $returnid));			
+			$fieldList = array('main'=>array(),'adv'=>array());
 			}
 		else
 			{
-			$mod->smarty->assign('start_form',$mod->CreateFormStart($id, 'admin_field_update', $returnid));
-			$mod->smarty->assign('type_set',1);
+			$mod->smarty->assign('start_form',$mod->CreateFormStart($id, 'admin_field_update', $returnid));	
+			$fieldList = $aefield->RenderAdminForm($id);
 			}
 		$mod->smarty->assign('end_form', $mod->CreateFormEnd());
 		$mod->smarty->assign('tab_start',$mod->StartTabHeaders().
@@ -1096,25 +1100,6 @@ class fbForm {
 
 		$mod->smarty->assign('hidden', $mod->CreateInputHidden($id, 'form_id', $this->Id) . $mod->CreateInputHidden($id, 'field_id', $aefield->GetId()) . $mod->CreateInputHidden($id, 'order_by', $aefield->GetOrder()).
 		$mod->CreateInputHidden($id,'set_from_form','1'));
-		$mod->smarty->assign('title_field_name',$mod->Lang('title_field_name'));
-		$mod->smarty->assign('input_field_name', $mod->CreateInputText($id, 'field_name', $aefield->GetName(), 50));
-		$mod->smarty->assign('title_field_type',$mod->Lang('title_field_type'));
-		
-		if ($aefield->GetFieldType() == '')
-			{
-			if (isset($params['dispose_only']) && $params['dispose_only']==1)
-				{
-				$mod->smarty->assign('input_field_type',$mod->CreateInputDropdown($id, 'field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->disp_field_types), -1,'', 'onchange="this.form.submit()"'));
-				}
-			else
-				{
-				$mod->smarty->assign('input_field_type',$mod->CreateInputDropdown($id, 'field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->field_types), -1,'', 'onchange="this.form.submit()"'));
-				}
-			}
-		else
-			{
-			$mod->smarty->assign('input_field_type',$aefield->GetDisplayType().$mod->CreateInputHidden($id, 'type', $aefield->GetFieldType()));
-			}
 
 		if (!$aefield->IsDisposition() && !$aefield->IsSpecialInput())
 			{
@@ -1124,39 +1109,55 @@ class fbForm {
 			{
 			$mod->smarty->assign('requirable',0);
 			}
-		$mod->smarty->assign('title_field_required',$mod->Lang('title_field_required'));
-		$mod->smarty->assign('input_field_required',$mod->CreateInputCheckbox($id, 'required', 1, $aefield->IsRequired()).$mod->Lang('title_field_required_long'));
-		$mod->smarty->assign('title_hide_label',$mod->Lang('title_hide_label'));
-
-		$mod->smarty->assign('input_hide_label',$mod->CreateInputCheckbox($id, 'hide_label', 1, $aefield->HideLabel()).$mod->Lang('title_hide_label_long'));
-
-		$mod->smarty->assign('title_field_validation',$mod->Lang('title_field_validation'));
-		if (count($aefield->GetValidationTypes()) > 1)
+			
+		if (isset($baseList['main']))
 			{
-			$mod->smarty->assign('input_field_validation',$mod->CreateInputDropdown($id, 'validation_type', $aefield->GetValidationTypes(), -1, $aefield->GetValidationType()));
-			}
-		else
+			foreach ($baseList['main'] as $item)
+				{
+				$titleStr=$item[0];
+				$inputStr=$item[1];
+				$oneset = new stdClass();
+				$oneset->title = $titleStr;
+				if (is_array($inputStr))
+					{
+					$oneset->input = $inputStr[0];
+					$oneset->help = $inputStr[1];
+					}
+				else
+					{
+					$oneset->input = $inputStr;
+					$oneset->help='';
+					}
+				array_push($mainList,$oneset);
+				}
+			}	
+		if (isset($baseList['adv']))
 			{
-			$mod->smarty->assign('input_field_validation',$mod->Lang('automatic'));
-			}
-
-		if ($aefield->DisplayInForm())
-			{
-			$mod->smarty->assign('displayinform',1);
-			$mod->smarty->assign('title_field_css_class',$mod->Lang('title_field_css_class'));
-			$mod->smarty->assign('input_field_css_class',$mod->CreateInputText($id, 'opt_css_class', $aefield->GetOption('css_class'), 50));
-			}
-		else
-			{
-			$mod->smarty->assign('displayinform',0);
-			}
-		$mainList = array();
-		$advList = array();
-		$fieldList = $aefield->RenderAdminForm($id);
+			foreach ($baseList['adv'] as $item)
+				{
+				$titleStr = $item[0];
+				$inputStr = $item[1];
+				$oneset = new stdClass();
+				$oneset->title = $titleStr;
+				if (is_array($inputStr))
+					{
+					$oneset->input = $inputStr[0];
+					$oneset->help = $inputStr[1];
+					}
+				else
+					{
+					$oneset->input = $inputStr;
+					$oneset->help='';
+					}
+				array_push($advList,$oneset);
+				}
+			}	
 		if (isset($fieldList['main']))
 			{
-			foreach ($fieldList['main'] as $titleStr=>$inputStr)
+			foreach ($fieldList['main'] as $item)
 				{
+				$titleStr=$item[0];
+				$inputStr=$item[1];
 				$oneset = new stdClass();
 				$oneset->title = $titleStr;
 				if (is_array($inputStr))
@@ -1174,8 +1175,10 @@ class fbForm {
 			}
 		if (isset($fieldList['adv']))
 			{
-			foreach ($fieldList['adv'] as $titleStr=>$inputStr)
+			foreach ($fieldList['adv'] as $item)
 				{
+				$titleStr=$item[0];
+				$inputStr=$item[1];
 				$oneset = new stdClass();
 				$oneset->title = $titleStr;
 				if (is_array($inputStr))
@@ -1199,9 +1202,9 @@ class fbForm {
 
     function MakeAlias($string, $isForm=false)
     {
-    	$string = trim($string);
-        $string = preg_replace("/[_-\W]+/", "_", $string);
-		$string = trim($string, '_');
+    	$string = trim(htmlspecialchars($string));
+        //$string = preg_replace("/[_-\W]+/", "_", $string);
+		//$string = trim($string, '_');
 		if ($isForm)
 		  {
 		  return strtolower($string);

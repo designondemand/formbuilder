@@ -204,6 +204,73 @@ class fbFieldBase {
 		return $this->form_ptr->module_ptr->Lang('field_type_'.$this->Type);
 	}
 
+
+	function BaseAdminForm($formDescriptor,$disposeOnly=0)
+	{
+		$mod = $this->form_ptr->module_ptr;
+		if ($this->Type == '')
+			{
+			if ($disposeOnly == 1)
+				{
+				$typeInput = $mod->CreateInputDropdown($formDescriptor, 'field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->disp_field_types), -1,'', 'onchange="this.form.submit()"');
+				}
+			else
+				{
+				$typeInput = $mod->CreateInputDropdown($formDescriptor, 'field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->field_types), -1,'', 'onchange="this.form.submit()"');
+				}
+			}
+		else
+			{
+			$typeInput = $this->GetDisplayType().$mod->CreateInputHidden($formDescriptor, 'field_type', $this->Type);
+			}
+		
+		$main = array(
+			array($mod->Lang('title_field_name'),
+					  $mod->CreateInputText($formDescriptor, 'field_name', $this->GetName(), 50)),
+		    array($mod->Lang('title_field_type'),$typeInput),
+		);
+		
+		$adv = array();
+
+		// if we know our type, we can load up with additional options
+		if ($this->Type != '')
+			{
+			
+			// validation types?
+			if (count($this->GetValidationTypes()) > 1)
+				{
+				$validInput = $mod->CreateInputDropdown($formDescriptor, 'validation_type', $this->GetValidationTypes(), -1, $this->GetValidationType());
+				}
+			else
+				{
+				$validInput = $mod->Lang('automatic');
+				}
+				
+			// requirable?
+			if (!$this->IsDisposition() && !$this->IsSpecialInput())
+				{
+				array_push($main, array($mod->Lang('title_field_required'),$mod->CreateInputCheckbox($formDescriptor, 'required', 1, $this->IsRequired()).$mod->Lang('title_field_required_long')));
+				}
+				
+			array_push($main, array($mod->Lang('title_field_validation'),$validInput));
+
+			array_push($adv, array($mod->Lang('title_hide_label'),$mod->CreateInputCheckbox($formDescriptor, 'hide_label', 1, $this->HideLabel()).$mod->Lang('title_hide_label_long')));
+			if ($this->DisplayInForm())
+				{
+				array_push($adv,array($mod->Lang('title_field_css_class'),$mod->CreateInputText($formDescriptor, 'opt_css_class', $this->GetOption('css_class'), 50)));
+				}
+			
+			}
+		else
+			{
+			// no advanced options until we know our type
+			array_push($adv,array($mod->Lang('tab_advanced'),$mod->Lang('notice_select_type')));
+			}
+				
+		return array('main'=>$main, 'adv'=>$adv);
+	}
+	
+	
     // override me.
     // I return an ugly data structure:
     // It's an associative array with two items, 'main' and 'adv' (for the

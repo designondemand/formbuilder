@@ -491,15 +491,15 @@ class FormBuilder extends CMSModule
             //$aefield->DebugDisplay();
             //exit;
             $aefield->Store(true);
-            if ($params['op'] == 'added')
-            	{
-            	echo $aeform->AddEditField($id, $aefield, $returnid);
-            	return;
-            	}
-            else
-            	{
+           // if ($params['op'] == 'added')
+            //	{
+            //	echo $aeform->AddEditField($id, $aefield, $returnid);
+            //	return;
+            //	}
+            //else
+            //	{
             	return $this->AdminAddEditForm($id, $params, $returnid, $params['op']);
-            	}
+            //	}
             }
         else
         	{
