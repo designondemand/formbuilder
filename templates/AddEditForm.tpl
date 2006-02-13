@@ -69,12 +69,12 @@
 		<p class="pageinput">{$input_form_next_button}</p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_form_required_symbol}:</p>
-		<p class="pageinput">{$input_form_required_symbol}</p>
+		<p class="pagetext">{$title_form_prev_button}:</p>
+		<p class="pageinput">{$input_form_prev_button}</p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_form_thanks_text}:</p>
-		<p class="pageinput">{$input_form_thanks_text}</p>
+		<p class="pagetext">{$title_form_required_symbol}:</p>
+		<p class="pageinput">{$input_form_required_symbol}</p>
 	</div>
 {$tab_end}
 {$tabletab_start}

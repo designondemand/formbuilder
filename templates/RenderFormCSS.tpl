@@ -28,5 +28,5 @@
 	    	{/strip}
 	  {/if}
 {/foreach}
-<div class="submit">{$submit}</div>
+<div class="submit">{$prev}{$submit}</div>
 </div>

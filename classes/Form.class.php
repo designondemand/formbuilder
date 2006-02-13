@@ -17,8 +17,8 @@ class fbForm {
 
 	function fbForm(&$module_ptr, &$params, $loadDeep=false)
 	{
-//echo "form init";
-//debug_display($params);
+echo "form init";
+debug_display($params);
 	   $this->module_ptr = $module_ptr;
 	   $this->Fields = array();
 	   $this->Attrs = array();
@@ -40,7 +40,12 @@ class fbForm {
 	       }
 	   else
 	   	  {
-	   	  $this->Page = 0;
+	   	  $this->Page = 1;
+	   	  }
+	   if (isset($params['prev']) && isset($params['previous']))
+	   	  {
+	   	  $this->Page = $params['previous'];
+	   	  $params['done'] = 0;
 	   	  }
 	   $this->formTotalPages = 1;
 	   if ($this->Id != -1)
@@ -150,13 +155,14 @@ class fbForm {
         $validated = true;
         $message = '';
         $formPageCount=1;
+        $valPage = $this->Page - 1;
         for($i=0;$i<count($this->Fields);$i++)
         	{
-        	if ($this->Fields[$i]->GetFieldType() == 'PageBreak')
+        	if ($this->Fields[$i]->GetFieldType() == 'PageBreakField')
         		{
         		$formPageCount++;
         		}
-        	if (isset($this->Page) && $this->Page != $formPageCount)
+        	if ($valPage != $formPageCount)
         		{
         		continue;
         		}
@@ -243,6 +249,9 @@ class fbForm {
 	// returns a string.
     function RenderForm($id, &$params, $returnid)
     {
+echo 'render form';
+debug_display($params);
+debug_display($this->Page);
 		$mod = $this->module_ptr;
     	if ($this->Id == -1)
 			{
@@ -253,19 +262,22 @@ class fbForm {
 			$this->LoadForm($params);
 			}
 		$reqSymbol = $this->GetAttr('required_field_symbol','*');
-		$this->thisPage++;
-		
-		$mod->smarty->assign('title_page_x_of_y',$mod->Lang('title_page',$this->thisPage,$this->formTotalPages));
+				
+		$mod->smarty->assign('title_page_x_of_y',$mod->Lang('title_page_x_of_y',array($this->Page,$this->formTotalPages)));
 		
 		$mod->smarty->assign('css_class',$this->GetAttr('css_class',''));
 		$mod->smarty->assign('total_pages',$this->formTotalPages);
-		$mod->smarty->assign('this_page',$this->thisPage);
+		$mod->smarty->assign('this_page',$this->Page);
 		$mod->smarty->assign('form_name',$this->Name);
 		$mod->smarty->assign('form_id',$this->Id);
 		
 		$hidden = $mod->CreateInputHidden($id, 'form_id', $this->Id);
-	    $hidden .= $mod->CreateInputHidden($id, 'continue', $this->thisPage);
-    	if ($this->thisPage == $this->formTotalPages)
+	    $hidden .= $mod->CreateInputHidden($id, 'continue', ($this->Page + 1));
+	    if ($this->Page > 1)
+	    	{
+	    	$hidden .= $mod->CreateInputHidden($id, 'previous', ($this->Page - 1));
+	    	}
+    	if ($this->Page == $this->formTotalPages)
 			{
 			$hidden .= $mod->CreateInputHidden($id, 'done', 1);
 			}
@@ -274,26 +286,26 @@ class fbForm {
     	for ($i=0; $i < count($this->Fields); $i++)
 			{
 			$thisField = &$this->Fields[$i];
-			if ($thisField->GetFieldType() == 'PageBreak')
+			if ($thisField->GetFieldType() == 'PageBreakField')
 				{
 				$formPageCount++;
 				}
-			if ($formPageCount != $this->thisPage)
+			if ($formPageCount != $this->Page)
 				{
-				if (is_array($params[$this->Fields[$i]->GetId()]))
+				if (is_array($params['_'.$this->Fields[$i]->GetId()]))
 					{
-					foreach ($params[$this->Fields[$i]->GetId()] as $val)
+					foreach ($params['_'.$this->Fields[$i]->GetId()] as $val)
 						{
 						$hidden .= $mod->CreateInputHidden($id,
-							$this->Fields[$i]->GetId().'[]',
+							'_'.$this->Fields[$i]->GetId().'[]',
 							htmlspecialchars($val,ENT_QUOTES));
 						}
 					}
 				else
 					{
 					$hidden .= $mod->CreateInputHidden($id,
-						$this->Fields[$i]->GetId(),
-						htmlspecialchars($params[$this->Fields[$i]->GetId()],ENT_QUOTES));
+						'_'.$this->Fields[$i]->GetId(),
+						htmlspecialchars($params['_'.$this->Fields[$i]->GetId()],ENT_QUOTES));
 					}
 				continue;
 			    }
@@ -315,7 +327,18 @@ class fbForm {
 		$mod->smarty->assign_by_ref('hidden',$hidden);
 		$mod->smarty->assign_by_ref('fields',$fields);
 
-		if ($this->thisPage < $formPageCount)
+		if ($this->Page > 1)
+			{
+    	   	$mod->smarty->assign('prev',$mod->CreateInputSubmit($id, 'prev',
+    	   		$this->GetAttr('prev_button_text'),
+    	   		$this->GetAttr('use_id_and_name','')==''?'class="fbsubmit"':'id="'.$this->Alias.'_sub" class="fbsubmit"'));
+			}
+		else
+			{
+			$mod->smarty->assign('prev','');
+			}
+
+		if ($this->Page < $formPageCount)
 			{
     	   	$mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'submit',
     	   		$this->GetAttr('next_button_text'),
@@ -429,7 +452,7 @@ class fbForm {
 		for ($i=0; $i < count($this->Fields); $i++)
 			{
 			//echo $this->Fields[$i]->Type.' ';
-			if ($this->Fields[$i]->Type == 'PageBreak')
+			if ($this->Fields[$i]->Type == 'PageBreakField')
 				{
 				$this->formTotalPages++;
 				}
@@ -688,17 +711,20 @@ class fbForm {
 			$mod->Lang('title_form_submit_button'));
 		$mod->smarty->assign('input_form_submit_button',
 			$mod->CreateInputText($id, 'forma_submit_button_text',
-				$this->GetAttr('submit_button_text','Submit Form'), 35, 35));
+				$this->GetAttr('submit_button_text',$mod->Lang('button_submit')), 35, 35));
+
+		$mod->smarty->assign('title_form_prev_button',
+			$mod->Lang('title_form_prev_button'));
+		$mod->smarty->assign('input_form_prev_button',
+			$mod->CreateInputText($id, 'forma_prev_button_text',
+				$this->GetAttr('prev_button_text',$mod->Lang('button_previous')), 35, 35));
+
+
 		$mod->smarty->assign('title_form_next_button',
 			$mod->Lang('title_form_next_button'));
 		$mod->smarty->assign('input_form_next_button',
 			$mod->CreateInputText($id, 'forma_next_button_text',
-				$this->GetAttr('next_button_text','Continue...'), 35, 35));
-		$mod->smarty->assign('title_form_thanks_text',
-			$mod->Lang('title_form_thanks_text'));
-		$mod->smarty->assign('input_form_thanks_text',
-			$mod->CreateTextArea(false, $id,
-				$this->GetAttr('thanks_message','Thanks!'), 'forma_thanks_message', 'pageheadtags', '', '', ''));
+				$this->GetAttr('next_button_text',$mod->Lang('button_continue')), 35, 35));
 		$mod->smarty->assign('title_form_required_symbol',
 			$mod->Lang('title_form_required_symbol'));
 		$mod->smarty->assign('input_form_required_symbol',
@@ -765,7 +791,7 @@ class fbForm {
 		$mod->smarty->assign('message',$message);
 		$mainList = array();
 		$advList = array();
-		$baseList = $aefield->BaseAdminForm($id,
+		$baseList = $aefield->PrePopulateBaseAdminForm($id,
 			isset($params['dispose_only'])?$params['dispose_only']:0);
 		if ($aefield->GetFieldType() == '')
 			{
@@ -775,7 +801,7 @@ class fbForm {
 		else
 			{
 			$mod->smarty->assign('start_form',$mod->CreateFormStart($id, 'admin_field_update', $returnid));	
-			$fieldList = $aefield->RenderAdminForm($id);
+			$fieldList = $aefield->PrePopulateAdminForm($id);
 			}
 		$mod->smarty->assign('end_form', $mod->CreateFormEnd());
 		$mod->smarty->assign('tab_start',$mod->StartTabHeaders().
@@ -896,6 +922,7 @@ class fbForm {
 				}
 			}
 		
+		$aefield->PostPopulateAdminForm($mainList, $advList);
 		$mod->smarty->assign('mainList',$mainList);
 		$mod->smarty->assign('advList',$advList);
         return $mod->ProcessTemplate('AddEditField.tpl');

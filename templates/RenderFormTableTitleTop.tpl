@@ -31,5 +31,5 @@
 	    	{/strip}
 	  {/if}
 {/foreach}
-<tr><td>{$submit}</td></tr>
+<tr><td>{$prev}{$submit}</td></tr>
 </table>

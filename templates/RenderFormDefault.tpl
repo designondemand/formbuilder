@@ -27,6 +27,7 @@
        {$css_class}               - CSS Class for the form
        {$form_name}           - Form name
        {$form_id}                 - Form Database ID
+       {$prev}                      - "Back" button for multipart forms
 
 -->
 {/literal}
@@ -61,5 +62,5 @@
 	    	{/strip}
 	  {/if}
 {/foreach}
-<div class="submit">{$submit}</div>
+<div class="submit">{$prev}{$submit}</div>
 </div>
