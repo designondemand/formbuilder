@@ -328,6 +328,8 @@ class FormBuilder extends CMSModule
             // get the form by name, not ID
             $params['form_id'] = $this->GetFormIDFromAlias($params['form']);
             }
+//echo "pre-sintant";
+//debug_display($params);
         $aeform = new fbForm($this,$params,true);
 //debug_display($params);
         echo $aeform->RenderFormHeader();
@@ -336,6 +338,8 @@ class FormBuilder extends CMSModule
         	(isset($params['done'])))
             {
 //error_log( "validating page :".$aeform->GetPageNumber());            
+//        	debug_display($params);
+//        	$aeform->DebugDisplay();
         	$res = $aeform->Validate();
 
             if ($res[0] === false)
@@ -488,18 +492,8 @@ class FormBuilder extends CMSModule
 		$val = $aefield->AdminValidate();
         if ($val[0])
             {
-            //$aefield->DebugDisplay();
-            //exit;
             $aefield->Store(true);
-           // if ($params['op'] == 'added')
-            //	{
-            //	echo $aeform->AddEditField($id, $aefield, $returnid);
-            //	return;
-            //	}
-            //else
-            //	{
-            	return $this->AdminAddEditForm($id, $params, $returnid, $params['op']);
-            //	}
+            return $this->AdminAddEditForm($id, $params, $returnid, $params['op']);
             }
         else
         	{
