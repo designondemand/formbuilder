@@ -191,6 +191,8 @@ $lang['title_callback_fields']='Result Fields to Include';
 $lang['title_callback_help']='Help';
 $lang['title_form_template']='Template to use to Display Form';
 $lang['title_css_id_and_name'] = 'Use ID and Name for CSS inputs';
+$lang['title_page_x_of_y'] = 'Page %s of %s';
+
 $lang['title_date_format']='Date Format (standard <a href="http://www.php.net/manual/en/function.date.php">PHP Date Formats</a>)';
 $lang['title_use_wysiwyg']='Use WYSIWYG editor for text Area?';
 $lang['title_callback_helplong']='<p>You specify a module and method. This method signature should be:</p><br />

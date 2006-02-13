@@ -10,7 +10,6 @@ class fbTextAreaField extends fbFieldBase {
         $this->fbFieldBase($form_ptr, $params);
 		$mod = $form_ptr->module_ptr;
 		$this->Type = 'TextAreaField';
-		$this->DisplayType = $mod->Lang('field_type_text_area');
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
             $mod->Lang('validation_none')=>'none',

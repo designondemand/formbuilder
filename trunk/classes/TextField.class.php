@@ -10,7 +10,6 @@ class fbTextField extends fbFieldBase {
         $this->fbFieldBase($form_ptr, $params);
         $mod = $form_ptr->module_ptr;
 		$this->Type = 'TextField';
-		$this->DisplayType = $mod->Lang('field_type_text_input');
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
             $mod->Lang('validation_none')=>'none',
@@ -82,6 +81,7 @@ class fbTextField extends fbFieldBase {
 		  	       break;
 		  	   case 'integer':
                   if ($this->Value === false ||
+                  	! preg_match("/^([\d])+$/i", $this->Value) ||
                       intval($this->Value) != $this->Value)
                     {
                     $result = false;

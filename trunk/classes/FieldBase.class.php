@@ -24,8 +24,11 @@ class fbFieldBase {
     var $Options;
     var $loaded;
 
-	function fbFieldBase(&$form_ptr, $params=array())
+	function fbFieldBase(&$form_ptr, &$params=array())
 	{
+//	echo "fbBase instantiate";
+// debug_display($params);
+
 	   $this->form_ptr = $form_ptr;
 	   $mod = $form_ptr->module_ptr;
 	   $this->Options = array();
@@ -74,6 +77,7 @@ class fbFieldBase {
 	       $this->ValidationType = $params['validation_type'];
 	       }
 	   if (isset($params['_'.$this->Id]) && strlen($params['_'.$this->Id]) > 0)
+//	   if (isset($params['_'.$this->Id]))
 	   		{
 //	   		error_log('Setting '.'_'.$this->Id.' value to '.$params['_'.$this->Id]);
 	   		$this->Value = $params['_'.$this->Id];
@@ -359,7 +363,7 @@ class fbFieldBase {
         $this->Options[$optionName] = $optionValue;
     }
 
-    function LoadField($params)
+    function LoadField(&$params)
     {
     	if ($this->Id > 0)
     	   {
@@ -369,7 +373,7 @@ class fbFieldBase {
     }
 
     // loadDeep also loads all options for a field.
-    function Load($params=array(), $loadDeep=false)
+    function Load(&$params=array(), $loadDeep=false)
     {
 		$sql = 'SELECT * FROM ' . cms_db_prefix() . 'module_fb_field WHERE field_id=?';
 	    $rs = $this->form_ptr->module_ptr->dbHandle->Execute($sql, array($this->Id));
