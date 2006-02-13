@@ -4,7 +4,7 @@ $lang['friendlyname'] = 'Form Builder';
 
 // field types
 $lang['field_type_']='Field Type Not Set';
-$lang['field_type_TextField']='Text Input Field';
+$lang['field_type_TextField']='Text Input';
 $lang['field_type_TextAreaField']='Text Area';
 $lang['field_type_CheckboxField']='Check Box';
 $lang['field_type_CheckboxGroupField']='Check Box Group';
@@ -18,7 +18,8 @@ $lang['field_type_DispositionDirector']='*Email Results Based on Pulldown';
 $lang['field_type_DispositionEmail']='*Email Results to set Address(es)';
 $lang['field_type_DispositionEmailSiteUser']='*Email Results to User-Selected Site User';
 $lang['field_type_DispositionFile']='*Write Results to Flat File';
-$lang['field_type_PageBreakStatic']='Page Break';
+$lang['field_type_PageBreakField']='Page Break';
+$lang['field_type_TextStatic']='Static Text';
 $lang['field_type_FileUploadField']='File Upload';
 $lang['field_type_EmailFromField']='Email "From" Field';
 $lang['field_type_StaticTextField']='Static Text';
@@ -106,6 +107,9 @@ $lang['uninstalled'] = 'Module uninstalled.';
 $lang['installed'] = 'Module version %s installed.';
 $lang['upgraded'] = 'Module upgraded to version %s.';
 
+$lang['button_previous'] = 'Back...';
+$lang['button_submit'] = 'Submit Form';
+$lang['button_continue'] = 'Continue...';
 
 // Field Attribute Titles
 $lang['title_maximum_length']='Maximum Length';
@@ -157,7 +161,7 @@ $lang['title_show_version_long']='This will embed your installed version number 
 $lang['title_add_new_field']='Add New Field';
 $lang['title_form_submit_button']='Form Submit Button Text';
 $lang['title_form_next_button']='Form "Next" Button Text (used for multipage forms)';
-$lang['title_form_thanks_text']='Form Thanks Message Text';
+$lang['title_form_prev_button'] = 'Form "Previous" Button Text (used for multipage forms)';
 $lang['title_field_validation']='Field Validation';
 $lang['title_default_user']='Default User';
 $lang['title_no_default_user']='No Default User';
@@ -192,6 +196,8 @@ $lang['title_callback_help']='Help';
 $lang['title_form_template']='Template to use to Display Form';
 $lang['title_css_id_and_name'] = 'Use ID and Name for CSS inputs';
 $lang['title_page_x_of_y'] = 'Page %s of %s';
+$lang['title_no_advanced_options']='Field has no advanced options.';
+
 
 $lang['title_date_format']='Date Format (standard <a href="http://www.php.net/manual/en/function.date.php">PHP Date Formats</a>)';
 $lang['title_use_wysiwyg']='Use WYSIWYG editor for text Area?';

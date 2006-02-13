@@ -45,7 +45,7 @@ class fbTextField extends fbFieldBase {
 	}
 
 
-	function RenderAdminForm($formDescriptor)
+	function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$main = array(

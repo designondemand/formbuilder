@@ -209,7 +209,7 @@ class fbFieldBase {
 	}
 
 
-	function BaseAdminForm($formDescriptor,$disposeOnly=0)
+	function PrePopulateBaseAdminForm($formDescriptor,$disposeOnly=0)
 	{
 		$mod = $this->form_ptr->module_ptr;
 		if ($this->Type == '')
@@ -282,10 +282,18 @@ class fbFieldBase {
     // Each of these is an associative array of Title / Input values.
     // The Title will be displayed if it has a length;
     // the "Input" should be a Form input for that field attribute/option
-	function RenderAdminForm($formDescriptor)
+	function PrePopulateAdminForm($formDescriptor)
 	{
 		return array();
 	}
+
+    // override me.
+    // This gives you a chance to alter the array contents before
+    // they get rendered. 
+	function PostPopulateAdminForm(&$mainArray, &$advArray)
+	{
+	}
+
 
 
 	// override me. Returns an array: first value is a true or false (whether or not

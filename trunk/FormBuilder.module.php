@@ -322,20 +322,21 @@ class FormBuilder extends CMSModule
 
 	function HandlePublicForm($id, &$params, $returnid)
 	{
-//debug_display($params);
+debug_display($params);
         if (! isset($params['form_id']) && isset($params['form']))
             {
             // get the form by name, not ID
             $params['form_id'] = $this->GetFormIDFromAlias($params['form']);
             }
-//echo "pre-sintant";
+//echo "pre-instantiate form";
 //debug_display($params);
         $aeform = new fbForm($this,$params,true);
-//debug_display($params);
+echo 'pre-render';
+debug_display($params);
         echo $aeform->RenderFormHeader();
         $finished = false;
         if (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber() > 0) ||
-        	(isset($params['done'])))
+        	(isset($params['done'])&& $params['done']==1))
             {
 //error_log( "validating page :".$aeform->GetPageNumber());            
 //        	debug_display($params);
@@ -347,7 +348,7 @@ class FormBuilder extends CMSModule
                 echo $res[1]."\n";
                 $aeform->PageBack();
                 }
-            else if (isset($params['done']))
+            else if (isset($params['done']) && $params['done']==1)
             	{
             	$finished = true;
             	$results = $aeform->Dispose();
@@ -365,7 +366,7 @@ class FormBuilder extends CMSModule
         	{
         	if ($results[0] == true)
         		{
-        		echo $aeform->GetAttr('thanks_message');
+        		echo $this->Lang('successful_formsubmit');
         		}
         	else
         		{
