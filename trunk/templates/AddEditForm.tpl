@@ -21,6 +21,10 @@
 		<p class="pageinput">{$input_form_css_class}</p>
 	</div>
 	<div class="pageoverflow">
+		<p class="pagetext">{$title_name_as_id}:</p>
+		<p class="pageinput">{$input_name_as_id}</p>
+	</div>
+	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_displaytype}:</p>
 		<p class="pageinput">{$input_form_displaytype}</p>
 	</div>
@@ -83,12 +87,6 @@
 		<p class="pageinput">{$input_title_position}</p>
 	</div>
 
-{$tab_end}
-{$csstab_start}
-	<div class="pageoverflow">
-		<p class="pagetext">{$title_css_id_and_name}:</p>
-		<p class="pageinput">{$input_css_id_and_name}</p>
-	</div>
 {$tab_end}
 {$templatetab_start}
 	<div class="pageoverflow">

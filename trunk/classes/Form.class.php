@@ -17,8 +17,8 @@ class fbForm {
 
 	function fbForm(&$module_ptr, &$params, $loadDeep=false)
 	{
-echo "form init";
-debug_display($params);
+//echo "form init";
+//debug_display($params);
 	   $this->module_ptr = $module_ptr;
 	   $this->Fields = array();
 	   $this->Attrs = array();
@@ -249,9 +249,9 @@ debug_display($params);
 	// returns a string.
     function RenderForm($id, &$params, $returnid)
     {
-echo 'render form';
-debug_display($params);
-debug_display($this->Page);
+//echo 'render form';
+//debug_display($params);
+//debug_display($this->Page);
 		$mod = $this->module_ptr;
     	if ($this->Id == -1)
 			{
@@ -266,6 +266,7 @@ debug_display($this->Page);
 		$mod->smarty->assign('title_page_x_of_y',$mod->Lang('title_page_x_of_y',array($this->Page,$this->formTotalPages)));
 		
 		$mod->smarty->assign('css_class',$this->GetAttr('css_class',''));
+		$mod->smarty->assign('name_as_id',$this->GetAttr('name_as_id','0'));
 		$mod->smarty->assign('total_pages',$this->formTotalPages);
 		$mod->smarty->assign('this_page',$this->Page);
 		$mod->smarty->assign('form_name',$this->Name);
@@ -331,7 +332,7 @@ debug_display($this->Page);
 			{
     	   	$mod->smarty->assign('prev',$mod->CreateInputSubmit($id, 'prev',
     	   		$this->GetAttr('prev_button_text'),
-    	   		$this->GetAttr('use_id_and_name','')==''?'class="fbsubmit"':'id="'.$this->Alias.'_sub" class="fbsubmit"'));
+    	   		$this->GetAttr('name_as_id','0')=='0'?'class="fbsubmit"':'id="'.$this->GetAttr('prev_button_text').'" class="fbsubmit"'));
 			}
 		else
 			{
@@ -342,13 +343,13 @@ debug_display($this->Page);
 			{
     	   	$mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'submit',
     	   		$this->GetAttr('next_button_text'),
-    	   		$this->GetAttr('use_id_and_name','')==''?'class="fbsubmit"':'id="'.$this->Alias.'_sub" class="fbsubmit"'));
+    	   		$this->GetAttr('name_as_id','0')=='0'?'class="fbsubmit"':'id="'.$this->GetAttr('next_button_text').'" class="fbsubmit"'));
 			}
 		else
 			{
             $mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'submit',
             	$this->GetAttr('submit_button_text'),
-            	$this->GetAttr('use_id_and_name','')==''?'class="fbsubmit"':'id="'.$this->Alias.'_sub" class="fbsubmit"'));
+            	$this->GetAttr('name_as_id','')==''?'class="fbsubmit"':'id="'.$this->GetAttr('submit_button_text').'" class="fbsubmit"'));
 			}
 
 		// figure out how to render the form, now that it's smarty-ized
@@ -586,7 +587,6 @@ debug_display($this->Page);
 			$mod->SetTabHeader('maintab',$mod->Lang('tab_main')).
 			$mod->SetTabHeader('addition',$mod->Lang('tab_additional')).
 			$mod->SetTabHeader('tablelayout',$mod->Lang('tab_tablelayout')).
-			$mod->SetTabHeader('csslayout',$mod->Lang('tab_csslayout')).
 			$mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout')).
 			
 			$mod->EndTabHeaders() . $mod->StartTabContent());
@@ -595,7 +595,6 @@ debug_display($this->Page);
 		$mod->smarty->assign('maintab_start',$mod->StartTab("maintab"));
 		$mod->smarty->assign('additionaltab_start',$mod->StartTab("addition"));
 		$mod->smarty->assign('tabletab_start',$mod->StartTab("tablelayout"));
-		$mod->smarty->assign('csstab_start',$mod->StartTab("csslayout"));
 		$mod->smarty->assign('templatetab_start',$mod->StartTab("templatelayout"));
 		$mod->smarty->assign('tab_end',$mod->EndTab());
 		$mod->smarty->assign('form_end',$mod->CreateFormEnd());
@@ -737,11 +736,11 @@ debug_display($this->Page);
 		$mod->smarty->assign('input_form_displaytype',
 			$mod->CreateInputRadioGroup($id, 'forma_form_displaytype', $displayTypes, $this->GetAttr('form_displaytype','tab')));
 				
-		$mod->smarty->assign('title_css_id_and_name',
-			$mod->Lang('title_css_id_and_name'));
-		$mod->smarty->assign('input_css_id_and_name',
-			$mod->CreateInputCheckbox($id, 'forma_css_id_and_name', 1,
-				$this->GetAttr('css_id_and_name','0')).$mod->Lang('title_css_id_and_name'));
+		$mod->smarty->assign('title_name_as_id',
+			$mod->Lang('title_name_as_id'));
+		$mod->smarty->assign('input_name_as_id',
+			$mod->CreateInputCheckbox($id, 'forma_name_as_id', 1,
+				$this->GetAttr('name_as_id','0')).$mod->Lang('title_name_as_id'));
 		$mod->smarty->assign('title_title_position',
 			$mod->Lang('title_title_position'));
 		$pos = array($mod->Lang('title_table_layout_left')=>'left',$mod->Lang('title_table_layout_above')=>'top');	
