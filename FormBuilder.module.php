@@ -322,7 +322,7 @@ class FormBuilder extends CMSModule
 
 	function HandlePublicForm($id, &$params, $returnid)
 	{
-debug_display($params);
+//debug_display($params);
         if (! isset($params['form_id']) && isset($params['form']))
             {
             // get the form by name, not ID
@@ -331,8 +331,8 @@ debug_display($params);
 //echo "pre-instantiate form";
 //debug_display($params);
         $aeform = new fbForm($this,$params,true);
-echo 'pre-render';
-debug_display($params);
+//echo 'pre-render';
+//debug_display($params);
         echo $aeform->RenderFormHeader();
         $finished = false;
         if (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber() > 0) ||

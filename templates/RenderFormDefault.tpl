@@ -25,9 +25,11 @@
        {$this_page}              - number fo the current page for multi-page forms
        {$title_page_x_of_y} - displays "page x of y" for multi-page forms
        {$css_class}               - CSS Class for the form
+       {$name_as_id}  		  - 1 if the user opted to have field IDs set to the field name class, 0 otherwise
        {$form_name}           - Form name
        {$form_id}                 - Form Database ID
        {$prev}                      - "Back" button for multipart forms
+       Dunno why you'd want some of those, but there you go...
 
 -->
 {/literal}

@@ -92,7 +92,6 @@ $lang['tab_main']='Main';
 $lang['tab_additional']='Form Messages';
 $lang['tab_advanced']='Advanced Settings';
 $lang['tab_tablelayout']='Table-based Layout Options';
-$lang['tab_csslayout']='CSS Layout Options';
 $lang['tab_templatelayout'] = 'Template Layout Options';
 $lang['nofields']='No retrieval fields defined. ';
 $lang['nomethod']='No method/module set.';
@@ -194,7 +193,7 @@ $lang['title_callback_method']='Callback Method';
 $lang['title_callback_fields']='Result Fields to Include';
 $lang['title_callback_help']='Help';
 $lang['title_form_template']='Template to use to Display Form';
-$lang['title_css_id_and_name'] = 'Use ID and Name for CSS inputs';
+$lang['title_name_as_id'] = 'Use Name as an ID for inputs';
 $lang['title_page_x_of_y'] = 'Page %s of %s';
 $lang['title_no_advanced_options']='Field has no advanced options.';
 

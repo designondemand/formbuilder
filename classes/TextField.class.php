@@ -29,9 +29,8 @@ class fbTextField extends fbFieldBase {
 		return $mod->CreateInputText($id, '_'.$this->Id,
 			htmlspecialchars($this->Value, ENT_QUOTES),
             $this->GetOption('length')<25?$this->GetOption('length'):25,
-            $this->GetOption('length'));
-            
-            /*,$this->mod_globals->UseIDAndName?'id="'.$this->Alias.'"':'');*/
+            $this->GetOption('length'),
+            $this->form_ptr->GetAttr('name_as_id','0')=='1'?'id="'.$this->Name.'"':'');
 	}
 
 	function StatusInfo()
