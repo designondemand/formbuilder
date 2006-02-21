@@ -423,9 +423,23 @@ class fbForm {
            }
           
         $this->loaded = 'summary';
+
+		if (isset($params['response_id']))
+			{
+			$loadDeep = true;
+			}
 			
         if ($loadDeep)
            {
+			// if it's a stored form, load the results -- but this is wrong, since $params[] should
+			// override the value (say we're resubmitting a form)
+			if (isset($params['response_id']))
+				{
+				$this->LoadResponseValues($params);
+				}
+				
+		debug_display($params);
+
            $sql = 'SELECT * FROM ' . cms_db_prefix().
            	'module_fb_field WHERE form_id=? ORDER BY order_by';
 	       $rs = $this->module_ptr->dbHandle->Execute($sql, array($formId));
@@ -443,9 +457,18 @@ class fbForm {
                     // create the field object
                    //echo "Pre-merge on load";
                    //debug_display($params);
-                    if ((isset($thisRes['field_id']) && isset($params['_'.$thisRes['field_id']])) ||
-                    	(isset($params['field_id']) && isset($thisRes['field_id']) &&
-                        $params['field_id'] == $thisRes['field_id']))
+                    if (
+                    		( isset($thisRes['field_id']) &&
+                    			(
+                    			isset($params['_'.$thisRes['field_id']]) ||
+                    			isset($params['__'.$thisRes['field_id']])
+                    			)
+                    		) ||
+                    		(
+                    			isset($params['field_id']) && isset($thisRes['field_id']) &&
+                        	 	$params['field_id'] == $thisRes['field_id']
+                        	)
+                       	)
                         {
                         $thisRes = array_merge($thisRes,$params);
                         }
@@ -459,12 +482,6 @@ class fbForm {
             $this->loaded = 'full';
            }
 
-		// if it's a stored form, load the results -- but this is wrong, since $params[] should
-		// override the value (say we're resubmitting a form)
-		if (isset($params['response_id']))
-			{
-			$this->LoadResponse($params['response_id']);
-			}
 		
 		for ($i=0; $i < count($this->Fields); $i++)
 			{
@@ -1058,6 +1075,34 @@ class fbForm {
         	{
         	return false;
         	}
+    }   
+
+    function LoadResponseValues(&$params)
+    {
+    	$db = $this->module_ptr->dbHandle;
+         // loading a response -- at this point, we check that the response
+         // is for the correct form_id!
+		$sql = 'SELECT form_id FROM ' . cms_db_prefix().
+				'module_fb_resp where resp_id=?';
+        if($result = $db->GetRow($sql, array($params['response_id'])))
+        	{
+        	if ($result['form_id'] != $this->GetId())
+        		{
+        		return false;
+        		}
+        	$sql = 'SELECT * FROM '.cms_db_prefix().
+        			'module_fb_resp_val WHERE resp_id=?';
+        	 $dbresult = $db->Execute($sql, array($params['response_id']));
+		    while ($dbresult && $row = $dbresult->FetchRow())
+		        	{
+		        	$params['__'.$row['field_id']] = $row['value'];
+		        	}
+        	}
+        else
+        	{
+        	return false;
+        	}
+//        debug_display($params);
     }   
 
 
