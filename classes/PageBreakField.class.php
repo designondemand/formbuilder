@@ -12,8 +12,9 @@ class fbPageBreakField extends fbFieldBase {
 		$this->Type = 'PageBreakField';
 		$this->DisplayInForm = false;
 		$this->Required = false;
-		$this->ValidationTypes = array($mod->Lang('validation_none')=>'none');
-		$this->specialInput = true;
+		//$this->ValidationTypes = array($mod->Lang('validation_none')=>'none');
+		$this->ValidationTypes = array();
+		$this->SpecialInput = true;
 	}
 
 	function GetFieldInput($id, &$params, $return_id)

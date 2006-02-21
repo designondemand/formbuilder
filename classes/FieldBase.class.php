@@ -259,6 +259,8 @@ class fbFieldBase {
 			array_push($main, array($mod->Lang('title_field_validation'),$validInput));
 
 			array_push($adv, array($mod->Lang('title_hide_label'),$mod->CreateInputCheckbox($formDescriptor, 'hide_label', 1, $this->HideLabel()).$mod->Lang('title_hide_label_long')));
+
+//$this->DebugDisplay();
 			if ($this->DisplayInForm())
 				{
 				array_push($adv,array($mod->Lang('title_field_css_class'),$mod->CreateInputText($formDescriptor, 'opt_css_class', $this->GetOption('css_class'), 50)));
@@ -295,6 +297,35 @@ class fbFieldBase {
 	}
 
 
+	// clear fields unused by invisible dispositions
+	function HiddenDispositionFields(&$mainArray, &$advArray)
+	{
+		$mod = $this->form_ptr->module_ptr;
+		// remove the "required" field
+		$reqIndex = -1;
+		for ($i=0;$i<count($mainArray);$i++)
+			{
+			if ($mainArray[$i]->title == $mod->Lang('title_field_required'))
+				{
+				$reqIndex = $i;
+				}
+			}
+		if ($reqIndex != -1)
+			{
+			array_splice($mainArray, $reqIndex,1);
+			}
+		// remove the "hide name" field
+		$hideIndex = -1;
+		for ($i=0;$i<count($advArray);$i++)
+			{
+			if ($advArray[$i]->title == $mod->Lang('title_hide_label'))
+				{
+				$advArray[$i]->title = $mod->Lang('tab_advanced');
+				$advArray[$i]->input = $mod->Lang('title_no_advanced_options');
+				}
+			}
+	}
+	
 
 	// override me. Returns an array: first value is a true or false (whether or not
     // the value is valid), the second is a message
@@ -315,6 +346,13 @@ class fbFieldBase {
 			return $this->form_ptr->module_ptr->Lang('unspecified');
 			}
 	}
+
+	// override me, if necessary to convert type or something.
+	function SetValue($valStr)
+	{
+		$this->Value = $valStr;
+	}
+
 
 	function RequiresValidation()
 	{
@@ -384,8 +422,7 @@ class fbFieldBase {
     function Load(&$params=array(), $loadDeep=false)
     {
 		$sql = 'SELECT * FROM ' . cms_db_prefix() . 'module_fb_field WHERE field_id=?';
-	    $rs = $this->form_ptr->module_ptr->dbHandle->Execute($sql, array($this->Id));
-        if($rs && $result = $rs->FetchRow())
+        if($result = $this->form_ptr->module_ptr->dbHandle->GetRow($sql, array($this->Id)))
 			{
 			if (strlen($this->Name) < 1)
 				{

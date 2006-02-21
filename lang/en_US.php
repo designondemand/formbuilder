@@ -18,6 +18,7 @@ $lang['field_type_DispositionDirector']='*Email Results Based on Pulldown';
 $lang['field_type_DispositionEmail']='*Email Results to set Address(es)';
 $lang['field_type_DispositionEmailSiteUser']='*Email Results to User-Selected Site User';
 $lang['field_type_DispositionFile']='*Write Results to Flat File';
+$lang['field_type_DispositionDatabase']='*Store Results in Database';
 $lang['field_type_PageBreakField']='Page Break';
 $lang['field_type_TextStatic']='Static Text';
 $lang['field_type_FileUploadField']='File Upload';
