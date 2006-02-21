@@ -156,7 +156,7 @@ class FormBuilder extends CMSModule
 			field_id I,
 			form_id I,
 			name C(255),
-			value C(255)
+			value X
 		";
 		$sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_fb_field_opt', $flds, $taboptarray);
 		$dict->ExecuteSQLArray($sqlarray);
@@ -170,6 +170,42 @@ class FormBuilder extends CMSModule
 
 		$sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_fb_flock', $flds, $taboptarray);
 		$dict->ExecuteSQLArray($sqlarray);
+
+		$flds = "
+			resp_id I KEY,
+			form_id I,
+			user_approved T,
+			admin_approved T,
+			submitted T
+		";
+		$sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_fb_resp', $flds, $taboptarray);
+		$dict->ExecuteSQLArray($sqlarray);
+
+		$flds = "
+			resp_attr_id I KEY,
+			resp_id I,
+			name C(35),
+			value X
+		";
+		$sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_fb_resp_attr', $flds, $taboptarray);
+		$dict->ExecuteSQLArray($sqlarray);
+
+		$db->CreateSequence(cms_db_prefix().'module_fb_resp_attr_seq');
+
+
+		$db->CreateSequence(cms_db_prefix().'module_fb_resp_seq');
+
+		$flds = "
+			resp_val_id I KEY,
+			resp_id I,
+			field_id I,
+			value X
+		";
+		$sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_fb_resp_val', $flds, $taboptarray);
+		$dict->ExecuteSQLArray($sqlarray);
+
+		$db->CreateSequence(cms_db_prefix().'module_fb_resp_val_seq');
+
 
 		$this->CreatePermission('Modify Forms', 'Modify Forms');
 //        include 'includes/SampleData.inc';
@@ -204,6 +240,17 @@ class FormBuilder extends CMSModule
 
 		$sqlarray = $dict->DropTableSQL(cms_db_prefix().'module_fb_flock');
 		$dict->ExecuteSQLArray($sqlarray);
+
+		$sqlarray = $dict->DropTableSQL(cms_db_prefix().'module_fb_resp_val');
+		$dict->ExecuteSQLArray($sqlarray);
+		$sqlarray = $dict->DropTableSQL(cms_db_prefix().'module_fb_resp');
+		$dict->ExecuteSQLArray($sqlarray);
+		$sqlarray = $dict->DropTableSQL(cms_db_prefix().'module_fb_resp_attr');
+		$dict->ExecuteSQLArray($sqlarray);
+
+		$db->DropSequence(cms_db_prefix().'module_fb_resp_seq');
+		$db->DropSequence(cms_db_prefix().'module_fb_resp_val_seq');
+		$db->DropSequence(cms_db_prefix().'module_fb_resp_attr_seq');
 
 		$this->RemovePermission('Modify Forms', 'Modify Forms');
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('uninstalled'));
@@ -631,6 +678,41 @@ class FormBuilder extends CMSModule
 		return $this->Lang('help');
 	}
 
+
+	// For a given form, returns an array of response objects
+	function ListResponses($form_id, $sort_order='submitted')
+	{
+		$db = $this->dbHandle;
+		$ret = array();
+		$sql = 'SELECT * FROM '.cms_db_prefix().
+        			'module_fb_resp WHERE form_id=? ORDER BY ?';
+       	$dbresult = $db->Execute($query, array($form_id,$sort_order));
+		while ($dbresult && $row = $dbresult->FetchRow())
+			{
+			$oneset = new stdClass();
+			$oneset->id = $result['resp_id'];
+			$oneset->user_approved = $db->UnixTimeStamp($result['user_approved']); 
+ 			$oneset->admin_approved = $db->UnixTimeStamp($result['admin_approved']); 
+			$oneset->submitted = $db->UnixTimeStamp($result['submitted']); 
+		    array_push($ret,$oneset);
+		    }
+		return $ret;
+	}
+
+	// TO-DO - Implement
+	function ApproveResponse($response_id, $approver='user')
+	{
+	// user approval
+	
+	// admin approval
+	
+	
+	}
+
+	// TO-DO - Implement
+	function DeleteResponse($response_id)
+	{
+	}
 
     function def(&$var)
     {

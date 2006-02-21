@@ -127,10 +127,18 @@ class fbForm {
 	{
 		$tmp = $this->module_ptr;
 		$this->module_ptr = '';
+		$template_tmp = $this->GetAttr('form_template','');
+		$this->SetAttr('form_template',strlen($template_tmp).' characters');
 		debug_display($this);
+		$this->SetAttr('form_template',$template_tmp);
 		$this->module_ptr = $tmp;
 	}
 
+	
+	function SetAttr($attrname, $val)
+	{
+		$this->Attrs[$attrname] = $val;
+	}
 	
 	function GetAttr($attrname, $default="")
 	{
@@ -259,7 +267,7 @@ class fbForm {
 			}
 		if ($this->loaded != 'full')
 			{
-			$this->LoadForm($params);
+			$this->Load($this->Id,$params,true);
 			}
 		$reqSymbol = $this->GetAttr('required_field_symbol','*');
 				
@@ -384,9 +392,9 @@ class fbForm {
         $this->Fields[] = new $className($this->mod_globals, $fieldInfo);
     }
 
-    function LoadForm()
+    function LoadForm($loadDeep=false)
     {
-    	return $this->Load($this->Id, true);
+    	return $this->Load($this->Id, array(), $loadDeep);
     }
 
     function Load($formId, &$params, $loadDeep=false)
@@ -415,6 +423,7 @@ class fbForm {
            }
           
         $this->loaded = 'summary';
+			
         if ($loadDeep)
            {
            $sql = 'SELECT * FROM ' . cms_db_prefix().
@@ -449,6 +458,13 @@ class fbForm {
                 }
             $this->loaded = 'full';
            }
+
+		// if it's a stored form, load the results -- but this is wrong, since $params[] should
+		// override the value (say we're resubmitting a form)
+		if (isset($params['response_id']))
+			{
+			$this->LoadResponse($params['response_id']);
+			}
 		
 		for ($i=0; $i < count($this->Fields); $i++)
 			{
@@ -457,8 +473,7 @@ class fbForm {
 				{
 				$this->formTotalPages++;
 				}
-			}          
-           
+			}           
         return true;
     }
 
@@ -538,7 +553,7 @@ class fbForm {
 		  }
 		if ($this->loaded != 'full')
 			{
-			$this->LoadForm();
+			$this->Load($this->Id,array(),true);
 			}
         foreach ($this->Fields as $field)
             {
@@ -954,6 +969,11 @@ class fbForm {
         $srcField->Store();
         $destField->Store();
     }
+
+	function &GetFields()
+	{
+		return $this->Fields;
+	}
     
     function &GetFieldById($field_id)
     {
@@ -1008,7 +1028,81 @@ class fbForm {
     		$this->Fields[$index]->Delete();
     		array_splice($this->Fields,$index,1);
     		}
-    }    
+    } 
+    
+	// this will instantiate the form, and load the results
+    function LoadResponse($response_id)
+    {
+    	$db = $this->module_ptr->dbHandle;
+//$this->DebugDisplay();    	
+         // loading a response -- at this point, we check that the response
+         // is for the correct form_id!
+		$sql = 'SELECT form_id FROM ' . cms_db_prefix().
+				'module_fb_resp where resp_id=?';
+        if($result = $db->GetRow($sql, array($response_id)))
+        	{
+        	if ($result['form_id'] != $this->GetId())
+        		{
+        		return false;
+        		}
+        	$sql = 'SELECT * FROM '.cms_db_prefix().
+        			'module_fb_resp_val WHERE resp_id=?';
+        	 $dbresult = $db->Execute($sql, array($response_id));
+		    while ($dbresult && $row = $dbresult->FetchRow())
+		        	{
+		        	$index = $this->GetFieldIndexFromId($row['field_id']);
+		        	$this->Fields[$index]->SetValue($row['value']);
+		        	}
+        	}
+        else
+        	{
+        	return false;
+        	}
+    }   
+
+
+    
+    function StoreResponse($response_id=-1)
+    {
+    	$db = $this->module_ptr->dbHandle;
+        $fields = $this->GetFields();
+    	
+        if ($response_id == -1)
+            {
+            // saving a new response
+            $response_id = $db->GenID(cms_db_prefix(). 'module_fb_resp_seq');
+			$sql = 'INSERT INTO ' . cms_db_prefix().
+				'module_fb_resp (resp_id, form_id, submitted)' .
+				' VALUES (?, ?, ?)';
+			$res = $db->Execute($sql,
+				array($response_id,
+				 $this->GetId(),
+				 $db->DBTimeStamp(time())));
+            }
+        else
+            {
+            // updating an old response, so we purge old values
+			$sql = 'DELETE FROM ' . cms_db_prefix().
+				'module_fb_resp where resp_id=?';
+			$res = $db->Execute($sql, array($response_id));
+            }
+
+		$sql = 'INSERT INTO ' . cms_db_prefix().
+				'module_fb_resp_val (resp_val_id, resp_id, field_id, value)' .
+				'VALUES (?, ?, ?, ?)';
+        foreach ($fields as $thisField)
+        	{
+        	$resp_val_id = $db->GenID(cms_db_prefix().
+            	'module_fb_resp_val_seq');
+		// set the response_id to be the attribute of the database disposition
+            if ($thisField->GetFieldType() == 'DispositionDatabase')
+        		{
+        		$thisField->SetValue($response_id);
+        		}
+            $res = $db->Execute($sql, array($resp_val_id,$response_id,
+            	$thisField->GetId(),$thisField->GetValue())); 
+        	}
+    }   
     
 }
 
