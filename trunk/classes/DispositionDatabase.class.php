@@ -12,7 +12,16 @@ class fbDispositionDatabase extends fbFieldBase {
 		$this->Type = 'DispositionDatabase';
 		$this->IsDisposition = true;
 		$this->SpecialInput = true;
-		$this->DisplayInForm = false;
+		$this->DisplayInForm = true;
+		$this->HideLabel = 1;
+		$this->CodedValue = -1;
+	}
+
+	function GetFieldInput($id, &$params, $returnid)
+	{
+		$mod = $this->form_ptr->module_ptr;
+		return $mod->CreateInputHidden($id, '_'.$this->Id,	
+			$this->EncodeReqId($this->Value));
 	}
 
 	function StatusInfo()
@@ -20,16 +29,45 @@ class fbDispositionDatabase extends fbFieldBase {
 		 return '';
 	}
 	
-	function SetValue($val)
+	function DecodeReqId()
 	{
-		$this->Value = $val;
+		$tmp = base64_decode($this->EncodedValue);
+		$tmp2 = str_replace(session_id(),'',$tmp);
+		if (substr($tmp2,0,1) == '_')
+			{
+			return substr($tmp2,1);
+			}
+		else
+			{
+			return -1;
+			}
 	}
 	
-	function SetResponseId($resp_id)
+	function EncodeReqId($req_id)
 	{
-		$this->SetOption('response_id',$resp_id);
+		return base64_encode(session_id().'_'.$req_id);
 	}
-
+	
+	function SetValue($val)
+	{
+		$decval = base64_decode($val);
+		if (! $val)
+			{
+			// no value set, so we'll leave value as false
+			}
+		elseif (strpos($decval,'_') === false)
+			{
+			// unencrypted value, coming in from previous response
+			$this->Value = $val;
+			}
+		else
+			{
+			// encrypted value coming in from a form, so we'll update.
+			$this->EncodedValue = $val;
+			$this->Value = $this->DecodeReqId();
+			}
+	}
+	
 	function PrePopulateAdminForm($formDescriptor)
 	{
 		return array();
@@ -44,8 +82,7 @@ class fbDispositionDatabase extends fbFieldBase {
 	function DisposeForm()
 	{
 		$form = $this->form_ptr;
-		//$mod = $this->form_ptr->module_ptr;
-		$form->StoreResponse($this->GetOption('response_id',-1));
+		$form->StoreResponse($this->Value?$this->Value:-1);
 		return array(true,'');	   
 	}
 

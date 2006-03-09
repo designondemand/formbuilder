@@ -197,6 +197,7 @@ $lang['title_form_template']='Template to use to Display Form';
 $lang['title_name_as_id'] = 'Use Name as an ID for inputs';
 $lang['title_page_x_of_y'] = 'Page %s of %s';
 $lang['title_no_advanced_options']='Field has no advanced options.';
+$lang['title_form_unspecified']='Text to return for unspecified field values';
 
 
 $lang['title_date_format']='Date Format (standard <a href="http://www.php.net/manual/en/function.date.php">PHP Date Formats</a>)';
