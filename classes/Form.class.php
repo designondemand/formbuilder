@@ -431,14 +431,23 @@ class fbForm {
 			
         if ($loadDeep)
            {
-			// if it's a stored form, load the results -- but this is wrong, since $params[] should
-			// override the value (say we're resubmitting a form)
+			// if it's a stored form, load the results -- but we need to manually merge them,
+			// since $params[] should override the database value (say we're resubmitting a form)
 			if (isset($params['response_id']))
 				{
-				$this->LoadResponseValues($params);
+				$loadParams = array('response_id'=>$params['response_id']);
+				$this->LoadResponseValues($loadParams);
+				foreach ($loadParams as $thisParamKey=>$thisParamValue)
+					{
+					if (! isset($params[$thisParamKey]))
+						{
+						$params[$thisParamKey] = $thisParamValue;
+						}
+					//echo "$thisParamKey - $thisParamValue<br/>";
+					}
 				}
 				
-		debug_display($params);
+		//debug_display($params);
 
            $sql = 'SELECT * FROM ' . cms_db_prefix().
            	'module_fb_field WHERE form_id=? ORDER BY order_by';
@@ -634,6 +643,10 @@ class fbForm {
 		$mod->smarty->assign('input_form_name',
 			$mod->CreateInputText($id, 'form_name',
 			$this->Name, 50));
+		$mod->smarty->assign('title_form_unspecified',$mod->Lang('title_form_unspecified'));
+		$mod->smarty->assign('input_form_unspecified',
+			$mod->CreateInputText($id, 'forma_unspecified',
+			$this->GetAttr('unspecified','[unspecified]'), 50));
 		$mod->smarty->assign('title_form_status',
 			$mod->Lang('title_form_status'));
 		$mod->smarty->assign('text_ready',
@@ -1128,7 +1141,7 @@ class fbForm {
             {
             // updating an old response, so we purge old values
 			$sql = 'DELETE FROM ' . cms_db_prefix().
-				'module_fb_resp where resp_id=?';
+				'module_fb_resp_val where resp_id=?';
 			$res = $db->Execute($sql, array($response_id));
             }
 

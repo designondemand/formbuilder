@@ -76,17 +76,19 @@ class fbFieldBase {
 	       {
 	       $this->ValidationType = $params['validation_type'];
 	       }
-echo '-'.$params['_'.$this->Id].' '.$params['__'.$this->Id].'<br>';
+//echo '-'.$params['_'.$this->Id].' '.$params['__'.$this->Id];
 	   if (isset($params['_'.$this->Id]) && strlen($params['_'.$this->Id]) > 0)
 //	   if (isset($params['_'.$this->Id]))
 	   		{
 //	   		error_log('Setting '.'_'.$this->Id.' value to '.$params['_'.$this->Id]);
-	   		$this->Value = $params['_'.$this->Id];
+//echo " setting from form<br>";
+	   		$this->SetValue($params['_'.$this->Id]);
 	   		}
 	   	elseif (isset($params['__'.$this->Id]) && strlen($params['__'.$this->Id]) > 0)
 	   		{
 	   		// a response value
-	   		$this->Value = $params['__'.$this->Id];
+//echo " setting from stored response<br>";	   		
+	   		$this->SetValue($params['__'.$this->Id]);
 	   		}
 //	   else {echo 'no value to set for '.'_'.$this->Id;
 //	   debug_display($params);
@@ -349,7 +351,7 @@ echo '-'.$params['_'.$this->Id].' '.$params['__'.$this->Id].'<br>';
 			}
 		else
 			{
-			return $this->form_ptr->module_ptr->Lang('unspecified');
+			return $this->form_ptr->GetAttr('unspecified','[unspecified]');
 			}
 	}
 
