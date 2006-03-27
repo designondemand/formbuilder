@@ -1,7 +1,11 @@
 <?php
-// Feedback Form. 02/2005 SjG <feedbackform_cmsmodule@fogbound.net>
-// A Module for CMS Made Simple, (c)2005 by Ted Kulp (wishy@cmsmadesimple.org)
-// This project's homepage is: http://www.cmsmadesimple.org
+/* 
+   FormBuilder. Copyright (c) 2005-2006 Samuel Goldstein <sjg@cmsmodules.com>
+   More info at http://dev.cmsmadesimple.org/projects/formbuilder
+   
+   A Module for CMS Made Simple, Copyright (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
+  This project's homepage is: http://www.cmsmadesimple.org
+*/
 
 class fbTextField extends fbFieldBase {
 
@@ -71,7 +75,7 @@ class fbTextField extends fbFieldBase {
 		  	   case 'none':
 		  	       break;
 		  	   case 'numeric':
-                  if ($this->Value === false ||
+                  if ($this->Value !== false &&
                       ! preg_match("/^([\d\.\,])+$/i", $this->Value))
                       {
                       $result = false;
@@ -79,7 +83,7 @@ class fbTextField extends fbFieldBase {
                       }
 		  	       break;
 		  	   case 'integer':
-                  if ($this->Value === false ||
+                  if ($this->Value !== false &&
                   	! preg_match("/^([\d])+$/i", $this->Value) ||
                       intval($this->Value) != $this->Value)
                     {
@@ -88,7 +92,7 @@ class fbTextField extends fbFieldBase {
                     }
 		  	       break;
 		  	   case 'email':
-                  if ($this->Value === false ||
+                  if ($this->Value !== false &&
                       ! preg_match("/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i", $this->Value))
                     {
                     $result = false;
@@ -96,7 +100,7 @@ class fbTextField extends fbFieldBase {
                     }
 		  	       break;
 		  	   case 'regex_match':
-                  if ($this->Value === false ||
+                  if ($this->Value !== false &&
                       ! preg_match($this->GetOption('regex','/.*/'), $this->Value))
                     {
                     $result = false;
@@ -104,7 +108,7 @@ class fbTextField extends fbFieldBase {
                     }
 		  	   	   break;
 		  	   case 'regex_nomatch':
-                  if ($this->Value === false ||
+                  if ($this->Value !== false &&
                        preg_match($this->GetOption('regex','/.*/'), $this->Value))
                     {
                     $result = false;

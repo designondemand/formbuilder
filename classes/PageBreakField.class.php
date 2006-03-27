@@ -1,7 +1,11 @@
 <?php
-// Feedback Form. 02/2005 SjG <feedbackform_cmsmodule@fogbound.net>
-// A Module for CMS Made Simple, (c)2005 by Ted Kulp (wishy@cmsmadesimple.org)
-// This project's homepage is: http://www.cmsmadesimple.org
+/* 
+   FormBuilder. Copyright (c) 2005-2006 Samuel Goldstein <sjg@cmsmodules.com>
+   More info at http://dev.cmsmadesimple.org/projects/formbuilder
+   
+   A Module for CMS Made Simple, Copyright (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
+  This project's homepage is: http://www.cmsmadesimple.org
+*/
 
 class fbPageBreakField extends fbFieldBase {
 
@@ -14,7 +18,7 @@ class fbPageBreakField extends fbFieldBase {
 		$this->Required = false;
 		//$this->ValidationTypes = array($mod->Lang('validation_none')=>'none');
 		$this->ValidationTypes = array();
-		$this->SpecialInput = true;
+		$this->NonRequirableField = true;
 	}
 
 	function GetFieldInput($id, &$params, $return_id)
