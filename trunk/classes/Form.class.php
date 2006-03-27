@@ -1,7 +1,11 @@
 <?php
-// Feedback Form. 02/2005 SjG <feedbackform_cmsmodule@fogbound.net>
-// A Module for CMS Made Simple, (c)2005 by Ted Kulp (wishy@cmsmadesimple.org)
-// This project's homepage is: http://www.cmsmadesimple.org
+/* 
+   FormBuilder. Copyright (c) 2005-2006 Samuel Goldstein <sjg@cmsmodules.com>
+   More info at http://dev.cmsmadesimple.org/projects/formbuilder
+   
+   A Module for CMS Made Simple, Copyright (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
+  This project's homepage is: http://www.cmsmadesimple.org
+*/
 
 class fbForm {
 
@@ -301,20 +305,25 @@ class fbForm {
 				}
 			if ($formPageCount != $this->Page)
 				{
-				if (is_array($params['_'.$this->Fields[$i]->GetId()]))
+				$testIndex = '_'.$this->Fields[$i]->GetId();
+				if (!isset($params[$testIndex]))
 					{
-					foreach ($params['_'.$this->Fields[$i]->GetId()] as $val)
+					// do we need to write something?
+					}
+				elseif (is_array($params[$testIndex]))
+					{
+					foreach ($params[$testIndex] as $val)
 						{
 						$hidden .= $mod->CreateInputHidden($id,
-							'_'.$this->Fields[$i]->GetId().'[]',
+							$testIndex.'[]',
 							htmlspecialchars($val,ENT_QUOTES));
 						}
 					}
 				else
 					{
 					$hidden .= $mod->CreateInputHidden($id,
-						'_'.$this->Fields[$i]->GetId(),
-						htmlspecialchars($params['_'.$this->Fields[$i]->GetId()],ENT_QUOTES));
+						$testIndex,
+						htmlspecialchars($params[$testIndex],ENT_QUOTES));
 					}
 				continue;
 			    }
@@ -621,7 +630,7 @@ class fbForm {
 		$mod = &$this->module_ptr;
 		$mod->smarty->assign('message',$message);
 		$mod->smarty->assign('formstart',
-			$mod->CreateFormStart($id, 'admin_form_update', $returnid));
+			$mod->CreateFormStart($id, 'admin_store_form', $returnid));
 		$mod->smarty->assign('formid',
 			$mod->CreateInputHidden($id, 'form_id', $this->Id));
 		$mod->smarty->assign('tab_start',$mod->StartTabHeaders().
@@ -697,24 +706,26 @@ class fbForm {
 				{
 				$oneset = new stdClass();
 				$oneset->rowclass = $currow;
-				$oneset->name = $mod->CreateLink($id, 'admin_edit_formbuilder_field', '', $thisField->GetName(), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
+				$oneset->name = $mod->CreateLink($id, 'admin_add_edit_field', '', $thisField->GetName(), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
 				$oneset->type = $thisField->GetDisplayType();
-				if ($thisField->IsDisposition() || !$thisField->DisplayInForm())
+				if ($thisField->IsDisposition() ||
+					!$thisField->DisplayInForm() ||
+					$thisField->IsNonRequirableField())
 					{
 					$oneset->disposition = '.';
 					}
 				else if ($thisField->IsRequired())
 					{
-					$oneset->disposition = $mod->CreateLink($id, 'admin_field_required_update', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/true.gif','true','','','systemicon'), array('form_id'=>$this->Id,'active'=>'off','field_id'=>$thisField->GetId()));
+					$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/true.gif','true','','','systemicon'), array('form_id'=>$this->Id,'active'=>'off','field_id'=>$thisField->GetId()));
 					}
 				else
 					{
-					$oneset->disposition = $mod->CreateLink($id, 'admin_field_required_update', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/false.gif','false','','','systemicon'), array('form_id'=>$this->Id,'active'=>'on','field_id'=>$thisField->GetId()));
+					$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/false.gif','false','','','systemicon'), array('form_id'=>$this->Id,'active'=>'on','field_id'=>$thisField->GetId()));
 					}
 				$oneset->field_status = $thisField->StatusInfo();
 				if ($count > 1)
 					{
-					$oneset->up = $mod->CreateLink($id, 'admin_field_order_update', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/arrow-u.gif','up','','','systemicon'), array('form_id'=>$this->Id,'dir'=>'up','field_id'=>$thisField->GetId()));
+					$oneset->up = $mod->CreateLink($id, 'admin_update_field_order', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/arrow-u.gif','up','','','systemicon'), array('form_id'=>$this->Id,'dir'=>'up','field_id'=>$thisField->GetId()));
 					}
 				else
 					{
@@ -722,14 +733,14 @@ class fbForm {
 					}
 				if ($count < $last)
 					{
-					$oneset->down=$mod->CreateLink($id, 'admin_field_order_update', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/arrow-d.gif','down','','','systemicon'), array('form_id'=>$this->Id,'dir'=>'down','field_id'=>$thisField->GetId()));
+					$oneset->down=$mod->CreateLink($id, 'admin_update_field_order', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/arrow-d.gif','down','','','systemicon'), array('form_id'=>$this->Id,'dir'=>'down','field_id'=>$thisField->GetId()));
 					}
 				else
 					{
 					$oneset->down = '&nbsp;';
 					}
-				$oneset->editlink = $mod->CreateLink($id, 'admin_edit_formbuilder_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/edit.gif','edit','','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
-				$oneset->deletelink = $mod->CreateLink($id, 'admin_delete_formbuilder_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif','delete','','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),$mod->Lang('are_you_sure_delete_field',$thisField->GetName()));
+				$oneset->editlink = $mod->CreateLink($id, 'admin_add_edit_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/edit.gif','edit','','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
+				$oneset->deletelink = $mod->CreateLink($id, 'admin_delete_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif','delete','','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),$mod->Lang('are_you_sure_delete_field',$thisField->GetName()));
 				($currow == "row1"?$currow="row2":$currow="row1");
 				$count++;
 				if ($thisField->GetOrder() >= $maxOrder)
@@ -740,7 +751,7 @@ class fbForm {
 				}
 			$mod->smarty->assign('fields',$fieldList);
 			$mod->smarty->assign('add_field_link',
-				$mod->CreateLink($id, 'admin_add_formbuilder_form', $returnid,$mod->cms->variables['admintheme']->DisplayImage('icons/system/newobject.gif',$mod->Lang('title_add_new_field'),'','','systemicon'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', false) . $mod->CreateLink($id, 'admin_add_formbuilder_field', $returnid,$mod->Lang('title_add_new_field'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', false));			
+				$mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->cms->variables['admintheme']->DisplayImage('icons/system/newobject.gif',$mod->Lang('title_add_new_field'),'','','systemicon'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', false) . $mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_add_new_field'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', false));			
 		}
 		else
 		{
@@ -839,12 +850,12 @@ class fbForm {
 			isset($params['dispose_only'])?$params['dispose_only']:0);
 		if ($aefield->GetFieldType() == '')
 			{
-			$mod->smarty->assign('start_form',$mod->CreateFormStart($id, 'admin_edit_formbuilder_field', $returnid));			
+			$mod->smarty->assign('start_form',$mod->CreateFormStart($id, 'admin_add_edit_field', $returnid));			
 			$fieldList = array('main'=>array(),'adv'=>array());
 			}
 		else
 			{
-			$mod->smarty->assign('start_form',$mod->CreateFormStart($id, 'admin_field_update', $returnid));	
+			$mod->smarty->assign('start_form',$mod->CreateFormStart($id, 'admin_store_field', $returnid));	
 			$fieldList = $aefield->PrePopulateAdminForm($id);
 			}
 		$mod->smarty->assign('end_form', $mod->CreateFormEnd());
@@ -872,7 +883,7 @@ class fbForm {
 		$mod->smarty->assign('hidden', $mod->CreateInputHidden($id, 'form_id', $this->Id) . $mod->CreateInputHidden($id, 'field_id', $aefield->GetId()) . $mod->CreateInputHidden($id, 'order_by', $aefield->GetOrder()).
 		$mod->CreateInputHidden($id,'set_from_form','1'));
 
-		if (!$aefield->IsDisposition() && !$aefield->IsSpecialInput())
+		if (!$aefield->IsDisposition() && !$aefield->IsNonRequirableField())
 			{
 			$mod->smarty->assign('requirable',1);
 			}

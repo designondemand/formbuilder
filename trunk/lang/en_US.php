@@ -53,8 +53,7 @@ $lang['field_order_updated']='Field order updated.';
 $lang['form_deleted']='Form deleted.';
 $lang['field_deleted']='Field deleted.';
 $lang['configuration_updated']='Configuration Updated.';
-$lang['you_must_check1']='You must check "';
-$lang['you_must_check2']='" in order to continue.';
+$lang['you_must_check']='You must check "%s" in order to continue.';
 $lang['must_specify_one_destination']='You need to specify at least one destination address!';
 $lang['are_you_sure_delete_form']='Are you sure you want to delete the form %s?';
 $lang['are_you_sure_delete_field']='Are you sure you want to delete the field %s?';
@@ -87,7 +86,7 @@ $lang['save_and_continue']='Save and Continue Editing';
 $lang['information']='Information';
 $lang['automatic']='Automatic';
 $lang['forms']='Forms';
-$lang['form']='Form';
+$lang['form']='Form %s';
 $lang['configuration']='Configuration';
 $lang['tab_main']='Main';
 $lang['tab_additional']='Form Messages';
@@ -102,6 +101,7 @@ $lang['permitted_extensions']='Extensions';
 $lang['permitted_filetypes']='Allowed file types';
 $lang['file_too_large']='Uploaded file is too large! Maximum size is:';
 $lang['illegal_file_type']='This type of file may not be uploaded. Please check that the extension is correct.';
+$lang['unchecked']='Unchecked';
 
 $lang['uninstalled'] = 'Module uninstalled.';
 $lang['installed'] = 'Module version %s installed.';
@@ -111,10 +111,14 @@ $lang['button_previous'] = 'Back...';
 $lang['button_submit'] = 'Submit Form';
 $lang['button_continue'] = 'Continue...';
 
+$lang['value_checked'] = 'Checked';
+$lang['value_unchecked'] = 'Unchecked';
+
 // Field Attribute Titles
 $lang['title_maximum_length']='Maximum Length';
-$lang['title_checkbox_name']='Checkbox Name';
-$lang['title_submitted_value']='Submitted Value';
+$lang['title_checkbox_label']='Checkbox additional text (label)';
+$lang['title_checked_value']='Value when checked';
+$lang['title_unchecked_value']='Value when not checked.';
 $lang['title_checkbox_details']='Checkbox Group Details';
 $lang['title_select_one_message']='"Select One" Text';
 $lang['title_selection_subject']='Selection Subject';

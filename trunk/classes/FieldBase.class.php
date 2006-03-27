@@ -1,7 +1,11 @@
 <?php
-// Feedback Form. 02/2005 SjG <feedbackform_cmsmodule@fogbound.net>
-// A Module for CMS Made Simple, (c)2005 by Ted Kulp (wishy@cmsmadesimple.org)
-// This project's homepage is: http://www.cmsmadesimple.org
+/* 
+   FormBuilder. Copyright (c) 2005-2006 Samuel Goldstein <sjg@cmsmodules.com>
+   More info at http://dev.cmsmadesimple.org/projects/formbuilder
+   
+   A Module for CMS Made Simple, Copyright (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
+  This project's homepage is: http://www.cmsmadesimple.org
+*/
 
 class fbFieldBase {
 
@@ -17,7 +21,7 @@ class fbFieldBase {
     var $ValidationType;
 
     var $DisplayInForm;
-    var $SpecialInput;
+    var $NonRequirableField;
 
     var $Value=false;
     var $form_ptr;
@@ -97,7 +101,7 @@ class fbFieldBase {
 	   $this->IsDisposition = false;
 	   $this->ValidationTypes = array($mod->Lang('validation_none')=>'none');
 	   $this->loaded = 'not';
-	   $this->SpecialInput = false;
+	   $this->NonRequirableField = false;
 		foreach ($params as $thisParamKey=>$thisParamVal)
 		{
 	   		if (substr($thisParamKey,0,4) == 'opt_')
@@ -185,9 +189,9 @@ class fbFieldBase {
 	}
 
 	
-	function IsSpecialInput()
+	function IsNonRequirableField()
 	{
-		return $this->SpecialInput;
+		return $this->NonRequirableField;
 	}
 
 	function IsRequired()
@@ -259,7 +263,7 @@ class fbFieldBase {
 				}
 				
 			// requirable?
-			if (!$this->IsDisposition() && !$this->IsSpecialInput())
+			if (!$this->IsDisposition() && !$this->IsNonRequirableField())
 				{
 				array_push($main, array($mod->Lang('title_field_required'),$mod->CreateInputCheckbox($formDescriptor, 'required', 1, $this->IsRequired()).$mod->Lang('title_field_required_long')));
 				}

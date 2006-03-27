@@ -1,7 +1,11 @@
 <?php
-// Feedback Form. 02/2005 SjG <feedbackform_cmsmodule@fogbound.net>
-// A Module for CMS Made Simple, (c)2005 by Ted Kulp (wishy@cmsmadesimple.org)
-// This project's homepage is: http://www.cmsmadesimple.org
+/* 
+   FormBuilder. Copyright (c) 2005-2006 Samuel Goldstein <sjg@cmsmodules.com>
+   More info at http://dev.cmsmadesimple.org/projects/formbuilder
+   
+   A Module for CMS Made Simple, Copyright (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
+  This project's homepage is: http://www.cmsmadesimple.org
+*/
 
 class fbDispositionDatabase extends fbFieldBase {
 
@@ -11,7 +15,7 @@ class fbDispositionDatabase extends fbFieldBase {
         $mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionDatabase';
 		$this->IsDisposition = true;
-		$this->SpecialInput = true;
+		$this->NonRequirableField = true;
 		$this->DisplayInForm = true;
 		$this->HideLabel = 1;
 		$this->CodedValue = -1;
