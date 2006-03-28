@@ -62,7 +62,7 @@ $lang['notice_select_type']='Advanced options are not available until the field 
 // abbreviations, verbs, and other general terms
 $lang['abbreviation_length']='Len: %s';
 $lang['characters']='characters';
-$lang['boxes']='boxes';
+$lang['boxes']='%s boxes';
 $lang['field']='Field';
 $lang['order']='Order';
 $lang['unspecified']='(unspecified)';
@@ -114,12 +114,18 @@ $lang['button_continue'] = 'Continue...';
 $lang['value_checked'] = 'Checked';
 $lang['value_unchecked'] = 'Unchecked';
 
+$lang['add_options'] = 'Add More Options';
+$lang['delete_options'] = 'Delete Marked Options';
+$lang['add_checkboxes'] = 'Add More Checkboxes';
+$lang['delete_checkboxes'] = 'Delete Marked Checkboxes';
+
 // Field Attribute Titles
 $lang['title_maximum_length']='Maximum Length';
 $lang['title_checkbox_label']='Checkbox additional text (label)';
 $lang['title_checked_value']='Value when checked';
 $lang['title_unchecked_value']='Value when not checked.';
 $lang['title_checkbox_details']='Checkbox Group Details';
+$lang['title_delete'] = 'Delete?';
 $lang['title_select_one_message']='"Select One" Text';
 $lang['title_selection_subject']='Selection Subject';
 $lang['title_select_default_country']='Default Selection';

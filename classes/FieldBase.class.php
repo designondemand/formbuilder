@@ -22,6 +22,8 @@ class fbFieldBase {
 
     var $DisplayInForm;
     var $NonRequirableField;
+    var $HasAddOp;
+    var $HasDeleteOp;
 
     var $Value=false;
     var $form_ptr;
@@ -102,6 +104,8 @@ class fbFieldBase {
 	   $this->ValidationTypes = array($mod->Lang('validation_none')=>'none');
 	   $this->loaded = 'not';
 	   $this->NonRequirableField = false;
+	   $this->HasAddOp = false;
+	   $this->HasDeleteOp = false;
 		foreach ($params as $thisParamKey=>$thisParamVal)
 		{
 	   		if (substr($thisParamKey,0,4) == 'opt_')
@@ -145,6 +149,40 @@ class fbFieldBase {
 	function GetId()
 	{
 		return $this->Id;
+	}
+
+	function HasAddOp()
+	{
+		return $this->HasAddOp;
+	}
+
+	// override me, when necessary or useful
+	function DoOptionAdd(&$params)
+	{
+	}
+
+	// override me
+	function GetOptionAddButton()
+	{
+		$mod = $this->form_ptr->module_ptr;
+		return $mod->Lang('add_options');
+	}
+	
+	function HasDeleteOp()
+	{
+		return $this->HasDeleteOp;
+	}
+
+	// override me, when necessary or useful
+	function DoOptionDelete(&$params)
+	{
+	}
+
+	// override me
+	function GetOptionDeleteButton()
+	{
+		$mod = $this->form_ptr->module_ptr;
+		return $mod->Lang('delete_options');
 	}
 
 	function GetName()
@@ -309,6 +347,11 @@ class fbFieldBase {
 	}
 
 
+	// override me as necessary
+	function PostAdminSubmitCleanup()
+	{
+	}
+
 	// clear fields unused by invisible dispositions
 	function HiddenDispositionFields(&$mainArray, &$advArray)
 	{
@@ -410,10 +453,32 @@ class fbFieldBase {
 			{
 			return $this->Options[$optionName];
 			}
-		else
+		return $default;
+	}
+
+    function &GetOptionRef($optionName)
+	{
+		if (isset($this->Options[$optionName]))
 			{
-			return $default;
+			return &$this->Options[$optionName];
 			}
+		return false;
+	}
+
+	
+	function GetOptionElement($optionName, $index, $default)
+	{
+		if (isset($this->Options[$optionName]))
+			{
+			if (is_array($this->Options[$optionName]))
+				{
+				if (isset($this->Options[$optionName][$index]))
+					{
+					return $this->Options[$optionName][$index];
+					}
+				}
+			}
+		return $default;		
 	}
 
     function SetOption($optionName, $optionValue)

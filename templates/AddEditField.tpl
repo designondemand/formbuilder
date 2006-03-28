@@ -19,6 +19,12 @@
 	{/foreach}
 {$tab_end}
 {$tabs_end}
+{if $add != '' or $del != ''}
+	<div class="pageoverflow">
+		<p class="pagetext">&nbsp;</p>
+		<p class="pageinput">{$add}{$del}</p>
+	</div>
+{/if}
 	<div class="pageoverflow">
 		<p class="pagetext">&nbsp;</p>
 		<p class="pageinput">{$submit}</p>
