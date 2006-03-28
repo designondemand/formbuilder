@@ -30,7 +30,7 @@ class fbFieldBase {
     var $Options;
     var $loaded;
 
-	function fbFieldBase(&$form_ptr, &$params=array())
+	function fbFieldBase(&$form_ptr, &$params)
 	{
 //	echo "fbBase instantiate";
 // debug_display($params);
@@ -460,7 +460,7 @@ class fbFieldBase {
 	{
 		if (isset($this->Options[$optionName]))
 			{
-			return &$this->Options[$optionName];
+			return $this->Options[$optionName];
 			}
 		return false;
 	}
@@ -496,7 +496,7 @@ class fbFieldBase {
     }
 
     // loadDeep also loads all options for a field.
-    function Load(&$params=array(), $loadDeep=false)
+    function Load(&$params, $loadDeep=false)
     {
 		$sql = 'SELECT * FROM ' . cms_db_prefix() . 'module_fb_field WHERE field_id=?';
         if($result = $this->form_ptr->module_ptr->dbHandle->GetRow($sql, array($this->Id)))
