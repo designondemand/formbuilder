@@ -839,23 +839,24 @@ class fbForm {
 	}
 
 
-	function AddEditField($id, &$aefield, $returnid, $message='')
+	function AddEditField($id, &$aefield, $dispose_only, $returnid, $message='')
 	{
 		$mod = $this->module_ptr;
 		
 		$mod->smarty->assign('message',$message);
 		$mainList = array();
 		$advList = array();
-		$baseList = $aefield->PrePopulateBaseAdminForm($id,
-			isset($params['dispose_only'])?$params['dispose_only']:0);
+		$baseList = $aefield->PrePopulateBaseAdminForm($id, $dispose_only);
 		if ($aefield->GetFieldType() == '')
 			{
+			// still need type
 			$mod->smarty->assign('start_form',$mod->CreateFormStart($id, 'admin_add_edit_field', $returnid));			
 			$fieldList = array('main'=>array(),'adv'=>array());
 			}
 		else
 			{
-			$mod->smarty->assign('start_form',$mod->CreateFormStart($id, 'admin_store_field', $returnid));	
+			// we have our type
+			$mod->smarty->assign('start_form',$mod->CreateFormStart($id, 'admin_add_edit_field', $returnid));	
 			$fieldList = $aefield->PrePopulateAdminForm($id);
 			}
 		$mod->smarty->assign('end_form', $mod->CreateFormEnd());
@@ -872,13 +873,31 @@ class fbForm {
 		if($aefield->GetId() != -1)
 			{
 			$mod->smarty->assign('op',$mod->CreateInputHidden($id, 'op',$mod->Lang('updated')));
-			$mod->smarty->assign('submit',$mod->CreateInputSubmit($id, '', $mod->Lang('update')));
+			$mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'aef_upd', $mod->Lang('update')));
 			}
 		else
 			{
 			$mod->smarty->assign('op',$mod->CreateInputHidden($id, 'op', $mod->Lang('added')));
-			$mod->smarty->assign('submit',$mod->CreateInputSubmit($id, '', $mod->Lang('add')));
+			$mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'aef_add', $mod->Lang('add')));
 			}
+
+		if ($aefield->HasAddOp())
+			{
+			$mod->smarty->assign('add',$mod->CreateInputSubmit($id,'aef_optadd',$aefield->GetOptionAddButton()));
+			}
+		else
+			{
+			$mod->smarty->assign('add','');
+			}
+		if ($aefield->HasDeleteOp())
+			{
+			$mod->smarty->assign('del',$mod->CreateInputSubmit($id,'aef_optdel',$aefield->GetOptionDeleteButton()));
+			}
+		else
+			{
+			$mod->smarty->assign('del','');
+			}
+
 
 		$mod->smarty->assign('hidden', $mod->CreateInputHidden($id, 'form_id', $this->Id) . $mod->CreateInputHidden($id, 'field_id', $aefield->GetId()) . $mod->CreateInputHidden($id, 'order_by', $aefield->GetOrder()).
 		$mod->CreateInputHidden($id,'set_from_form','1'));

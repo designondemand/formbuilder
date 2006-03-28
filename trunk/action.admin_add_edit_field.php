@@ -14,5 +14,34 @@ if (! $this->CheckAccess()) exit;
 		
 		$aeform = new fbForm($this, $params);
 		$aefield = $aeform->NewField($params);
-		echo $aeform->AddEditField($id, $aefield, $returnid, isset($params['message'])?$params['message']:'');
+		if (isset($params['aef_upd']) ||
+			(isset($params['aef_add']) && $aefield->GetFieldType() != ''))
+			{
+			// save the field.
+			$aefield->PostAdminSubmitCleanup();
+			$this->DoAction('admin_store_field', $id, $params);
+			return;
+			}
+		elseif (isset($params['aef_add']))
+			{
+			// should have got a field type definition, so give rest of the field options
+			// reserve this space for special ops :)
+			}
+		elseif (isset($params['aef_optadd']))
+			{
+			// call the field's option add method, with all available parameters
+			$aefield->DoOptionAdd($params);
+			}
+		elseif (isset($params['aef_optdel']))
+			{
+			// call the field's option delete method, with all available parameters
+			$aefield->DoOptionDelete($params);
+			}
+		else
+			{
+			// new field, or implicit aef_add.
+			// again, reserving the space for future endeavors
+			}
+		echo $aeform->AddEditField($id, $aefield, (isset($params['dispose_only'])?$params['dispose_only']:0), $returnid, isset($params['message'])?$params['message']:'');
+		
 ?>
