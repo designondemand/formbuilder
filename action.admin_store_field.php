@@ -15,6 +15,8 @@ if (! $this->CheckAccess()) exit;
 		$val = $aefield->AdminValidate();
         if ($val[0])
             {
+
+	    $aefield->PostAdminSubmitCleanup();
             $aefield->Store(true);
             $params['message']=$params['op'];
             $this->DoAction('admin_add_edit_form', $id, $params);

@@ -28,7 +28,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	function countBoxes()
 	{
-			$tmp = $this->GetOptionRef('box_name','');
+			$tmp = &$this->GetOptionRef('box_name','');
 			if (is_array($tmp))
 				{
 	        	$this->boxCount = count($tmp);
@@ -217,7 +217,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 			$mod->Lang('title_delete').'</th></tr>';
 
 
-		for ($i=0;$i<($this->boxCount>4?$this->boxCount:5);$i++)
+		for ($i=0;$i<($this->boxCount>1?$this->boxCount:1);$i++)
 			{
 			$boxes .= '<tr><td>'.
             		$mod->CreateInputText($formDescriptor, 'opt_box_name[]',$this->GetOptionElement('box_name',$i),25,128).
@@ -258,11 +258,12 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	function PostAdminSubmitCleanup()
 	{
-		$names = $this->GetOptionRef('box_name');
-		$checked = $this->GetOptionRef('box_checked');
-		$unchecked = $this->GetOptionRef('box_unchecked');
+		$names = &$this->GetOptionRef('box_name');
+		$checked = &$this->GetOptionRef('box_checked');
+		$unchecked = &$this->GetOptionRef('box_unchecked');
 		for ($i=0;$i<count($names);$i++)
 			{
+error_log('['.$names[$i].']['.$checked[$i].']');
 			if ($names[$i] == '' && $checked[$i] == '' )
 				{
 				array_splice($names, $i, 1);
@@ -271,6 +272,10 @@ class fbCheckboxGroupField extends fbFieldBase {
 				$i--;
 				}
 			}
+
+error_log('Count of names: '.count($names));
+error_log('count of opt: '.count($this->GetOption('box_name')));
+		$this->countBoxes();
 	}
 
 /*
