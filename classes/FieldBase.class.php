@@ -466,7 +466,7 @@ class fbFieldBase {
 	}
 
 	
-	function GetOptionElement($optionName, $index, $default)
+	function GetOptionElement($optionName, $index, $default="")
 	{
 		if (isset($this->Options[$optionName]))
 			{
