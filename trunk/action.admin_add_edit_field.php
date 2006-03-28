@@ -18,7 +18,6 @@ if (! $this->CheckAccess()) exit;
 			(isset($params['aef_add']) && $aefield->GetFieldType() != ''))
 			{
 			// save the field.
-			$aefield->PostAdminSubmitCleanup();
 			$this->DoAction('admin_store_field', $id, $params);
 			return;
 			}
