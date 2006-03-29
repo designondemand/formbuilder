@@ -466,6 +466,20 @@ class fbFieldBase {
 	}
 
 	
+	function RemoveOptionElement($optionName, $index)
+	{
+		if (isset($this->Options[$optionName]))
+			{
+			if (is_array($this->Options[$optionName]))
+				{
+				if (isset($this->Options[$optionName][$index]))
+					{
+					array_splice($this->Options[$optionName],$index,1);
+					}
+				}
+			}
+	}
+	
 	function GetOptionElement($optionName, $index, $default="")
 	{
 		if (isset($this->Options[$optionName]))
