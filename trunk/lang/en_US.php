@@ -45,6 +45,7 @@ $lang['please_enter_an_integer']='Please enter an integer value for "%s"';
 $lang['please_enter_an_email']='Please enter a valid email address for "%s"';
 $lang['not_valid_email']='"%s" does not appear to be a valid email address!';
 $lang['please_enter_no_longer']='Please enter a value that is no longer than %s characters';
+$lang['title_result_join_char'] = 'Character to use as delimiter in results list';
 $lang['please_check_something']='Please check something for "%s"';
 $lang['please_select_something']='Please select something for "%s"';
 $lang['you_need_permission']='You need the "%s" permission to perform that operation.';
@@ -209,7 +210,7 @@ $lang['title_page_x_of_y'] = 'Page %s of %s';
 $lang['title_no_advanced_options']='Field has no advanced options.';
 $lang['title_form_unspecified']='Text to return for unspecified field values';
 
-
+$lang['help_dont_use_in_val'] = 'Be sure not to use this separator in your submitted values if you will be reloading responses from the database';
 $lang['title_date_format']='Date Format (standard <a href="http://www.php.net/manual/en/function.date.php">PHP Date Formats</a>)';
 $lang['title_use_wysiwyg']='Use WYSIWYG editor for text Area?';
 $lang['title_callback_helplong']='<p>You specify a module and method. This method signature should be:</p><br />

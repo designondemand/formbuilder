@@ -71,136 +71,56 @@ class fbCheckboxGroupField extends fbFieldBase {
 	}
 
 
-/*
+
 	function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = $this->form_ptr->module_ptr;
-		return $mod->CreateInputText($id, '_'.$this->Id,
-			htmlspecialchars($this->Value, ENT_QUOTES),
-            $this->GetOption('length')<25?$this->GetOption('length'):25,
-            $this->GetOption('length'),
-            $this->form_ptr->GetAttr('name_as_id','0')=='1'?'id="'.$this->Name.'"':'');
+		$names = &$this->GetOptionRef('box_name');
+		$fieldDisp = '';
+		for ($i=0;$i<count($names);$i++)
+			{
+			$label = '';
+			if (strlen($names[$i]) > 0)
+				{
+				$label = '&nbsp;<label for="'.$id.'_'.$this->Id.'[]">'.$names[$i].'</label>';
+				}
+			$fieldDisp .= $mod->CreateInputCheckbox($id, '_'.$this->Id.'[]', $i,
+				$this->FindArrayValue($i)!==false?$i:-1).$label;
+			}			
+		return $fieldDisp;
 	}
 
-	function WriteToPublicForm($id, &$params, $return_id)
+	function SetStoredValue($valStr)
 	{
-		$optVals = $this->GetOptionByKind('checkbox');
-        $dispRows = count($optVals);
-        if ($this->mod_globals->UseCSS)
-        	{
-        	echo "<div";
-        	}
-        else
-        	{
-        	echo "<table";
-        	}
-        if (strlen($this->CSSClass)>0)
-        	{
-        	echo " class=\"".$this->CSSClass."\"";
-        	}
-        echo ">";
-
-        for($i=0;$i<$dispRows;$i++)
-        	{
-        	if ($i%2 == 0)
-        		{
-        		if ($this->mod_globals->UseCSS)
-        			{
-        			echo "<div class=\"left\">";
-        			}
-        		else
-        			{
-        			echo "<tr><td class=\"left\">";
-        			}
-        		}
-        	if (is_array($this->Value))
-        	   {
-        	  
-                $index = array_search($optVals[$i]->OptionId, $this->Value);
-        	   	if ($this->Value[$index] == $optVals[$i]->OptionId)
-        	   	   {
-                    echo CMSModule::CreateInputCheckbox($id, $this->Alias.'[]', $optVals[$i]->OptionId, $optVals[$i]->OptionId, $this->mod_globals->UseIDAndName?'id="'.$this->Alias.$i.'"':'');
-        	   	   }
-        	   	else
-        	   	   {
-        	   	   echo CMSModule::CreateInputCheckbox($id, $this->Alias.'[]', $optVals[$i]->OptionId, '',$this->mod_globals->UseIDAndName?'id="'.$this->Alias.$i.'"':'');
-        	   	   }
-        	   }
-        	else
-        	   {
-        	   echo CMSModule::CreateInputCheckbox($id, $this->Alias.'[]', $optVals[$i]->OptionId, $this->Value,$this->mod_globals->UseIDAndName?'id="'.$this->Alias.$i.'"':'');
-        	   }
-          echo $optVals[$i]->Name;
-        	if ($i%2 == 0)
-        		{
-        		if ($this->mod_globals->UseCSS)
-        			{
-        			echo "</div><div class=\"right\">";
-        			}
-        		else
-        			{
-        			echo "</td><td class=\"right\">";
-        			}
-        		}
-        	else
-        		{
-        		if ($this->mod_globals->UseCSS)
-        			{
-        			echo "</div>\n";
-        			}
-        		else
-        			{
-        			echo "</td></tr>\n";
-        			}
-        		}
-          }
-          if ($i%2 != 0)
-          {
-          	if ($this->mod_globals->UseCSS)
-          		{
-          		echo "</div>\n";
-          		}
-          	else
-          		{
-          		echo "</td></tr>\n";
-          		}
-          }
-          if ($this->mod_globals->UseCSS)
-          	{
-          	echo "</div>";
-          	}
-          else
-          	{
-          	echo "</table>";
-          	}
+error_log($this->GetOption('join_char',','));
+		$vals = explode($this->GetOption('join_char',','),$valStr);
+		foreach ($vals as $thisVal)
+			{
+			error_log($thisVal);
+			$this->SetValue($thisVal);
+			}
 	}
+
 
 	function GetValue()
 	{
-		if (ffUtilityFunctions::def($this->Value))
+		$names = &$this->GetOptionRef('box_name');
+		$checked = &$this->GetOptionRef('box_checked');
+		$unchecked = &$this->GetOptionRef('box_unchecked');
+		$fieldRet = array();
+		for ($i=0;$i<count($names);$i++)
 			{
-			if (is_array($this->Value))
+			if ($this->FindArrayValue($i) === false)
 				{
-				$val = '';
-				foreach($this->Value as $tv)
-					{
-					$boxOpt = $this->GetOptionById($tv);
-					$val .= $boxOpt[0]->Value.", ";
-					}
-				return rtrim($val,', ');
+				array_push($fieldRet, $unchecked[$i]);
 				}
 			else
 				{
-				$boxOpt = $this->GetOptionById($this->Value);
-				return $boxOpt[0]->Value;
+				array_push($fieldRet, $checked[$i]);
 				}
 			}
-		else
-			{
-			return $this->mod_globals->Lang('unspecified');
-			}	
+		return join($this->GetOption('join_char',','),$fieldRet);			
 	}
-*/
 
 
 	function DoOptionAdd(&$params)
@@ -256,8 +176,10 @@ class fbCheckboxGroupField extends fbFieldBase {
 		$main = array(
 			array($mod->Lang('title_checkbox_details'),$boxes)
 		);
-
-		return array('main'=>$main,'adv'=>array());
+		$adv = array(
+			array($mod->Lang('title_result_join_char'),array($mod->CreateInputText($formDescriptor, 'opt_join_char',$this->GetOptionElement('join_char',', '),25,25),$mod->Lang('help_dont_use_in_val')))
+		);
+		return array('main'=>$main,'adv'=>$adv);
 	}
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
@@ -286,50 +208,20 @@ class fbCheckboxGroupField extends fbFieldBase {
 		$unchecked = &$this->GetOptionRef('box_unchecked');
 		for ($i=0;$i<count($names);$i++)
 			{
-error_log('['.$names[$i].']['.$checked[$i].']');
 			if ($names[$i] == '' && $checked[$i] == '' )
 				{
-				//array_splice($names, $i, 1);
-				//array_splice($checked, $i, 1);
-				//array_splice($unchecked, $i, 1);
 				$this->RemoveOptionElement('box_name', $i);
 				$this->RemoveOptionElement('box_checked', $i);
 				$this->RemoveOptionElement('box_unchecked', $i);
 				$i--;
 				}
 			}
-
-error_log('Count of names: '.count($names));
-error_log('count of opt: '.count($this->GetOption('box_name')));
 		$this->countBoxes();
 	}
 
-/*
-
-
-	function RenderAdminForm($formDescriptor)
-	{
-        $optVals = $this->GetOptionByKind('checkbox');
-        $ret = '<table><tr><th>'.$this->mod_globals->Lang('title_checkbox_name').
-            '</th><th>'.$this->mod_globals->Lang('title_submitted_value').'</th></tr>';
-        $dispRows = count($optVals)+5;
-        for($i=0;$i<$dispRows;$i++)
-        	{
-        	$ret .= '<tr><td>';
-        	$ret .= CMSModule::CreateInputText($formDescriptor, 'checkboxname[]',
-				ffUtilityFunctions::def($optVals[$i]->Name)?$this->NerfHTML($optVals[$i]->Name):'',25);
-			$ret .= '</td><td>';
-			$ret .= CMSModule::CreateInputText($formDescriptor, 'checkboxvalue[]',
-				ffUtilityFunctions::def($optVals[$i]->Value)?$this->NerfHTML($optVals[$i]->Value):'',25);
-			$ret .= '</td></tr>';
-        	}
-        $ret .= '</table>';
-		return array($this->mod_globals->Lang('title_checkbox_details').':'=>$ret);
-	}
-*/
-
 	function Validate()
 	{
+		$mod = $this->form_ptr->module_ptr;
 		$result = true;
 		$message = '';
 
@@ -338,10 +230,10 @@ error_log('count of opt: '.count($this->GetOption('box_name')));
 		  	   case 'none':
 		  	       break;
 		  	   case 'checked':
-		  	       if (! ffUtilityFunctions::def($this->Value))
+		  	       if ($this->Value === false)
 		  	           {
 		  	           $result = false;
-		  	           $message = $this->mod_globals->Lang('please_check_something').' "'.$this->Name.'"';
+		  	           $message = $mod->Lang('please_check_something',$this->Name);
 		  	           }
 		  	       break;
 		  }

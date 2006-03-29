@@ -82,19 +82,33 @@ class fbFieldBase {
 	       {
 	       $this->ValidationType = $params['validation_type'];
 	       }
+debug_display($params);
+		foreach ($params as $thisParamKey=>$thisParamVal)
+		{
+	   		if (substr($thisParamKey,0,4) == 'opt_')
+	   			{
+	   			$thisParamKey = substr($thisParamKey,4);
+	   			$this->Options[$thisParamKey] = $thisParamVal;
+	   			}
+	   	}
+
 //echo '-'.$params['_'.$this->Id].' '.$params['__'.$this->Id];
-	   if (isset($params['_'.$this->Id]) && strlen($params['_'.$this->Id]) > 0)
+	   if (isset($params['_'.$this->Id]) &&
+	   		(is_array($params['_'.$this->Id]) ||
+	   		strlen($params['_'.$this->Id]) > 0))
 //	   if (isset($params['_'.$this->Id]))
 	   		{
 //	   		error_log('Setting '.'_'.$this->Id.' value to '.$params['_'.$this->Id]);
 //echo " setting from form<br>";
 	   		$this->SetValue($params['_'.$this->Id]);
 	   		}
-	   	elseif (isset($params['__'.$this->Id]) && strlen($params['__'.$this->Id]) > 0)
+	   	elseif (isset($params['__'.$this->Id]) &&
+	   		(is_array($params['__'.$this->Id]) ||
+	   		strlen($params['__'.$this->Id]) > 0))
 	   		{
 	   		// a response value
 //echo " setting from stored response<br>";	   		
-	   		$this->SetValue($params['__'.$this->Id]);
+	   		$this->SetStoredValue($params['__'.$this->Id]);
 	   		}
 //	   else {echo 'no value to set for '.'_'.$this->Id;
 //	   debug_display($params);
@@ -106,14 +120,6 @@ class fbFieldBase {
 	   $this->NonRequirableField = false;
 	   $this->HasAddOp = false;
 	   $this->HasDeleteOp = false;
-		foreach ($params as $thisParamKey=>$thisParamVal)
-		{
-	   		if (substr($thisParamKey,0,4) == 'opt_')
-	   			{
-	   			$thisParamKey = substr($thisParamKey,4);
-	   			$this->Options[$thisParamKey] = $thisParamVal;
-	   			}
-	   	}
 
 	}
 
@@ -402,10 +408,76 @@ class fbFieldBase {
 			}
 	}
 
+	// override me? Returns the (possibly converted) value of the field.
+	function GetArrayValue($index)
+	{
+		if ($this->Value !== false)
+			{
+			if (is_array($this->Value))
+				{
+				if (isset($this->Value[$index]))
+					{
+					return $this->Value[$index];
+					}
+				}
+			elseif ($index == 0)
+				{
+				return $this->Value;
+				}
+			}
+		return false;
+	}
+
+	// override me? Returns true if the value is contained in the Value array
+	function FindArrayValue($value)
+	{
+		if ($this->Value !== false)
+			{
+			if (is_array($this->Value))
+				{
+					return array_search($value,$this->Value);
+				}
+			elseif ($this->Value == $value)
+				{
+				return true;
+				}
+			}
+		return false;
+	}
+
+
 	// override me, if necessary to convert type or something.
 	function SetValue($valStr)
 	{
-		$this->Value = $valStr;
+		if ($this->Value === false)
+			{
+			$this->Value = $valStr;
+			}
+		else
+			{
+			if (! is_array($this->Value))
+				{
+				$this->Value = array($this->Value);
+				}
+			array_push($this->Value,$varStr);
+			}
+	}
+
+	// override me, if necessary to convert type or something.
+	function SetStoredValue($valStr)
+	{
+		if ($this->Value === false)
+			{
+			$this->Value = $valStr;
+			}
+		else
+			{
+			if (! is_array($this->Value))
+				{
+				$this->Value = array($this->Value);
+				}
+			array_push($this->Value,$varStr);
+			}
 	}
 
 
@@ -490,6 +562,10 @@ class fbFieldBase {
 					{
 					return $this->Options[$optionName][$index];
 					}
+				}
+			elseif ($index == 0)
+				{
+				return $this->Options[$optionName];
 				}
 			}
 		return $default;		
