@@ -10,6 +10,7 @@
 class fbCheckboxGroupField extends fbFieldBase {
 
 	var $boxCount;
+	var $boxAdd;
 	
 	function fbCheckboxGroupField(&$form_ptr, &$params)
 	{
@@ -24,6 +25,7 @@ class fbCheckboxGroupField extends fbFieldBase {
             $mod->Lang('validation_none')=>'none',
             $mod->Lang('validation_at_least_one')=>'checked'
             );
+        $this->boxAdd = 0;
 	}
 
 	function countBoxes()
@@ -203,14 +205,35 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	function DoOptionAdd(&$params)
 	{
-		$this->boxCount += 5;
+		$this->boxAdd = 2;
 	}
+
+	function DoOptionDelete(&$params)
+	{
+		$delcount = 0;
+		foreach ($params as $thisKey=>$thisVal)
+			{
+			if (substr($thisKey,0,4) == 'del_')
+				{
+				$this->RemoveOptionElement('box_name', $thisVal - $delcount);
+				$this->RemoveOptionElement('box_checked', $thisVal - $delcount);
+				$this->RemoveOptionElement('box_unchecked', $thisVal - $delcount);
+				$delcount++;
+				}
+			}
+	}
+
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = $this->form_ptr->module_ptr;
-		$this->countBoxes();
 
+		$this->countBoxes();
+		if ($this->boxAdd > 0)
+			{
+			$this->boxCount += $this->boxAdd;
+			$this->boxAdd = 0;
+			}
 		$boxes = '<table><tr><th>'.$mod->Lang('title_checkbox_label').'</th><th>'.
 			$mod->Lang('title_checked_value').'</th><th>'.
 			$mod->Lang('title_unchecked_value').'</th><th>'.
@@ -266,9 +289,12 @@ class fbCheckboxGroupField extends fbFieldBase {
 error_log('['.$names[$i].']['.$checked[$i].']');
 			if ($names[$i] == '' && $checked[$i] == '' )
 				{
-				array_splice($names, $i, 1);
-				array_splice($checked, $i, 1);
-				array_splice($unchecked, $i, 1);
+				//array_splice($names, $i, 1);
+				//array_splice($checked, $i, 1);
+				//array_splice($unchecked, $i, 1);
+				$this->RemoveOptionElement('box_name', $i);
+				$this->RemoveOptionElement('box_checked', $i);
+				$this->RemoveOptionElement('box_unchecked', $i);
 				$i--;
 				}
 			}
