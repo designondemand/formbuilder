@@ -1216,10 +1216,13 @@ class fbForm {
         		}
         	foreach ($store as $thisFieldVal)
         		{
-        		$resp_val_id = $db->GenID(cms_db_prefix().
-            		'module_fb_resp_val_seq');
-            	$res = $db->Execute($sql, array($resp_val_id,$response_id,
-            		$thisField->GetId(),$thisFieldVal));
+        		if ($thisFieldVal !== false)
+        			{
+        			$resp_val_id = $db->GenID(cms_db_prefix().
+            			'module_fb_resp_val_seq');
+            		$res = $db->Execute($sql, array($resp_val_id,$response_id,
+            			$thisField->GetId(),$thisFieldVal));
+            		}
             	} 
         	}
     }   
