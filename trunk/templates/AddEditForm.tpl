@@ -84,6 +84,10 @@
 		<p class="pagetext">{$title_form_unspecified}:</p>
 		<p class="pageinput">{$input_form_unspecified}</p>
 	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">{$title_list_delimiter}:</p>
+		<p class="pageinput">{$input_list_delimiter}</p>
+	</div>
 {$tab_end}
 {$tabletab_start}
 	<div class="pageoverflow">

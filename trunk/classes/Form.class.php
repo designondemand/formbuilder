@@ -679,6 +679,9 @@ class fbForm {
 			$mod->Lang('title_field_type'));
 		$mod->smarty->assign('title_form_template',
 			$mod->Lang('title_form_template'));
+		$mod->smarty->assign('title_list_delimiter',
+			$mod->Lang('title_list_delimiter'));
+
 		$mod->smarty->assign('title_information',$mod->Lang('information'));
 		$mod->smarty->assign('title_order',$mod->Lang('order'));    
 		$mod->smarty->assign('title_form_displaytype', $mod->Lang('title_form_displaytype'));
@@ -785,6 +788,11 @@ class fbForm {
 		$mod->smarty->assign('input_form_required_symbol',
 			$mod->CreateInputText($id, 'forma_required_field_symbol',
 				$this->GetAttr('required_field_symbol','*'), 50));
+		$mod->smarty->assign('input_list_delimiter',
+			$mod->CreateInputText($id, 'forma_list_delimiter',
+				$this->GetAttr('list_delimiter',','), 50));
+
+
 
 		$displayTypes = array($mod->Lang('disptype_table')=>'tab',
 			$mod->Lang('disptype_css')=>'cssonly',
@@ -1137,8 +1145,21 @@ class fbForm {
         			'module_fb_resp_val WHERE resp_id=?';
         	 $dbresult = $db->Execute($sql, array($params['response_id']));
 		    while ($dbresult && $row = $dbresult->FetchRow())
-		        	{
-		        	$params['__'.$row['field_id']] = $row['value'];
+		        	{ // was '__'
+		        	if (isset($params['_'.$row['field_id']]) &&
+		        		! is_array($params['_'.$row['field_id']]))
+		        		{
+		        		$params['_'.$row['field_id']] = array($params['_'.$row['field_id']]);
+		        		array_push($params['_'.$row['field_id']], $row['value']);
+		        		}
+		        	elseif (isset($params['_'.$row['field_id']]))
+		        		{
+		        		array_push($params['_'.$row['field_id']], $row['value']);
+		        		}
+		        	else
+		        		{
+		        		$params['_'.$row['field_id']] = $row['value'];
+		        		}
 		        	}
         	}
         else
@@ -1149,7 +1170,6 @@ class fbForm {
     }   
 
 
-    
     function StoreResponse($response_id=-1)
     {
     	$db = $this->module_ptr->dbHandle;
@@ -1179,16 +1199,28 @@ class fbForm {
 				'module_fb_resp_val (resp_val_id, resp_id, field_id, value)' .
 				'VALUES (?, ?, ?, ?)';
         foreach ($fields as $thisField)
-        	{
-        	$resp_val_id = $db->GenID(cms_db_prefix().
-            	'module_fb_resp_val_seq');
-		// set the response_id to be the attribute of the database disposition
+        	{        	
+			// set the response_id to be the attribute of the database disposition
             if ($thisField->GetFieldType() == 'DispositionDatabase')
         		{
         		$thisField->SetValue($response_id);
         		}
-            $res = $db->Execute($sql, array($resp_val_id,$response_id,
-            	$thisField->GetId(),$thisField->GetValue())); 
+        	if (! is_array($thisField->GetValue()))
+        		{
+        		$store = array();
+        		array_push($store,$thisField->GetValue());
+        		}
+        	else
+        		{
+        		$store = $thisField->GetValue();
+        		}
+        	foreach ($store as $thisFieldVal)
+        		{
+        		$resp_val_id = $db->GenID(cms_db_prefix().
+            		'module_fb_resp_val_seq');
+            	$res = $db->Execute($sql, array($resp_val_id,$response_id,
+            		$thisField->GetId(),$thisFieldVal));
+            	} 
         	}
     }   
     

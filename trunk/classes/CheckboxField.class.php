@@ -31,10 +31,10 @@ class fbCheckboxField extends fbFieldBase {
 			{
 			$label = '&nbsp;<label for="'.$id.'_'.$this->Id.'">'.$this->GetOption('label').'</label>';
 			}
-		return $mod->CreateInputCheckbox($id, '_'.$this->Id, 't',$this->Value!==false?'t':'f').$label;
+		return $mod->CreateInputCheckbox($id, '_'.$this->Id, 't',$this->Value).$label;
 	}
 
-	function GetValue()
+	function GetHumanReadableValue()
 	{
 		$mod = $this->form_ptr->module_ptr;
 		if ($this->Value === false)
