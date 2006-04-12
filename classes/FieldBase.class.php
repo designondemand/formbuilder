@@ -82,7 +82,7 @@ class fbFieldBase {
 	       {
 	       $this->ValidationType = $params['validation_type'];
 	       }
-debug_display($params);
+//debug_display($params);
 		foreach ($params as $thisParamKey=>$thisParamVal)
 		{
 	   		if (substr($thisParamKey,0,4) == 'opt_')
@@ -102,6 +102,7 @@ debug_display($params);
 //echo " setting from form<br>";
 	   		$this->SetValue($params['_'.$this->Id]);
 	   		}
+/* new regime!
 	   	elseif (isset($params['__'.$this->Id]) &&
 	   		(is_array($params['__'.$this->Id]) ||
 	   		strlen($params['__'.$this->Id]) > 0))
@@ -110,6 +111,7 @@ debug_display($params);
 //echo " setting from stored response<br>";	   		
 	   		$this->SetStoredValue($params['__'.$this->Id]);
 	   		}
+*/
 //	   else {echo 'no value to set for '.'_'.$this->Id;
 //	   debug_display($params);
 //	   }
@@ -395,8 +397,8 @@ debug_display($params);
 		return array(true,'');
 	}
 
-	// override me. Returns the (possibly converted) value of the field.
-	function GetValue()
+
+	function GetHumanReadableValue()
 	{
 		if ($this->Value !== false)
 			{
@@ -406,6 +408,12 @@ debug_display($params);
 			{
 			return $this->form_ptr->GetAttr('unspecified','[unspecified]');
 			}
+	}
+
+	// probably don't need to override this
+	function GetValue()
+	{
+		return $this->Value;
 	}
 
 	// override me? Returns the (possibly converted) value of the field.
@@ -459,7 +467,7 @@ debug_display($params);
 				{
 				$this->Value = array($this->Value);
 				}
-			array_push($this->Value,$varStr);
+			array_push($this->Value,$valStr);
 			}
 	}
 

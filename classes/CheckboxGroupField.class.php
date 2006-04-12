@@ -85,25 +85,27 @@ class fbCheckboxGroupField extends fbFieldBase {
 				$label = '&nbsp;<label for="'.$id.'_'.$this->Id.'[]">'.$names[$i].'</label>';
 				}
 			$fieldDisp .= $mod->CreateInputCheckbox($id, '_'.$this->Id.'[]', $i,
-				$this->FindArrayValue($i)!==false?$i:-1).$label;
+				$this->Value !== false?$this->FindArrayValue($i):'-1').$label;
 			}			
 		return $fieldDisp;
 	}
 
-	function SetStoredValue($valStr)
+/*	function SetStoredValue($valStr)
 	{
-error_log($this->GetOption('join_char',','));
-		$vals = explode($this->GetOption('join_char',','),$valStr);
+		$form = $this->form_ptr;
+error_log($form->GetAttr('list_delimiter',','));
+		$vals = explode($form->GetAttr('list_delimiter',','),$valStr);
 		foreach ($vals as $thisVal)
 			{
 			error_log($thisVal);
 			$this->SetValue($thisVal);
 			}
 	}
+*/
 
-
-	function GetValue()
+	function GetHumanReadableValue()
 	{
+		$form = $this->form_ptr;
 		$names = &$this->GetOptionRef('box_name');
 		$checked = &$this->GetOptionRef('box_checked');
 		$unchecked = &$this->GetOptionRef('box_unchecked');
@@ -119,7 +121,7 @@ error_log($this->GetOption('join_char',','));
 				array_push($fieldRet, $checked[$i]);
 				}
 			}
-		return join($this->GetOption('join_char',','),$fieldRet);			
+		return join($form->GetAttr('list_delimiter',','),$fieldRet);			
 	}
 
 
@@ -176,9 +178,7 @@ error_log($this->GetOption('join_char',','));
 		$main = array(
 			array($mod->Lang('title_checkbox_details'),$boxes)
 		);
-		$adv = array(
-			array($mod->Lang('title_result_join_char'),array($mod->CreateInputText($formDescriptor, 'opt_join_char',$this->GetOptionElement('join_char',', '),25,25),$mod->Lang('help_dont_use_in_val')))
-		);
+		$adv = array();
 		return array('main'=>$main,'adv'=>$adv);
 	}
 
