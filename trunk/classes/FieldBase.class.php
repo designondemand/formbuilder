@@ -472,7 +472,7 @@ class fbFieldBase {
 	}
 
 	// override me, if necessary to convert type or something.
-	function SetStoredValue($valStr)
+/*	function SetStoredValue($valStr)
 	{
 		if ($this->Value === false)
 			{
@@ -487,7 +487,7 @@ class fbFieldBase {
 			array_push($this->Value,$varStr);
 			}
 	}
-
+*/
 
 	function RequiresValidation()
 	{

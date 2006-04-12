@@ -70,8 +70,6 @@ class fbCheckboxGroupField extends fbFieldBase {
 		return $mod->Lang('delete_checkboxes');
 	}
 
-
-
 	function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = $this->form_ptr->module_ptr;
@@ -84,8 +82,15 @@ class fbCheckboxGroupField extends fbFieldBase {
 				{
 				$label = '&nbsp;<label for="'.$id.'_'.$this->Id.'[]">'.$names[$i].'</label>';
 				}
+			$check_val = false;
+			if ($this->Value !== false)
+				{
+				$check_val = $this->FindArrayValue($i);
+				}
+			error_log('checkbox '.$i.' '.$check_val);
+			error_log($check_val !== false?'false':'true');
 			$fieldDisp .= $mod->CreateInputCheckbox($id, '_'.$this->Id.'[]', $i,
-				$this->Value !== false?$this->FindArrayValue($i):'-1').$label;
+				$check_val !== false?$i:'-1').$label;
 			}			
 		return $fieldDisp;
 	}
