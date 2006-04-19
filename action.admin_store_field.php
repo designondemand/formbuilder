@@ -15,8 +15,7 @@ if (! $this->CheckAccess()) exit;
 		$val = $aefield->AdminValidate();
         if ($val[0])
             {
-
-	    $aefield->PostAdminSubmitCleanup();
+	        $aefield->PostAdminSubmitCleanup();
             $aefield->Store(true);
             $params['message']=$params['op'];
             $this->DoAction('admin_add_edit_form', $id, $params);
@@ -26,8 +25,8 @@ if (! $this->CheckAccess()) exit;
         	{
             $aefield->LoadField($params);
             $params['message'] = $val[1];
-            $this->DoAction('admin_add_edit_field', $id, $params);
-			//echo $aeform->AddEditField($id, $aefield, $returnid, $val[1]);
+			echo $aeform->AddEditField($id, $aefield, (isset($params['dispose_only'])?$params['dispose_only']:0), $returnid, isset($params['message'])?$params['message']:'');
+
         	}
 
 ?>

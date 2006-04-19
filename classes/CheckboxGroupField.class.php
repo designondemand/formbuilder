@@ -30,12 +30,12 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	function countBoxes()
 	{
-			$tmp = &$this->GetOptionRef('box_name','');
+			$tmp = &$this->GetOptionRef('box_name');
 			if (is_array($tmp))
 				{
 	        	$this->boxCount = count($tmp);
 	        	}
-	        elseif ($tmp != '')
+	        elseif ($tmp !== false)
 	        	{
 	        	$this->boxCount = 1;
 	        	}
@@ -87,26 +87,11 @@ class fbCheckboxGroupField extends fbFieldBase {
 				{
 				$check_val = $this->FindArrayValue($i);
 				}
-			error_log('checkbox '.$i.' '.$check_val);
-			error_log($check_val !== false?'false':'true');
 			$fieldDisp .= $mod->CreateInputCheckbox($id, '_'.$this->Id.'[]', $i,
 				$check_val !== false?$i:'-1').$label;
 			}			
 		return $fieldDisp;
 	}
-
-/*	function SetStoredValue($valStr)
-	{
-		$form = $this->form_ptr;
-error_log($form->GetAttr('list_delimiter',','));
-		$vals = explode($form->GetAttr('list_delimiter',','),$valStr);
-		foreach ($vals as $thisVal)
-			{
-			error_log($thisVal);
-			$this->SetValue($thisVal);
-			}
-	}
-*/
 
 	function GetHumanReadableValue()
 	{

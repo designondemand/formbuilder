@@ -1,24 +1,69 @@
 <?php
-// Feedback Form. 02/2005 SjG <feedbackform_cmsmodule@fogbound.net>
-// A Module for CMS Made Simple, (c)2005 by Ted Kulp (wishy@cmsmadesimple.org)
-// This project's homepage is: http://www.cmsmadesimple.org
+/* 
+   FormBuilder. Copyright (c) 2005-2006 Samuel Goldstein <sjg@cmsmodules.com>
+   More info at http://dev.cmsmadesimple.org/projects/formbuilder
+   
+   A Module for CMS Made Simple, Copyright (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
+  This project's homepage is: http://www.cmsmadesimple.org
+*/
 
 require_once('DispositionEmailBase.class.php');
 
-class ffDispositionEmail extends ffDispositionEmailBase {
+class fbDispositionEmail extends fbDispositionEmailBase {
 
-	function ffDispositionEmail(&$mod_globals, $formRef, $params=array())
+	var $addressCount;
+	var $addressAdd;
+
+	function fbDispositionEmail(&$form_ptr, &$params)
 	{
-        $this->ffDispositionEmailBase($mod_globals, $formRef, $params);
+        $this->fbDispositionEmailBase($form_ptr, $params);
+        $mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionEmail';
-		$this->DisplayType = $this->mod_globals->Lang('field_type_disposition_email');
+		$this->DisplayInForm = false;
+		$this->NonRequirableField = true;
+		$this->IsDisposition = true;
+		$this->HasAddOp = true;
+		$this->HasDeleteOp = true;
+		$this->ValidationTypes = array(
+       		);
+       	error_log("loading");
+    }
 
- 		$this->addListParam('address', 'address', 'address', $params);
+	function GetOptionAddButton()
+	{
+		$mod = $this->form_ptr->module_ptr;
+		return $mod->Lang('add_address');
 	}
+
+	function GetOptionDeleteButton()
+	{
+		$mod = $this->form_ptr->module_ptr;
+		return $mod->Lang('delete_address');
+	}
+
+	function DoOptionAdd(&$params)
+	{
+		$this->addressAdd = 1;
+	}
+
+	function DoOptionDelete(&$params)
+	{
+		$delcount = 0;
+		foreach ($params as $thisKey=>$thisVal)
+			{
+			if (substr($thisKey,0,4) == 'del_')
+				{
+				$this->RemoveOptionElement('destination_address', $thisVal - $delcount);
+				$delcount++;
+				}
+			}
+	}
+
+
 
     function StatusInfo()
 	{
-		$opt = $this->GetOptionByKind('address');
+/*		$opt = $this->GetOption('address',$this->Lang);
 		$ret= $this->mod_globals->Lang('to').": ";
 		if (ffUtilityFunctions::def($opt[0]->Value))
 		  {
@@ -38,64 +83,90 @@ class ffDispositionEmail extends ffDispositionEmailBase {
           }
         $ret.= $this->TemplateStatus();
         return $ret;
+*/
+	}
+
+	function countAddresses()
+	{
+			$tmp = &$this->GetOptionRef('destination_address');
+			if (is_array($tmp))
+				{
+	        	$this->addressCount = count($tmp);
+	        	}
+	        elseif ($tmp !== false)
+	        	{
+	        	$this->addressCount = 1;
+	        	}
+	        else
+	        	{
+	        	$this->addressCount = 0;
+	        	}
 	}
 
 
     // Send off those emails
 	function DisposeForm($formName, &$config, $results)
 	{
-		return $this->SendForm($formName, $config, $results);
+//		return $this->SendForm($formName, $config, $results);
 	}
 
-
-	function RenderAdminForm($formDescriptor)
+	function PrePopulateAdminForm($formDescriptor)
 	{
-        $opt = $this->GetOptionByKind('address');
-        $dispRows = count($opt)+2;
-        $ret = '<table>';
-        for($i=0;$i<$dispRows;$i++)
-        	{
-        	$ret .= '<tr><td>';
-        	$ret .= CMSModule::CreateInputText($formDescriptor, 'address[]',
-				ffUtilityFunctions::def($opt[$i]->Value)?$this->NerfHTML($opt[$i]->Value):'',25);
+		$mod = $this->form_ptr->module_ptr;
+
+		$this->countAddresses();
+		if ($this->addressAdd > 0)
+			{
+			$this->addressCount += $this->addressAdd;
+			$this->addressAdd = 0;
 			}
-	   $ret .= '</table>';
-	   $tmp = array($this->mod_globals->Lang('title_email_addresses').':'=>$ret);
-	   $tmp2 = $this->RenderAdminFormBase($formDescriptor);
-	   foreach ($tmp2 as $key=>$val)
-	   		{
-	   		$tmp[$key]=$val;
-	   		}
-	   return $tmp;
+		$dests = '<table><tr><th>'.$mod->Lang('title_destination_address').'</th><th>'.
+			$mod->Lang('title_delete').'</th></tr>';
+
+
+		for ($i=0;$i<($this->addressCount>1?$this->addressCount:1);$i++)
+			{
+			$dests .= '<tr><td>'.
+            		$mod->CreateInputText($formDescriptor, 'opt_destination_address[]',$this->GetOptionElement('destination_address',$i),25,128).
+            		'</td><td>'.
+            		$mod->CreateInputCheckbox($formDescriptor, 'del_'.$i, $i,-1).
+             		'</td></tr>';
+			}
+		$dests .= '</table>';
+		list($main,$adv) = $this->PrePopulateAdminFormBase($formDescriptor);
+		array_push($main,array($mod->Lang('title_destination_address'),$dests));
+		return array('main'=>$main,'adv'=>$adv);
+	}
+
+	function PostPopulateAdminForm(&$mainArray, &$advArray)
+	{
+		$this->HiddenDispositionFields($mainArray, $advArray);
 	}
 
 
 	function AdminValidate()
     {
-    	$opt = $this->GetOptionByKind('address');
+error_log("Checking");
+		$mod = $this->form_ptr->module_ptr;
+    	$opt = $this->GetOptionRef('destination_address');
     	$ret = true;
     	$message = '';
-		if ($this->NameExists())
-		  {
-		  $ret = false;
-          $message = $this->mod_globals->Lang('field_name_in_use1').' "'.$this->Name.
-            '" '.$this->mod_globals->Lang('field_name_in_use2').'<br/>';
-		  }
-		if (count($opt) == 0)
+		if ($opt === false || count($opt) == 0)
 			{
 			$ret = false;
-			$message .= $this->mod_globals->Lang('must_specify_one_destination').'</br>';
+			$message .= $mod->Lang('must_specify_one_destination').'</br>';
 			}
         for($i=0;$i<count($opt);$i++)
     	   {
-    	   if (! preg_match("/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i", $opt[$i]->Value))
+    	   if (! preg_match("/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i", $opt[$i]))
     	       {
     	       	$ret = false;
-                $message .= '"'.$opt[$i]->Value . '" '.$this->mod_globals->Lang('not_valid_email').'<br/>';
+                $message .= $mod->Lang('not_valid_email',$opt[$i]) . '<br/>';
     	       }
         }
-        return array($ret,$message);
+        return array($ret,$message);       
     }
+
 
 	function Validate()
 	{
