@@ -119,6 +119,8 @@ $lang['add_options'] = 'Add More Options';
 $lang['delete_options'] = 'Delete Marked Options';
 $lang['add_checkboxes'] = 'Add More Checkboxes';
 $lang['delete_checkboxes'] = 'Delete Marked Checkboxes';
+$lang['add_address'] = 'Add Another Address';
+$lang['delete_address'] = 'Delete Marked Addresses';
 
 // Field Attribute Titles
 $lang['title_maximum_length']='Maximum Length';
@@ -131,7 +133,7 @@ $lang['title_select_one_message']='"Select One" Text';
 $lang['title_selection_subject']='Selection Subject';
 $lang['title_select_default_country']='Default Selection';
 $lang['title_selection_name']='Selection Name';
-$lang['title_destination_email']='Destination Email Address';
+$lang['title_destination_address']='Destination Email Address';
 $lang['title_director_details']='Pulldown-based Emailer Details';
 $lang['title_email_addresses']='Email Address(es) to Send Form Results';
 $lang['title_file_format']='File Format';
@@ -269,6 +271,14 @@ $lang['submission_subject']='Form Submission';
 $lang['submission_error']='There has been an error in the form submission<br>Please try again later.';
 $lang['submission_error_file']='Error. Unable to write to file.';
 
+
+$lang['email_default_template'] = "Form Name: {\$sub_form_name}\n" .
+        		"Submission Date: {\$sub_date}\nSubmission Host: {\$sub_host}\n" .
+        		"Submission Source: {\$sub_source_ip}\n-------------------------------\n";
+$lang['email_template_not_set'] = '<br/>Email Template not yet set!';      
+$lang['email_value_unspecified'] = 'unspecified';  		
+$lang['missing_cms_mailer'] = 'Cannot find required module CMSMailer!';  		
+  		
 // post-install message
 $lang['post_install']="
 <p>Make sure to set the \"Modify Forms\" permissions
