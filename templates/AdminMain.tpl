@@ -2,7 +2,7 @@
 
 {$tabheaders}
 {$start_formtab}
-<table cellspacing="0" class="AdminTable" width="80%">
+<table cellspacing="0" class="pagetable" width="80%">
 <thead><tr>
     <th>{$title_form_name}</th>
     <th>{$title_form_alias}</th>

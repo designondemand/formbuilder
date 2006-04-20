@@ -655,7 +655,7 @@ class fbForm {
 		$mod->smarty->assign('title_form_unspecified',$mod->Lang('title_form_unspecified'));
 		$mod->smarty->assign('input_form_unspecified',
 			$mod->CreateInputText($id, 'forma_unspecified',
-			$this->GetAttr('unspecified','[unspecified]'), 50));
+			$this->GetAttr('unspecified',$mod->Lang('unspecified')), 50));
 		$mod->smarty->assign('title_form_status',
 			$mod->Lang('title_form_status'));
 		$mod->smarty->assign('text_ready',

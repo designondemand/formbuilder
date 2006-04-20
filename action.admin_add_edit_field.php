@@ -12,7 +12,7 @@ if (! $this->CheckAccess()) exit;
 		$this->initialize();
 		$this->mod_globals->ModuleInputPrefix = $id;
 		
-		$aeform = new fbForm($this, $params);
+		$aeform = new fbForm($this, $params,true);
 		$aefield = $aeform->NewField($params);
 		if (isset($params['aef_upd']) ||
 			(isset($params['aef_add']) && $aefield->GetFieldType() != ''))

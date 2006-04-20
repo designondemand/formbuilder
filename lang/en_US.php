@@ -66,7 +66,7 @@ $lang['characters']='characters';
 $lang['boxes']='%s boxes';
 $lang['field']='Field';
 $lang['order']='Order';
-$lang['unspecified']='(unspecified)';
+$lang['unspecified']='[unspecified]';
 $lang['added']='added';
 $lang['updated']='updated';
 $lang['deleted']='deleted';
@@ -134,6 +134,9 @@ $lang['title_selection_subject']='Selection Subject';
 $lang['title_select_default_country']='Default Selection';
 $lang['title_selection_name']='Selection Name';
 $lang['title_destination_address']='Destination Email Address';
+$lang['title_email_from_name']='"From name" for email';
+$lang['title_email_from_address']='"From address" for email';
+$lang['title_email_encoding']='Email character set encoding';
 $lang['title_director_details']='Pulldown-based Emailer Details';
 $lang['title_email_addresses']='Email Address(es) to Send Form Results';
 $lang['title_file_format']='File Format';
@@ -212,6 +215,24 @@ $lang['title_page_x_of_y'] = 'Page %s of %s';
 $lang['title_no_advanced_options']='Field has no advanced options.';
 $lang['title_form_unspecified']='Text to return for unspecified field values';
 
+$lang['help_variables_for_template']='Variables For Template';
+$lang['help_submission_date']='Date of Submission';
+$lang['help_server_name']='Your server';
+$lang['help_sub_source_ip']='IP address of person using form';
+$lang['help_sub_url']='URL of page containing form';
+$lang['help_other_fields']='Other fields will be available as you add them to the form.';
+$lang['']='';
+$lang['']='';
+$lang['']='';
+$lang['']='';
+$lang['']='';
+$lang['']='';
+$lang['']='';
+$lang['']='';
+$lang['']='';
+$lang['']='';
+
+
 $lang['help_dont_use_in_val'] = 'Be sure not to use this separator in your submitted values if you will be reloading responses from the database';
 $lang['title_date_format']='Date Format (standard <a href="http://www.php.net/manual/en/function.date.php">PHP Date Formats</a>)';
 $lang['title_use_wysiwyg']='Use WYSIWYG editor for text Area?';
@@ -274,7 +295,9 @@ $lang['submission_error_file']='Error. Unable to write to file.';
 
 $lang['email_default_template'] = "Form Name: {\$sub_form_name}\n" .
         		"Submission Date: {\$sub_date}\nSubmission Host: {\$sub_host}\n" .
-        		"Submission Source: {\$sub_source_ip}\n-------------------------------\n";
+        		"Submission Source: {\$sub_source_ip}\n".
+        		"Submission URL: {\$sub_url}\n".
+        		"-------------------------------\n";
 $lang['email_template_not_set'] = '<br/>Email Template not yet set!';      
 $lang['email_value_unspecified'] = 'unspecified';  		
 $lang['missing_cms_mailer'] = 'Cannot find required module CMSMailer!';  		
