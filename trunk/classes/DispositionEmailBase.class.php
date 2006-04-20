@@ -22,7 +22,7 @@ class fbDispositionEmailBase extends fbFieldBase {
         $this->sampleTemplateCode = "<script type=\"text/javascript\">\n
 function populate(formname)
     {
-    var fname = 'IDemail_template';
+    var fname = 'IDopt_email_template';
     formname[fname].value=TEMPLATE;
     }
 </script>
@@ -36,10 +36,11 @@ function populate(formname)
 
     function TemplateStatus()
     {
-    	if ($this->GetOption('email_template',$this->Lang('email_default_template')) ==
-    		$this->Lang('email_default_template'))
+    	$mod = $this->form_ptr->module_ptr;
+    	if ($this->GetOption('email_template',$mod->Lang('email_default_template')) ==
+    		$mod->Lang('email_default_template'))
     		{
-    		return $this->Lang('email_template_not_set');
+    		return $mod->Lang('email_template_not_set');
     		}
     }
 
@@ -53,7 +54,6 @@ function populate(formname)
 	{
 		$maxvarlen = 24;
 		$string = strtolower(preg_replace('/\s+/','_',$string));
-		//$string = preg_replace('/\W/','',$string);
 		if (strlen($string) > $maxvarlen)
 			{
 			$string = substr($string,0,$maxvarlen);
@@ -68,7 +68,8 @@ function populate(formname)
 
     function createSampleTemplate()
     {
-    	$ret = $this->Lang('email_default_template');
+    	$mod = $this->form_ptr->module_ptr;
+    	$ret = $mod->Lang('email_default_template');
 		$others = $this->form_ptr->GetFields();
 		for($i=0;$i<count($others);$i++)
 			{
@@ -80,68 +81,85 @@ function populate(formname)
         return $ret;
     }
 
+	// override me as necessary
+	function SetFromAddress()
+	{
+		return true;
+	}
+
+	// override me as necessary
+	function SetFromName()
+	{
+		return true;
+	}
+
+	// override me as necessary
+	function SetSubject()
+	{
+		return true;
+	}
+
+
     // Send off those emails
-	function SendForm($formName, &$config, $results)
+	function SendForm()
 	{
 		global $gCms;
-
-		$message = $this->GetOption('email_template',$this->Lang('email_default_template'));
+		$mod = $this->form_ptr->module_ptr;
+		$message = $this->GetOption('email_template',$mod->Lang('email_default_template'));
 
         if ($message == '')
             {
             $message = $this->createSampleTemplate();
             }
-        $this->smarty->assign('sub_form_name',$formName);
-        $this->smarty->assign('sub_date',date('r'));
-        $this->smarty->assign('sub_host',$_SERVER['SERVER_NAME']);
-        $this->smarty->assign('sub_source_ip',$_SERVER['REMOTE_ADDR']);
-/*        $message = preg_replace('/\$sub_form_name/',$formName, $message);
-        $message = preg_replace('/\$sub_date/',date('r'), $message);
-        $message = preg_replace('/\$sub_host/',$_SERVER['SERVER_NAME'], $message);
-        $message = preg_replace('/\$sub_source_ip/',$_SERVER['REMOTE_ADDR'], $message);
-*/		
-		foreach ($results as $res)
+        $mod->smarty->assign('sub_form_name',$formName);
+        $mod->smarty->assign('sub_date',date('r'));
+        $mod->smarty->assign('sub_host',$_SERVER['SERVER_NAME']);
+        $mod->smarty->assign('sub_source_ip',$_SERVER['REMOTE_ADDR']);
+        $mod->smarty->assign('sub_url',$_SERVER['HTTP_REFERER']);
+
+		$others = $this->form_ptr->GetFields();
+		$unspec = $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
+		
+		for($i=0;$i<count($others);$i++)
 			{
 			$replVal = '';
-			if (is_array($res[1]))
+			if ($others[$i]->GetFieldType() != 'PageBreak' && $others[$i]->GetFieldType() != 'FileUpload')
 				{
-				foreach($res[1] as $elem)
+				$replVal = $others[$i]->GetHumanReadableValue();
+				if ($replVal == '')
 					{
-					$replVal .= $elem . ", ";
+					$replVal = $unspec;
 					}
-				$replVal = rtrim($replVal,", ");
-				}
-			else
-				{
-				$replVal = $res[1];
-				}
-			if ($replVal == '')
-				{
-				$replVal = $this->Lang('email_value_unspecified');
-				}
-			$this->smarty->assign($this->MakeVar($res[0]),$replVal);
-			//$message = preg_replace($replKey,$replVal,$message);
-			}
+                }
+        	$mod->smarty->assign($this->MakeVar($others[$i]->Getname()),$replVal);
+        	}
 
+		$message = $mod->ProcessTemplateFromData( $message );
 		// send the message...
-		$mail = $this->mod_globals->selfptr->GetModuleInstance('CMSMailer');
+		$mail = $mod->GetModuleInstance('CMSMailer');
 		if ($mail == FALSE)
 			{
-			if (! $config->HideErrors)
+			if (! $mod->GetPreference('hide_errors',0))
 				{
 				echo '<hr />'.$this->mod_globals->Lang('missing_cms_mailer'). '<hr />';
 				} 
 			audit(-1, (isset($name)?$name:""), 'Feedback Form Error: '.$this->mod_globals->Lang('missing_cms_mailer'));
-
 			}
 		$mail->reset();
-		$mail->SetFrom($config->FromAddress);
-		$mail->SetFromName($config->FromName);
-		
-		$subj = $this->GetOptionByKind('subject');
-		$mail->SetSubject(ffUtilityFunctions::def($subj[0]->Value)?$subj[0]->Value:$this->mod_globals->Lang('submission_subject').": ".$formName);
+		if ($this->SetFromAddress())
+			{
+			$mail->SetFrom($this->GetOption('email_from_address'));
+			}
+		if ($this->SetFromName())
+			{
+			$mail->SetFrom($this->GetOption('email_from_name'));
+			}
+		if ($this->SetSubject())
+			{
+			$mail->SetFrom($this->GetOption('email_subject'));
+			}
 		$mail->SetBody(html_entity_decode($message));
-		$mail->SetCharSet('utf-8');
+		$mail->SetCharSet($this->GetOption('email_encoding','utf-8'));
 
 		if (count($_FILES) > 0)
 			{
@@ -160,21 +178,25 @@ function populate(formname)
 					}
 				}
 			}
-		$opt = $this->GetOptionByKind('address');
+		$opt = $this->GetOption('destination_address');
+		if (! is_array($opt))
+			{
+			$opt = array($opt);
+			}
 		foreach ($opt as $thisDest)
 		  {
-          $mail->AddAddress($thisDest->Value);
+          $mail->AddAddress($thisDest);
           }
 
 		$res = $mail->Send();
-		if (! $res)
+		if ($res === false)
 			{
-			echo $this->mod_globals->Lang('submission_error');
-			if (! $config->HideErrors)
+			echo $mod->Lang('submission_error');
+			if (! $mod->GetPreference('hide_errors',0))
 				{
-				echo '<hr />'.$mail->ErrorInfo. '<hr />';
+				echo '<hr />'.$mail->GetErrorInfo(). '<hr />';
 				} 
-			audit(-1, (isset($name)?$name:""), 'Feedback Form Error: '.$mail->ErrorInfo);
+			audit(-1, (isset($name)?$name:""), 'Feedback Form Error: '.$mail->GetErrorInfo());
 			}
 		return $res;
 	}
@@ -183,38 +205,43 @@ function populate(formname)
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$message = $this->GetOption('email_template',$mod->Lang('email_default_template'));
-        $ret = '<table border=1><tr><th colspan="2">Variables For Template</th></tr>';
-        $ret .= '<tr><td>$sub_form_name</td><td>Form Name</td></tr>';
-        $ret .= '<tr><td>$sub_date</td><td>Date of Submission Date</td></tr>';
-        $ret .= '<tr><td>$sub_host</td><td>Your server</td></tr>';
-        $ret .= '<tr><td>$sub_source_ip</td><td>IP address of person using form</td></tr>';
+        $ret = '<table class="pagetable"><tr><th colspan="2">'.$mod->Lang('help_variables_for_template').'</th></tr>';
+        $ret .= '<tr><td>$sub_form_name</td><td>'.$mod->Lang('title_form_name').'</td></tr>';
+        $ret .= '<tr><td>$sub_date</td><td>'.$mod->Lang('help_submission_date').'</td></tr>';
+        $ret .= '<tr><td>$sub_host</td><td>'.$mod->Lang('help_server_name').'</td></tr>';
+        $ret .= '<tr><td>$sub_source_ip</td><td>'.$mod->Lang('help_sub_source_ip').'</td></tr>';
+        $ret .= '<tr><td>$source_url</td><td>'.$mod->Lang('help_sub_url').'</td></tr>';
 		$others = $this->form_ptr->GetFields();
 		for($i=0;$i<count($others);$i++)
 			{
 			if ($others[$i]->GetFieldType() != 'PageBreak' && $others[$i]->GetFieldType() != 'FileUpload')
-				{
-				//$ret .= '<tr><td>$'.$this->MakeVar($others[$i]->GetName()) . '</td><td>';
-				//$ret .= $others[$i]->GetName() .'</td></tr>';
-                
+				{                
                 $ret .= '<tr><td>$'.$this->MakeVar($others[$i]->GetName()) .'</td><td>' .$others[$i]->GetName() . '</td></tr>';
                 }
         	}
        	
-        $ret .= '<tr><td colspan="2">Other fields will be available as you add them to the form.</td></tr>';
+        $ret .= '<tr><td colspan="2">'.$mod->Lang('help_other_fields').'</td></tr>';
         
-	   $ret .= '</table>';
-/*	   $escapedSample = preg_replace('/\'/',"\\'",$this->createSampleTemplate());
+	   $escapedSample = preg_replace('/\'/',"\\'",$this->createSampleTemplate());
        $escapedSample = preg_replace('/\n/',"\\n'+\n'", $escapedSample);
 	   $this->sampleTemplateCode = preg_replace('/TEMPLATE/',"'".$escapedSample."'",$this->sampleTemplateCode);
 	   $this->sampleTemplateCode = preg_replace('/ID/',$formDescriptor, $this->sampleTemplateCode);
-*/
-       return array(array(),array(array($mod->Lang('title_email_template'),
-       	array($mod->CreateTextArea(false, $formDescriptor,
-        	htmlentities($message),'opt_email_template', '', '','',30,15),
-        		//$this->mod_globals->Lang('title_sample_template')=>$this->sampleTemplateCode
-        		$ret))
-            ));
-           return array(array(array('a',array('b','c'))),array());
+	   $ret .= '<tr><td colspan="2">'.$this->sampleTemplateCode.'</td></tr>';
+	   $ret .= '</table>';
+
+       return array(
+       		array(
+               		array($mod->Lang('title_email_subject'),$mod->CreateInputText($formDescriptor, 'opt_email_subject',$this->GetOption('email_subject',''),25,128)),
+               		array($mod->Lang('title_email_from_name'),$mod->CreateInputText($formDescriptor, 'opt_email_from_name',$this->GetOption('email_from_name',$mod->Lang('friendlyname')),25,128)),
+               		array($mod->Lang('title_email_from_address'),$mod->CreateInputText($formDescriptor, 'opt_email_from_address',$this->GetOption('email_from_address',''),25,128)),
+					),
+			array(
+					array($mod->Lang('title_email_template'),
+       					array($mod->CreateTextArea(false, $formDescriptor,
+        					htmlentities($message),'opt_email_template', '', '','',0,0),$ret)),
+        			array($mod->Lang('title_email_encoding'),$mod->CreateInputText($formDescriptor, 'opt_email_encoding',$this->GetOption('email_encoding','utf-8'),25,128))
+            		)
+            );
 	}
 
 

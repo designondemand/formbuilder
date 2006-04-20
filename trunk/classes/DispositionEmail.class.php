@@ -26,7 +26,6 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 		$this->HasDeleteOp = true;
 		$this->ValidationTypes = array(
        		);
-       	error_log("loading");
     }
 
 	function GetOptionAddButton()
@@ -63,27 +62,28 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 
     function StatusInfo()
 	{
-/*		$opt = $this->GetOption('address',$this->Lang);
-		$ret= $this->mod_globals->Lang('to').": ";
-		if (ffUtilityFunctions::def($opt[0]->Value))
+		$mod = $this->form_ptr->module_ptr;
+		$opt = $this->GetOption('destination_address','');
+
+		$ret= $mod->Lang('to').": ";
+		if (is_array($opt))
 		  {
 		  if (count($opt)>1)
 		      {
 		      $ret.= count($opt);
-		      $ret.= " ".$this->mod_globals->Lang('recipients');
+		      $ret.= " ".$mod->Lang('recipients');
 		      }
 		  else
 		      {
-		      $ret.= $opt[0]->Value;
+		      $ret.= $opt[0];
 		      }
 		  }
 		else
 		  {
-          $ret.= $this->mod_globals->Lang('unspecified');
+          $ret.= $mod->Lang('unspecified');
           }
         $ret.= $this->TemplateStatus();
         return $ret;
-*/
 	}
 
 	function countAddresses()
@@ -105,9 +105,9 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 
 
     // Send off those emails
-	function DisposeForm($formName, &$config, $results)
+	function DisposeForm()
 	{
-//		return $this->SendForm($formName, $config, $results);
+		return $this->SendForm();
 	}
 
 	function PrePopulateAdminForm($formDescriptor)
@@ -146,7 +146,6 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 
 	function AdminValidate()
     {
-error_log("Checking");
 		$mod = $this->form_ptr->module_ptr;
     	$opt = $this->GetOptionRef('destination_address');
     	$ret = true;

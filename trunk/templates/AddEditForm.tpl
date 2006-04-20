@@ -33,7 +33,7 @@
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_fields}</p>
 		<div class="pageinput">
-			<table class="AdminTable">
+			<table class="pagetable">
                 <thead><tr><th>{$title_field_name}</th>
                 	<th>{$title_field_type}</th>
                 	<th>{$title_field_required_abbrev}</th>

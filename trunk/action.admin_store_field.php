@@ -26,7 +26,6 @@ if (! $this->CheckAccess()) exit;
             $aefield->LoadField($params);
             $params['message'] = $val[1];
 			echo $aeform->AddEditField($id, $aefield, (isset($params['dispose_only'])?$params['dispose_only']:0), $returnid, isset($params['message'])?$params['message']:'');
-
         	}
 
 ?>
