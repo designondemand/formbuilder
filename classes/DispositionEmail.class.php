@@ -64,7 +64,6 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$opt = $this->GetOption('destination_address','');
-
 		$ret= $mod->Lang('to').": ";
 		if (is_array($opt))
 		  {
@@ -78,6 +77,10 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 		      $ret.= $opt[0];
 		      }
 		  }
+		elseif ($opt != '')
+			{
+			$ret .= $opt;
+			}
 		else
 		  {
           $ret.= $mod->Lang('unspecified');

@@ -290,6 +290,8 @@ $lang['submission_date']='Date';
 $lang['submission_source']='Source';
 $lang['submission_subject']='Form Submission';
 $lang['submission_error']='There has been an error in the form submission<br>Please try again later.';
+$lang['submit_error']='FormBuilder submit error: %s';
+$lang['upload_attach_error'] = 'Upload/Attachment error on file %s (tmp_name: %s, of type %s)';
 $lang['submission_error_file']='Error. Unable to write to file.';
 
 

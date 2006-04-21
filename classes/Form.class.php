@@ -180,8 +180,7 @@ class fbForm {
         		}
         	if (! $this->Fields[$i]->IsDisposition() &&
         		 $this->Fields[$i]->IsRequired() &&
-        		 	$this->Fields[$i]->GetValue() ==
-        		 	$this->module_ptr->Lang('unspecified'))
+        		 	$this->Fields[$i]->HasValue() == false)
         		{
         			$message .= "<h4>".$this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName())."</h4>\n";
         			$validated = false;
