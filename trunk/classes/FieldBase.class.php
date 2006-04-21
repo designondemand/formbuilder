@@ -431,6 +431,14 @@ class fbFieldBase {
 			}
 	}
 
+
+	// override this if you have some unusual format for values,
+	// especially if "false" is a valid value!
+	function HasValue()
+	{
+		return ($this->Value !== false);
+	}
+	
 	// probably don't need to override this
 	function GetValue()
 	{

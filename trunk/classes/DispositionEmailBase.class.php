@@ -54,6 +54,7 @@ function populate(formname)
 	{
 		$maxvarlen = 24;
 		$string = strtolower(preg_replace('/\s+/','_',$string));
+		$string = strtolower(preg_replace('/\W/','_',$string));
 		if (strlen($string) > $maxvarlen)
 			{
 			$string = substr($string,0,$maxvarlen);
@@ -73,7 +74,8 @@ function populate(formname)
 		$others = $this->form_ptr->GetFields();
 		for($i=0;$i<count($others);$i++)
 			{
-			if ($others[$i]->GetFieldType() != 'PageBreak' && $others[$i]->GetFieldType() != 'FileUpload')
+//			if ($others[$i]->GetFieldType() != 'PageBreak' && $others[$i]->GetFieldType() != 'FileUpload')
+			if ($others[$i]->DisplayInForm())
 				{
                 $ret .= $others[$i]->GetName() . ': {$' . $this->MakeVar($others[$i]->GetName()) . "}\n";
                 }
@@ -111,7 +113,7 @@ function populate(formname)
             {
             $message = $this->createSampleTemplate();
             }
-        $mod->smarty->assign('sub_form_name',$formName);
+        $mod->smarty->assign('sub_form_name',$this->form_ptr->GetName());
         $mod->smarty->assign('sub_date',date('r'));
         $mod->smarty->assign('sub_host',$_SERVER['SERVER_NAME']);
         $mod->smarty->assign('sub_source_ip',$_SERVER['REMOTE_ADDR']);
@@ -152,11 +154,11 @@ function populate(formname)
 			}
 		if ($this->SetFromName())
 			{
-			$mail->SetFrom($this->GetOption('email_from_name'));
+			$mail->SetFromName($this->GetOption('email_from_name'));
 			}
 		if ($this->SetSubject())
 			{
-			$mail->SetFrom($this->GetOption('email_subject'));
+			$mail->SetSubject($this->GetOption('email_subject'));
 			}
 		$mail->SetBody(html_entity_decode($message));
 		$mail->SetCharSet($this->GetOption('email_encoding','utf-8'));
@@ -171,10 +173,10 @@ function populate(formname)
 					}
 				if (! $mail->AddAttachment($thisFile['tmp_name'], $thisFile['name'], "base64", $thisFile['type']))
 					{
-					echo '<hr />Upload Attachment Error!';
-					echo $thisFile['tmp_name'] . '<br>';
-					echo $thisFile['name'] . '<br>';
-					echo $thisFile['type'] . '<hr>';
+					// failed upload kills the send.
+					audit(-1, (isset($name)?$name:""), $mod->Lang('submit_error',$mail->GetErrorInfo()));
+					return array($res, $mod->Lang('upload_attach_error',
+						array($thisFile['name'],$thisFile['tmp_name'] ,$thisFile['type'])));
 					}
 				}
 			}
@@ -191,14 +193,9 @@ function populate(formname)
 		$res = $mail->Send();
 		if ($res === false)
 			{
-			echo $mod->Lang('submission_error');
-			if (! $mod->GetPreference('hide_errors',0))
-				{
-				echo '<hr />'.$mail->GetErrorInfo(). '<hr />';
-				} 
-			audit(-1, (isset($name)?$name:""), 'Feedback Form Error: '.$mail->GetErrorInfo());
+			audit(-1, (isset($name)?$name:""), $mod->Lang('submit_error',$mail->GetErrorInfo()));
 			}
-		return $res;
+		return array($res, $mail->GetErrorInfo());
 	}
 
 	function PrePopulateAdminFormBase($formDescriptor)
@@ -238,7 +235,7 @@ function populate(formname)
 			array(
 					array($mod->Lang('title_email_template'),
        					array($mod->CreateTextArea(false, $formDescriptor,
-        					htmlentities($message),'opt_email_template', '', '','',0,0),$ret)),
+        					htmlspecialchars($message),'opt_email_template', '', '','',0,0),$ret)),
         			array($mod->Lang('title_email_encoding'),$mod->CreateInputText($formDescriptor, 'opt_email_encoding',$this->GetOption('email_encoding','utf-8'),25,128))
             		)
             );
