@@ -69,41 +69,6 @@ class fbDatePickerField extends fbFieldBase {
        			$mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $Year, -1, $today['year']);
 	}
 
-/*
-
-	function WriteToPublicForm($id, &$params, $return_id)
-	{
-        if (strlen($this->CSSClass)>0)
-        	{
-        	echo "<div class=\"".$this->CSSClass."\">";
-        	}
-       $today = getdate();
-       $Days = array();
-       for ($i=1;$i<32;$i++)
-         {
-         	$Days[$i]=$i;
-         }
-       $Year = array();
-       for ($i=$today['year']-10;$i<$today['year']+10;$i++)
-         {
-         	$Year[$i]=$i;
-         }
-		if (isset($params[$this->Alias]) && is_array($params[$this->Alias]))
-			{
-			$today['mday'] = $params[$this->Alias][0];
-			$today['mon'] = $params[$this->Alias][1];
-			$today['year'] = $params[$this->Alias][2];			
-			}
-
-       echo CMSModule::CreateInputDropdown($id, $this->Alias.'[]', $Days, -1, $today['mday'],$this->mod_globals->UseIDAndName?'id="'.$this->Alias.'_d"':'');
-       echo CMSModule::CreateInputDropdown($id, $this->Alias.'[]', $this->Months, -1, $today['mon'],$this->mod_globals->UseIDAndName?'id="'.$this->Alias.'_m"':'');
-       echo CMSModule::CreateInputDropdown($id, $this->Alias.'[]', $Year, -1, $today['year'],$this->mod_globals->UseIDAndName?'id="'.$this->Alias.'_y"':'');
-	   if (strlen($this->CSSClass)>0)
-        	{
-        	echo "</div>";
-        	}
-	}
-*/
 	function GetHumanReadableValue()
 	{
 		$mod = $this->form_ptr->module_ptr;
@@ -127,21 +92,6 @@ class fbDatePickerField extends fbFieldBase {
             		$this->GetOption('date_format','j F Y'),25,25),$mod->Lang('help_date_format'))
 		));
 		return array('main'=>$main,array());
-	}
-
-
-/*	function RenderAdminForm($formDescriptor)
-	{
-        $format = $this->GetOptionByKind('dateformat');
-		return array($this->mod_globals->Lang('title_date_format').':'=>CMSModule::CreateInputText($formDescriptor, 'dateformat',
-				ffUtilityFunctions::def($format[0]->Value)?$this->NerfHTML($format[0]->Value):'j F Y',25));
-	}
-*/
-
-
-	function Validate()
-	{
-		return array(true,'');
 	}
 
 }
