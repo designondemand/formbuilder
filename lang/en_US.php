@@ -59,6 +59,7 @@ $lang['must_specify_one_destination']='You need to specify at least one destinat
 $lang['are_you_sure_delete_form']='Are you sure you want to delete the form %s?';
 $lang['are_you_sure_delete_field']='Are you sure you want to delete the field %s?';
 $lang['notice_select_type']='Advanced options are not available until the field type has been set.';
+$lang['field_name_in_use']='The field name "%s" is already in use. Please use unique field names.';
 
 // abbreviations, verbs, and other general terms
 $lang['abbreviation_length']='Len: %s';
@@ -76,6 +77,7 @@ $lang['select_a_user']='Select A User';
 $lang['select_type']='Select Type';
 $lang['to']='To';
 $lang['recipients']='recipients';
+$lang['destination_count'] = '%s destinations';
 $lang['note']='Note';
 $lang['any_user']='Any User';
 $lang['list']='list';
@@ -121,6 +123,8 @@ $lang['add_checkboxes'] = 'Add More Checkboxes';
 $lang['delete_checkboxes'] = 'Delete Marked Checkboxes';
 $lang['add_address'] = 'Add Another Address';
 $lang['delete_address'] = 'Delete Marked Addresses';
+$lang['add_destination'] = 'Add Another Destination';
+$lang['delete_destination'] = 'Delete Marked Destinations';
 
 // Field Attribute Titles
 $lang['title_maximum_length']='Maximum Length';

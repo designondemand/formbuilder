@@ -45,8 +45,9 @@ function populate(formname)
     }
 
 	// override me!
-	function DisposeForm($formName, &$config, $results)
+	function DisposeForm()
 	{
+		return array(true,'');
 	}
 
 
@@ -95,19 +96,12 @@ function populate(formname)
 		return true;
 	}
 
-	// override me as necessary
-	function SetSubject()
-	{
-		return true;
-	}
-
-
     // Send off those emails
-	function SendForm()
+	function SendForm($destination_array, $subject)
 	{
 		global $gCms;
 		$mod = $this->form_ptr->module_ptr;
-		$message = $this->GetOption('email_template',$mod->Lang('email_default_template'));
+		$message = $this->GetOption('email_template','');
 
         if ($message == '')
             {
@@ -156,10 +150,7 @@ function populate(formname)
 			{
 			$mail->SetFromName($this->GetOption('email_from_name'));
 			}
-		if ($this->SetSubject())
-			{
-			$mail->SetSubject($this->GetOption('email_subject'));
-			}
+		$mail->SetSubject($subject);
 		$mail->SetBody(html_entity_decode($message));
 		$mail->SetCharSet($this->GetOption('email_encoding','utf-8'));
 
@@ -180,12 +171,11 @@ function populate(formname)
 					}
 				}
 			}
-		$opt = $this->GetOption('destination_address');
-		if (! is_array($opt))
+		if (! is_array($destination_array))
 			{
-			$opt = array($opt);
+			$destination_array = array($destination_array);
 			}
-		foreach ($opt as $thisDest)
+		foreach ($destination_array as $thisDest)
 		  {
           $mail->AddAddress($thisDest);
           }
@@ -201,7 +191,7 @@ function populate(formname)
 	function PrePopulateAdminFormBase($formDescriptor)
 	{
 		$mod = $this->form_ptr->module_ptr;
-		$message = $this->GetOption('email_template',$mod->Lang('email_default_template'));
+		$message = $this->GetOption('email_template','');
         $ret = '<table class="pagetable"><tr><th colspan="2">'.$mod->Lang('help_variables_for_template').'</th></tr>';
         $ret .= '<tr><td>$sub_form_name</td><td>'.$mod->Lang('title_form_name').'</td></tr>';
         $ret .= '<tr><td>$sub_date</td><td>'.$mod->Lang('help_submission_date').'</td></tr>';
