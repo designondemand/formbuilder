@@ -134,7 +134,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 			$this->addressCount += $this->addressAdd;
 			$this->addressAdd = 0;
 			}
-		$dests = '<table><tr><th>'.$mod->Lang('title_selection_subject').'</th><th>'.
+		$dests = '<table class="module_fb_table"><tr><th>'.$mod->Lang('title_selection_subject').'</th><th>'.
 			$mod->Lang('title_destination_address').'</th><th>'.
 			$mod->Lang('title_delete').'</th></tr>';
 
@@ -227,78 +227,6 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 	}
 
 
-
-/*	function WriteToPublicForm($id, &$params, $return_id)
-	{
-	   if (strlen($this->CSSClass)>0)
-        	{
-        	echo "<div class=\"".$this->CSSClass."\">";
-        	}
-		$optVals = $this->GetOptionByKind('director');
-		$defVals = $this->GetOptionByKind('default');
-		if (ffUtilityFunctions::def($defVals[0]->Value))
-			{
-			$opts = array($defVals[0]->Value=>'');
-			}
-		else
-			{
-			$opts = array($this->mod_globals->Lang('select_one')=>'');
-			}
-        $dispRows = count($optVals);
-        for($i=0;$i<$dispRows;$i++)
-        	{
-        	$opts[$this->NerfHTML($optVals[$i]->Name)]=$optVals[$i]->OptionId;
-        	}
-        	
-        echo CMSModule::CreateInputDropdown($id, $this->Alias, $opts, -1, $this->Value,$this->mod_globals->UseIDAndName?'id="'.$this->Alias.'"':'');
-	   if (strlen($this->CSSClass)>0)
-        	{
-        	echo "</div>";
-        	}
-	}
-
-
-
-    // Send off those emails
-   	function DisposeForm($formName, &$config, $results)
-	{
-		// a touch ugly, since we're rewiring everything to use a base class.
-		$opt = $this->GetOptionById($this->Value);
-		$this->AddOption('address','address',$opt[0]->Value);
-		return $this->SendForm($formName, $config, $results);
-	}
-
-
-	function RenderAdminForm($formDescriptor)
-	{
-        $optVals = $this->GetOptionByKind('director');
-		$defVals = $this->GetOptionByKind('default');
-        $ret = '<table><tr><th>'.$this->mod_globals->Lang('title_selection_subject').
-            '</th><th>'.$this->mod_globals->Lang('title_destination_email').'</th></tr>';
-        $dispRows = count($optVals)+4;
-        for($i=0;$i<$dispRows;$i++)
-        	{
-        	$ret .= '<tr><td>';
-        	$ret .= CMSModule::CreateInputText($formDescriptor, 'subject[]',
-				ffUtilityFunctions::def($optVals[$i]->Name)?$this->NerfHTML($optVals[$i]->Name):'',25);
-			$ret .= '</td><td>';
-			$ret .= CMSModule::CreateInputText($formDescriptor, 'address[]',
-				ffUtilityFunctions::def($optVals[$i]->Value)?$this->NerfHTML($optVals[$i]->Value):'',25);
-			$ret .= '</td></tr>';
-        	}
-        $ret .= '</table>';
-	   $tmp = array($this->mod_globals->Lang('title_select_one_message').
-	   		': '=>CMSModule::CreateInputText($formDescriptor, 'default',
-			ffUtilityFunctions::def($defVals[0]->Value)?$this->NerfHTML($defVals[0]->Value):$this->mod_globals->Lang('select_one'),25),
-	   		$this->mod_globals->Lang('title_director_details').':'=>$ret);
-	   $tmp2 = $this->RenderAdminFormBase($formDescriptor);
-	   foreach ($tmp2 as $key=>$val)
-	   		{
-	   		$tmp[$key]=$val;
-	   		}
-	   return $tmp;
-	}
-*/
 	function AdminValidate()
     {
 		$mod = $this->form_ptr->module_ptr;
