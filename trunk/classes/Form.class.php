@@ -161,6 +161,19 @@ class fbForm {
 		return count($this->Fields);
 	}
 
+	function HasFieldNamed($name)
+	{
+		$ret = false;
+        for($i=0;$i<count($this->Fields);$i++)
+        	{
+        	if ($this->Fields[$i]->GetName() == $name)
+        		{
+        		$ret = true;
+        		}
+        	}
+        return $ret;
+	}
+
 
 	function Validate()
 	{

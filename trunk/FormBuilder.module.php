@@ -35,6 +35,7 @@ class FormBuilder extends CMSModule
 	var $disp_field_types;
 	var $all_validation_types;
 	var $module_ptr;
+	var $email_regex;
 	var $dbHandle;
 	
 	function FormBuilder()
@@ -43,7 +44,7 @@ class FormBuilder extends CMSModule
 		$this->CMSModule();
         $this->module_ptr = &$this;
         $this->dbHandle = &$gCms->GetDb();
-
+		$this->email_regex = "/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i";
 		require_once 'classes/Form.class.php';
 		require_once 'classes/FieldBase.class.php';
 	}

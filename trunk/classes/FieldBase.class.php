@@ -390,7 +390,7 @@ class fbFieldBase {
 			{
 			array_splice($advArray, $hideIndex,1);
 			}
-		// remove the "hide name" field
+		// remove the "css" field
 		$hideIndex = -1;
 		for ($i=0;$i<count($advArray);$i++)
 			{
@@ -530,13 +530,24 @@ class fbFieldBase {
 			}
 	}
 
-	// override me. Returns an array: first value is a true or
+	function DoesFieldNameExist()
+	{
+		$mod = $this->form_ptr->module_ptr;
+		
+		// field name in use??
+		if ($this->form_ptr->HasFieldNamed($this->GetName()))
+			{
+			return array(false,$mod->Lang('field_name_in_use',$this->GetName()).'<br />');
+			}
+		
+		return array(true,'');
+	}
+
+	// override me, if needed. Returns an array: first value is a true or
     // false (whether or not the value is valid), the second is a message
 	function AdminValidate()
 	{
-		$mod = $this->form_ptr->module_ptr;
-		$ret = array(true,'');
-		return $ret;
+		return $this->DoesFieldNameExist();
 	}
 
 

@@ -110,7 +110,7 @@ class fbDispositionEmail extends fbDispositionEmailBase {
     // Send off those emails
 	function DisposeForm()
 	{
-		return $this->SendForm();
+		return $this->SendForm($this->GetOption('destination_address'),$this->GetOption('email_subject'));
 	}
 
 	function PrePopulateAdminForm($formDescriptor)
@@ -151,16 +151,20 @@ class fbDispositionEmail extends fbDispositionEmailBase {
     {
 		$mod = $this->form_ptr->module_ptr;
     	$opt = $this->GetOptionRef('destination_address');
-    	$ret = true;
-    	$message = '';
+		list($ret, $message) = $this->DoesFieldNameExist();
 		if ($opt === false || count($opt) == 0)
 			{
 			$ret = false;
 			$message .= $mod->Lang('must_specify_one_destination').'</br>';
 			}
+		if (! preg_match($mod->email_regex,$this->GetOption('email_from_address')))
+			{
+    	       	$ret = false;
+                $message .= $mod->Lang('not_valid_email',$this->GetOption('email_from_address')) . '<br/>';
+			}
         for($i=0;$i<count($opt);$i++)
     	   {
-    	   if (! preg_match("/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i", $opt[$i]))
+    	   if (! preg_match($mod->email_regex, $opt[$i]))
     	       {
     	       	$ret = false;
                 $message .= $mod->Lang('not_valid_email',$opt[$i]) . '<br/>';

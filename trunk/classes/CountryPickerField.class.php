@@ -68,7 +68,7 @@ class fbCountryPickerField extends fbFieldBase {
 			}
 		else
 			{
-			$sorted[' '.$this->Countries]=$mod->Lang('select_one');
+			$sorted[' '.$mod->Lang('select_one')]='';
 			}
 		ksort($this->Countries);
 		foreach($this->Countries as $k=>$v)
