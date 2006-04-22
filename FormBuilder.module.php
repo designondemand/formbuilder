@@ -176,6 +176,7 @@ class FormBuilder extends CMSModule
 			resp_id I KEY,
 			form_id I,
 			user_approved T,
+			secret_code C(35),
 			admin_approved T,
 			submitted T
 		";
@@ -272,6 +273,12 @@ class FormBuilder extends CMSModule
 	{
 		return true;
 	}
+
+    function AdminStyle()
+    {
+      return "\n.module_fb_table {font-size: 10px;}\n.module_fb_area_wide {width: 500px;}\n.module_fb_legend{font-size: 9px; margin: 6px; border: 1px solid black;}\n";
+    }
+
 
 	function InstallPostMessage()
 	{

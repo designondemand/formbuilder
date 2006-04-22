@@ -75,7 +75,6 @@ function populate(formname)
 		$others = $this->form_ptr->GetFields();
 		for($i=0;$i<count($others);$i++)
 			{
-//			if ($others[$i]->GetFieldType() != 'PageBreak' && $others[$i]->GetFieldType() != 'FileUpload')
 			if ($others[$i]->DisplayInForm())
 				{
                 $ret .= $others[$i]->GetName() . ': {$' . $this->MakeVar($others[$i]->GetName()) . "}\n";
@@ -192,18 +191,19 @@ function populate(formname)
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$message = $this->GetOption('email_template','');
-        $ret = '<table class="pagetable"><tr><th colspan="2">'.$mod->Lang('help_variables_for_template').'</th></tr>';
-        $ret .= '<tr><td>$sub_form_name</td><td>'.$mod->Lang('title_form_name').'</td></tr>';
-        $ret .= '<tr><td>$sub_date</td><td>'.$mod->Lang('help_submission_date').'</td></tr>';
-        $ret .= '<tr><td>$sub_host</td><td>'.$mod->Lang('help_server_name').'</td></tr>';
-        $ret .= '<tr><td>$sub_source_ip</td><td>'.$mod->Lang('help_sub_source_ip').'</td></tr>';
-        $ret .= '<tr><td>$source_url</td><td>'.$mod->Lang('help_sub_url').'</td></tr>';
+        $ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_template').'</th></tr>';
+        $ret .= '<tr><th>'.$mod->Lang('help_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';
+        $ret .= '<tr><td>{$sub_form_name}</td><td>'.$mod->Lang('title_form_name').'</td></tr>';
+        $ret .= '<tr><td>{$sub_date}</td><td>'.$mod->Lang('help_submission_date').'</td></tr>';
+        $ret .= '<tr><td>{$sub_host}</td><td>'.$mod->Lang('help_server_name').'</td></tr>';
+        $ret .= '<tr><td>{$sub_source_ip}</td><td>'.$mod->Lang('help_sub_source_ip').'</td></tr>';
+        $ret .= '<tr><td>{$source_url}</td><td>'.$mod->Lang('help_sub_url').'</td></tr>';
 		$others = $this->form_ptr->GetFields();
 		for($i=0;$i<count($others);$i++)
 			{
 			if ($others[$i]->GetFieldType() != 'PageBreak' && $others[$i]->GetFieldType() != 'FileUpload')
 				{                
-                $ret .= '<tr><td>$'.$this->MakeVar($others[$i]->GetName()) .'</td><td>' .$others[$i]->GetName() . '</td></tr>';
+                $ret .= '<tr><td>${'.$this->MakeVar($others[$i]->GetName()) .'}</td><td>' .$others[$i]->GetName() . '</td></tr>';
                 }
         	}
        	
@@ -225,7 +225,7 @@ function populate(formname)
 			array(
 					array($mod->Lang('title_email_template'),
        					array($mod->CreateTextArea(false, $formDescriptor,
-        					htmlspecialchars($message),'opt_email_template', '', '','',0,0),$ret)),
+        					htmlspecialchars($message),'opt_email_template', 'module_fb_area_wide', '','',0,0),$ret)),
         			array($mod->Lang('title_email_encoding'),$mod->CreateInputText($formDescriptor, 'opt_email_encoding',$this->GetOption('email_encoding','utf-8'),25,128))
             		)
             );

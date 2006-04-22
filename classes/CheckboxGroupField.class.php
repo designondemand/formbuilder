@@ -146,7 +146,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 			$this->boxCount += $this->boxAdd;
 			$this->boxAdd = 0;
 			}
-		$boxes = '<table><tr><th>'.$mod->Lang('title_checkbox_label').'</th><th>'.
+		$boxes = '<table class="module_fb_table"><tr><th>'.$mod->Lang('title_checkbox_label').'</th><th>'.
 			$mod->Lang('title_checked_value').'</th><th>'.
 			$mod->Lang('title_unchecked_value').'</th><th>'.
 			$mod->Lang('title_delete').'</th></tr>';
