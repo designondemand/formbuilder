@@ -694,14 +694,15 @@ class fbFieldBase {
 
     function Store($storeDeep=false)
     {
+    	$mod =  $this->form_ptr->module_ptr;
         if ($this->Id == -1)
             {
-            $this->Id = $this->form_ptr->module_ptr->dbHandle->GenID(cms_db_prefix().'module_fb_field_seq');
-			$sql = 'INSERT INTO ' .cms_db_prefix().
+            $this->Id = $mod->dbHandle->GenID(cms_db_prefix().'module_fb_field_seq');
+ 			$sql = 'INSERT INTO ' .cms_db_prefix().
 				'module_fb_field (field_id, form_id, name, type, ' .
                 'required, validation_type, hide_label, order_by) '.
                 ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-			$res = $this->form_ptr->module_ptr->dbHandle->Execute($sql,
+			$res = $mod->dbHandle->Execute($sql,
 				array($this->Id, $this->FormId, $this->Name,
 				$this->Type, $this->Required?1:0, 
 				$this->ValidationType, $this->HideLabel, $this->OrderBy));
@@ -712,7 +713,7 @@ class fbFieldBase {
 				'module_fb_field set name=?, type=?,'.
                 'required=?, validation_type=?, order_by=?, '.
                 'hide_label=? where field_id=?';
-			$res = $this->form_ptr->module_ptr->dbHandle->Execute($sql,
+			$res = $mod->dbHandle->Execute($sql,
 				array($this->Name, $this->Type, $this->Required?1:0,
 					$this->ValidationType,
 					$this->OrderBy, $this->HideLabel, $this->Id));
@@ -723,7 +724,7 @@ class fbFieldBase {
             // drop old options
 			$sql = 'DELETE FROM ' . cms_db_prefix() .
 				'module_fb_field_opt where field_id=?';
-			$res = $this->form_ptr->module_ptr->dbHandle->Execute($sql,
+			$res = $mod->dbHandle->Execute($sql,
 				array($this->Id));
 
 			foreach ($this->Options as $thisOptKey=>$thisOptValueList)
@@ -734,12 +735,12 @@ class fbFieldBase {
 					}
 				foreach ($thisOptValueList as $thisOptValue)
 					{
-            		$optId = $this->form_ptr->module_ptr->dbHandle->GenID(
+            		$optId = $mod->dbHandle->GenID(
             			cms_db_prefix().'module_fb_field_opt_seq');
 					$sql = 'INSERT INTO ' . cms_db_prefix().
 						'module_fb_field_opt (option_id, field_id, form_id, '.
 						'name, value) VALUES (?, ?, ?, ?, ?)';
-					$res = $this->form_ptr->module_ptr->dbHandle->Execute($sql,
+					$res = $mod->dbHandle->Execute($sql,
 						array($optId, $this->Id, $this->FormId, $thisOptKey,
 						$thisOptValue));
 					}

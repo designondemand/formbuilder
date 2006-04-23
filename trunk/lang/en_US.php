@@ -228,7 +228,7 @@ $lang['help_other_fields']='Other fields will be available as you add them to th
 $lang['help_date_format']='See <a href="http://www.php.net/manual/en/function.date.php" target=_NEW>the PHP Manual</a> for formatting help.';
 $lang['help_variable_name']='Variable';
 $lang['help_form_field']='Field Represented';
-$lang['']='';
+$lang['link_back_to_form']='&#171; Back to Form';
 $lang['']='';
 $lang['']='';
 $lang['']='';
