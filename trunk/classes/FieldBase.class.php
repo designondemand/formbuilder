@@ -24,6 +24,7 @@ class fbFieldBase {
     var $NonRequirableField;
     var $HasAddOp;
     var $HasDeleteOp;
+    var $modifiesOtherFields;
 
     var $Value=false;
     var $form_ptr;
@@ -122,6 +123,7 @@ class fbFieldBase {
 	   $this->NonRequirableField = false;
 	   $this->HasAddOp = false;
 	   $this->HasDeleteOp = false;
+	   $this->modifiesOtherFields = false;
 
 	}
 
@@ -130,6 +132,15 @@ class fbFieldBase {
 		return $id.'_'.$this->Id;
 	}
 
+	function ModifiesOtherFields()
+	{
+		return $this->modifiesOtherFields;
+	}
+
+	// override me if you're just tweaking other fields before disposition
+	function ModifyOtherFields()
+	{
+	}
 
 	// override me with a form input string or something
 	// this should just be the input portion. The title

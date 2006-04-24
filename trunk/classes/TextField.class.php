@@ -93,7 +93,7 @@ class fbTextField extends fbFieldBase {
 		  	       break;
 		  	   case 'email':
                   if ($this->Value !== false &&
-                      ! preg_match("/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i", $this->Value))
+                      ! preg_match($mod->email_regex, $this->Value))
                     {
                     $result = false;
                     $message = $mod->Lang('please_enter_an_email',$this->Name);

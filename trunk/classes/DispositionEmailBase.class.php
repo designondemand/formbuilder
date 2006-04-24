@@ -125,19 +125,20 @@ function populate(formname)
 					$replVal = $unspec;
 					}
                 }
-        	$mod->smarty->assign($this->MakeVar($others[$i]->Getname()),$replVal);
+        	$mod->smarty->assign($this->MakeVar($others[$i]->GetName()),$replVal);
         	}
-
 		$message = $mod->ProcessTemplateFromData( $message );
 		// send the message...
 		$mail = $mod->GetModuleInstance('CMSMailer');
 		if ($mail == FALSE)
 			{
+			$msg = '';
 			if (! $mod->GetPreference('hide_errors',0))
 				{
-				echo '<hr />'.$this->mod_globals->Lang('missing_cms_mailer'). '<hr />';
+				$msg = '<hr />'.$this->mod_globals->Lang('missing_cms_mailer'). '<hr />';
 				} 
 			audit(-1, (isset($name)?$name:""), 'Feedback Form Error: '.$this->mod_globals->Lang('missing_cms_mailer'));
+			return array(false,$msg);
 			}
 		$mail->reset();
 		if ($this->SetFromAddress())
