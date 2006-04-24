@@ -229,11 +229,11 @@ $lang['help_date_format']='See <a href="http://www.php.net/manual/en/function.da
 $lang['help_variable_name']='Variable';
 $lang['help_form_field']='Field Represented';
 $lang['link_back_to_form']='&#171; Back to Form';
-$lang['']='';
-$lang['']='';
-$lang['']='';
-$lang['']='';
-$lang['']='';
+$lang['title_create_sample_template']='Create Sample Template';
+$lang['title_create_sample_header']='Create Sample Header';
+$lang['help_tab_symbol']='a tab character';
+$lang['title_file_template']='Template for one line of output file';
+$lang['title_file_header']='Template for the header of output file';
 $lang['']='';
 
 
@@ -297,7 +297,7 @@ $lang['submission_error']='There has been an error in the form submission<br>Ple
 $lang['submit_error']='FormBuilder submit error: %s';
 $lang['upload_attach_error'] = 'Upload/Attachment error on file %s (tmp_name: %s, of type %s)';
 $lang['submission_error_file']='Error. Unable to write to file.';
-
+$lang['submission_error_file_lock'] = 'Error. Unable to obtain lock for file.';
 
 $lang['email_default_template'] = "Form Name: {\$sub_form_name}\n" .
         		"Submission Date: {\$sub_date}\nSubmission Host: {\$sub_host}\n" .
