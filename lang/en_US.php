@@ -22,7 +22,8 @@ $lang['field_type_DispositionDatabase']='*Store Results in Database';
 $lang['field_type_PageBreakField']='Page Break';
 $lang['field_type_TextStatic']='Static Text';
 $lang['field_type_FileUploadField']='File Upload';
-$lang['field_type_EmailFromField']='Email "From" Field';
+$lang['field_type_FromEmailAddressField']='Email "From Address" Field';
+$lang['field_type_FromEmailNameField']='Email "From Name" Field';
 $lang['field_type_StaticTextField']='Static Text';
 
 

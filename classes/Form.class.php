@@ -235,6 +235,15 @@ class fbForm {
 	// element 1 is an array of reasons, in the event of failure.
 	function Dispose()
 	{
+		// first, we run all field methods that will modify other fields
+        for($i=0;$i<count($this->Fields);$i++)
+        	{
+        	if ($this->Fields[$i]->ModifiesOtherFields())
+        		{
+        		$this->Fields[$i]->ModifyOtherFields();
+        		}
+        	}
+
 		$resArray = array();
         $retCode = true;
         // for each form disposition pseudo-field, dispose the form results
