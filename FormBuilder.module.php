@@ -276,7 +276,7 @@ class FormBuilder extends CMSModule
 
     function AdminStyle()
     {
-      return "\n.module_fb_table {font-size: 10px;}\n.module_fb_area_wide {width: 500px;}\n.module_fb_legend{font-size: 9px; margin: 6px; border: 1px solid black;}\n";
+      return "\n.module_fb_table {font-size: 10px;}\n.module_fb_area_wide {width: 500px;}\n.module_fb_legend{font-size: 9px; margin: 6px; border: 1px solid black;}.module_fb_area_short {width: 500px; height: 100px;}\n";
     }
 
 
@@ -354,7 +354,8 @@ class FormBuilder extends CMSModule
 	// For a given form, returns an array of response objects
 	function ListResponses($form_id, $sort_order='submitted')
 	{
-		$db = $this->dbHandle;
+		global $gCms;
+		$db =& $gCms->GetDb();
 		$ret = array();
 		$sql = 'SELECT * FROM '.cms_db_prefix().
         			'module_fb_resp WHERE form_id=? ORDER BY ?';
@@ -406,6 +407,43 @@ class FormBuilder extends CMSModule
     	   }
     	return true;
     }
+
+    function ClearFileLock()
+    {
+		global $gCms;
+		$db =& $gCms->GetDb();
+		$sql = "DELETE from ".cms_db_prefix().'module_fb_flock';
+		$rs = $db->Execute($sql);
+    }
+
+
+    function GetFileLock()
+    {
+		global $gCms;
+		$db =& $gCms->GetDb();
+		$sql = "insert into ".cms_db_prefix()."module_fb_flock (flock_id, flock) values (1,".$db->sysTimeStamp.")";
+		$rs = $db->Execute($sql);
+        if ($rs)
+        	{
+        	return true;
+        	}
+        $sql = "select flock_id from ".cms_db_prefix().
+        	"module_fb_flock where flock + interval 15 second < ".$db->sysTimeStamp;
+		$rs = $db->Execute($sql);
+        if ($rs && $rs->RowCount() > 0)
+        	{
+        	$this->ClearFileLock();
+        	return false;
+        	}        	 
+		return false;
+    }
+
+    function ReturnFileLock()
+    {
+		$this->ClearFileLock();
+    }
+
+
 
 
 }

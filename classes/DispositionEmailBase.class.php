@@ -26,7 +26,7 @@ function populate(formname)
     formname[fname].value=TEMPLATE;
     }
 </script>
-<input type=\"button\" value=\"Create Sample Template\" onClick=\"javascript:populate(this.form)\" />";
+<input type=\"button\" value=\"".$mod->Lang('title_create_sample_template')."\" onClick=\"javascript:populate(this.form)\" />";
     }
 
 	// override me!
@@ -37,8 +37,7 @@ function populate(formname)
     function TemplateStatus()
     {
     	$mod = $this->form_ptr->module_ptr;
-    	if ($this->GetOption('email_template',$mod->Lang('email_default_template')) ==
-    		$mod->Lang('email_default_template'))
+    	if ($this->GetOption('email_template','') == '')
     		{
     		return $mod->Lang('email_template_not_set');
     		}
@@ -101,11 +100,11 @@ function populate(formname)
 		global $gCms;
 		$mod = $this->form_ptr->module_ptr;
 		$message = $this->GetOption('email_template','');
+		if ($message == '')
+			{
+			$message = $this->createSampleTemplate();
+			}
 
-        if ($message == '')
-            {
-            $message = $this->createSampleTemplate();
-            }
         $mod->smarty->assign('sub_form_name',$this->form_ptr->GetName());
         $mod->smarty->assign('sub_date',date('r'));
         $mod->smarty->assign('sub_host',$_SERVER['SERVER_NAME']);
@@ -118,7 +117,7 @@ function populate(formname)
 		for($i=0;$i<count($others);$i++)
 			{
 			$replVal = '';
-			if ($others[$i]->GetFieldType() != 'PageBreak' && $others[$i]->GetFieldType() != 'FileUpload')
+			if ($others[$i]->DisplayInForm())
 				{
 				$replVal = $others[$i]->GetHumanReadableValue();
 				if ($replVal == '')
@@ -201,7 +200,7 @@ function populate(formname)
 		$others = $this->form_ptr->GetFields();
 		for($i=0;$i<count($others);$i++)
 			{
-			if ($others[$i]->GetFieldType() != 'PageBreak' && $others[$i]->GetFieldType() != 'FileUpload')
+			if ($others[$i]->DisplayInForm())
 				{                
                 $ret .= '<tr><td>${'.$this->MakeVar($others[$i]->GetName()) .'}</td><td>' .$others[$i]->GetName() . '</td></tr>';
                 }
