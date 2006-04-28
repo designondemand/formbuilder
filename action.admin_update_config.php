@@ -12,6 +12,7 @@ if (! $this->CheckAccess()) exit;
 		$this->mod_globals->ModuleInputPrefix = $id;
 		$this->SetPreference('hide_errors',isset($params['hide_errors'])?$params['hide_errors']:0);
 		$this->SetPreference('show_version',isset($params['show_version'])?$params['show_version']:0);
+		$this->SetPreference('enable_fastadd',isset($params['enable_fastadd'])?$params['enable_fastadd']:0);
 
 		$params['message'] = $this->Lang('configuration_updated');
         $this->DoAction('defaultadmin', $id, $params);

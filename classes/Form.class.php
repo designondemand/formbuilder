@@ -708,9 +708,26 @@ class fbForm {
 		$mod->smarty->assign('title_form_displaytype', $mod->Lang('title_form_displaytype'));
         $mod->smarty->assign('title_field_required_abbrev',$mod->Lang('title_field_required_abbrev'));
 		$mod->smarty->assign('hasdisposition',$this->HasDisposition()?1:0);
-
+		$maxOrder = 1;
 		if($this->Id > 0)
     	{
+    		if ($mod->GetPreference('enable_fastadd',1) == 1)
+    			{
+    			$mod->smarty->assign('fastadd',1);
+    			$mod->smarty->assign('title_fastadd',$mod->Lang('title_fastadd'));
+    			$typeInput = "<script type=\"text/javascript\">
+function fast_add(field_type)
+{
+	var type=field_type.options[field_type.selectedIndex].value;
+	var link = '".$mod->CreateLink($id, 'admin_add_edit_field', $returnid,'',array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', true,true)."&".$id."field_type='+type;
+	this.location=link;
+	return true;
+}
+</script>";
+				$typeInput = str_replace('&amp;','&',$typeInput); 
+    			$mod->initialize();
+    			$mod->smarty->assign('input_fastadd',$typeInput.$mod->CreateInputDropdown($id, 'field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->field_types), -1,'', 'onchange="fast_add(this)"'));
+    			}
     		$mod->smarty->assign('submit_button',
     			$mod->CreateInputSubmit($id, 'submit',
     			$mod->Lang('save_and_continue')));
@@ -722,7 +739,6 @@ class fbForm {
 			$fieldList = array();
 			$currow = "row1";
 			$count = 1;
-			$maxOrder = 1;
 			$last = $this->GetFieldCount();
 			foreach ($this->Fields as $thisField)
 				{

@@ -30,6 +30,14 @@
 	</div>
 
 {if $adding==0}
+	{if $fastadd==1}
+		<div class="pageoverflow">
+			<p class="pagetext">{$title_fastadd}</p>
+			<div class="pageinput">
+				{$input_fastadd}
+			</div>
+		</div>
+	{/if}
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_fields}</p>
 		<div class="pageinput">
