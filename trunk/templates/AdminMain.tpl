@@ -30,6 +30,10 @@
 {if $may_config == 1}
 {$start_configform}
 	<div class="pageoverflow">
+		<p class="pagetext">{$title_enable_fastadd}:</p>
+		<p class="pageinput">{$input_enable_fastadd}</p>
+	</div>
+	<div class="pageoverflow">
 		<p class="pagetext">{$title_hide_errors}:</p>
 		<p class="pageinput">{$input_hide_errors}</p>
 	</div>

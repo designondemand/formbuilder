@@ -219,6 +219,9 @@ $lang['title_name_as_id'] = 'Use Name as an ID for inputs';
 $lang['title_page_x_of_y'] = 'Page %s of %s';
 $lang['title_no_advanced_options']='Field has no advanced options.';
 $lang['title_form_unspecified']='Text to return for unspecified field values';
+$lang['title_enable_fastadd_long']='Enable fast field adding pulldown for forms?';
+$lang['title_enable_fastadd']='Enable fast field add pulldown?';
+$lang['title_fastadd']='Fast field adder';
 
 $lang['help_variables_for_template']='Variables For Template';
 $lang['help_submission_date']='Date of Submission';
