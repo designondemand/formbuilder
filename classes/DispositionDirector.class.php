@@ -26,6 +26,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 		$this->HasDeleteOp = true;
 		$this->ValidationTypes = array(
        		);
+       	$this->addressAdd = 0;
 	}
 
 	function GetOptionAddButton()
@@ -93,11 +94,17 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 			}
 		$subjects = &$this->GetOptionRef('destination_subject');
 
-		for($i=0;$i<count($subjects);$i++)
+		if (count($subjects) > 1)
 			{
-			$sorted[$subjects[$i]]=$i;
+			for($i=0;$i<count($subjects);$i++)
+				{
+				$sorted[$subjects[$i]]=$i;
+				}
 			}
-
+		else
+			{
+			$sorted[$subjects] = $i;
+			}
 		return $mod->CreateInputDropdown($id, '_'.$this->Id, $sorted, -1, $this->Value);
 	}
 
