@@ -19,6 +19,11 @@
 			field->input                  = the field's input control (e.g., the input field itself)
 			field->input_id              = the of the field's input (useful for <label for="">)
 			field->type                   = the field's data type
+			field->multiple_parts	   = 1 if the field->input is actually a collection of controls
+			
+	   In certain cases, field->input is actually an array of objects rather than an input. This
+	   happens, for example, in CheckBoxGroups or RadioButtonGroups. For them, you
+	   can iterate through field->input->name and field->input->inputs.
        
        Additional smarty variables that you can use include:
        {$total_pages}           - number of pages for multi-page forms
@@ -34,7 +39,7 @@
 -->
 {/literal}
 
-{$hidden}
+{$hidden}{assign var="cols" value="3"}
 <div{if $css_class != ''} class="{$css_class}"{/if}>
 {if $total_pages gt 1}<tr><td colspan="2">{$title_page_x_of_y}</td></tr>{/if}
 {foreach from=$fields item=entry}
@@ -58,7 +63,10 @@
 	    			{$entry->required_symbol}
 	    		{/if}
 	    	{/if}
-	    	{$entry->input}
+	    	{if $entry->multiple_parts == 1}
+    		<table>					<tr>				{section name=numloop loop=$entry->input}	    			<td>{$entry->input[numloop]->input}&nbsp;{$entry->input[numloop]->name}</td>	    			       {if not ($smarty.section.numloop.rownum mod $cols)}                				{if not $smarty.section.numloop.last}                        		</tr><tr>                				{/if}        					{/if}       				{if $smarty.section.numloop.last}                		{math equation = "n - a % n" n=$cols a=$entry->input|@count assign="cells"}                		{if $cells ne $cols}                			{section name=pad loop=$cells}                        		<td>&nbsp;</td>                			{/section}               		 	{/if}                		</tr>        			{/if}	    		{/section}	    		</table>	    	{else}
+	    		{$entry->input}
+	    	{/if}
 	    	{if $entry->valid == 0} &lt;--- {/if}
 	    	</div>
 	    	{/strip}

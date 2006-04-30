@@ -22,7 +22,13 @@
 	    			{$entry->required_symbol}
 	    		{/if}
 	    	{/if}
-	    	{$entry->input}
+	    	{if $entry->multiple_parts == 1}
+	    		{foreach from=$entry->input item=part}
+	    			{$part->input}&nbsp;{$part->name}
+	    		{/foreach}
+	    	{else}
+	    		{$entry->input}
+	    	{/if}
 	    	{if $entry->valid == 0} &lt;--- {/if}
 	    	</div>
 	    	{/strip}
