@@ -3,15 +3,15 @@
 // A Module for CMS Made Simple, (c)2005 by Ted Kulp (wishy@cmsmadesimple.org)
 // This project's homepage is: http://www.cmsmadesimple.org
 
-class fbStatePickerField extends fbField {
+class fbStatePickerField extends fbFieldBase {
 
 	var $States;
 	
-	function fbStatePickertField((&$form_ptr, &$params)
+	function fbStatePickerField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
         $mod = $form_ptr->module_ptr;
-		$this->Type = 'CountryPickerField';
+		$this->Type = 'StatePickerField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
             );
@@ -93,7 +93,7 @@ class fbStatePickerField extends fbField {
 		$main = array(
 			array($mod->Lang('title_select_default_state'),
             		$mod->CreateInputDropdown($formDescriptor, 'opt_default',
-            		$this->Countries, -1, $this->GetOption('default',''))),
+            		$this->States, -1, $this->GetOption('default',''))),
 			array($mod->Lang('title_select_one_message'),
             		$mod->CreateInputText($formDescriptor, 'opt_select_one',
             		$this->GetOption('select_one',$mod->Lang('select_one'))))
