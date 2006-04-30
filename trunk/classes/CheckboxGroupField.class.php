@@ -22,8 +22,6 @@ class fbCheckboxGroupField extends fbFieldBase {
 		$this->HasDeleteOp = true;
 		$this->NonRequirableField = true;
 		$this->ValidationTypes = array(
-            $mod->Lang('validation_none')=>'none',
-            $mod->Lang('validation_at_least_one')=>'checked'
             );
         $this->boxAdd = 0;
         $this->hasMultipleFormComponents = true;
