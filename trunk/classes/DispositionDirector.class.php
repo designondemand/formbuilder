@@ -52,7 +52,8 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 			{
 			if (substr($thisKey,0,4) == 'del_')
 				{
-				$this->RemoveOptionElement('destination', $thisVal - $delcount);
+				$this->RemoveOptionElement('destination_address', $thisVal - $delcount);
+				$this->RemoveOptionElement('destination_subject', $thisVal - $delcount);
 				$delcount++;
 				}
 			}
