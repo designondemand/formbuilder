@@ -25,6 +25,7 @@ class fbFieldBase {
     var $HasAddOp;
     var $HasDeleteOp;
     var $modifiesOtherFields;
+    var $hasMultipleFormComponents;
 
     var $Value=false;
     var $form_ptr;
@@ -124,7 +125,13 @@ class fbFieldBase {
 	   $this->HasAddOp = false;
 	   $this->HasDeleteOp = false;
 	   $this->modifiesOtherFields = false;
+	   $this->hasMultipleFormComponents = false;
 
+	}
+
+	function HasMultipleFormComponents()
+	{
+		return $this->hasMultipleFormComponents;
 	}
 
 	function GetFieldInputId($id, &$params, $returnid)

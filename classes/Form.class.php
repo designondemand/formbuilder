@@ -282,9 +282,6 @@ class fbForm {
 	// returns a string.
     function RenderForm($id, &$params, $returnid)
     {
-//echo 'render form';
-//debug_display($params);
-//debug_display($this->Page);
 		$mod = $this->module_ptr;
     	if ($this->Id == -1)
 			{
@@ -358,6 +355,7 @@ class fbForm {
 			$oneset->name = $thisField->GetName();
 			$oneset->input = $thisField->GetFieldInput($id, $params, $returnid);
 			$oneset->input_id = '_'.$id;
+			$oneset->multiple_parts = $thisField->HasMultipleFormComponents()?1:0;
 			$oneset->type = $thisField->GetDisplayType();
 			$mod->smarty->assign($thisField->GetName(),$oneset);
 			array_push($fields,$oneset);

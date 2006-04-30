@@ -26,6 +26,7 @@ class fbCheckboxGroupField extends fbFieldBase {
             $mod->Lang('validation_at_least_one')=>'checked'
             );
         $this->boxAdd = 0;
+        $this->hasMultipleFormComponents = true;
 	}
 
 	function countBoxes()
@@ -48,7 +49,6 @@ class fbCheckboxGroupField extends fbFieldBase {
     function StatusInfo()
 	{
         $mod = $this->form_ptr->module_ptr;
-//		$boxCount= count($this->GetOption('boxes'));
 		$this->countBoxes();
 		$ret = $mod->Lang('boxes',$this->boxCount);
 		if (strlen($this->ValidationType)>0)
@@ -74,21 +74,23 @@ class fbCheckboxGroupField extends fbFieldBase {
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$names = &$this->GetOptionRef('box_name');
-		$fieldDisp = '';
+		$fieldDisp = array();
 		for ($i=0;$i<count($names);$i++)
 			{
 			$label = '';
+			$thisBox = new stdClass();
 			if (strlen($names[$i]) > 0)
 				{
-				$label = '&nbsp;<label for="'.$id.'_'.$this->Id.'[]">'.$names[$i].'</label>';
+				$thisBox->name = '<label for="'.$id.'_'.$this->Id.'[]">'.$names[$i].'</label>';
 				}
 			$check_val = false;
 			if ($this->Value !== false)
 				{
 				$check_val = $this->FindArrayValue($i);
 				}
-			$fieldDisp .= $mod->CreateInputCheckbox($id, '_'.$this->Id.'[]', $i,
+			$thisBox->input = $mod->CreateInputCheckbox($id, '_'.$this->Id.'[]', $i,
 				$check_val !== false?$i:'-1').$label;
+			array_push($fieldDisp, $thisBox);
 			}			
 		return $fieldDisp;
 	}
