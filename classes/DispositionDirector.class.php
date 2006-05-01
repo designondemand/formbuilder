@@ -98,12 +98,12 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 			{
 			for($i=0;$i<count($subjects);$i++)
 				{
-				$sorted[$subjects[$i]]=$i;
+				$sorted[$subjects[$i]]=($i+1);
 				}
 			}
 		else
 			{
-			$sorted[$subjects] = $i;
+			$sorted[$subjects] = '1';
 			}
 		return $mod->CreateInputDropdown($id, '_'.$this->Id, $sorted, -1, $this->Value);
 	}
@@ -220,7 +220,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 		$mod = $this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
-			return $this->GetOptionElement('destination_address',$this->Value);
+			return $this->GetOptionElement('destination_address',($this->Value - 1));
 			}
 		else
 			{
@@ -230,8 +230,8 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 	
 	function DisposeForm()
 	{
-		return $this->SendForm($this->GetOptionElement('destination_address',$this->Value),
-			$this->GetOptionElement('destination_subject',$this->Value));
+		return $this->SendForm($this->GetOptionElement('destination_address',($this->Value - 1)),
+			$this->GetOptionElement('destination_subject',($this->Value - 1)));
 	}
 
 

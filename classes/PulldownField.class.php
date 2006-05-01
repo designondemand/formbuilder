@@ -95,12 +95,12 @@ class fbPulldownField extends fbFieldBase {
 			{
 			for($i=0;$i<count($subjects);$i++)
 				{
-				$sorted[$subjects[$i]]=$i;
+				$sorted[$subjects[$i]]=($i+1);
 				}
 			}
 		else
 			{
-			$sorted[$subjects] = $i;
+			$sorted[$subjects] = '1';
 			}
 		return $mod->CreateInputDropdown($id, '_'.$this->Id, $sorted, -1, $this->Value);
 	}
@@ -191,7 +191,7 @@ class fbPulldownField extends fbFieldBase {
 		$mod = $this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
-			return $this->GetOptionElement('option_value',$this->Value);
+			return $this->GetOptionElement('option_value',($this->Value-1));
 			}
 		else
 			{
