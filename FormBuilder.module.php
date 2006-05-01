@@ -76,6 +76,7 @@ class FormBuilder extends CMSModule
         		}
         	}
 		$this->all_validation_types = array();
+		ksort($this->field_types);
 	}
 
 	function GetName()
