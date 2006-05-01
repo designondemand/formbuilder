@@ -836,11 +836,6 @@ function fast_add(field_type)
 		$mod->smarty->assign('input_form_displaytype',
 			$mod->CreateInputRadioGroup($id, 'forma_form_displaytype', $displayTypes, $this->GetAttr('form_displaytype','tab')));
 				
-		$mod->smarty->assign('title_name_as_id',
-			$mod->Lang('title_name_as_id'));
-		$mod->smarty->assign('input_name_as_id',
-			$mod->CreateInputCheckbox($id, 'forma_name_as_id', 1,
-				$this->GetAttr('name_as_id','0')).$mod->Lang('title_name_as_id'));
 		$mod->smarty->assign('title_title_position',
 			$mod->Lang('title_title_position'));
 		$pos = array($mod->Lang('title_table_layout_left')=>'left',$mod->Lang('title_table_layout_above')=>'top');	

@@ -634,6 +634,7 @@ class fbFieldBase {
 				return $this->Options[$optionName];
 				}
 			}
+
 		return $default;		
 	}
 
