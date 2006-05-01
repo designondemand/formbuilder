@@ -700,6 +700,8 @@ class fbForm {
 			$mod->Lang('title_form_template'));
 		$mod->smarty->assign('title_list_delimiter',
 			$mod->Lang('title_list_delimiter'));
+		$mod->smarty->assign('title_redirect_page',
+			$mod->Lang('title_redirect_page'));
 
 		$mod->smarty->assign('title_information',$mod->Lang('information'));
 		$mod->smarty->assign('title_order',$mod->Lang('order'));    
@@ -828,6 +830,8 @@ function fast_add(field_type)
 			$mod->CreateInputText($id, 'forma_list_delimiter',
 				$this->GetAttr('list_delimiter',','), 50));
 
+error_log($this->GetAttr('redirect_page','0'));
+		$mod->smarty->assign('input_redirect_page',@ContentManager::CreateHierarchyDropdown('',$this->GetAttr('redirect_page','0'), $id.'forma_redirect_page'));
 
 
 		$displayTypes = array($mod->Lang('disptype_table')=>'tab',
