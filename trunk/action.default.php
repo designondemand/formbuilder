@@ -54,7 +54,7 @@ if (!isset($gCms)) exit;
         	{
         	if ($results[0] == true)
         		{
-        		echo $this->Lang('successful_formsubmit');
+        		$this->RedirectContent($aeform->GetAttr('redirect_page','0'));
         		}
         	else
         		{

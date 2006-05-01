@@ -68,6 +68,10 @@
 {$tab_end}{$additionaltab_start}
 
 	<div class="pageoverflow">
+		<p class="pagetext">{$title_redirect_page}:</p>
+		<p class="pageinput">{$input_redirect_page}</p>
+	</div>
+	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_submit_button}:</p>
 		<p class="pageinput">{$input_form_submit_button}</p>
 	</div>
