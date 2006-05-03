@@ -15,6 +15,7 @@ $lang['field_type_DatePickerField']='Date Picker';
 $lang['field_type_RadioGroupField']='Radio Button Group';
 $lang['field_type_DispositionDirector']='*Email Results Based on Pulldown';
 $lang['field_type_DispositionEmail']='*Email Results to set Address(es)';
+$lang['field_type_DispositionEmailConfirmation']='*Validate-via-Email Address';
 $lang['field_type_DispositionFile']='*Write Results to Flat File';
 $lang['field_type_DispositionDatabase']='*Store Results in Database';
 $lang['field_type_PageBreakField']='-Page Break';
@@ -220,7 +221,6 @@ $lang['title_callback_method']='Callback Method';
 $lang['title_callback_fields']='Result Fields to Include';
 $lang['title_callback_help']='Help';
 $lang['title_form_template']='Template to use to Display Form';
-$lang['title_name_as_id'] = 'Use Name as an ID for inputs';
 $lang['title_page_x_of_y'] = 'Page %s of %s';
 $lang['title_no_advanced_options']='Field has no advanced options.';
 $lang['title_form_unspecified']='Text to return for unspecified field values';
@@ -243,7 +243,7 @@ $lang['title_create_sample_header']='Create Sample Header';
 $lang['help_tab_symbol']='a tab character';
 $lang['title_file_template']='Template for one line of output file';
 $lang['title_file_header']='Template for the header of output file';
-$lang['']='';
+$lang['title_confirmation_url']='URL to click for form confirmation';
 
 
 $lang['help_dont_use_in_val'] = 'Be sure not to use this separator in your submitted values if you will be reloading responses from the database';
@@ -308,11 +308,7 @@ $lang['upload_attach_error'] = 'Upload/Attachment error on file %s (tmp_name: %s
 $lang['submission_error_file']='Error. Unable to write to file.';
 $lang['submission_error_file_lock'] = 'Error. Unable to obtain lock for file.';
 
-$lang['email_default_template'] = "Form Name: {\$sub_form_name}\n" .
-        		"Submission Date: {\$sub_date}\nSubmission Host: {\$sub_host}\n" .
-        		"Submission Source: {\$sub_source_ip}\n".
-        		"Submission URL: {\$sub_url}\n".
-        		"-------------------------------\n";
+$lang['email_default_template'] = "FormBuilder Submission\n";
 $lang['email_template_not_set'] = '<br/>Email Template not yet set!';      
 $lang['email_value_unspecified'] = 'unspecified';  		
 $lang['missing_cms_mailer'] = 'Cannot find required module CMSMailer!';  		

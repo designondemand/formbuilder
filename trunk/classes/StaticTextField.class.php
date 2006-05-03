@@ -15,6 +15,7 @@ class fbStaticTextField extends fbFieldBase {
         $mod = $form_ptr->module_ptr;
 		$this->Type = 'StaticTextField';
 		$this->DisplayInForm = true;
+		$this->DisplayInSubmission = false;
 		$this->NonRequirableField = true;
 		$this->ValidationTypes = array(
             );
@@ -31,7 +32,11 @@ class fbStaticTextField extends fbFieldBase {
 		 return $this->form_ptr->module_ptr->Lang('text_length',strlen($this->GetOption('text','')));
 	}
 
-
+	function GetHumanReadableValue()
+	{
+		return '[static text field]';
+	}
+	
 	function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = $this->form_ptr->module_ptr;

@@ -83,7 +83,7 @@ class fbDispositionDatabase extends fbFieldBase {
 	}
 
     // Write To the Database
-	function DisposeForm()
+	function DisposeForm($returnid)
 	{
 		$form = $this->form_ptr;
 		$form->StoreResponse($this->Value?$this->Value:-1);

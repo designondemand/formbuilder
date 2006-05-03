@@ -233,7 +233,7 @@ class fbForm {
 
 	// return an array: element 0 is true for success, false for failure
 	// element 1 is an array of reasons, in the event of failure.
-	function Dispose()
+	function Dispose($returnid)
 	{
 		// first, we run all field methods that will modify other fields
         for($i=0;$i<count($this->Fields);$i++)
@@ -249,9 +249,9 @@ class fbForm {
         // for each form disposition pseudo-field, dispose the form results
         for($i=0;$i<count($this->Fields);$i++)
         	{
-        	if ($this->Fields[$i]->IsDisposition())
+        	if ($this->Fields[$i]->IsDisposition() && $this->Fields[$i]->DispositionIsPermitted())
         		{
-        		$res = $this->Fields[$i]->DisposeForm();
+        		$res = $this->Fields[$i]->DisposeForm($returnid);
 				if ($res[0] == false)
 					{
 					$retCode = false;
@@ -296,7 +296,6 @@ class fbForm {
 		$mod->smarty->assign('title_page_x_of_y',$mod->Lang('title_page_x_of_y',array($this->Page,$this->formTotalPages)));
 		
 		$mod->smarty->assign('css_class',$this->GetAttr('css_class',''));
-		$mod->smarty->assign('name_as_id',$this->GetAttr('name_as_id','0'));
 		$mod->smarty->assign('total_pages',$this->formTotalPages);
 		$mod->smarty->assign('this_page',$this->Page);
 		$mod->smarty->assign('form_name',$this->Name);
@@ -368,7 +367,7 @@ class fbForm {
 			{
     	   	$mod->smarty->assign('prev',$mod->CreateInputSubmit($id, 'prev',
     	   		$this->GetAttr('prev_button_text'),
-    	   		$this->GetAttr('name_as_id','0')=='0'?'class="fbsubmit"':'id="'.$this->GetAttr('prev_button_text').'" class="fbsubmit"'));
+    	   		'class="fbsubmit_prev"'));
 			}
 		else
 			{
@@ -379,13 +378,13 @@ class fbForm {
 			{
     	   	$mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'submit',
     	   		$this->GetAttr('next_button_text'),
-    	   		$this->GetAttr('name_as_id','0')=='0'?'class="fbsubmit"':'id="'.$this->GetAttr('next_button_text').'" class="fbsubmit"'));
+    	   		'class="fbsubmit_next"'));
 			}
 		else
 			{
             $mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'submit',
             	$this->GetAttr('submit_button_text'),
-            	$this->GetAttr('name_as_id','')==''?'class="fbsubmit"':'id="'.$this->GetAttr('submit_button_text').'" class="fbsubmit"'));
+            	'class="fbsubmit"'));
 			}
 
 		// figure out how to render the form, now that it's smarty-ized
@@ -1211,17 +1210,19 @@ error_log($this->GetAttr('redirect_page','0'));
     	$db = $this->module_ptr->dbHandle;
         $fields = $this->GetFields();
     	
+    	$secret_code = '';
         if ($response_id == -1)
             {
             // saving a new response
+            $secret_code = substr(md5(session_id().'_'.time()),0,7);
             $response_id = $db->GenID(cms_db_prefix(). 'module_fb_resp_seq');
 			$sql = 'INSERT INTO ' . cms_db_prefix().
-				'module_fb_resp (resp_id, form_id, submitted)' .
-				' VALUES (?, ?, ?)';
+				'module_fb_resp (resp_id, form_id, submitted, secret_code)' .
+				' VALUES (?, ?, ?, ?)';
 			$res = $db->Execute($sql,
 				array($response_id,
 				 $this->GetId(),
-				 $db->DBTimeStamp(time())));
+				 $db->DBTimeStamp(time()),$secret_code));
             }
         else
             {
@@ -1241,6 +1242,11 @@ error_log($this->GetAttr('redirect_page','0'));
         		{
         		$thisField->SetValue($response_id);
         		}
+			elseif (! $thisField->DisplayInSubmission())
+				{
+				// skip if not a displayable field.
+				continue;
+				}
         	if (! is_array($thisField->GetValue()))
         		{
         		$store = array();
@@ -1261,6 +1267,7 @@ error_log($this->GetAttr('redirect_page','0'));
             		}
             	} 
         	}
+    return array($response_id,$secret_code);
     }   
     
 }

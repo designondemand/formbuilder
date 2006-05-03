@@ -10,6 +10,7 @@
 class fbDispositionEmailBase extends fbFieldBase {
 
     var $sampleTemplateCode;
+    var $templateVariables;
 	
 	function fbDispositionEmailBase(&$form_ptr, &$params)
 	{
@@ -27,6 +28,14 @@ function populate(formname)
     }
 </script>
 <input type=\"button\" value=\"".$mod->Lang('title_create_sample_template')."\" onClick=\"javascript:populate(this.form)\" />";
+
+		$this->templateVariables = Array(
+        '{$sub_form_name}'=>$mod->Lang('title_form_name'),
+        '{$sub_date}'=>$mod->Lang('help_submission_date'),
+        '{$sub_host}'=>$mod->Lang('help_server_name'),
+        '{$sub_source_ip}'=>$mod->Lang('help_sub_source_ip'),
+        '{$source_url}'=>$mod->Lang('help_sub_url')
+		);
     }
 
 	// override me!
@@ -49,6 +58,11 @@ function populate(formname)
 		return array(true,'');
 	}
 
+	function AddTemplateVariable($name,$def)
+	{
+		$theKey = '{$'.$name.'}';
+		$this->templateVariables[$theKey] = $def;
+	}
 
 	function MakeVar($string)
 	{
@@ -71,10 +85,15 @@ function populate(formname)
     {
     	$mod = $this->form_ptr->module_ptr;
     	$ret = $mod->Lang('email_default_template');
+    	foreach($this->templateVariables as $thisKey=>$thisVal)
+    		{
+    		$ret .= $thisVal.': '.$thisKey."\n";
+    		}
+    	$ret .= "-------------------------------------------------\n";
 		$others = $this->form_ptr->GetFields();
 		for($i=0;$i<count($others);$i++)
 			{
-			if ($others[$i]->DisplayInForm())
+			if ($others[$i]->DisplayInSubmission())
 				{
                 $ret .= $others[$i]->GetName() . ': {$' . $this->MakeVar($others[$i]->GetName()) . "}\n";
                 }
@@ -117,7 +136,7 @@ function populate(formname)
 		for($i=0;$i<count($others);$i++)
 			{
 			$replVal = '';
-			if ($others[$i]->DisplayInForm())
+			if ($others[$i]->DisplayInSubmission())
 				{
 				$replVal = $others[$i]->GetHumanReadableValue();
 				if ($replVal == '')
@@ -193,17 +212,24 @@ function populate(formname)
 		$message = $this->GetOption('email_template','');
         $ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_template').'</th></tr>';
         $ret .= '<tr><th>'.$mod->Lang('help_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';
+    	foreach($this->templateVariables as $thisKey=>$thisVal)
+    		{
+    		$ret .= '<tr><td>'.$thisKey.'</td><td>'.$thisVal.'</td></tr>';
+    		}
+
+/*
         $ret .= '<tr><td>{$sub_form_name}</td><td>'.$mod->Lang('title_form_name').'</td></tr>';
         $ret .= '<tr><td>{$sub_date}</td><td>'.$mod->Lang('help_submission_date').'</td></tr>';
         $ret .= '<tr><td>{$sub_host}</td><td>'.$mod->Lang('help_server_name').'</td></tr>';
         $ret .= '<tr><td>{$sub_source_ip}</td><td>'.$mod->Lang('help_sub_source_ip').'</td></tr>';
         $ret .= '<tr><td>{$source_url}</td><td>'.$mod->Lang('help_sub_url').'</td></tr>';
+*/
 		$others = $this->form_ptr->GetFields();
 		for($i=0;$i<count($others);$i++)
 			{
-			if ($others[$i]->DisplayInForm())
+			if ($others[$i]->DisplayInSubmission())
 				{                
-                $ret .= '<tr><td>${'.$this->MakeVar($others[$i]->GetName()) .'}</td><td>' .$others[$i]->GetName() . '</td></tr>';
+                $ret .= '<tr><td>{$'.$this->MakeVar($others[$i]->GetName()) .'}</td><td>' .$others[$i]->GetName() . '</td></tr>';
                 }
         	}
        	
@@ -229,16 +255,6 @@ function populate(formname)
         			array($mod->Lang('title_email_encoding'),$mod->CreateInputText($formDescriptor, 'opt_email_encoding',$this->GetOption('email_encoding','utf-8'),25,128))
             		)
             );
-	}
-
-
-	function AdminValidate()
-    {
-    }
-
-	function Validate()
-	{
-		return array(true, '');
 	}
 
 }

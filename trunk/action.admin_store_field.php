@@ -19,7 +19,6 @@ if (! $this->CheckAccess()) exit;
             $aefield->Store(true);
             $params['message']=$params['op'];
             $this->DoAction('admin_add_edit_form', $id, $params);
-            //return $this->AdminAddEditForm($id, $params, $returnid, $params['op']);
             }
         else
         	{

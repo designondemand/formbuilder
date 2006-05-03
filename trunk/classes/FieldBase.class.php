@@ -21,6 +21,8 @@ class fbFieldBase {
     var $ValidationType;
 
     var $DisplayInForm;
+    var $DisplayInSubmission;
+    var $DispositionPermitted;
     var $NonRequirableField;
     var $HasAddOp;
     var $HasDeleteOp;
@@ -118,6 +120,7 @@ class fbFieldBase {
 //	   debug_display($params);
 //	   }
 	   $this->DisplayInForm = true;
+	   $this->DisplayInSubmission = true;
 	   $this->IsDisposition = false;
 	   $this->ValidationTypes = array($mod->Lang('validation_none')=>'none');
 	   $this->loaded = 'not';
@@ -126,7 +129,7 @@ class fbFieldBase {
 	   $this->HasDeleteOp = false;
 	   $this->modifiesOtherFields = false;
 	   $this->hasMultipleFormComponents = false;
-
+	   $this->DispositionPermitted = true;
 	}
 
 	function HasMultipleFormComponents()
@@ -143,6 +146,19 @@ class fbFieldBase {
 	{
 		return $this->modifiesOtherFields;
 	}
+
+	// mechanism for fields/dispositions to inhibit other dispositions
+	function DispositionIsPermitted()
+	{
+		return $this->DispositionPermitted;
+	}
+
+	// mechanism for fields/dispositions to inhibit other dispositions
+	function SetDispositionPermission($permitted=true)
+	{
+		$this->DispositionPermitted = $permitted;
+	}
+
 
 	// override me if you're just tweaking other fields before disposition
 	function ModifyOtherFields()
@@ -250,6 +266,11 @@ class fbFieldBase {
 	function DisplayInForm()
 	{
 		return $this->DisplayInForm;
+	}
+
+	function DisplayInSubmission()
+	{
+		return ($this->DisplayInForm && $this->DisplayInSubmission);
 	}
 
 	

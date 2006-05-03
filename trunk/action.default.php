@@ -39,7 +39,7 @@ if (!isset($gCms)) exit;
             else if (isset($params['done']) && $params['done']==1)
             	{
             	$finished = true;
-            	$results = $aeform->Dispose();
+            	$results = $aeform->Dispose($returnid);
             	}
             }
 //error_log('Finished is '.$finished);

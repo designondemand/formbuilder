@@ -44,7 +44,7 @@ function populate_header(formname)
 		return $this->GetOption('filespec',$mod->Lang('unspecified'));
 	}
 
-function DisposeForm()
+function DisposeForm($returnid)
 	{
 		$mod=$this->form_ptr->module_ptr;
 		$count = 0;
@@ -89,7 +89,7 @@ function DisposeForm()
 		for($i=0;$i<count($others);$i++)
 			{
 			$replVal = '';
-			if ($others[$i]->DisplayInForm())
+			if ($others[$i]->DisplayInSubmission())
 				{
 				$replVal = $others[$i]->GetHumanReadableValue();
 				if ($replVal == '')
@@ -110,23 +110,6 @@ function DisposeForm()
 		fclose($f2); 
         $mod->ReturnFileLock();
         return array(true,'');        
-	}
-
-	function RenderAdminForm($formDescriptor)
-	{
-        $fmt = $this->GetOptionByName('format');
-        $spec = $this->GetOptionByName('filespec');
-        return array($this->mod_globals->Lang('title_file_format').':'=>CMSModule::CreateInputDropdown($formDescriptor, 'format',
-            array($this->mod_globals->Lang('title_file_format_tab')=>'tab',
-                $this->mod_globals->Lang('title_file_format_tab_header')=>'tabhead',
-                $this->mod_globals->Lang('title_file_format_page')=>'page'), -1,
-                ffUtilityFunctions::def($fmt[0]->Value)?$this->NerfHTML($fmt[0]->Value):''),
-            $this->mod_globals->Lang('title_file_name').':'=>CMSModule::CreateInputText($formDescriptor, 'filespec',
-				ffUtilityFunctions::def($spec[0]->Value)?$this->NerfHTML($spec[0]->Value):'',25),
-			$this->mod_globals->Lang('title_erase_filelock').':'=>CMSModule::CreateInputCheckbox($formDescriptor, 'clear_flock', 'clear', '').
-			' '.$this->mod_globals->Lang('title_erase_usage'),
-			$this->mod_globals->Lang('note').':'=>$this->mod_globals->Lang('title_file_note')
-            );
 	}
 
 	function MakeVar($string)
@@ -154,7 +137,7 @@ function DisposeForm()
 		$fields = array();
 		for($i=0;$i<count($others);$i++)
 			{
-			if ($others[$i]->DisplayInForm())
+			if ($others[$i]->DisplayInSubmission())
 				{
                 array_push($fields,$others[$i]->GetName());
                 }
@@ -170,7 +153,7 @@ function DisposeForm()
 		$fields = array();
 		for($i=0;$i<count($others);$i++)
 			{
-			if ($others[$i]->DisplayInForm())
+			if ($others[$i]->DisplayInSubmission())
 				{
                 array_push($fields,'{$' . $this->MakeVar($others[$i]->GetName()) . '}');
                 }
@@ -192,7 +175,7 @@ function DisposeForm()
 		$others = $this->form_ptr->GetFields();
 		for($i=0;$i<count($others);$i++)
 			{
-			if ($others[$i]->DisplayInForm())
+			if ($others[$i]->DisplayInDisposition())
 				{                
                 $ret .= '<tr><td>${'.$this->MakeVar($others[$i]->GetName()) .'}</td><td>' .$others[$i]->GetName() . '</td></tr>';
                 }

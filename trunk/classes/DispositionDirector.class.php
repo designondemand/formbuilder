@@ -228,7 +228,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 			}	
 	}
 	
-	function DisposeForm()
+	function DisposeForm($returnid)
 	{
 		return $this->SendForm($this->GetOptionElement('destination_address',($this->Value - 1)),
 			$this->GetOptionElement('destination_subject',($this->Value - 1)));
