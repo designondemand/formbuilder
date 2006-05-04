@@ -34,7 +34,7 @@ function populate(formname)
         '{$sub_date}'=>$mod->Lang('help_submission_date'),
         '{$sub_host}'=>$mod->Lang('help_server_name'),
         '{$sub_source_ip}'=>$mod->Lang('help_sub_source_ip'),
-        '{$source_url}'=>$mod->Lang('help_sub_url')
+        '{$sub_url}'=>$mod->Lang('help_sub_url')
 		);
     }
 
@@ -89,7 +89,7 @@ function populate(formname)
     		{
     		$ret .= $thisVal.': '.$thisKey."\n";
     		}
-    	$ret .= "-------------------------------------------------\n";
+    	$ret .= "\n-------------------------------------------------\n";
 		$others = $this->form_ptr->GetFields();
 		for($i=0;$i<count($others);$i++)
 			{
@@ -128,8 +128,14 @@ function populate(formname)
         $mod->smarty->assign('sub_date',date('r'));
         $mod->smarty->assign('sub_host',$_SERVER['SERVER_NAME']);
         $mod->smarty->assign('sub_source_ip',$_SERVER['REMOTE_ADDR']);
-        $mod->smarty->assign('sub_url',$_SERVER['HTTP_REFERER']);
-
+        if (empty($_SERVER['HTTP_REFERER']))
+        	{
+        	$mod->smarty->assign('sub_url',$mod->Lang('no_referrer_info'));
+        	}
+        else
+        	{
+        	$mod->smarty->assign('sub_url',$_SERVER['HTTP_REFERER']);
+			}
 		$others = $this->form_ptr->GetFields();
 		$unspec = $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
 		
@@ -154,9 +160,9 @@ function populate(formname)
 			$msg = '';
 			if (! $mod->GetPreference('hide_errors',0))
 				{
-				$msg = '<hr />'.$this->mod_globals->Lang('missing_cms_mailer'). '<hr />';
+				$msg = '<hr />'.$mod->Lang('missing_cms_mailer'). '<hr />';
 				} 
-			audit(-1, (isset($name)?$name:""), 'Feedback Form Error: '.$this->mod_globals->Lang('missing_cms_mailer'));
+			audit(-1, (isset($name)?$name:""),$mod->Lang('missing_cms_mailer'));
 			return array(false,$msg);
 			}
 		$mail->reset();

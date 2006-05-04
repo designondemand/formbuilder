@@ -10,7 +10,6 @@ if (!isset($gCms)) exit;
 if (! $this->CheckAccess()) exit;
 
 		$this->initialize();
-		$this->mod_globals->ModuleInputPrefix = $id;
 		
 		$aeform = new fbForm($this, $params,true);
 		$aefield = $aeform->NewField($params);

@@ -8,27 +8,20 @@
 */
 if (!isset($gCms)) exit;
 
-		$this->mod_globals->ModuleInputPrefix = $id;
-//debug_display($params);
 
         if (! isset($params['form_id']) && isset($params['form']))
             {
             // get the form by name, not ID
             $params['form_id'] = $this->GetFormIDFromAlias($params['form']);
             }
-//echo "pre-instantiate form";
-//debug_display($params);
         $aeform = new fbForm($this,$params,true);
-//echo 'pre-render';
-//debug_display($params);
+
         echo $aeform->RenderFormHeader();
         $finished = false;
         if (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber() > 0) ||
         	(isset($params['done'])&& $params['done']==1))
             {
-//error_log( "validating page :".$aeform->GetPageNumber());            
-//        	debug_display($params);
-//        	$aeform->DebugDisplay();
+
         	$res = $aeform->Validate();
 
             if ($res[0] === false)
@@ -42,7 +35,6 @@ if (!isset($gCms)) exit;
             	$results = $aeform->Dispose($returnid);
             	}
             }
-//error_log('Finished is '.$finished);
 
 		if (! $finished)
 			{

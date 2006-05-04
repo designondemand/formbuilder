@@ -9,6 +9,8 @@
 
 class fbDispositionDatabase extends fbFieldBase {
 
+	var $approvedBy;
+	
 	function fbDispositionDatabase(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
@@ -17,8 +19,10 @@ class fbDispositionDatabase extends fbFieldBase {
 		$this->IsDisposition = true;
 		$this->NonRequirableField = true;
 		$this->DisplayInForm = true;
+		$this->DisplayInSubmission = false;
 		$this->HideLabel = 1;
 		$this->CodedValue = -1;
+		$this->approvedBy = '';
 	}
 
 	function GetFieldInput($id, &$params, $returnid)
@@ -26,6 +30,11 @@ class fbDispositionDatabase extends fbFieldBase {
 		$mod = $this->form_ptr->module_ptr;
 		return $mod->CreateInputHidden($id, '_'.$this->Id,	
 			$this->EncodeReqId($this->Value));
+	}
+
+	function SetApprovalName($name)
+	{
+		$this->approvedBy = $name;
 	}
 
 	function StatusInfo()
@@ -52,10 +61,12 @@ class fbDispositionDatabase extends fbFieldBase {
 		return base64_encode(session_id().'_'.$req_id);
 	}
 	
+	
 	function SetValue($val)
 	{
 		$decval = base64_decode($val);
-		if (! $val)
+
+		if (! $val || ! $this->DispositionIsPermitted())
 			{
 			// no value set, so we'll leave value as false
 			}
@@ -86,7 +97,7 @@ class fbDispositionDatabase extends fbFieldBase {
 	function DisposeForm($returnid)
 	{
 		$form = $this->form_ptr;
-		$form->StoreResponse($this->Value?$this->Value:-1);
+		$form->StoreResponse($this->Value?$this->Value:-1,$this->approvedBy);
 		return array(true,'');	   
 	}
 

@@ -33,9 +33,11 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 	{
         return $this->TemplateStatus();
 	}
-	
-	function ApproveToGo()
+
+	function ApproveToGo($response_id)
 	{
+		// delete the stored response
+		$this->form_ptr->DeleteResponse($response_id);
 		$this->approvedToGo = true;
 	}
 
@@ -43,18 +45,16 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 	{
 		$mod = $this->form_ptr->module_ptr;
 		
-		if ($this->approvedToGo)
-			{
-			return;
-			}
 		// If we haven't been approved, inhibit all other dispositions!
-
 		$others = $this->form_ptr->GetFields();
 
 		for($i=0;$i<count($others);$i++)
 			{
-			$replVal = '';
-			if ($others[$i]->IsDisposition())
+			if ($this->approvedToGo && $others[$i]->GetFieldType() == 'DispositionDatabase')
+				{
+				$others[$i]->SetApprovalName($this->GetValue());
+				}
+			elseif (! $this->approvedToGo && $others[$i]->IsDisposition())
 				{
 				$others[$i]->SetDispositionPermission(false);
 				}
@@ -79,7 +79,7 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 		if (! $this->approvedToGo)
 			{
 			// create response URL
-			list($rid,$code) = $this->form_ptr->StoreResponse(-1);
+			list($rid,$code) = $this->form_ptr->StoreResponse();
 					
 			$mod->smarty->assign('confirm_url',$mod->CreateFrontendLink('', $returnid,
 				'validate', '', array('f'=>$this->form_ptr->GetId(),'r'=>$rid,'c'=>$code), '',
