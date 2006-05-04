@@ -244,6 +244,7 @@ $lang['help_tab_symbol']='a tab character';
 $lang['title_file_template']='Template for one line of output file';
 $lang['title_file_header']='Template for the header of output file';
 $lang['title_confirmation_url']='URL to click for form confirmation';
+$lang['no_referrer_info']='No HTTP_REFERER info available';
 
 
 $lang['help_dont_use_in_val'] = 'Be sure not to use this separator in your submitted values if you will be reloading responses from the database';
@@ -311,7 +312,8 @@ $lang['submission_error_file_lock'] = 'Error. Unable to obtain lock for file.';
 $lang['email_default_template'] = "FormBuilder Submission\n";
 $lang['email_template_not_set'] = '<br/>Email Template not yet set!';      
 $lang['email_value_unspecified'] = 'unspecified';  		
-$lang['missing_cms_mailer'] = 'Cannot find required module CMSMailer!';  		
+$lang['missing_cms_mailer'] = 'FormBuilder: Cannot find required module CMSMailer!';  		
+$lang['user_approved_submission']='User approved submission %s from %s';
   		
 // post-install message
 $lang['post_install']="

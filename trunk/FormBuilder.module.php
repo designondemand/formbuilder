@@ -373,21 +373,6 @@ class FormBuilder extends CMSModule
 		return $ret;
 	}
 
-	// TO-DO - Implement
-	function ApproveResponse($response_id, $approver='user')
-	{
-	// user approval
-	
-	// admin approval
-	
-	
-	}
-
-	// TO-DO - Implement
-	function DeleteResponse($response_id)
-	{
-	}
-
     function def(&$var)
     {
     	if (!isset($var))

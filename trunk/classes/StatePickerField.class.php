@@ -78,13 +78,6 @@ class fbStatePickerField extends fbFieldBase {
 		return $mod->CreateInputDropdown($id, '_'.$this->Id, $sorted, -1, $this->Value);
 	}
 
-	function RenderAdminForm($formDescriptor)
-	{
-		$defVals = $this->GetOptionByKind('default');
-		return array($this->mod_globals->Lang('title_select_one_message').':'=>CMSModule::CreateInputText($formDescriptor, 'default',
-				ffUtilityFunctions::def($defVals[0]->Value)?$this->NerfHTML($defVals[0]->Value):'Select One',25));
-	}
-
 	function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = $this->form_ptr->module_ptr;

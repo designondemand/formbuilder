@@ -9,8 +9,6 @@
 if (!isset($gCms)) exit;
 if (! $this->CheckAccess()) exit;
 
-		$this->mod_globals->ModuleInputPrefix = $id;
-
         $aeform = new fbForm($this, $params, true);
         $srcIndex = $aeform->GetFieldIndexFromId($params['field_id']);
         if ($params['dir'] == 'up')

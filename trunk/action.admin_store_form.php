@@ -9,8 +9,6 @@
 if (!isset($gCms)) exit;
 if (! $this->CheckAccess()) exit;
 
-		$this->mod_globals->ModuleInputPrefix = $id;
-		
         $aeform = new fbForm($this, $params, true);
         $aeform->Store();
         if ($params['submit'] == $this->Lang('save'))

@@ -9,7 +9,6 @@
 if (!isset($gCms)) exit;
 if (! $this->CheckAccess()) exit;
 
-		$this->mod_globals->ModuleInputPrefix = $id;
         $aeform = new fbForm($this, $params, true);
         $aeform->DeleteField($params['field_id']);
 		echo $aeform->AddEditForm($id, $returnid, $this->Lang('field_deleted'));

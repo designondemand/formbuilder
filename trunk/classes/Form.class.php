@@ -412,13 +412,6 @@ class fbForm {
 			}
     }
 
-    function AddField($fieldInfo=array())
-    {
-        $className = $this->MakeClassName($fieldInfo['type'], '');
-        // create the field object
-        $this->Fields[] = new $className($this->mod_globals, $fieldInfo);
-    }
-
     function LoadForm($loadDeep=false)
     {
     	return $this->Load($this->Id, array(), $loadDeep);
@@ -444,8 +437,6 @@ class fbForm {
 	    $rs = $this->module_ptr->dbHandle->Execute($sql, array($formId));
         while ($rs && $result=$rs->FetchRow())
 	       {
-	       //$attrName = substr($result['name'],6);
-           //$this->Attrs[$attrName] = $result['value'];
            $this->Attrs[$result['name']] = $result['value'];
            }
           
@@ -470,11 +461,9 @@ class fbForm {
 						{
 						$params[$thisParamKey] = $thisParamValue;
 						}
-					//echo "$thisParamKey - $thisParamValue<br/>";
 					}
 				}
 				
-		//debug_display($params);
 
            $sql = 'SELECT * FROM ' . cms_db_prefix().
            	'module_fb_field WHERE form_id=? ORDER BY order_by';
@@ -491,8 +480,6 @@ class fbForm {
                     {
                     $className = $this->MakeClassName($thisRes['type'], '');
                     // create the field object
-                   //echo "Pre-merge on load";
-                   //debug_display($params);
                     if (
                     		( isset($thisRes['field_id']) &&
                     			(
@@ -510,8 +497,6 @@ class fbForm {
                         }
                      
                     $this->Fields[$fieldCount] = $this->NewField($thisRes);
-                    // load its options
-                 //   $this->Fields[$fieldCount]->LoadOptions($params);
                     $fieldCount++;
                     }
                 }
@@ -521,7 +506,6 @@ class fbForm {
 		
 		for ($i=0; $i < count($this->Fields); $i++)
 			{
-			//echo $this->Fields[$i]->Type.' ';
 			if ($this->Fields[$i]->Type == 'PageBreakField')
 				{
 				$this->formTotalPages++;
@@ -529,22 +513,6 @@ class fbForm {
 			}           
         return true;
     }
-
-/*
-    function ListSavedFields($formId)
-    {
-		$sql = 'SELECT * FROM ' . $this->mod_globals->FieldTableName .
-                ' WHERE form_id=? ORDER BY order_by';
-	    
-	    $rs = $this->mod_globals->DBHandle->Execute($sql, array( $formId ));
-        $result = array();
-        if ($rs && $rs->RowCount() > 0)
-        	{
-            $result=$rs->GetRows();
-            }
-        return $result;
-    }
-*/
 
     // storeDeep also stores all fields and options for a form
     function Store($storeDeep=false)
@@ -1204,28 +1172,70 @@ error_log($this->GetAttr('redirect_page','0'));
 //        debug_display($params);
     }   
 
+	function DeleteResponse($response_id)
+	{
+    	$db = $this->module_ptr->dbHandle;
+		$sql = 'DELETE FROM ' . cms_db_prefix().
+				'module_fb_resp_val where resp_id=?';
+		$res = $db->Execute($sql, array($response_id));
+		$sql = 'DELETE FROM '.cms_db_prefix().
+				'module_fb_resp where resp_id=?';
+		$res = $db->Execute($sql, array($response_id));	
+	}
 
-    function StoreResponse($response_id=-1)
+	function CheckResponse($form_id, $response_id, $code)
+	{
+    	$db = $this->module_ptr->dbHandle;
+		$sql = 'SELECT secret_code FROM ' . cms_db_prefix().
+				'module_fb_resp where form_id=? and resp_id=?';
+        if($result = $db->GetRow($sql, array($form_id,$response_id)))
+        	{
+        	if ($result['secret_code'] == $code)
+        		{
+        		return true;
+        		}
+        	}
+		return false;
+	}
+
+
+    function StoreResponse($response_id=-1,$approver='')
     {
     	$db = $this->module_ptr->dbHandle;
-        $fields = $this->GetFields();
-    	
+        $fields = $this->GetFields();    	
     	$secret_code = '';
         if ($response_id == -1)
             {
             // saving a new response
             $secret_code = substr(md5(session_id().'_'.time()),0,7);
             $response_id = $db->GenID(cms_db_prefix(). 'module_fb_resp_seq');
-			$sql = 'INSERT INTO ' . cms_db_prefix().
-				'module_fb_resp (resp_id, form_id, submitted, secret_code)' .
-				' VALUES (?, ?, ?, ?)';
-			$res = $db->Execute($sql,
-				array($response_id,
-				 $this->GetId(),
-				 $db->DBTimeStamp(time()),$secret_code));
+			if ($approver == '')
+				{
+				$sql = 'INSERT INTO ' . cms_db_prefix().
+					'module_fb_resp (resp_id, form_id,submitted, secret_code)' .
+					' VALUES (?, ?, ?,?)';
+				$res = $db->Execute($sql,
+					array($response_id,
+				 	$this->GetId(),
+				 	$db->DBTimeStamp(time()),
+				 	$secret_code));
+				 }
+			else
+				{
+				error_log("saving approved record");
+				$sql = 'INSERT INTO ' . cms_db_prefix().
+					'module_fb_resp (resp_id, form_id, submitted, user_approved, secret_code)' .
+					' VALUES (?, ?, ?, ?, ?)';
+				$res = $db->Execute($sql,
+					array($response_id,
+				 	$this->GetId(),
+				 	$db->DBTimeStamp(time()),
+				 	$db->DBTimeStamp(time()),$secret_code));
+				audit(-1, (isset($name)?$name:""), $this->module_ptr->Lang('user_approved_submission',array($response_id,$approver)));
+				 }
             }
         else
-            {
+            {            
             // updating an old response, so we purge old values
 			$sql = 'DELETE FROM ' . cms_db_prefix().
 				'module_fb_resp_val where resp_id=?';

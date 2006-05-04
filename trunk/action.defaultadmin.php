@@ -8,8 +8,6 @@
 */
 if (!isset($gCms)) exit;
 
-		$this->mod_globals->ModuleInputPrefix = $id;
-
 		// and a list of all the extant forms.
         $forms = $this->GetForms();
 		$num_forms = count($forms);
