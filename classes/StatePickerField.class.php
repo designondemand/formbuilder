@@ -17,7 +17,7 @@ class fbStatePickerField extends fbFieldBase {
             );
 
         $this->States = array(
-        "Alabama"=>"AL", "Alaska"=>"AK", "Arizona"=>"AZ", "Arkansas"=>"AR", 
+        "No Default"=>'',"Alabama"=>"AL", "Alaska"=>"AK", "Arizona"=>"AZ", "Arkansas"=>"AR", 
         "California"=>"CA", "Colorado"=>"CO", "Connecticut"=>"CT", "Delaware"=>"DE", 
         "Florida"=>"FL", "Georgia"=>"GA", "Hawaii"=>"HI", "Idaho"=>"ID", 
         "Illinois"=>"IL", "Indiana"=>"IN", "Iowa"=>"IA", 
@@ -53,29 +53,23 @@ class fbStatePickerField extends fbFieldBase {
 	{
 		$mod = $this->form_ptr->module_ptr;
 
-		// why all this? Associative arrays are not guaranteed to preserve
-		// order, except in "chronological" creation order.
-		$sorted =array();
+		unset($this->States[$mod->Lang('no_default')]);
 		if ($this->GetOption('select_one','') != '')
 			{
-			$sorted[' '.$this->GetOption('select_one','')]='';
+			$this->States = array_merge(array($this->GetOption('select_one','')=>''),$this->States);
 			}
 		else
 			{
-			$sorted[' '.$mod->Lang('select_one')]='';
+			$this->States = array_merge(array($mod->Lang('select_one')=>''),$this->States);
 			}
-		ksort($this->States);
-		foreach($this->States as $k=>$v)
-			{
-			$sorted[$k]=$v;
-			}
+
 
 		if (! $this->HasValue() && $this->GetOption('default','') != '')
 		  {
 		  $this->SetValue($this->GetOption('default',''));
 		  }
 
-		return $mod->CreateInputDropdown($id, '_'.$this->Id, $sorted, -1, $this->Value);
+		return $mod->CreateInputDropdown($id, '_'.$this->Id, $this->States, -1, $this->Value);
 	}
 
 	function PrePopulateAdminForm($formDescriptor)

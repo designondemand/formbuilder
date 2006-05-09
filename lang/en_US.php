@@ -200,6 +200,7 @@ $lang['title_hide_label']='Hide Label';
 $lang['title_hide_label_long']='Hide this field\'s name on Form';
 $lang['title_text']='Static text to display';
 $lang['title_field_regex']='Validation Regex';
+$lang['no_default']='No Default';
 $lang['title_regex_help']='This regular expression will only be used if "validation type" is set to a regex-related option. Include a full Perl-style regex, including the start/stop slashes and flags (e.g., "/image\.(\d+)/i")';
 $lang['title_field_required_abbrev']='Req\'d';
 $lang['title_title_position']='Field Title Position (non-CSS Layout only)';
