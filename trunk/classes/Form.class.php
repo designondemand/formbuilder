@@ -678,23 +678,6 @@ class fbForm {
 		$maxOrder = 1;
 		if($this->Id > 0)
     	{
-    		if ($mod->GetPreference('enable_fastadd',1) == 1)
-    			{
-    			$mod->smarty->assign('fastadd',1);
-    			$mod->smarty->assign('title_fastadd',$mod->Lang('title_fastadd'));
-    			$typeInput = "<script type=\"text/javascript\">
-function fast_add(field_type)
-{
-	var type=field_type.options[field_type.selectedIndex].value;
-	var link = '".$mod->CreateLink($id, 'admin_add_edit_field', $returnid,'',array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', true,true)."&".$id."field_type='+type;
-	this.location=link;
-	return true;
-}
-</script>";
-				$typeInput = str_replace('&amp;','&',$typeInput); 
-    			$mod->initialize();
-    			$mod->smarty->assign('input_fastadd',$typeInput.$mod->CreateInputDropdown($id, 'field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->field_types), -1,'', 'onchange="fast_add(this)"'));
-    			}
     		$mod->smarty->assign('submit_button',
     			$mod->CreateInputSubmit($id, 'submit',
     			$mod->Lang('save_and_continue')));
@@ -756,7 +739,24 @@ function fast_add(field_type)
 				}
 			$mod->smarty->assign('fields',$fieldList);
 			$mod->smarty->assign('add_field_link',
-				$mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->cms->variables['admintheme']->DisplayImage('icons/system/newobject.gif',$mod->Lang('title_add_new_field'),'','','systemicon'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', false) . $mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_add_new_field'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', false));			
+				$mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->cms->variables['admintheme']->DisplayImage('icons/system/newobject.gif',$mod->Lang('title_add_new_field'),'','','systemicon'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', false) . $mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_add_new_field'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', false));
+    		if ($mod->GetPreference('enable_fastadd',1) == 1)
+    			{
+    			$mod->smarty->assign('fastadd',1);
+    			$mod->smarty->assign('title_fastadd',$mod->Lang('title_fastadd'));
+    			$typeInput = "<script type=\"text/javascript\">
+function fast_add(field_type)
+{
+	var type=field_type.options[field_type.selectedIndex].value;
+	var link = '".$mod->CreateLink($id, 'admin_add_edit_field', $returnid,'',array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', true,true)."&".$id."field_type='+type;
+	this.location=link;
+	return true;
+}
+</script>";
+				$typeInput = str_replace('&amp;','&',$typeInput); 
+    			$mod->initialize();
+    			$mod->smarty->assign('input_fastadd',$typeInput.$mod->CreateInputDropdown($id, 'field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->field_types), -1,'', 'onchange="fast_add(this)"'));
+    			}							
 		}
 		else
 		{
@@ -797,7 +797,6 @@ function fast_add(field_type)
 			$mod->CreateInputText($id, 'forma_list_delimiter',
 				$this->GetAttr('list_delimiter',','), 50));
 
-error_log($this->GetAttr('redirect_page','0'));
 		$mod->smarty->assign('input_redirect_page',@ContentManager::CreateHierarchyDropdown('',$this->GetAttr('redirect_page','0'), $id.'forma_redirect_page'));
 
 
@@ -1222,7 +1221,7 @@ error_log($this->GetAttr('redirect_page','0'));
 				 }
 			else
 				{
-				error_log("saving approved record");
+				//error_log("saving approved record");
 				$sql = 'INSERT INTO ' . cms_db_prefix().
 					'module_fb_resp (resp_id, form_id, submitted, user_approved, secret_code)' .
 					' VALUES (?, ?, ?, ?, ?)';

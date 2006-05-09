@@ -36,8 +36,6 @@ class fbFieldBase {
 
 	function fbFieldBase(&$form_ptr, &$params)
 	{
-//	echo "fbBase instantiate";
-// debug_display($params);
 
 	   $this->form_ptr = $form_ptr;
 	   $mod = $form_ptr->module_ptr;
@@ -86,7 +84,7 @@ class fbFieldBase {
 	       {
 	       $this->ValidationType = $params['validation_type'];
 	       }
-//debug_display($params);
+
 		foreach ($params as $thisParamKey=>$thisParamVal)
 		{
 	   		if (substr($thisParamKey,0,4) == 'opt_')
@@ -96,29 +94,12 @@ class fbFieldBase {
 	   			}
 	   	}
 
-//echo '-'.$params['_'.$this->Id].' '.$params['__'.$this->Id];
 	   if (isset($params['_'.$this->Id]) &&
 	   		(is_array($params['_'.$this->Id]) ||
 	   		strlen($params['_'.$this->Id]) > 0))
-//	   if (isset($params['_'.$this->Id]))
 	   		{
-//	   		error_log('Setting '.'_'.$this->Id.' value to '.$params['_'.$this->Id]);
-//echo " setting from form<br>";
 	   		$this->SetValue($params['_'.$this->Id]);
 	   		}
-/* new regime!
-	   	elseif (isset($params['__'.$this->Id]) &&
-	   		(is_array($params['__'.$this->Id]) ||
-	   		strlen($params['__'.$this->Id]) > 0))
-	   		{
-	   		// a response value
-//echo " setting from stored response<br>";	   		
-	   		$this->SetStoredValue($params['__'.$this->Id]);
-	   		}
-*/
-//	   else {echo 'no value to set for '.'_'.$this->Id;
-//	   debug_display($params);
-//	   }
 	   $this->DisplayInForm = true;
 	   $this->DisplayInSubmission = true;
 	   $this->IsDisposition = false;
@@ -357,7 +338,6 @@ class fbFieldBase {
 
 			array_push($adv, array($mod->Lang('title_hide_label'),$mod->CreateInputCheckbox($formDescriptor, 'hide_label', 1, $this->HideLabel()).$mod->Lang('title_hide_label_long')));
 
-//$this->DebugDisplay();
 			if ($this->DisplayInForm())
 				{
 				array_push($adv,array($mod->Lang('title_field_css_class'),$mod->CreateInputText($formDescriptor, 'opt_css_class', $this->GetOption('css_class'), 50)));
@@ -538,24 +518,6 @@ class fbFieldBase {
 			array_push($this->Value,$valStr);
 			}
 	}
-
-	// override me, if necessary to convert type or something.
-/*	function SetStoredValue($valStr)
-	{
-		if ($this->Value === false)
-			{
-			$this->Value = $valStr;
-			}
-		else
-			{
-			if (! is_array($this->Value))
-				{
-				$this->Value = array($this->Value);
-				}
-			array_push($this->Value,$varStr);
-			}
-	}
-*/
 
 	function RequiresValidation()
 	{
@@ -744,7 +706,7 @@ class fbFieldBase {
                 ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
 			$res = $mod->dbHandle->Execute($sql,
 				array($this->Id, $this->FormId, $this->Name,
-				$this->Type, $this->Required?1:0, 
+				$this->Type, ($this->Required?1:0), 
 				$this->ValidationType, $this->HideLabel, $this->OrderBy));
             }
         else
@@ -754,7 +716,7 @@ class fbFieldBase {
                 'required=?, validation_type=?, order_by=?, '.
                 'hide_label=? where field_id=?';
 			$res = $mod->dbHandle->Execute($sql,
-				array($this->Name, $this->Type, $this->Required?1:0,
+				array($this->Name, $this->Type, ($this->Required?1:0),
 					$this->ValidationType,
 					$this->OrderBy, $this->HideLabel, $this->Id));
             }
