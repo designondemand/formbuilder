@@ -19,7 +19,8 @@ class fbCountryPickerField extends fbFieldBase {
 		$this->ValidationTypes = array(
             );
 
-        $this->Countries = array('Afghanistan'=>'AF', 'Aland Islands'=>'AX', 
+        $this->Countries = array($mod->Lang('no_default')=>'',
+        'Afghanistan'=>'AF', 'Aland Islands'=>'AX', 
         'Albania'=>'AL',  'Algeria'=>'DZ', 'American Samoa'=>'AS', 'Andorra'=>'AD',
          'Angola'=>'AO', 'Anguilla'=>'AI', 'Antarctica'=>'AQ',  'Antigua and Barbuda'=>'AG',        'Argentina'=>'AR', 'Armenia'=>'AM', 'Aruba'=>'AW', 'Australia'=>'AU', 'Austria'=>'AT', 		'Azerbaijan'=>'AZ', 'Bahamas'=>'BS', 'Bahrain'=>'BH', 'Barbados'=>' BB',        'Bangladesh'=>'BD', 'Belarus'=>'BY', 'Belgium'=>'BE',        'Belize'=>'BZ', 'Benin'=>'BJ', 'Bermuda'=>'BM', 'Bhutan'=>'BT', 'Botswana'=>'BW',        'Bolivia'=>'BO', 'Bosnia and Herzegovina'=>'BA', 'Bouvet Island'=>'BV',
         'Brazil'=>'BR', 'British Indian Ocean Territory'=>'IO', 'Brunei Darussalam'=>'BN', 'Bulgaria'=>'BG',        'Burkina Faso'=>'BF', 'Burundi'=>'BI', 'Cambodia'=>'KH',        'Cameroon'=>'CM', 'Canada'=>'CA' , 'Cape Verde'=>'CV', 'Cayman Islands'=>'KY', 
@@ -59,21 +60,14 @@ class fbCountryPickerField extends fbFieldBase {
 	{
 		$mod = $this->form_ptr->module_ptr;
 
-		// why all this? Associative arrays are not guaranteed to preserve
-		// order, except in "chronological" creation order.
-		$sorted =array();
+		unset($this->Countries[$mod->Lang('no_default')]);
 		if ($this->GetOption('select_one','') != '')
 			{
-			$sorted[' '.$this->GetOption('select_one','')]='';
+			$this->Countries = array_merge(array($this->GetOption('select_one','')=>''),$this->Countries);
 			}
 		else
 			{
-			$sorted[' '.$mod->Lang('select_one')]='';
-			}
-		ksort($this->Countries);
-		foreach($this->Countries as $k=>$v)
-			{
-			$sorted[$k]=$v;
+			$this->Countries = array_merge(array($mod->Lang('select_one')=>''),$this->Countries);
 			}
 
 		if (! $this->HasValue() && $this->GetOption('default','') != '')
@@ -81,7 +75,7 @@ class fbCountryPickerField extends fbFieldBase {
 		  $this->SetValue($this->GetOption('default',''));
 		  }
 
-		return $mod->CreateInputDropdown($id, '_'.$this->Id, $sorted, -1, $this->Value);
+		return $mod->CreateInputDropdown($id, '_'.$this->Id, $this->Countries, -1, $this->Value);
 	}
 
 	function PrePopulateAdminForm($formDescriptor)
