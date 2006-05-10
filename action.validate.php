@@ -9,7 +9,7 @@
 		
 if (!isset($params['f']) || !isset($params['r']) || !isset($params['c']))
 	{
-	echo "Parameter Error!";
+	echo $this->Lang('validation_param_error');
 	}
 $params['response_id']=$params['r'];
 $params['form_id']=$params['f'];
@@ -17,7 +17,7 @@ $aeform = new fbForm($this, $params, true);
 
 if (!$aeform->CheckResponse($params['f'], $params['r'], $params['c']))
 	{
-	echo "Response Error!";
+	echo $this->Lang('validation_response_error');
 	}
 
 $fields = $aeform->GetFields();
@@ -32,6 +32,22 @@ for($i=0;$i<count($fields);$i++)
 if ($confirmationField != -1)
 	{
 	$fields[$confirmationField]->ApproveToGo($params['r']);
-	$aeform->Dispose($returnid);
+	$results = $aeform->Dispose($returnid);
+	if ($results[0] == true)
+		{
+		$this->RedirectContent($fields[$confirmationField]->GetOption('redirect_page','0'));
+		}
+	else
+		{
+		echo "Error!: ";
+		foreach ($results[1] as $thisRes)
+			{
+			echo $thisRes . '<br />';
+			}
+		}
+	}
+else
+	{
+		echo $this->Lang('validation_no_field_error');
 	}
 ?>
