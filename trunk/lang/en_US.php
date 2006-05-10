@@ -201,6 +201,7 @@ $lang['title_hide_label_long']='Hide this field\'s name on Form';
 $lang['title_text']='Static text to display';
 $lang['title_field_regex']='Validation Regex';
 $lang['no_default']='No Default';
+$lang['redirect_after_approval']='Page to redirect after approval';
 $lang['title_regex_help']='This regular expression will only be used if "validation type" is set to a regex-related option. Include a full Perl-style regex, including the start/stop slashes and flags (e.g., "/image\.(\d+)/i")';
 $lang['title_field_required_abbrev']='Req\'d';
 $lang['title_title_position']='Field Title Position (non-CSS Layout only)';
@@ -246,7 +247,9 @@ $lang['title_file_template']='Template for one line of output file';
 $lang['title_file_header']='Template for the header of output file';
 $lang['title_confirmation_url']='URL to click for form confirmation';
 $lang['no_referrer_info']='No HTTP_REFERER info available';
-
+$lang['validation_param_error']='Validation Parameter Error. Please make sure you copy the URL from your email correctly!';
+$lang['validation_response_error']='Validation Repsonse Error. Please make sure you copy the URL from your email correctly!';
+$lang['validation_no_field_error']='Validation Repsonse Error. No email validation field in this form!';
 
 $lang['help_dont_use_in_val'] = 'Be sure not to use this separator in your submitted values if you will be reloading responses from the database';
 $lang['title_date_format']='Date Format (standard <a href="http://www.php.net/manual/en/function.date.php">PHP Date Formats</a>)';
