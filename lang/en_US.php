@@ -30,9 +30,7 @@ $lang['validation_none']='No Validation';
 $lang['validation_numeric']='Numeric';
 $lang['validation_integer']='Integer';
 $lang['validation_email_address']='Email Address';
-$lang['validation_at_least_one']='At Least One Checked';
 $lang['validation_must_check']='Must Be Checked';
-$lang['validation_option_selected']='Option Must be Selected';
 $lang['validation_regex_match']='Match Regular Expression';
 $lang['validation_regex_nomatch']='Doesn\'t match Regular Expression';
 
@@ -45,8 +43,6 @@ $lang['please_enter_an_email']='Please enter a valid email address for "%s"';
 $lang['not_valid_email']='"%s" does not appear to be a valid email address!';
 $lang['please_enter_no_longer']='Please enter a value that is no longer than %s characters';
 $lang['title_list_delimiter'] = 'Character to use as delimiter in results that return more than one value';
-$lang['please_check_something']='Please check something for "%s"';
-$lang['please_select_something']='Please select something for "%s"';
 $lang['you_need_permission']='You need the "%s" permission to perform that operation.';
 $lang['lackpermission']='Sorry! You don\'t have adequate privileges to access this section.';
 $lang['field_order_updated']='Field order updated.';
@@ -62,27 +58,18 @@ $lang['field_name_in_use']='The field name "%s" is already in use. Please use un
 
 // abbreviations, verbs, and other general terms
 $lang['abbreviation_length']='Len: %s';
-$lang['characters']='characters';
 $lang['boxes']='%s boxes';
 $lang['options']='%s options';
 $lang['text_length']='%s chars.';
-$lang['field']='Field';
 $lang['order']='Order';
 $lang['unspecified']='[unspecified]';
 $lang['added']='added';
 $lang['updated']='updated';
-$lang['deleted']='deleted';
-$lang['choices']='choices';
 $lang['select_one']='Select One';
-$lang['select_a_user']='Select A User';
 $lang['select_type']='Select Type';
 $lang['to']='To';
 $lang['recipients']='recipients';
 $lang['destination_count'] = '%s destinations';
-$lang['note']='Note';
-$lang['any_user']='Any User';
-$lang['list']='list';
-$lang['not_configured']='Not Configured';
 $lang['save']='Save';
 $lang['add']='Add';
 $lang['update']='Update';
@@ -97,15 +84,12 @@ $lang['tab_additional']='Form Settings';
 $lang['tab_advanced']='Advanced Settings';
 $lang['tab_tablelayout']='Table-based Layout Options';
 $lang['tab_templatelayout'] = 'Template Layout Options';
-$lang['nofields']='No retrieval fields defined. ';
-$lang['nomethod']='No method/module set.';
 $lang['field_requirement_updated'] = 'Field required state updated.';
 $lang['maximum_size']='Max. Size';
 $lang['permitted_extensions']='Extensions';
 $lang['permitted_filetypes']='Allowed file types';
 $lang['file_too_large']='Uploaded file is too large! Maximum size is:';
 $lang['illegal_file_type']='This type of file may not be uploaded. Please check that the extension is correct.';
-$lang['unchecked']='Unchecked';
 
 $lang['uninstalled'] = 'Module uninstalled.';
 $lang['installed'] = 'Module version %s installed.';
@@ -138,35 +122,18 @@ $lang['title_select_one_message']='"Select One" Text';
 $lang['title_selection_subject']='Selection Subject';
 $lang['title_select_default_country']='Default Selection';
 $lang['title_select_default_state']='Default Selection';
-$lang['title_selection_name']='Selection Name';
 $lang['title_option_name']="Option Name";
 $lang['title_option_value']="Value Submitted";
 $lang['title_pulldown_details']='Pulldown Options';
 $lang['title_destination_address']='Destination Email Address';
 $lang['title_email_from_name']='"From name" for email';
+$lang['title_relaxed_email_regex']='Use relaxed email validation';
+$lang['title_relaxed_regex_long']='Use relaxed email address validation (e.g., allow "x@y" instead of requiring "x@y.tld")';
 $lang['title_email_from_address']='"From address" for email';
 $lang['title_email_encoding']='Email character set encoding';
 $lang['title_director_details']='Pulldown-based Emailer Details';
-$lang['title_email_addresses']='Email Address(es) to Send Form Results';
-$lang['title_file_format']='File Format';
-$lang['title_file_format_tab']='Tab-Delimited Values';
-$lang['title_file_format_tab_header']='Tab-Delimited Values with Header';
-$lang['title_file_format_page']='Page Format';
 $lang['title_file_name']='File Name';
-$lang['title_erase_filelock']='Erase File Lock';
-$lang['title_erase_usage']='(use this to clear the file lock if file writes are failing due to a crashed process)';
-$lang['title_file_note']='Files will be saved in the modules/FeedbackForm/output directory, under your install root.';
-$lang['title_username']='Site Username';
-$lang['title_real_name']='Full (Real) Name';
-$lang['title_both_names']='Site Username + Real Name';
-$lang['title_no_group_restriction']='No Group Restriction';
 $lang['title_email_subject']='Email Subject Line';
-$lang['title_restrict_to_group']='Restrict to users in group';
-$lang['title_names_in_pulldown']='Names to use in Pulldown';
-$lang['title_select_a_user_message']='"Select a User" message';
-$lang['title_pulldown_contents']='Pulldown Contents';
-$lang['title_radio_name']='Radio Button Name';
-$lang['title_radio_group_details']='Radio Button Group Details';
 $lang['title_form_name']='Form Name';
 $lang['title_form_status']='Form Status';
 $lang['title_ready_for_deployment']='Ready for Deployment';
@@ -177,11 +144,11 @@ $lang['title_not_ready_link']='use this shortcut';
 $lang['title_form_alias']='Form Alias';
 $lang['title_form_fields']='Form Fields';
 $lang['title_field_name']='Field Name';
+$lang['title_radiogroup_details']='Radio Button Group Details';
 $lang['title_field_type']='Field Type';
 $lang['title_not_ready3']='to create a form handling field.';
 $lang['title_form_alias']='Form Alias';
 $lang['title_add_new_form']='Add New Form';
-$lang['title_edit_configuration']='Edit Form Builder Configuration';
 $lang['title_show_version']='Show Form Builder Version?';
 $lang['title_show_version_long']='This will embed your installed version number of Form Builder module in a comment, to aid in debugging';
 $lang['title_add_new_field']='Add New Field';
@@ -189,8 +156,6 @@ $lang['title_form_submit_button']='Form Submit Button Text';
 $lang['title_form_next_button']='Form "Next" Button Text (used for multipage forms)';
 $lang['title_form_prev_button'] = 'Form "Previous" Button Text (used for multipage forms)';
 $lang['title_field_validation']='Field Validation';
-$lang['title_default_user']='Default User';
-$lang['title_no_default_user']='No Default User';
 $lang['title_form_css_class']='CSS Class for this form';
 $lang['title_field_css_class']='CSS Class for this field';
 $lang['title_form_required_symbol']='Symbol to mark required Fields';
@@ -211,17 +176,11 @@ $lang['title_hide_errors']='Hide Errors';
 $lang['title_form_displaytype'] = 'Form Display Type';
 $lang['title_hide_errors_long']='Prevent debug / error messages from being seen by users.';
 $lang['title_email_template']='Email Template';
-$lang['title_email_template_vars']='Variables Available for Use in Email Template';
-$lang['title_sample_template']='Create a sample template'; 
 $lang['title_maximum_size']='Maximum upload file size (kilobytes)';
 $lang['title_permitted_extensions']='Permitted Extensions';
 $lang['title_permitted_extensions_long']='Enter a comma-separated list, excluding the dot (e.g., "jpg,gif,jpeg"). Spaces will be ignored. Leaving this blank means there will be no restrictions.';
 $lang['title_show_limitations']='Display restrictions?';
 $lang['title_show_limitations_long']='Display any size and extension restrictions with the upload field?';
-$lang['title_callback_module']='Callback Module';
-$lang['title_callback_method']='Callback Method';
-$lang['title_callback_fields']='Result Fields to Include';
-$lang['title_callback_help']='Help';
 $lang['title_form_template']='Template to use to Display Form';
 $lang['title_page_x_of_y'] = 'Page %s of %s';
 $lang['title_no_advanced_options']='Field has no advanced options.';
@@ -251,20 +210,8 @@ $lang['validation_param_error']='Validation Parameter Error. Please make sure yo
 $lang['validation_response_error']='Validation Repsonse Error. Please make sure you copy the URL from your email correctly!';
 $lang['validation_no_field_error']='Validation Repsonse Error. No email validation field in this form!';
 
-$lang['help_dont_use_in_val'] = 'Be sure not to use this separator in your submitted values if you will be reloading responses from the database';
 $lang['title_date_format']='Date Format (standard <a href="http://www.php.net/manual/en/function.date.php">PHP Date Formats</a>)';
 $lang['title_use_wysiwyg']='Use WYSIWYG editor for text Area?';
-$lang['title_callback_helplong']='<p>You specify a module and method. This method signature should be:</p><br />
-function whatever($id, &$params, $returnid, &$cms)<br /><br />
-<p>This function should output something that makes sense in a form, <i>e.g.</i> probably hidden fields containing
-useful information.</p>
-<p>The "fields" field should contain a comma-delimited list of the fields generated by that method.</p>
-<p>Example: I have a module "UserID" which has a method "LoggedInUser". This method creates two hidden fields
-called "first_name" and "last_name" which I want included in my form submission. I would then enter the following:</p>
-module: UserID<br />
-method: LoggedInUser<br />
-fields: first_name,last_name</br>
-';
 
 $lang['disptype_table']='Table/CSS';
 $lang['disptype_css']='Pure CSS';
@@ -272,18 +219,6 @@ $lang['disptype_template']='Custom Template';
 
 $lang['admindesc']='Add, edit and manage interactive Forms';
 
-$lang['date_a_jan']='JAN';
-$lang['date_a_feb']='FEB';
-$lang['date_a_mar']='MAR';
-$lang['date_a_apr']='APR';
-$lang['date_a_may']='MAY';
-$lang['date_a_jun']='JUN';
-$lang['date_a_jul']='JUL';
-$lang['date_a_aug']='AUG';
-$lang['date_a_sep']='SEP';
-$lang['date_a_oct']='OCT';
-$lang['date_a_nov']='NOV';
-$lang['date_a_dec']='DEC';
 $lang['date_january']='January';
 $lang['date_february']='February';
 $lang['date_march']='March';
@@ -296,26 +231,14 @@ $lang['date_september']='September';
 $lang['date_october']='October';
 $lang['date_november']='November';
 $lang['date_december']='December';
-$lang['month'] = 'Month';
-$lang['day'] = 'Day';
-$lang['year'] = 'Year';
 
 // Form Submission Headers
-$lang['submission_title']='Form Submission';
-$lang['submission_host']='Host';
-$lang['submission_form_name']='Form';
-$lang['submission_date']='Date';
-$lang['submission_source']='Source';
-$lang['submission_subject']='Form Submission';
-$lang['submission_error']='There has been an error in the form submission<br>Please try again later.';
 $lang['submit_error']='FormBuilder submit error: %s';
 $lang['upload_attach_error'] = 'Upload/Attachment error on file %s (tmp_name: %s, of type %s)';
-$lang['submission_error_file']='Error. Unable to write to file.';
 $lang['submission_error_file_lock'] = 'Error. Unable to obtain lock for file.';
 
 $lang['email_default_template'] = "FormBuilder Submission\n";
 $lang['email_template_not_set'] = '<br/>Email Template not yet set!';      
-$lang['email_value_unspecified'] = 'unspecified';  		
 $lang['missing_cms_mailer'] = 'FormBuilder: Cannot find required module CMSMailer!';  		
 $lang['user_approved_submission']='User approved submission %s from %s';
   		
@@ -482,28 +405,14 @@ module homepage at <a href=\"http://www.cmsmodules.com\">CMSModules.com</a>.</li
 of the license for the full disclaimer.</p>
 
 <h3>Copyright and License</h3>
-<p>Copyright &copy; 2005, Samuel Goldstein <a href=\"mailto:sjg@cmsmodules.com\">&lt;sjg@cmsmodules.com&gt;</a>. All Rights Are Reserved.</p>
+<p>Copyright &copy; 2006, Samuel Goldstein <a href=\"mailto:sjg@cmsmodules.com\">&lt;sjg@cmsmodules.com&gt;</a>. All Rights Are Reserved.</p>
 <p>This module has been released under the <a href=\"http://www.gnu.org/licenses/licenses.html#GPL\">GNU Public License</a>. You must agree to this license before using the module.</p>
 		
 ";
 
 $lang['changelog'] = 		"
 		    <ul>
-		    <li>Version 0.9 -  2 October 2005. Migrated to proper Module API (lang, smarty templates, etc.).
-            <li>Version 0.8 - 31 July 2005. Bug fixes, added Date and Callback Function input types.</li>
-            <li>Version 0.7.3 - 21 July 2005. Bug fixes, added State and Country input types.</li>
-            <li>Version 0.7.2 - 18 July 2005. Validation bug fixes, fixed PHPMailer localization.</li>
-            <li>Version 0.7.1 - 1 June 2005. Minor bug fixes.</li>
-            <li>Version 0.7 - 24 May 2005. More and better support for CSS and pure CSS layouts.
-            Support for multi-page forms.
-            Many new form options. New field types: file upload, email \"from\" address. Improved
-            error handling. Email disposal types now templated.</li>
-			<li>Version 0.6 - 16 Apr 2005. Updated for new Admin, simplified permissions.</li>
-		    <li>Version 0.5 - 4 Mar 2005. Minor bug fixes for deleting forms/fields.</li>
-		    <li>Version 0.4 - 2 Mar 2005. Localization and numerous bug fixes.</li>
-		    <li>Version 0.3 - 28 Feb 2005. Primitive localization and bug fixes.</li>
-		    <li>Version 0.2 - 24 Feb 2005. Converted to use Objects. Many improvements and bug fixes.</li>
-			<li>Version 0.1 - 11 Feb 2005. Initial Release</li></ul>
+		    <li>Version 0.1 -  2006. Initial Release</li>
 		";
 
 

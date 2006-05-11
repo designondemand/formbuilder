@@ -60,7 +60,7 @@ class fbFromEmailAddressField extends fbFieldBase {
 		  {
 		  	   case 'email':
                   if ($this->Value !== false &&
-                      ! preg_match($mod->email_regex, $this->Value))
+                      ! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $this->Value))
                     {
                     $result = false;
                     $message = $mod->Lang('please_enter_an_email',$this->Name);
