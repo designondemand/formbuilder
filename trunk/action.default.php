@@ -46,7 +46,11 @@ if (!isset($gCms)) exit;
         	{
         	if ($results[0] == true)
         		{
-        		$this->RedirectContent($aeform->GetAttr('redirect_page','0'));
+        		$ret = $aeform->GetAttr('redirect_page','-1');
+        		if ($ret != -1)
+        			{
+        			$this->RedirectContent($ret);
+        			}
         		}
         	else
         		{
