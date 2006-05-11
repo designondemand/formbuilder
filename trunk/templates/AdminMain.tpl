@@ -38,6 +38,10 @@
 		<p class="pageinput">{$input_hide_errors}</p>
 	</div>
 	<div class="pageoverflow">
+		<p class="pagetext">{$title_relaxed_email_regex}:</p>
+		<p class="pageinput">{$input_relaxed_email_regex}</p>
+	</div>
+	<div class="pageoverflow">
 		<p class="pagetext">{$title_show_version}:</p>
 		<p class="pageinput">{$input_show_version}</p>
 	</div>
