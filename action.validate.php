@@ -35,7 +35,11 @@ if ($confirmationField != -1)
 	$results = $aeform->Dispose($returnid);
 	if ($results[0] == true)
 		{
-		$this->RedirectContent($fields[$confirmationField]->GetOption('redirect_page','0'));
+		$ret = $fields[$confirmationField]->GetOption('redirect_page','-1');
+		if ($ret != -1)
+			{
+			$this->RedirectContent($ret);
+			}
 		}
 	else
 		{
