@@ -21,8 +21,6 @@ class fbForm {
 
 	function fbForm(&$module_ptr, &$params, $loadDeep=false)
 	{
-//echo "form init";
-//debug_display($params);
 	   $this->module_ptr = $module_ptr;
 	   $this->Fields = array();
 	   $this->Attrs = array();
@@ -767,7 +765,7 @@ function fast_add(field_type)
     			$mod->CreateInputHidden($id, 'form_op',$mod->Lang('added')));
 			$mod->smarty->assign('adding',1);
 		}
-		$mod->smarty->assign('link_notready',"<strong>".$mod->Lang('title_not_ready1')."</strong>".$mod->Lang('title_not_ready2')." ".$mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_not_ready_link'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder,'dispose_only'=>1), '', false)." ".$mod->Lang('title_not_ready3')
+		$mod->smarty->assign('link_notready',"<strong>".$mod->Lang('title_not_ready1')."</strong> ".$mod->Lang('title_not_ready2')." ".$mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_not_ready_link'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder,'dispose_only'=>1), '', false, false,'class="module_fb_link"')." ".$mod->Lang('title_not_ready3')
 		);
 
 		$mod->smarty->assign('title_form_submit_button',
