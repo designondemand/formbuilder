@@ -131,6 +131,12 @@ class FormBuilder extends CMSModule
     }
 
 
+	function GetDependencies()
+	{
+		return array('CMSMailer'=>'1.73');
+	}
+
+
 	function InstallPostMessage()
 	{
 		return $this->Lang('post_install');
