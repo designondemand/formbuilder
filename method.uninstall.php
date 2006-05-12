@@ -45,7 +45,7 @@ if (! $this->CheckAccess()) exit;
 		$db->DropSequence(cms_db_prefix().'module_fb_resp_val_seq');
 		$db->DropSequence(cms_db_prefix().'module_fb_resp_attr_seq');
 
-		$this->RemovePermission('Modify Forms', 'Modify Forms');
+		$this->RemovePermission('Modify Forms');
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('uninstalled'));
 
 ?>

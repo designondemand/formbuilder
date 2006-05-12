@@ -553,15 +553,7 @@ class fbForm {
 				}
 			}
 		
-
-/*        if ($storeDeep)
-            {
-            foreach ($this->Fields as $field)
-                {
-                $field->Store($storeDeep);
-                }
-            }
-*/        return $res;
+        return $res;
     }
 
     function Delete()
