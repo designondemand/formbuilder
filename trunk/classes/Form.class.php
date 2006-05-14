@@ -264,7 +264,7 @@ class fbForm {
     {
     	if ($this->module_ptr->GetPreference('show_version',0) == 1)
     	   {
-    	   return "\n<!-- Start FeedbackForm Module (".$this->module_ptr->GetVersion().") -->\n";
+    	   return "\n<!-- Start FormBuilder Module (".$this->module_ptr->GetVersion().") -->\n";
     	   }
     }
 
@@ -272,7 +272,7 @@ class fbForm {
     {
     	if ($this->module_ptr->GetPreference('show_version',0) == 1)
     	   {
-    	   return "\n<!-- End FeedbackForm Module -->\n";
+    	   return "\n<!-- End FormBuilder Module -->\n";
     	   }
     }
 
@@ -549,7 +549,7 @@ class fbForm {
 				$thisAttrValue));
 			if ($thisAttrKey == 'form_template')
 				{
-				$this->module_ptr->SetTemplate('form_'.$this->Id,$thisAttrValue);
+				$this->module_ptr->SetTemplate('fb_'.$this->Id,$thisAttrValue);
 				}
 			}
 		
