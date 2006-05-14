@@ -187,6 +187,25 @@ class FormBuilder extends CMSModule
 		return $result['form_id'];
 	}
 
+	function GetFormNameFromID($form_id)
+	{
+        global $gCms;
+		$db =& $gCms->GetDb();
+		$sql = 'SELECT name from '.cms_db_prefix().'module_fb_form WHERE form_id = ?';
+		$rs = $db->Execute($sql, array($form_id));
+		if($rs && $rs->RowCount() > 0)
+		{
+			$result = $rs->FetchRow();
+		}
+		return $result['name'];
+	}
+
+	function GetFormByID($form_id, $loadDeep=false)
+	{
+			$params = array('form_id'=>$form_id);
+		    $form = new fbForm($this, $params, $loadDeep);
+		    return $form;
+	}
 	
 	function GetHelp($lang = 'en_US')
 	{
