@@ -36,6 +36,7 @@ class FormBuilder extends CMSModule
 	var $all_validation_types;
 	var $module_ptr;
 	var $email_regex;
+	var $email_regex_relaxed;
 	var $dbHandle;
 	
 	function FormBuilder()
