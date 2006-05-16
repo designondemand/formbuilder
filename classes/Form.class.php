@@ -21,6 +21,7 @@ class fbForm {
 
 	function fbForm(&$module_ptr, &$params, $loadDeep=false)
 	{
+error_log('form init');
 	   $this->module_ptr = $module_ptr;
 	   $this->Fields = array();
 	   $this->Attrs = array();
@@ -417,6 +418,7 @@ class fbForm {
 
     function Load($formId, &$params, $loadDeep=false)
     {
+error_log('Load (form)');
         $sql = 'SELECT * FROM '.cms_db_prefix().'module_fb_form WHERE form_id=?';
 	    $rs = $this->module_ptr->dbHandle->Execute($sql, array($formId));
         if($rs && $rs->RowCount() > 0)
@@ -1093,6 +1095,7 @@ function fast_add(field_type)
 	// this will instantiate the form, and load the results
     function LoadResponse($response_id)
     {
+error_log('load response');
     	$db = $this->module_ptr->dbHandle;
 //$this->DebugDisplay();    	
          // loading a response -- at this point, we check that the response
@@ -1122,6 +1125,7 @@ function fast_add(field_type)
 
     function LoadResponseValues(&$params)
     {
+error_log('load response values');
     	$db = $this->module_ptr->dbHandle;
          // loading a response -- at this point, we check that the response
          // is for the correct form_id!
@@ -1137,7 +1141,7 @@ function fast_add(field_type)
         			'module_fb_resp_val WHERE resp_id=?';
         	 $dbresult = $db->Execute($sql, array($params['response_id']));
 		    while ($dbresult && $row = $dbresult->FetchRow())
-		        	{ // was '__'
+		        	{ // was '__'		        	
 		        	if (isset($params['_'.$row['field_id']]) &&
 		        		! is_array($params['_'.$row['field_id']]))
 		        		{
@@ -1174,6 +1178,7 @@ function fast_add(field_type)
 
 	function CheckResponse($form_id, $response_id, $code)
 	{
+error_log('check response');
     	$db = $this->module_ptr->dbHandle;
 		$sql = 'SELECT secret_code FROM ' . cms_db_prefix().
 				'module_fb_resp where form_id=? and resp_id=?';
@@ -1201,8 +1206,8 @@ function fast_add(field_type)
 			if ($approver == '')
 				{
 				$sql = 'INSERT INTO ' . cms_db_prefix().
-					'module_fb_resp (resp_id, form_id,submitted, secret_code)' .
-					' VALUES (?, ?, ?,?)';
+					'module_fb_resp (resp_id, form_id, submitted, secret_code)' .
+					' VALUES (?, ?, ?, ?)';
 				$res = $db->Execute($sql,
 					array($response_id,
 				 	$this->GetId(),
@@ -1230,12 +1235,13 @@ function fast_add(field_type)
 				'module_fb_resp_val where resp_id=?';
 			$res = $db->Execute($sql, array($response_id));
             }
-
 		$sql = 'INSERT INTO ' . cms_db_prefix().
 				'module_fb_resp_val (resp_val_id, resp_id, field_id, value)' .
 				'VALUES (?, ?, ?, ?)';
         foreach ($fields as $thisField)
+ //		  for($i=0;$i<count($fields);$i++)
         	{        	
+ //       	$thisField = &$fields[$i];
 			// set the response_id to be the attribute of the database disposition
             if ($thisField->GetFieldType() == 'DispositionDatabase')
         		{

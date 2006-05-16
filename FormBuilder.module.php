@@ -213,6 +213,36 @@ class FormBuilder extends CMSModule
 	}
 
 
+	function GetRepsonses($form_id, $start_point, $number,
+		$admin_approved=false, $user_approved=false)
+	{
+		global $gCms;
+		$db =& $gCms->GetDb();
+		$ret = array();
+		$sql = 'SELECT * FROM '.cms_db_prefix().
+        			'module_fb_resp WHERE form_id=?';
+        if ($user_approved)
+        	{
+        	 $sql .= 'and user_approved is not null';
+        	 }
+        if ($admin_approved)
+        	{
+        	$sql .= ' and admin_approved is not null';
+        	}
+       	$dbresult = $db->Execute($query, array($form_id,$sort_order));
+		while ($dbresult && $row = $dbresult->FetchRow())
+			{
+			$oneset = new stdClass();
+			$oneset->id = $result['resp_id'];
+			$oneset->user_approved = $db->UnixTimeStamp($result['user_approved']); 
+ 			$oneset->admin_approved = $db->UnixTimeStamp($result['admin_approved']); 
+			$oneset->submitted = $db->UnixTimeStamp($result['submitted']); 
+		    array_push($ret,$oneset);
+		    }
+		return $ret;
+	
+	}
+
 	// For a given form, returns an array of response objects
 	function ListResponses($form_id, $sort_order='submitted')
 	{
