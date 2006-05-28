@@ -36,15 +36,18 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 
 	function ApproveToGo($response_id)
 	{
-		// delete the stored response
-		$this->form_ptr->DeleteResponse($response_id);
-		$this->approvedToGo = true;
+	$this->approvedToGo = true;
 	}
 
 	function ModifyOtherFields()
 	{
 		$mod = $this->form_ptr->module_ptr;
-		
+
+		if ($this->form_ptr->GetFormState() == 'update')
+			{
+			$this->approvedToGo = true;
+			return;
+			}
 		// If we haven't been approved, inhibit all other dispositions!
 		$others = $this->form_ptr->GetFields();
 
@@ -61,8 +64,6 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 			}
 		$this->SetDispositionPermission(true);		
 	}
-
-
 
 	function GetFieldInput($id, &$params, $returnid)
 	{

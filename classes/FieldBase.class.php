@@ -40,6 +40,18 @@ class fbFieldBase {
 	   $this->form_ptr = $form_ptr;
 	   $mod = $form_ptr->module_ptr;
 	   $this->Options = array();
+	   $this->DisplayInForm = true;
+	   $this->DisplayInSubmission = true;
+	   $this->IsDisposition = false;
+	   $this->ValidationTypes = array($mod->Lang('validation_none')=>'none');
+	   $this->loaded = false;
+	   $this->NonRequirableField = false;
+	   $this->HasAddOp = false;
+	   $this->HasDeleteOp = false;
+	   $this->modifiesOtherFields = false;
+	   $this->hasMultipleFormComponents = false;
+	   $this->DispositionPermitted = true;
+
 	   if (isset($params['form_id']))
 	       {
 	       $this->FormId = $params['form_id'];
@@ -100,17 +112,6 @@ class fbFieldBase {
 	   		{
 	   		$this->SetValue($params['_'.$this->Id]);
 	   		}
-	   $this->DisplayInForm = true;
-	   $this->DisplayInSubmission = true;
-	   $this->IsDisposition = false;
-	   $this->ValidationTypes = array($mod->Lang('validation_none')=>'none');
-	   $this->loaded = 'not';
-	   $this->NonRequirableField = false;
-	   $this->HasAddOp = false;
-	   $this->HasDeleteOp = false;
-	   $this->modifiesOtherFields = false;
-	   $this->hasMultipleFormComponents = false;
-	   $this->DispositionPermitted = true;
 	}
 
 	function HasMultipleFormComponents()
@@ -664,7 +665,7 @@ class fbFieldBase {
 			{
 			return false;
 			}
-		$this->loaded = 'summary';
+		$this->loaded = true;
 		if ($loadDeep)
 			{
         	$sql = 'SELECT name, value FROM ' . cms_db_prefix() .
@@ -688,7 +689,6 @@ class fbFieldBase {
             		}
             	}
             $this->Options = array_merge($tmpOpts,$this->Options);
-			$this->loaded = 'full';
 			}
 		return true;
     }

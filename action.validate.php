@@ -13,6 +13,7 @@ if (!isset($params['f']) || !isset($params['r']) || !isset($params['c']))
 	}
 $params['response_id']=$params['r'];
 $params['form_id']=$params['f'];
+$params['user_form_validate']=true;
 $aeform = new fbForm($this, $params, true);
 
 if (!$aeform->CheckResponse($params['f'], $params['r'], $params['c']))

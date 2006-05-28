@@ -8,7 +8,6 @@
 */
 if (!isset($gCms)) exit;
 
-
         if (! isset($params['form_id']) && isset($params['form']))
             {
             // get the form by name, not ID
@@ -21,7 +20,6 @@ if (!isset($gCms)) exit;
         if (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber() > 0) ||
         	(isset($params['done'])&& $params['done']==1))
             {
-
         	$res = $aeform->Validate();
 
             if ($res[0] === false)
