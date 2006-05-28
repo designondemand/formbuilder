@@ -10,8 +10,7 @@
 class fbDispositionDatabase extends fbFieldBase {
 
 	var $approvedBy;
-	var $DDInitialized;
-	
+		
 	function fbDispositionDatabase(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
@@ -22,16 +21,16 @@ class fbDispositionDatabase extends fbFieldBase {
 		$this->DisplayInForm = true;
 		$this->DisplayInSubmission = false;
 		$this->HideLabel = 1;
-		$this->CodedValue = -1;
 		$this->approvedBy = '';
-		$this->DDInitialized = 1;
-error_log('Disposition Database Init!');
-		error_log('On init '.$this->DispositionIsPermitted()?'permitted':'not permitted');
 	}
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = $this->form_ptr->module_ptr;
+		if ($this->Value === false)
+			{
+			return '';
+			}
 		return $mod->CreateInputHidden($id, '_'.$this->Id,	
 			$this->EncodeReqId($this->Value));
 	}
@@ -46,9 +45,9 @@ error_log('Disposition Database Init!');
 		 return '';
 	}
 	
-	function DecodeReqId()
+	function DecodeReqId($theVal)
 	{
-		$tmp = base64_decode($this->EncodedValue);
+		$tmp = base64_decode($theVal);
 		$tmp2 = str_replace(session_id(),'',$tmp);
 		if (substr($tmp2,0,1) == '_')
 			{
@@ -69,33 +68,22 @@ error_log('Disposition Database Init!');
 	function SetValue($val)
 	{
 
-error_log('Disposition Database Set Value. incoming: '.$val);
 		$decval = base64_decode($val);
-
-error_log($this->DispositionIsPermitted()?'permitted':'not permitted');
-error_log('DDInitialized '.$this->DDInitialized);
-/* the second part of this next clause is required for the user approval process,
-   but breaks  response reload... */
    
-		if ($val === false || ! $this->DispositionIsPermitted())
+		if ($val === false)
 			{
-error_log('neeeeeh?');
 			// no value set, so we'll leave value as false
 			}
 		elseif (strpos($decval,'_') === false)
 			{
 			// unencrypted value, coming in from previous response
 			$this->Value = $val;
-error_log('nodecval');
 			}
 		else
 			{
 			// encrypted value coming in from a form, so we'll update.
-			$this->EncodedValue = $val;
-			$this->Value = $this->DecodeReqId();
-error_log('encr;');
+			$this->Value = $this->DecodeReqId($val);
 			}
-error_log('outgoing: '.$this->Value);
 	}
 	
 	function PrePopulateAdminForm($formDescriptor)
@@ -112,7 +100,6 @@ error_log('outgoing: '.$this->Value);
 	function DisposeForm($returnid)
 	{
 		$form = $this->form_ptr;
-		error_log($this->Value);
 		$form->StoreResponse(($this->Value?$this->Value:-1),$this->approvedBy);
 		return array(true,'');	   
 	}

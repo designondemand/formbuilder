@@ -18,13 +18,14 @@ class fbForm {
 	var $Page;
     var $Attrs;
     var $Fields;
+    var $formState;
 
 	function fbForm(&$module_ptr, &$params, $loadDeep=false)
 	{
-error_log('form init');
 	   $this->module_ptr = $module_ptr;
 	   $this->Fields = array();
 	   $this->Attrs = array();
+	   $this->formState = 'new';
 	   if (isset($params['form_id']))
 	       {
 	       $this->Id = $params['form_id'];
@@ -51,8 +52,20 @@ error_log('form init');
 	   	  $params['done'] = 0;
 	   	  }
 	   $this->formTotalPages = 1;
+	   if (isset($params['done'])&& $params['done']==1)
+	   		{
+	   		$this->formState = 'submit';
+	   		}
+	   if (isset($params['user_form_validate']) && $params['user_form_validate']==true)
+	   		{
+	   		$this->formState = 'confirm';
+	   		}
 	   if ($this->Id != -1)
 	   		{
+			if ($this->formState == 'submit')
+				{
+	   			$this->formState = 'update';
+	   			}
 	   		$this->Load($this->Id, $params, $loadDeep);
 	   		}
 	   	foreach ($params as $thisParamKey=>$thisParamVal)
@@ -93,6 +106,11 @@ error_log('form init');
 	function GetName()
 	{
 		return $this->Name;
+	}
+	
+	function GetFormState()
+	{
+		return $this->formState;
 	}
 	
 	function GetPageCount()
@@ -418,7 +436,6 @@ error_log('form init');
 
     function Load($formId, &$params, $loadDeep=false)
     {
-error_log('Load (form)');
         $sql = 'SELECT * FROM '.cms_db_prefix().'module_fb_form WHERE form_id=?';
 	    $rs = $this->module_ptr->dbHandle->Execute($sql, array($formId));
         if($rs && $rs->RowCount() > 0)
@@ -495,7 +512,6 @@ error_log('Load (form)');
                         {
                         $thisRes = array_merge($thisRes,$params);
                         }
-                     
                     $this->Fields[$fieldCount] = $this->NewField($thisRes);
                     $fieldCount++;
                     }
@@ -811,11 +827,8 @@ function fast_add(field_type)
 	}
 
 
-	function &NewField(&$params)
+	function &OldNewField(&$params)
 	{
-	//echo "new-field";
-   //debug_display($params);
-
 		$aefield = new fbFieldBase($this,$params);
         if ($aefield->GetId() != -1 )
             {
@@ -838,6 +851,44 @@ function fast_add(field_type)
         $aefield->LoadField($params);
 		return $aefield;
 	}
+
+	function &NewField(&$params)
+	{
+		//$aefield = new fbFieldBase($this,$params);
+		$aefield = false;
+        if (isset($params['field_id']) && $params['field_id'] != -1 )
+            {
+            // we're loading an extant field
+			$sql = 'SELECT type FROM ' . cms_db_prefix() . 'module_fb_field WHERE field_id=?';
+	    	$rs = $this->module_ptr->dbHandle->Execute($sql, array( $params['field_id']));
+        	if($rs && $result = $rs->FetchRow())
+				{				
+				if ($result['type'] != '')
+					{
+            		$className = $this->MakeClassName($result['type'] , '');
+            		$aefield = new $className($this, $params);
+       				$aefield->LoadField($params);
+					}
+            	}
+            }
+		if ($aefield === false)
+			{
+			// new field
+			if (! isset($params['field_type']))
+				{
+				// unknown field type
+				$aefield = new fbFieldBase($this,$params);
+				}
+			else
+				{
+				// specified field type via params
+            	$className = $this->MakeClassName($params['field_type'], '');
+            	$aefield = new $className($this, $params);
+				}
+			}
+		return $aefield;
+	}
+
 
 
 	function AddEditField($id, &$aefield, $dispose_only, $returnid, $message='')
@@ -1095,9 +1146,7 @@ function fast_add(field_type)
 	// this will instantiate the form, and load the results
     function LoadResponse($response_id)
     {
-error_log('load response');
     	$db = $this->module_ptr->dbHandle;
-//$this->DebugDisplay();    	
          // loading a response -- at this point, we check that the response
          // is for the correct form_id!
 		$sql = 'SELECT form_id FROM ' . cms_db_prefix().
@@ -1125,7 +1174,6 @@ error_log('load response');
 
     function LoadResponseValues(&$params)
     {
-error_log('load response values');
     	$db = $this->module_ptr->dbHandle;
          // loading a response -- at this point, we check that the response
          // is for the correct form_id!
@@ -1178,7 +1226,6 @@ error_log('load response values');
 
 	function CheckResponse($form_id, $response_id, $code)
 	{
-error_log('check response');
     	$db = $this->module_ptr->dbHandle;
 		$sql = 'SELECT secret_code FROM ' . cms_db_prefix().
 				'module_fb_resp where form_id=? and resp_id=?';
@@ -1198,13 +1245,16 @@ error_log('check response');
     	$db = $this->module_ptr->dbHandle;
         $fields = $this->GetFields();    	
     	$secret_code = '';
-        if ($response_id == -1)
+    	$newrec = false;
+    	if ($response_id == -1)
+    		{
+    		$newrec = true;
+    		}
+        if ($newrec)
             {
             // saving a new response
             $secret_code = substr(md5(session_id().'_'.time()),0,7);
             $response_id = $db->GenID(cms_db_prefix(). 'module_fb_resp_seq');
-			if ($approver == '')
-				{
 				$sql = 'INSERT INTO ' . cms_db_prefix().
 					'module_fb_resp (resp_id, form_id, submitted, secret_code)' .
 					' VALUES (?, ?, ?, ?)';
@@ -1213,22 +1263,16 @@ error_log('check response');
 				 	$this->GetId(),
 				 	$db->DBTimeStamp(time()),
 				 	$secret_code));
-				 }
-			else
-				{
-				//error_log("saving approved record");
-				$sql = 'INSERT INTO ' . cms_db_prefix().
-					'module_fb_resp (resp_id, form_id, submitted, user_approved, secret_code)' .
-					' VALUES (?, ?, ?, ?, ?)';
+			}
+		else if ($approver != '')
+			{
+				$sql = 'UPDATE ' . cms_db_prefix().
+					'module_fb_resp set user_approved=? where resp_id=?';
 				$res = $db->Execute($sql,
-					array($response_id,
-				 	$this->GetId(),
-				 	$db->DBTimeStamp(time()),
-				 	$db->DBTimeStamp(time()),$secret_code));
+					array($db->DBTimeStamp(time()),$response_id));
 				audit(-1, (isset($name)?$name:""), $this->module_ptr->Lang('user_approved_submission',array($response_id,$approver)));
-				 }
-            }
-        else
+			}
+        if (! $newrec)
             {            
             // updating an old response, so we purge old values
 			$sql = 'DELETE FROM ' . cms_db_prefix().
@@ -1239,9 +1283,7 @@ error_log('check response');
 				'module_fb_resp_val (resp_val_id, resp_id, field_id, value)' .
 				'VALUES (?, ?, ?, ?)';
         foreach ($fields as $thisField)
- //		  for($i=0;$i<count($fields);$i++)
         	{        	
- //       	$thisField = &$fields[$i];
 			// set the response_id to be the attribute of the database disposition
             if ($thisField->GetFieldType() == 'DispositionDatabase')
         		{
