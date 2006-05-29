@@ -175,7 +175,7 @@ function DisposeForm($returnid)
 		$others = $this->form_ptr->GetFields();
 		for($i=0;$i<count($others);$i++)
 			{
-			if ($others[$i]->DisplayInDisposition())
+			if ($others[$i]->DisplayInSubmission())
 				{                
                 $ret .= '<tr><td>${'.$this->MakeVar($others[$i]->GetName()) .'}</td><td>' .$others[$i]->GetName() . '</td></tr>';
                 }
