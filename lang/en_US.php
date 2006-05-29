@@ -257,8 +257,9 @@ content page only when you have finished editing. Otherwise, erroneous results c
 only one admin is editing a given form at a given time.</p>";
 
 $lang['help'] = "<h3>What Does This Do?</h3>
-<p>The Form Builder Module allows you to create forms for use by other modules such as the FeedbackForm module. These forms may be inserted
-into templates and/or content pages. Feedback forms may contain many kinds of inputs, and may have
+<p>The Form Builder Module allows you to create feedback forms (in fact, it's a replacement of the original Feedback Form module), with the added power of database storage. With its companion module Form Browser, you can use it to create simple database applications.</p>
+<p>The forms created using the Form Builder may be inserted
+into templates and/or content pages. Forms may contain many kinds of inputs, and may have
 validation applied to these inputs. The results of these forms may be handled in a variety of ways.</p>
 
 <h3>How Do I Use it?</h3>
@@ -267,46 +268,56 @@ If you get stuck, chat with me on the #cms IRC channel, post to the forum, send 
 really desperate, read the rest of this page.</P>
 
 <h3>How Do I Create a Form</h3>
-<p>In the CMS Admin Menu, you should get a new menu item called FeedbackForm. Click on this. On the page
+<p>In the CMS Admin Menu, you should get a new menu item called FormBuilder. Click on this. On the page
 that gets shown, there are options (at the bottom of the list of Forms) to Add a New Form or Modify
 Configuration.</p>
 
 <h3>Adding a Form to a Page</h3>
-<p>In the main FeedbackForm admin page, you can see an example of the tag used to display each form. It looks
-something like {cms_module module=\"FeedbackForm\" form=\"feedback_form_example\"}</p>
+<p>In the main FormBuilder admin page, you can see an example of the tag used to display each form. It looks
+something like {cms_module module='FormBuilder' form='sample_form'}</p>
 <p>By copying this tag into the content of a page, or into a template, will cause that form to be displayed.
 In theory, you can have multiple forms on a page if you really want to. Be careful when pasting the tag
 into a page's content if you use a WYSIWYG editor such as TinyMCE or HTMLArea. These editors may stealthily
 change the quote marks (\") into HTML entities (&amp;quot;), and the forms will not show up. Try using
 single quotes (') or editing the HTML directly.
 
-<h3>Adding Fields to a Form</h3>
-<p>By clicking on a Form's name, you enter the Form Edit page. You will see a number of options for the form
-(like what you want the text of the submit button to say, what message should be displayed to the user when
-they submit the form, etc). There is also a list of fields that make up the form. The types of fields that
-are currently supported fit into four groups: standard input fields, display control fields, email-only input
-fields, and form result handling fields (also
-called Form Dispositions in places):</p>
+<h3>Working with Forms</h3>
+<p>By clicking on a Form's name, you enter the Form Edit page. There are several tabs, which are described below:</p>
+<h4>Main</h4>
+<p>This is the main place you'll work on your form. Here, you give it a name, an alias (which is used to identify it for placing it in a page or template), and, optionally, a CSS class with which to wrap the whole thing. You also select the display type. Your choices are:</p>
 <ul>
-<li>Standard Input Fields - these are inputs that allow entry of typical form elements.</li>
-<li>Display Control Fields - these input control how the user will see the display of the form.</li>
-<li>Email-only Input Fields - these are inputs that allow entry of typical form elements, but apply only
-for form dispositions that send the results via email.</li>
-<li>Special Purpose Fields - these inputs are used for interfacing programmatically with other modules.</li>
+<li>Table/CSS. The form is created using HTML tables. If you don't know what to choose, this is the easiest option, and will probably do most of what you want. You can still use CSS to style the form if you want.</li>
+<li>Pure CSS. The form is created, with all the fields wrapped in &lt;div&gt; tags. You can then style the form as you see fit.</li>
+<li>Custom Template. Basically, you get a smarty template, a bunch of variables, and you're on your own. You have the power to create whatever you want.</li>
+</ul>
+<p>Below this, if you have it enabled, is the \"fast field adder\" pulldown, that lets you quickly add a field to the end of your form by selecting the field type.</p>
+<p>Below this is the list of fields that make up your form. More detail on this is described below.</p>
+<h4>Form Settings</h4>
+<p>Form Settings allows you to customize a lot of the messages and text in the controls for your form. It also allows you to pick a page to redirect users to after a successful form submission.</p>
+<h4>Table-based Layout Options</h4>
+<p>Table-layouts have gotten simpler, so your only option here is the position of the field names relative to the inputs. If you're using a Table/CSS layout, you can use this tab to select the field name positions.</p>
+<h4>Template Layout Options</h4>
+<p>This is where you do your customization work if your form uses a Custom Template.</p>
+<p>The form should default to a a Custom template that documents the smarty tags available to you. Unless you're a smarty expert, you probably don't want to mess around with this. If you are a smarty expert, this is where you can unleash your magic.</p>
+<h3>Adding Fields to your Form</h3>
+<p>The types of fields that are currently supported fit into four groups: standard input fields, display control fields, email-specific fields, and form result handling fields (also called Form Dispositions in places):</p>
+<ul>
+<li>Standard Input Fields - these are inputs that allow entry of typical form elements; text inputs, radio buttons, etc.</li>
+<li>Display Control Fields - these input control how the user will see the display of the form; page breaks, static text, etc.</li>
+<li>Email-specific Fields - some forms generate email, and email-specific fields can alter attributes of the emails sent.</li>
 <li>Form Dispositions - These determine what happens when the user
 submits the form; for each result handling field, some method of transmitting, saving, or emailing the
 form contents takes place. A form may have multiple form dispositions.</li>
 </ul>
 <p>Form fields are assigned names. These names identify the field, not only on the screen as labels for the user,
 but in the data when it's submitted so you know what the user is responding to. Phrasing the name like a question
-is a handy way of making it clear to the user what is expected. Similarly, some fields have both Names and Values.
+is a handy way of making it clear to the user what is expected. Similarly, many fields have both Names and Values.
 The Names are what gets shown to the user; the Value is what gets saved or transmitted when the user submits
 the form. The Values are never seen by the user, nor are they visible in the HTML, so it's safe to use for
 email addresses and such.</p>
 <p>Some fields can have multiple values, or multiple name/value pairs. When you first create such a field,
 there may not be sufficient inputs for you to specify all the values you want. To get more space for inputting
-these values, simply save the field, and then click on its name to edit it again. Every time you edit such a
-field, you will receive more inputs.</p>
+these values, use the buttons at the bottom of the page for adding options.</p>
 <p>Fields can be assigned validation rules, which vary according to the type of the field. These rules help
 ensure that the user enters valid data. They may also be
 separately marked \"Required\", which will force the user to enter a response.</p>
@@ -318,79 +329,63 @@ write your CSS.</p>
 <ul><li>Text Input. This is a standard text field. You can limit the length, and apply various validation
 functions to the field.</li>
 <li>Text Area. This is a big, free-form text input field.</li>
-<li>Checkbox. This is a standard check box. If you turn on validation, you can require that the user checks
-the box. This is useful for forms where the user is obligated to agree to something in order to submit
-the form.</li>
+<li>Checkbox. This is a standard check box.</li>
 <li>Checkbox Group. This is a collection of checkboxes. The only difference between this input and a
-collection of Checkbox inputs is that they are presented as a group, with one name, and can have a validation
-function requiring that you check one or more of the boxes in the group.</li>
+collection of Checkbox inputs is that they are presented as a group, with one name, and can have a validation function requiring that you check one or more of the boxes in the group.</li>
 <li>Radio Group. This is a collection of radio buttons. Only one of the group may be selected by the user.</li>
 <li>Pulldown. This is a standard pulldown menu. It's really conceptually the same thing as a radio button
 group, but is better when there are a large number of options.</li>
+<li>Multiselect. This is a multi-select field. It's really conceptually the same thing as a checkbox button
+group, but is better when there are a large number of options, as you can limit the number displayed on the screen at any one time.</li>
 <li>State. This is a pulldown listing the States of the U.S.</li>
 <li>Countries. This is a pulldown listing the Countries of the world (as of July 2005).</li>
 <li>Date Picker. This is a triple pulldown allowing the user to select a date.</li>
 </ul></li>
 
-<li>Email-only Inputs
-<ul><li>File Upload. This allows a user to upload a file, which will be included as an attachment to any email
-disposition. File uploads do not currently work with the Flat File disposition method.</li>
-<li>Email From Field. This allows users to provide their name and email address. The email generated when the
-form gets handled will use this name and address in the \"From\" field.</li>
+<li>Email-specific Inputs
+<ul><li>Email From Address Field. This allows users to provide their email address. The email generated when the form gets handled will use this address in the \"From\" field.</li>
+<li>Email From Name Field. This allows users to provide their name. The email generated when the form gets handled will use this name in the \"From\" field.</li>
 </ul></li>
 
 <li>Display Control Fields<ul>
-<li>Page Break. This allows you to split your feedback form into multiple pages. Each page is
-independently validated. This is good for applications like online surveys.</li></ul></li>
-
-<li>Special Purpose Fields<ul>
-<li>Function Callback \"Input\". This allows programmers to access information from other modules (such as getting user name data from a user authentication module).</li></ul></li>
+<li>-Page Break. This allows you to split your feedback form into multiple pages. Each page is
+independently validated. This is good for applications like online surveys.</li>
+<li>-Static Text. This allows you to put text or a label in the middle of your form. This is useful for giving additional help text, especially if you're not using a Custom Template to render your form.</li>
+</ul></li>
 
 <li>Form Handling Inputs (Dispositions)
-<ul><li>Email Results Based on Pulldown. This is useful for web sites where comments get routed based on
-their subject matter, e.g., bugs get sent to one person, marketing questions to another person, sales requests
-to someone else, etc. The pulldown is populated with the subjects, and each gets directed to a specific email
-address. You set up these mappings in the when you create or edit a field of this type. If you use one of
-these \"Director\" pulldowns, the user must make a selection in order to submit the
+<ul><li>*Email Results Based on Pulldown. This is useful for web sites where comments get routed based on their subject matter, e.g., bugs get sent to one person, marketing questions to another person, sales requests to someone else, etc. The pulldown is populated with the subjects, and each gets directed to a specific email address. You set up these mappings in the when you create or edit a field of this type. If you use one of these \"Director\" pulldowns, the user must make a selection in order to submit the
 form. This input is part of the form the user sees, although the email addresses are not made visible nor
 are they embedded in the HTML.</li>
-<li>Email Results to set Address(es). This simply sends the form results to one or more email addresses that
-you enter when you create or edit this type of field. This field and its name are not visible in the
+<li>*Email Results to set Address(es). This simply sends the form results to one or more email addresses that you enter when you create or edit this type of field. This field and its name are not visible in the
 form that the user sees. The email addresses are not made visible nor
 are they embedded in the HTML.</li>
-<li>Email Results to User-Selected Site User. This input is our first end-user suggestion! It creates a 
-pulldown of usernames in the form. The usernames are other users who are registered with the site.
-When the form is submitted, the data is sent to the user whose name was selected. When you create
-a field of this type, you may select specific groups from which the userlist is created. This input is
-part of the form the user sees, although the email addresses are not made visible nor are they embedded
-in the HTML.</li>
-<li>Write Results to Flat File. This takes the form results and writes them into a text file. You may
-select the name of the file, and its format. You can choose from \"page\" format, which looks like the
-emails that get sent by the other handlers, or you can choose a tab-delimited format useful for reading
-into Excel or similar programs. If you choose tab-delimited, you can opt to have the file start with
-a header row, which names the columns. These files are written to the \"output\" directory under the
-module's installation directory.
+<li>*Store Results in Database. This will store the form contents in an internal database. You will always use this disposition if you use the form with FormBrowser.</li>
+<li>*Validate via Email. This is a strange and powerful field. It provides the user a mandatory input for their email address. Once they submit their form, the standard form dispositions are not performed -- rather, it send the user an email with a special coded link. If they click on the link, the other form is considered \"approved,\" and the other dispositions are all performed.</li>
+<li>*Write Results to Flat File. This takes the form results and writes them into a text file. You may
+select the name of the file, and set its format. These files are written to the \"output\" directory under the
+module's installation directory, assuming the web server has permission to write there.
 </ul></li></li></ul>
+
+<h3>Email and Flat File Templates</h3>
+<p>Man disposition types allow you to create a template for the email that is generated, or for the way the results are written to a file. If you opt not to create a template, the FormBuilder will use it's own best guess, which may or may not work out to your liking. You can always click on the \"Create Sample Template\" and then customize the results.</p>
+<p>Note that once you've changed a template, it will no longer automatically add new fields. For this reason, it's usually best to create your templates as the last step of creating your form.</p>
 
 <h3>Known Issues</h3>
 <ul>
-<li>File Upload Inputs may be used on multi-page feedback forms, <strong>but they must be on the last page</strong> of
-the form.</li>
-<li>File Upload \"maximum size\" cannot be larger than the value set in your php.ini file. This is not a bug -- this is a feature.</li>
-<li>File Upload \"maximum size\" uses units called \"kilobytes\" that are 1000 bytes, not 1024 bytes.</li>
-<li>File Uploads do not currently work with the Flat File disposition method.</li>
-<li>File Uploads could allow users to submit offensive, obscene, or illegal material. It could also be used to transmit
-dangerous files such as trojan-horses, viruses, or other security threats. Use File Uploads with caution and common sense.</li>
+<li>Some field types from FeedbackForms are not implemented in FormBuilder. If there is demand for them, they will be added.</li>
+<li>FormBuilder is not yet integrated with FrontEnd Users. It will be.</li>
 </ul>
 
 <h3>Troubleshooting</h3>
-<ol><li> First step is to check you're running CMS 0.10.x or later.</li>
+<ol><li> First step is to check you're running CMS 0.13.x or later.</li>
 <li> Second step is to read and understand the caveat about WYSIWYG editors up in the
 section <em>Adding a Form to a Page</em>.</li>
+<li> If you're missing fields in an email that gets generated, check the disposition field's template, and make sure you're specifying the missing fields. Seems obvious, but it's an easy mistake to make.</li>
 <li> Just mess around and try clicking on links and icons and stuff. See what happens.</li>
 <li> Last resport is to email me or catch me on IRC and we can go from there.</li>
 </ol> 
-<p>This may no longer be such an early version, but it is probably still buggy. While I've done all I can
+<p>This is a fairly early version, if not a rank beta release, and it is probably still buggy. While I've done all I can
 to make sure no egregious bugs have crept in, I have to admit that during testing, this program
 revealed seven cockroaches, two earwigs, a small family of aphids, and a walking-stick insect. It also
 ate the neighbor's nasty little yap dog, for which I was inappropriately grateful.</p>
@@ -398,20 +393,17 @@ ate the neighbor's nasty little yap dog, for which I was inappropriately gratefu
 <h3>Support</h3>
 <p>This module does not include commercial support. However, there are a number of resources available to help you with it:</p>
 <ul>
-<li>For the latest version of this module, FAQs, or to file a Bug Report or buy commercial support, please visit SjG's
-module homepage at <a href=\"http://www.cmsmodules.com\">CMSModules.com</a>.</li>
+<li>For the latest version of this module, FAQs, or to file a Bug Report, please visit the CMS Made Simple  <a href=\"http://dev.cmsmadesimple.org\">Developer Forge</a>.</li>
+<li>To obtain commercial support, please send an email to the author at <a href=\"mailto:sjg@cmsmodules.com\">&lt;sjg@cmsmodules.com&gt;</a>.</li>
 <li>Additional discussion of this module may also be found in the <a href=\"http://forum.cmsmadesimple.org\">CMS Made Simple Forums</a>.</li>
-<li>The author, SjG, can often be found in the <a href=\"irc://irc.freenode.net/#cms\">CMS IRC Channel</a>.</li>
-<li>Lastly, you may have some success emailing the author directly.</li>  
+<li>The author can often be found in the <a href=\"irc://irc.freenode.net/#cms\">CMS IRC Channel</a>.</li>
+<li>Lastly, you may have some success emailing the author directly and grovelling for free support.</li>  
 </ul>
 <p>As per the GPL, this software is provided as-is. Please read the text
 of the license for the full disclaimer.</p>
-
 <h3>Copyright and License</h3>
 <p>Copyright &copy; 2006, Samuel Goldstein <a href=\"mailto:sjg@cmsmodules.com\">&lt;sjg@cmsmodules.com&gt;</a>. All Rights Are Reserved.</p>
-<p>This module has been released under the <a href=\"http://www.gnu.org/licenses/licenses.html#GPL\">GNU Public License</a>. You must agree to this license before using the module.</p>
-		
-";
+<p>This module has been released under the <a href=\"http://www.gnu.org/licenses/licenses.html#GPL\">GNU Public License</a>. You must agree to this license before using the module.</p>";
 
 $lang['changelog'] = 		"
 		    <ul>

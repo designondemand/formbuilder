@@ -13,7 +13,7 @@
 {foreach from=$forms item=entry}
 	<tr class="{$entry->rowclass}" onmouseover="this.className='{$entry->rowclass}hover';" onmouseout="this.className='{$entry->rowclass}';">
 		<td>{$entry->name}</td>
-		<td>{$entry->usage}</td>
+		<td>&#123;cms_module module='FormBuilder' form='{$entry->usage}'&#125;</td>
 		<td>{$entry->editlink}</td>
 		<td>{$entry->deletelink}</td>
 	</tr>

@@ -137,6 +137,11 @@ class FormBuilder extends CMSModule
 		return array('CMSMailer'=>'1.73');
 	}
 
+	// may be too stringent, but better safe than sorry.
+	function MinimumCMSVersion()
+	{
+		return '0.13';
+	}
 
 	function InstallPostMessage()
 	{
