@@ -57,7 +57,7 @@ class fbPulldownField extends fbFieldBase {
 			}
 	}
 
-	function countAddresses()
+	function countItems()
 	{
 			$tmp = &$this->GetOptionRef('option_name');
 			if (is_array($tmp))
@@ -132,7 +132,7 @@ class fbPulldownField extends fbFieldBase {
 	{
 		$mod = $this->form_ptr->module_ptr;
 
-		$this->countAddresses();
+		$this->countItems();
 		if ($this->optionAdd > 0)
 			{
 			$this->optionCount += $this->optionAdd;
