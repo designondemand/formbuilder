@@ -99,7 +99,7 @@ class fbRadioGroupField extends fbFieldBase {
 
 	function GetHumanReadableValue()
 	{
-		$form = $this->form_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
 			return $this->GetOptionElement('button_checked',$this->Value);
