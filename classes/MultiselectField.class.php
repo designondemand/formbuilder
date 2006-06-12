@@ -156,9 +156,21 @@ class fbMultiselectField extends fbFieldBase {
 	function GetHumanReadableValue()
 	{
 		$mod = $this->form_ptr->module_ptr;
+		$form = $this->form_ptr;
+		$vals = &$this->GetOptionRef('option_value');
+		
 		if ($this->HasValue())
 			{
-			return $this->GetOptionElement('option_value',($this->Value-1));
+			$fieldRet = array();
+			if (! is_array($this->Value))
+				{
+				$this->Value = array($this->Value);
+				}
+			foreach ($this->Value as $thisOne)
+				{
+				array_push($fieldRet,$vals[$thisOne - 1]);
+				}
+			return join($form->GetAttr('list_delimiter',','),$fieldRet);			
 			}
 		else
 			{

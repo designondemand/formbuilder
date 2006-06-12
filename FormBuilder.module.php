@@ -211,6 +211,13 @@ class FormBuilder extends CMSModule
 		    $form = new fbForm($this, $params, $loadDeep);
 		    return $form;
 	}
+
+	function GetFormByParams(&$params, $loadDeep=false)
+	{
+		    $form = new fbForm($this, $params, $loadDeep);
+		    return $form;
+	}
+
 	
 	function GetHelp($lang = 'en_US')
 	{
@@ -218,8 +225,7 @@ class FormBuilder extends CMSModule
 	}
 
 
-	function GetRepsonses($form_id, $start_point, $number,
-		$admin_approved=false, $user_approved=false)
+	function GetResponses($form_id, $start_point, $number, $admin_approved=false, $user_approved=false, $field_list=array())
 	{
 		global $gCms;
 		$db =& $gCms->GetDb();
@@ -234,18 +240,35 @@ class FormBuilder extends CMSModule
         	{
         	$sql .= ' and admin_approved is not null';
         	}
-       	$dbresult = $db->Execute($query, array($form_id,$sort_order));
+$db->debug= true;
+$gCms->config['debug']=true;
+       	$dbresult = $db->SelectLimit($sql, $number, $start_point, array($form_id));
+
 		while ($dbresult && $row = $dbresult->FetchRow())
 			{
 			$oneset = new stdClass();
-			$oneset->id = $result['resp_id'];
-			$oneset->user_approved = $db->UnixTimeStamp($result['user_approved']); 
- 			$oneset->admin_approved = $db->UnixTimeStamp($result['admin_approved']); 
-			$oneset->submitted = $db->UnixTimeStamp($result['submitted']); 
+			$oneset->id = $row['resp_id'];
+			$oneset->user_approved = $db->UnixTimeStamp($row['user_approved']); 
+ 			$oneset->admin_approved = $db->UnixTimeStamp($row['admin_approved']); 
+			$oneset->submitted = $db->UnixTimeStamp($row['submitted']);
+			$oneset->fields = array();
 		    array_push($ret,$oneset);
 		    }
+		for($i=0;$i<count($ret);$i++)
+			{
+			$paramSet = array('form_id'=>$form_id, 'response_id'=>$ret[$i]->id);
+			$fm = $this->GetFormByParams($paramSet, true);
+
+			$fields = $fm->GetFields();
+			for($j=0;$j<count($fields);$j++)
+				{
+				if ($fields[$j]->DisplayInSubmission())
+					{
+                	$ret[$i]->fields[$fields[$j]->GetId()] = $fields[$j]->GetHumanReadableValue();
+                	}
+        		}
+			}
 		return $ret;
-	
 	}
 
 	// For a given form, returns an array of response objects
