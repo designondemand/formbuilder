@@ -225,7 +225,7 @@ class FormBuilder extends CMSModule
 	}
 
 
-	function GetResponses($form_id, $start_point, $number, $admin_approved=false, $user_approved=false, $field_list=array())
+	function GetResponses($form_id, $start_point, $number, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y')
 	{
 		global $gCms;
 		$db =& $gCms->GetDb();
@@ -240,17 +240,16 @@ class FormBuilder extends CMSModule
         	{
         	$sql .= ' and admin_approved is not null';
         	}
-$db->debug= true;
-$gCms->config['debug']=true;
+
        	$dbresult = $db->SelectLimit($sql, $number, $start_point, array($form_id));
 
 		while ($dbresult && $row = $dbresult->FetchRow())
 			{
 			$oneset = new stdClass();
 			$oneset->id = $row['resp_id'];
-			$oneset->user_approved = $db->UnixTimeStamp($row['user_approved']); 
- 			$oneset->admin_approved = $db->UnixTimeStamp($row['admin_approved']); 
-			$oneset->submitted = $db->UnixTimeStamp($row['submitted']);
+			$oneset->user_approved = date($dateFmt,$db->UnixTimeStamp($row['user_approved'])); 
+ 			$oneset->admin_approved = date($dateFmt,$db->UnixTimeStamp($row['admin_approved'])); 
+			$oneset->submitted = date($dateFmt,$db->UnixTimeStamp($row['submitted']));
 			$oneset->fields = array();
 		    array_push($ret,$oneset);
 		    }
@@ -264,7 +263,11 @@ $gCms->config['debug']=true;
 				{
 				if ($fields[$j]->DisplayInSubmission())
 					{
-                	$ret[$i]->fields[$fields[$j]->GetId()] = $fields[$j]->GetHumanReadableValue();
+					if (isset($field_list[$fields[$j]->GetId()])
+						&& $field_list[$fields[$j]->GetId()] > -1)
+						{
+                		$ret[$i]->fields[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetHumanReadableValue();
+                		}
                 	}
         		}
 			}
