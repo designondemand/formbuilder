@@ -229,7 +229,8 @@ class FormBuilder extends CMSModule
 	{
 		global $gCms;
 		$db =& $gCms->GetDb();
-		$ret = array();
+		$names = array();
+		$values = array();
 		$sql = 'SELECT * FROM '.cms_db_prefix().
         			'module_fb_resp WHERE form_id=?';
         if ($user_approved)
@@ -247,17 +248,17 @@ class FormBuilder extends CMSModule
 			{
 			$oneset = new stdClass();
 			$oneset->id = $row['resp_id'];
-			$oneset->user_approved = date($dateFmt,$db->UnixTimeStamp($row['user_approved'])); 
- 			$oneset->admin_approved = date($dateFmt,$db->UnixTimeStamp($row['admin_approved'])); 
+			$oneset->user_approved = (empty($row['user_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['user_approved']))); 
+ 			$oneset->admin_approved = (empty($row['admin_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['admin_approved']))); 
 			$oneset->submitted = date($dateFmt,$db->UnixTimeStamp($row['submitted']));
 			$oneset->fields = array();
-		    array_push($ret,$oneset);
+		    array_push($values,$oneset);
 		    }
-		for($i=0;$i<count($ret);$i++)
+		$populate_names = true;
+		for($i=0;$i<count($values);$i++)
 			{
-			$paramSet = array('form_id'=>$form_id, 'response_id'=>$ret[$i]->id);
+			$paramSet = array('form_id'=>$form_id, 'response_id'=>$values[$i]->id);
 			$fm = $this->GetFormByParams($paramSet, true);
-
 			$fields = $fm->GetFields();
 			for($j=0;$j<count($fields);$j++)
 				{
@@ -266,12 +267,17 @@ class FormBuilder extends CMSModule
 					if (isset($field_list[$fields[$j]->GetId()])
 						&& $field_list[$fields[$j]->GetId()] > -1)
 						{
-                		$ret[$i]->fields[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetHumanReadableValue();
+						if ($populate_names)
+							{
+							$names[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetName();
+							}
+                		$values[$i]->fields[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetHumanReadableValue();
                 		}
                 	}
         		}
+        	$populate_names = false;
 			}
-		return $ret;
+		return array($names, $values);
 	}
 
 	// For a given form, returns an array of response objects
