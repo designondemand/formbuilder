@@ -225,6 +225,45 @@ class FormBuilder extends CMSModule
 	}
 
 
+	function GetResponse($form_id,$response_id,$field_list=array(), $dateFmt='d F y')
+	{
+		$names = array();
+		$values = array();
+		global $gCms;
+		$db =& $gCms->GetDb();
+
+       	$dbresult = $db->Execute('SELECT * FROM '.cms_db_prefix().
+        			'module_fb_resp WHERE resp_id=?', array($response_id));
+
+		$oneset = new stdClass();
+		if ($dbresult && $row = $dbresult->FetchRow())
+			{			
+			$oneset->id = $row['resp_id'];
+			$oneset->user_approved = (empty($row['user_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['user_approved']))); 
+ 			$oneset->admin_approved = (empty($row['admin_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['admin_approved']))); 
+			$oneset->submitted = date($dateFmt,$db->UnixTimeStamp($row['submitted']));
+			$oneset->fields = array();
+			$oneset->names = array();
+		    }
+
+		$paramSet = array('form_id'=>$form_id, 'response_id'=>$response_id);
+		$fm = $this->GetFormByParams($paramSet, true);
+		$fields = $fm->GetFields();
+		for($j=0;$j<count($fields);$j++)
+			{
+			if ($fields[$j]->DisplayInSubmission())
+				{
+				if (isset($field_list[$fields[$j]->GetId()])
+					&& $field_list[$fields[$j]->GetId()] > -1)
+					{
+						$oneset->names[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetName();
+                		$oneset->values[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetHumanReadableValue();
+                	}
+                }
+        	}
+		return $oneset;	
+	}
+
 	function GetResponses($form_id, $start_point, $number, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y')
 	{
 		global $gCms;
