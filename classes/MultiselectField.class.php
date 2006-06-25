@@ -94,7 +94,19 @@ class fbMultiselectField extends fbFieldBase {
 			{
 			$sorted[$subjects] = '1';
 			}
-		return $mod->CreateInputSelectList($id, '_'.$this->Id.'[]', $sorted,($this->Value!==false?$this->Value:array()) , $this->GetOption('lines','3'));
+		if ($this->Value === false)
+			{
+			$val = array();
+			}
+		elseif (!is_array($this->Value))
+			{
+			$val = array($this->Value);
+			}
+		else
+			{
+			$val = $this->Value;
+			}
+		return $mod->CreateInputSelectList($id, '_'.$this->Id.'[]', $sorted,$val, $this->GetOption('lines','3'));
 	}
 
 
