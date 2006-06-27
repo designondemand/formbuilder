@@ -185,7 +185,7 @@ class FormBuilder extends CMSModule
 		$db =& $gCms->GetDb();
 		$sql = 'SELECT form_id from '.cms_db_prefix().'module_fb_form WHERE alias = ?';
 		$rs = $db->Execute($sql, array($form_alias));
-		if($rs && $rs->RowCount() > 0)
+		if($rs && $rs->RecordCount() > 0)
 		{
 			$result = $rs->FetchRow();
 		}
@@ -198,7 +198,7 @@ class FormBuilder extends CMSModule
 		$db =& $gCms->GetDb();
 		$sql = 'SELECT name from '.cms_db_prefix().'module_fb_form WHERE form_id = ?';
 		$rs = $db->Execute($sql, array($form_id));
-		if($rs && $rs->RowCount() > 0)
+		if($rs && $rs->RecordCount() > 0)
 		{
 			$result = $rs->FetchRow();
 		}
@@ -280,7 +280,7 @@ class FormBuilder extends CMSModule
         	{
         	$sql .= ' and admin_approved is not null';
         	}
-
+        
        	$dbresult = $db->SelectLimit($sql, $number, $start_point, array($form_id));
 
 		while ($dbresult && $row = $dbresult->FetchRow())
@@ -383,7 +383,7 @@ class FormBuilder extends CMSModule
         $sql = "select flock_id from ".cms_db_prefix().
         	"module_fb_flock where flock + interval 15 second < ".$db->sysTimeStamp;
 		$rs = $db->Execute($sql);
-        if ($rs && $rs->RowCount() > 0)
+        if ($rs && $rs->RecordCount() > 0)
         	{
         	$this->ClearFileLock();
         	return false;

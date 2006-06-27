@@ -320,6 +320,10 @@ class fbForm {
 		
 		$hidden = $mod->CreateInputHidden($id, 'form_id', $this->Id);
 	    $hidden .= $mod->CreateInputHidden($id, 'continue', ($this->Page + 1));
+		if (isset($params['browser_id']))
+			{
+			$hidden .= $mod->CreateInputHidden($id,'browser_id',$params['browser_id']);
+			}
 	    if ($this->Page > 1)
 	    	{
 	    	$hidden .= $mod->CreateInputHidden($id, 'previous', ($this->Page - 1));
@@ -438,7 +442,7 @@ class fbForm {
     {
         $sql = 'SELECT * FROM '.cms_db_prefix().'module_fb_form WHERE form_id=?';
 	    $rs = $this->module_ptr->dbHandle->Execute($sql, array($formId));
-        if($rs && $rs->RowCount() > 0)
+        if($rs && $rs->RecordCount() > 0)
 	       {
 	       $result = $rs->FetchRow();
            $this->Id = $result['form_id'];
@@ -486,7 +490,7 @@ class fbForm {
            	'module_fb_field WHERE form_id=? ORDER BY order_by';
 	       $rs = $this->module_ptr->dbHandle->Execute($sql, array($formId));
            $result = array();
-           if ($rs && $rs->RowCount() > 0)
+           if ($rs && $rs->RecordCount() > 0)
                 {
                 $result = $rs->GetArray();
                 }
@@ -1261,7 +1265,7 @@ function fast_add(field_type)
 				$res = $db->Execute($sql,
 					array($response_id,
 				 	$this->GetId(),
-				 	$db->DBTimeStamp(time()),
+				 	$this->clean_datetime($db->DBTimeStamp(time())),
 				 	$secret_code));
 			}
 		else if ($approver != '')
@@ -1269,7 +1273,7 @@ function fast_add(field_type)
 				$sql = 'UPDATE ' . cms_db_prefix().
 					'module_fb_resp set user_approved=? where resp_id=?';
 				$res = $db->Execute($sql,
-					array($db->DBTimeStamp(time()),$response_id));
+					array($this->clean_datetime($db->DBTimeStamp(time())),$response_id));
 				audit(-1, (isset($name)?$name:""), $this->module_ptr->Lang('user_approved_submission',array($response_id,$approver)));
 			}
         if (! $newrec)
@@ -1316,6 +1320,11 @@ function fast_add(field_type)
         	}
     return array($response_id,$secret_code);
     }   
+    
+    function clean_datetime($dt)
+    {
+    	return substr($dt,1,strlen($dt)-2);
+    }
     
 }
 
