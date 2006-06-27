@@ -73,10 +73,10 @@ if (! $this->CheckAccess()) exit;
 		$flds = "
 			resp_id I KEY,
 			form_id I,
-			user_approved T,
+			user_approved DT,
 			secret_code C(35),
-			admin_approved T,
-			submitted T
+			admin_approved DT,
+			submitted DT
 		";
 		$sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_fb_resp', $flds, $taboptarray);
 		$dict->ExecuteSQLArray($sqlarray);
