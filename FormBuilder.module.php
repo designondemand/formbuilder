@@ -270,7 +270,7 @@ class FormBuilder extends CMSModule
 		$db =& $gCms->GetDb();
 		$names = array();
 		$values = array();
-		$sql = 'SELECT * FROM '.cms_db_prefix().
+		$sql = 'FROM '.cms_db_prefix().
         			'module_fb_resp WHERE form_id=?';
         if ($user_approved)
         	{
@@ -281,7 +281,14 @@ class FormBuilder extends CMSModule
         	$sql .= ' and admin_approved is not null';
         	}
         
-       	$dbresult = $db->SelectLimit($sql, $number, $start_point, array($form_id));
+        $dbcount = $db->Execute('SELECT COUNT(*) as num '.$sql,array($form_id));
+   
+        $records = 0;
+        if ($dbcount && $row = $dbcount->FetchRow())
+        	{   
+        	$records = $row['num'];
+        	}
+       	$dbresult = $db->SelectLimit('SELECT * '.$sql, $number, $start_point, array($form_id));
 
 		while ($dbresult && $row = $dbresult->FetchRow())
 			{
@@ -316,7 +323,7 @@ class FormBuilder extends CMSModule
         		}
         	$populate_names = false;
 			}
-		return array($names, $values);
+		return array($records, $names, $values);
 	}
 
 	// For a given form, returns an array of response objects
