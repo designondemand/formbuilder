@@ -10,7 +10,7 @@ class fbStatePickerField extends fbFieldBase {
 	function fbStatePickerField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
+        $mod = &$form_ptr->module_ptr;
 		$this->Type = 'StatePickerField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
@@ -51,7 +51,7 @@ class fbStatePickerField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 
 		unset($this->States[$mod->Lang('no_default')]);
 		if ($this->GetOption('select_one','') != '')
@@ -74,7 +74,7 @@ class fbStatePickerField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		ksort($this->States);
 
 		$main = array(

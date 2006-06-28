@@ -12,7 +12,7 @@ class fbTextField extends fbFieldBase {
 	function fbTextField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
+        $mod = &$form_ptr->module_ptr;
 		$this->Type = 'TextField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
@@ -29,7 +29,7 @@ class fbTextField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		return $mod->CreateInputText($id, '_'.$this->Id,
 			htmlspecialchars($this->Value, ENT_QUOTES),
             $this->GetOption('length')<25?$this->GetOption('length'):25,
@@ -49,7 +49,7 @@ class fbTextField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		$main = array(
 			array($mod->Lang('title_maximum_length'),
             		$mod->CreateInputText($formDescriptor, 'opt_length',
@@ -68,7 +68,7 @@ class fbTextField extends fbFieldBase {
 	{
 		$result = true;
 		$message = '';
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		switch ($this->ValidationType)
 		  {
 		  	   case 'none':

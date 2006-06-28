@@ -15,7 +15,7 @@ class fbDispositionEmailBase extends fbFieldBase {
 	function fbDispositionEmailBase(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
+        $mod = &$form_ptr->module_ptr;
 		$this->IsDisposition = true;
 		$this->ValidationTypes = array(
             );
@@ -45,7 +45,7 @@ function populate(formname)
 
     function TemplateStatus()
     {
-    	$mod = $this->form_ptr->module_ptr;
+    	$mod = &$this->form_ptr->module_ptr;
     	if ($this->GetOption('email_template','') == '')
     		{
     		return $mod->Lang('email_template_not_set');
@@ -83,14 +83,14 @@ function populate(formname)
 
     function createSampleTemplate()
     {
-    	$mod = $this->form_ptr->module_ptr;
+    	$mod = &$this->form_ptr->module_ptr;
     	$ret = $mod->Lang('email_default_template');
     	foreach($this->templateVariables as $thisKey=>$thisVal)
     		{
     		$ret .= $thisVal.': '.$thisKey."\n";
     		}
     	$ret .= "\n-------------------------------------------------\n";
-		$others = $this->form_ptr->GetFields();
+		$others = &$this->form_ptr->GetFields();
 		for($i=0;$i<count($others);$i++)
 			{
 			if ($others[$i]->DisplayInSubmission())
@@ -117,7 +117,7 @@ function populate(formname)
 	function SendForm($destination_array, $subject)
 	{
 		global $gCms;
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		$message = $this->GetOption('email_template','');
 		if ($message == '')
 			{
@@ -136,7 +136,7 @@ function populate(formname)
         	{
         	$mod->smarty->assign('sub_url',$_SERVER['HTTP_REFERER']);
 			}
-		$others = $this->form_ptr->GetFields();
+		$others = &$this->form_ptr->GetFields();
 		$unspec = $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
 		
 		for($i=0;$i<count($others);$i++)
@@ -214,7 +214,7 @@ function populate(formname)
 
 	function PrePopulateAdminFormBase($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		$message = $this->GetOption('email_template','');
         $ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_template').'</th></tr>';
         $ret .= '<tr><th>'.$mod->Lang('help_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';
@@ -223,14 +223,7 @@ function populate(formname)
     		$ret .= '<tr><td>'.$thisKey.'</td><td>'.$thisVal.'</td></tr>';
     		}
 
-/*
-        $ret .= '<tr><td>{$sub_form_name}</td><td>'.$mod->Lang('title_form_name').'</td></tr>';
-        $ret .= '<tr><td>{$sub_date}</td><td>'.$mod->Lang('help_submission_date').'</td></tr>';
-        $ret .= '<tr><td>{$sub_host}</td><td>'.$mod->Lang('help_server_name').'</td></tr>';
-        $ret .= '<tr><td>{$sub_source_ip}</td><td>'.$mod->Lang('help_sub_source_ip').'</td></tr>';
-        $ret .= '<tr><td>{$source_url}</td><td>'.$mod->Lang('help_sub_url').'</td></tr>';
-*/
-		$others = $this->form_ptr->GetFields();
+		$others = &$this->form_ptr->GetFields();
 		for($i=0;$i<count($others);$i++)
 			{
 			if ($others[$i]->DisplayInSubmission())

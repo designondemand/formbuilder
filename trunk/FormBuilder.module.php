@@ -43,8 +43,8 @@ class FormBuilder extends CMSModule
 	{
 		global $gCms;
 		$this->CMSModule();
-        $this->module_ptr = &$this;
-        $this->dbHandle = &$gCms->GetDb();
+      $this->module_ptr = &$this;
+      $this->dbHandle = &$gCms->GetDb();
 		$this->email_regex = "/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i";
 		$this->email_regex_relaxed="/^([\w\d\.\-\_])+\@([\w\d\.\-\_])+$/i";
 		require_once 'classes/Form.class.php';
@@ -248,7 +248,7 @@ class FormBuilder extends CMSModule
 
 		$paramSet = array('form_id'=>$form_id, 'response_id'=>$response_id);
 		$fm = $this->GetFormByParams($paramSet, true);
-		$fields = $fm->GetFields();
+		$fields = &$fm->GetFields();
 		for($j=0;$j<count($fields);$j++)
 			{
 			if ($fields[$j]->DisplayInSubmission())
@@ -305,7 +305,7 @@ class FormBuilder extends CMSModule
 			{
 			$paramSet = array('form_id'=>$form_id, 'response_id'=>$values[$i]->id);
 			$fm = $this->GetFormByParams($paramSet, true);
-			$fields = $fm->GetFields();
+			$fields = &$fm->GetFields();
 			for($j=0;$j<count($fields);$j++)
 				{
 				if ($fields[$j]->DisplayInSubmission())

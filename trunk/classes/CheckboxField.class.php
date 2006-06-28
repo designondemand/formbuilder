@@ -12,7 +12,7 @@ class fbCheckboxField extends fbFieldBase {
 	function fbCheckboxField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
+        $mod = &$form_ptr->module_ptr;
 		$this->Type =  'CheckboxField';
 		$this->DisplayInForm = true;
 		$this->NonRequirableField = true;
@@ -25,7 +25,7 @@ class fbCheckboxField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		$label = '';
 		if (strlen($this->GetOption('label','')) > 0)
 			{
@@ -36,7 +36,7 @@ class fbCheckboxField extends fbFieldBase {
 
 	function GetHumanReadableValue()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		if ($this->Value === false)
 			{
 			return $this->GetOption('unchecked_value',$mod->Lang('value_unchecked'));
@@ -78,7 +78,7 @@ class fbCheckboxField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		$main = array(
 			array($mod->Lang('title_checkbox_label'),
             		$mod->CreateInputText($formDescriptor, 'opt_label',
@@ -97,7 +97,7 @@ class fbCheckboxField extends fbFieldBase {
 
 	function Validate()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		$result = true;
 		$message = '';
 

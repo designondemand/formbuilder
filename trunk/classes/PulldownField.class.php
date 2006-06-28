@@ -15,7 +15,7 @@ class fbPulldownField extends fbFieldBase {
 	function fbPulldownField(&$form_ptr, &$params)
 	{
        $this->fbFieldBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
+        $mod = &$form_ptr->module_ptr;
 		$this->Type = 'PulldownField';
 		$this->DisplayInForm = true;
 		$this->NonRequirableField = false;
@@ -28,13 +28,13 @@ class fbPulldownField extends fbFieldBase {
 
 	function GetOptionAddButton()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		return $mod->Lang('add_options');
 	}
 
 	function GetOptionDeleteButton()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		return $mod->Lang('delete_options');
 	}
 
@@ -76,7 +76,7 @@ class fbPulldownField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 
 		// why all this? Associative arrays are not guaranteed to preserve
 		// order, except in "chronological" creation order.
@@ -109,7 +109,7 @@ class fbPulldownField extends fbFieldBase {
 
     function StatusInfo()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		$opt = $this->GetOption('option_name','');
 		
 		if (is_array($opt))
@@ -130,7 +130,7 @@ class fbPulldownField extends fbFieldBase {
 	
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 
 		$this->countItems();
 		if ($this->optionAdd > 0)
@@ -165,7 +165,7 @@ class fbPulldownField extends fbFieldBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		// remove the "required" field
 		$reqIndex = -1;
 		for ($i=0;$i<count($mainArray);$i++)
@@ -188,7 +188,7 @@ class fbPulldownField extends fbFieldBase {
 
 	function GetHumanReadableValue()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
 			return $this->GetOptionElement('option_value',($this->Value-1));

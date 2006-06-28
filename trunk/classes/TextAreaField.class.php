@@ -11,8 +11,8 @@ class fbTextAreaField extends fbFieldBase {
 
 	function fbTextAreaField(&$form_ptr, &$params)
 	{
-        $this->fbFieldBase($form_ptr, $params);
-		$mod = $form_ptr->module_ptr;
+      $this->fbFieldBase($form_ptr, $params);
+		$mod = &$form_ptr->module_ptr;
 		$this->Type = 'TextAreaField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
@@ -23,7 +23,7 @@ class fbTextAreaField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{            
-	   $mod = $this->form_ptr->module_ptr;
+	   $mod = &$this->form_ptr->module_ptr;
        return $mod->CreateTextArea($this->GetOption('wysiwyg','0') == '1'?true:false,
        		$id, htmlspecialchars($this->Value, ENT_QUOTES),
        		'_'.$this->Id);            
@@ -51,7 +51,7 @@ class fbTextAreaField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-	   $mod = $this->form_ptr->module_ptr;
+	   $mod = &$this->form_ptr->module_ptr;
 		return array(
 			'main'=>
 				array(array($mod->Lang('title_use_wysiwyg'),
@@ -65,7 +65,7 @@ class fbTextAreaField extends fbFieldBase {
 	{
 		$result = true;
 		$message = '';
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		switch ($this->ValidationType)
 		  {
 		  	   case 'none':

@@ -14,7 +14,7 @@ class fbDatePickerField extends fbFieldBase {
 	function fbDatePickerField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
+        $mod = &$form_ptr->module_ptr;
 		$this->Type = 'DatePickerField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
@@ -44,7 +44,7 @@ class fbDatePickerField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
        $today = getdate();
        $Days = array();
        for ($i=1;$i<32;$i++)
@@ -71,7 +71,7 @@ class fbDatePickerField extends fbFieldBase {
 
 	function GetHumanReadableValue()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
 			$theDate = mktime ( 1, 1, 1, $this->GetArrayValue(1),  $this->GetArrayValue(0), $this->GetArrayValue(2) );
@@ -85,7 +85,7 @@ class fbDatePickerField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		$main = array(
 			array($mod->Lang('title_date_format'),
             		array($mod->CreateInputText($formDescriptor, 'opt_date_format',

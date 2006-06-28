@@ -12,7 +12,7 @@ class fbFromEmailAddressField extends fbFieldBase {
 	function fbFromEmailAddressField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
+        $mod = &$form_ptr->module_ptr;
 		$this->Type = 'FromEmailAddressField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
@@ -24,7 +24,7 @@ class fbFromEmailAddressField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		return $mod->CreateInputText($id, '_'.$this->Id,
 			htmlspecialchars($this->Value, ENT_QUOTES),
            25,128);
@@ -32,8 +32,8 @@ class fbFromEmailAddressField extends fbFieldBase {
 	
 	function ModifyOtherFields()
 	{
-		$mod = $this->form_ptr->module_ptr;
-		$others = $this->form_ptr->GetFields();
+		$mod = &$this->form_ptr->module_ptr;
+		$others = &$this->form_ptr->GetFields();
 		
 		for($i=0;$i<count($others);$i++)
 			{
@@ -55,7 +55,7 @@ class fbFromEmailAddressField extends fbFieldBase {
 	{
 		$result = true;
 		$message = '';
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		switch ($this->ValidationType)
 		  {
 		  	   case 'email':
