@@ -37,8 +37,8 @@ class fbFieldBase {
 	function fbFieldBase(&$form_ptr, &$params)
 	{
 
-	   $this->form_ptr = $form_ptr;
-	   $mod = $form_ptr->module_ptr;
+	   $this->form_ptr = &$form_ptr;
+	   $mod = &$form_ptr->module_ptr;
 	   $this->Options = array();
 	   $this->DisplayInForm = true;
 	   $this->DisplayInSubmission = true;
@@ -383,7 +383,7 @@ class fbFieldBase {
 	// clear fields unused by invisible dispositions
 	function HiddenDispositionFields(&$mainArray, &$advArray)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		// remove the "required" field
 		$reqIndex = -1;
 		for ($i=0;$i<count($mainArray);$i++)
