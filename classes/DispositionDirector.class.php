@@ -17,7 +17,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 	function fbDispositionDirector(&$form_ptr, &$params)
 	{
        $this->fbDispositionEmailBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
+        $mod = &$form_ptr->module_ptr;
 		$this->Type = 'DispositionDirector';
 		$this->DisplayInForm = true;
 		$this->NonRequirableField = false;
@@ -31,13 +31,13 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 
 	function GetOptionAddButton()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		return $mod->Lang('add_destination');
 	}
 
 	function GetOptionDeleteButton()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		return $mod->Lang('delete_destination');
 	}
 
@@ -79,7 +79,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 
 		// why all this? Associative arrays are not guaranteed to preserve
 		// order, except in "chronological" creation order.
@@ -112,7 +112,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 
     function StatusInfo()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		$opt = $this->GetOption('destination_address','');
 		
 		if (is_array($opt))
@@ -134,7 +134,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 	
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 
 		$this->countAddresses();
 		if ($this->addressAdd > 0)
@@ -168,7 +168,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		// remove the "required" field
 		$reqIndex = -1;
 		for ($i=0;$i<count($mainArray);$i++)
@@ -217,7 +217,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 
 	function GetHumanReadableValue()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
 			return $this->GetOptionElement('destination_address',($this->Value - 1));
@@ -237,7 +237,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 
 	function AdminValidate()
     {
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
     	$opt = $this->GetOption('destination_address');
 		list($ret, $message) = $this->DoesFieldNameExist();
 		if (count($opt) == 0)

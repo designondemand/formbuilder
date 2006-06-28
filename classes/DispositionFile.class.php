@@ -15,7 +15,7 @@ class fbDispositionFile extends  fbFieldBase {
 	function fbDispositionFile(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
+        $mod = &$form_ptr->module_ptr;
 		$this->Type = 'DispositionFile';
 		$this->IsDisposition = true;
 		$this->NonRequirableField = true;
@@ -40,13 +40,13 @@ function populate_header(formname)
 
     function StatusInfo()
 	{
-		$mod=$this->form_ptr->module_ptr;
+		$mod=&$this->form_ptr->module_ptr;
 		return $this->GetOption('filespec',$mod->Lang('unspecified'));
 	}
 
 function DisposeForm($returnid)
 	{
-		$mod=$this->form_ptr->module_ptr;
+		$mod=&$this->form_ptr->module_ptr;
 		$count = 0;
         while (! $mod->GetFileLock() && $count<200)
 			{
@@ -83,7 +83,7 @@ function DisposeForm($returnid)
         $mod->smarty->assign('sub_source_ip',$_SERVER['REMOTE_ADDR']);
         $mod->smarty->assign('sub_url',$_SERVER['HTTP_REFERER']);
 		$mod->smarty->assign('TAB',"\t");
-		$others = $this->form_ptr->GetFields();
+		$others = &$this->form_ptr->GetFields();
 		$unspec = $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
 		
 		for($i=0;$i<count($others);$i++)
@@ -132,8 +132,8 @@ function DisposeForm($returnid)
 
     function createSampleHeader()
     {
-    	$mod = $this->form_ptr->module_ptr;
-		$others = $this->form_ptr->GetFields();
+    	$mod = &$this->form_ptr->module_ptr;
+		$others = &$this->form_ptr->GetFields();
 		$fields = array();
 		for($i=0;$i<count($others);$i++)
 			{
@@ -148,8 +148,8 @@ function DisposeForm($returnid)
 
     function createSampleTemplate()
     {
-    	$mod = $this->form_ptr->module_ptr;
-		$others = $this->form_ptr->GetFields();
+    	$mod = &$this->form_ptr->module_ptr;
+		$others = &$this->form_ptr->GetFields();
 		$fields = array();
 		for($i=0;$i<count($others);$i++)
 			{
@@ -164,7 +164,7 @@ function DisposeForm($returnid)
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
         $ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_template').'</th></tr>';
         $ret .= '<tr><th>'.$mod->Lang('help_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';
         $ret .= '<tr><td>{$sub_form_name}</td><td>'.$mod->Lang('title_form_name').'</td></tr>';
@@ -172,7 +172,7 @@ function DisposeForm($returnid)
         $ret .= '<tr><td>{$sub_host}</td><td>'.$mod->Lang('help_server_name').'</td></tr>';
         $ret .= '<tr><td>{$sub_source_ip}</td><td>'.$mod->Lang('help_sub_source_ip').'</td></tr>';
         $ret .= '<tr><td>{$source_url}</td><td>'.$mod->Lang('help_sub_url').'</td></tr>';
-		$others = $this->form_ptr->GetFields();
+		$others = &$this->form_ptr->GetFields();
 		for($i=0;$i<count($others);$i++)
 			{
 			if ($others[$i]->DisplayInSubmission())

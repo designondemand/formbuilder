@@ -15,7 +15,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 	function fbCheckboxGroupField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
+        $mod = &$form_ptr->module_ptr;
 		$this->Type = 'CheckboxGroupField';
 		$this->DisplayInForm = true;
 		$this->HasAddOp = true;
@@ -46,7 +46,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 
     function StatusInfo()
 	{
-        $mod = $this->form_ptr->module_ptr;
+        $mod = &$this->form_ptr->module_ptr;
 		$this->countBoxes();
 		$ret = $mod->Lang('boxes',$this->boxCount);
 		if (strlen($this->ValidationType)>0)
@@ -58,19 +58,19 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	function GetOptionAddButton()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		return $mod->Lang('add_checkboxes');
 	}
 
 	function GetOptionDeleteButton()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		return $mod->Lang('delete_checkboxes');
 	}
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		$names = &$this->GetOptionRef('box_name');
 		$fieldDisp = array();
 		for ($i=0;$i<count($names);$i++)
@@ -95,7 +95,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	function GetHumanReadableValue()
 	{
-		$form = $this->form_ptr;
+		$form = &$this->form_ptr;
 		$names = &$this->GetOptionRef('box_name');
 		$checked = &$this->GetOptionRef('box_checked');
 		$unchecked = &$this->GetOptionRef('box_unchecked');
@@ -138,7 +138,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 
 		$this->countBoxes();
 		if ($this->boxAdd > 0)
@@ -174,7 +174,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		// remove the "required" field, since this can only be done via validation
 		$reqIndex = -1;
 		for ($i=0;$i<count($mainArray);$i++)

@@ -15,7 +15,7 @@ class fbRadioGroupField extends fbFieldBase {
 	function fbRadioGroupField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
+        $mod = &$form_ptr->module_ptr;
 		$this->Type = 'RadioGroupField';
 		$this->DisplayInForm = true;
 		$this->HasAddOp = true;
@@ -46,7 +46,7 @@ class fbRadioGroupField extends fbFieldBase {
 
     function StatusInfo()
 	{
-        $mod = $this->form_ptr->module_ptr;
+        $mod = &$this->form_ptr->module_ptr;
 		$this->countBoxes();
 		$ret = $mod->Lang('options',$this->optionCount);
 		if (strlen($this->ValidationType)>0)
@@ -58,19 +58,19 @@ class fbRadioGroupField extends fbFieldBase {
 
 	function GetOptionAddButton()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		return $mod->Lang('add_options');
 	}
 
 	function GetOptionDeleteButton()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		return $mod->Lang('delete_options');
 	}
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		$names = &$this->GetOptionRef('button_name');
 		$fieldDisp = array();
 		for ($i=0;$i<count($names);$i++)
@@ -99,7 +99,7 @@ class fbRadioGroupField extends fbFieldBase {
 
 	function GetHumanReadableValue()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
 			return $this->GetOptionElement('button_checked',$this->Value);
@@ -133,7 +133,7 @@ class fbRadioGroupField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 
 		$this->countBoxes();
 		if ($this->optionAdd > 0)
@@ -166,7 +166,7 @@ class fbRadioGroupField extends fbFieldBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this->form_ptr->module_ptr;
 		// remove the "required" field, since this can only be done via validation
 		$reqIndex = -1;
 		for ($i=0;$i<count($mainArray);$i++)
