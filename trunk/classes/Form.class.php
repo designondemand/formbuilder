@@ -150,8 +150,15 @@ class fbForm {
 		$this->module_ptr = '';
 		$template_tmp = $this->GetAttr('form_template','');
 		$this->SetAttr('form_template',strlen($template_tmp).' characters');
+		$field_tmp = $this->Fields;
+		$this->Fields = 'Field Array: '.count($field_tmp);
 		debug_display($this);
 		$this->SetAttr('form_template',$template_tmp);
+		$this->Fields = $field_tmp;
+		foreach($this->Fields as $fld)
+			{
+			$fld->DebugDisplay();
+			}
 		$this->module_ptr = $tmp;
 	}
 
@@ -484,7 +491,6 @@ class fbForm {
 						}
 					}
 				}
-				
 
            $sql = 'SELECT * FROM ' . cms_db_prefix().
            	'module_fb_field WHERE form_id=? ORDER BY order_by';
@@ -516,7 +522,7 @@ class fbForm {
                         {
                         $thisRes = array_merge($thisRes,$params);
                         }
-                    $this->Fields[$fieldCount] = $this->NewField($thisRes);
+                    $this->Fields[$fieldCount] = &$this->NewField($thisRes);
                     $fieldCount++;
                     }
                 }
@@ -530,7 +536,8 @@ class fbForm {
 				{
 				$this->formTotalPages++;
 				}
-			}           
+			}
+
         return true;
     }
 
@@ -557,8 +564,7 @@ class fbForm {
         // save out the attrs
 		$sql = 'DELETE FROM '.cms_db_prefix().
 			'module_fb_form_attr WHERE form_id=?';
-		$res = $this->module_ptr->dbHandle->Execute($sql,
-			array($this->Id));
+		$res = $this->module_ptr->dbHandle->Execute($sql, array($this->Id));
 		foreach ($this->Attrs as $thisAttrKey=>$thisAttrValue)
 			{
             $formAttrId = $this->module_ptr->dbHandle->GenID(cms_db_prefix().
@@ -1076,8 +1082,8 @@ function fast_add(field_type)
     
     function SwapFieldsByIndex($src_field_index, $dest_field_index)
     {
-        $srcField = $this->GetFieldByIndex($src_field_index);
-        $destField = $this->GetFieldByIndex($dest_field_index);
+        $srcField = &$this->GetFieldByIndex($src_field_index);
+        $destField = &$this->GetFieldByIndex($dest_field_index);
         $tmpOrderBy = $destField->GetOrder();
         $destField->SetOrder($srcField->GetOrder());
         $srcField->SetOrder($tmpOrderBy);
@@ -1214,7 +1220,6 @@ function fast_add(field_type)
         	{
         	return false;
         	}
-//        debug_display($params);
     }   
 
 	function DeleteResponse($response_id)
@@ -1247,8 +1252,8 @@ function fast_add(field_type)
     function StoreResponse($response_id=-1,$approver='')
     {
     	$db = $this->module_ptr->dbHandle;
-        $fields = $this->GetFields();    	
-    	$secret_code = '';
+      $fields = &$this->GetFields();
+		$secret_code = '';
     	$newrec = false;
     	if ($response_id == -1)
     		{
@@ -1276,20 +1281,20 @@ function fast_add(field_type)
 					array($this->clean_datetime($db->DBTimeStamp(time())),$response_id));
 				audit(-1, (isset($name)?$name:""), $this->module_ptr->Lang('user_approved_submission',array($response_id,$approver)));
 			}
-        if (! $newrec)
-            {            
-            // updating an old response, so we purge old values
+      if (! $newrec)
+         {
+         // updating an old response, so we purge old values
 			$sql = 'DELETE FROM ' . cms_db_prefix().
-				'module_fb_resp_val where resp_id=?';
+					'module_fb_resp_val where resp_id=?';
 			$res = $db->Execute($sql, array($response_id));
-            }
+         }
 		$sql = 'INSERT INTO ' . cms_db_prefix().
 				'module_fb_resp_val (resp_val_id, resp_id, field_id, value)' .
 				'VALUES (?, ?, ?, ?)';
-        foreach ($fields as $thisField)
-        	{        	
+      foreach ($fields as $thisField)
+        	{
 			// set the response_id to be the attribute of the database disposition
-            if ($thisField->GetFieldType() == 'DispositionDatabase')
+         if ($thisField->GetFieldType() == 'DispositionDatabase')
         		{
         		$thisField->SetValue($response_id);
         		}
