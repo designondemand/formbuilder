@@ -1152,11 +1152,19 @@ function fast_add(field_type)
     		array_splice($this->Fields,$index,1);
     		}
     } 
+
+	function ResetFields()
+	{
+		for($i=0;$i<count($this->Fields);$i++)
+			{
+			$this->Fields[$i]->ResetValue();
+			}
+	}
     
 	// this will instantiate the form, and load the results
     function LoadResponse($response_id)
     {
-    	$db = $this->module_ptr->dbHandle;
+    	$db = &$this->module_ptr->dbHandle;
          // loading a response -- at this point, we check that the response
          // is for the correct form_id!
 		$sql = 'SELECT form_id FROM ' . cms_db_prefix().
@@ -1167,6 +1175,9 @@ function fast_add(field_type)
         		{
         		return false;
         		}
+		    
+		    $this->ResetFields();
+
         	$sql = 'SELECT * FROM '.cms_db_prefix().
         			'module_fb_resp_val WHERE resp_id=?';
         	 $dbresult = $db->Execute($sql, array($response_id));
