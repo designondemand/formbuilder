@@ -502,6 +502,10 @@ class fbFieldBase {
 		return false;
 	}
 
+	function ResetValue()
+	{
+		$this->Value = false;
+	}
 
 	// override me, if necessary to convert type or something.
 	function SetValue($valStr)

@@ -301,10 +301,18 @@ class FormBuilder extends CMSModule
 		    array_push($values,$oneset);
 		    }
 		$populate_names = true;
+		$fm = -1;
 		for($i=0;$i<count($values);$i++)
 			{
 			$paramSet = array('form_id'=>$form_id, 'response_id'=>$values[$i]->id);
-			$fm = $this->GetFormByParams($paramSet, true);
+			if ($fm == -1) // fix this, for better efficiency!
+				{
+				$fm = $this->GetFormByParams($paramSet, true);
+				}
+			else
+				{
+				$fm->LoadResponse($values[$i]->id);
+				}
 			$fields = &$fm->GetFields();
 			for($j=0;$j<count($fields);$j++)
 				{
