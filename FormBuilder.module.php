@@ -257,11 +257,11 @@ class FormBuilder extends CMSModule
 					&& $field_list[$fields[$j]->GetId()] > -1)
 					{
 						$oneset->names[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetName();
-                		$oneset->values[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetHumanReadableValue();
-                	}
-                }
+                	$oneset->values[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetHumanReadableValue();
+               }
+            }
         	}
-		return $oneset;	
+		return $oneset;
 	}
 
 	function GetResponses($form_id, $start_point, $number, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y')
