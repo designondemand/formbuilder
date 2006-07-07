@@ -73,6 +73,7 @@ if (! $this->CheckAccess()) exit;
 		$flds = "
 			resp_id I KEY,
 			form_id I,
+			feuser_id I,
 			user_approved DT,
 			secret_code C(35),
 			admin_approved DT,

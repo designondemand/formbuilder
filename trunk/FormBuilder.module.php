@@ -140,7 +140,7 @@ class FormBuilder extends CMSModule
 	// may be too stringent, but better safe than sorry.
 	function MinimumCMSVersion()
 	{
-		return '0.13';
+		return '1.0-svn';
 	}
 
 	function InstallPostMessage()
