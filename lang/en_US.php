@@ -245,24 +245,24 @@ $lang['email_template_not_set'] = '<br/>Email Template not yet set!';
 $lang['missing_cms_mailer'] = 'FormBuilder: Cannot find required module CMSMailer!';  		
 $lang['user_approved_submission']='User approved submission %s from %s';
 
-$lang['event_info_OnFormBuilderFormSubmit']='Event triggered when a FromBuilder form is submitted';
-$lang['event_info_OnFormBuilderFormSubmitError']='Event triggered if there is an error when a FromBuilder form is submitted';
-$lang['event_info_OnFormBuilderFormDisplay']='Event triggered when a FromBuilder form is displayed';
+$lang['event_info_OnFormBuilderFormSubmit']='Event triggered when a FormBuilder form is submitted';
+$lang['event_info_OnFormBuilderFormSubmitError']='Event triggered if there is an error when a FormBuilder form is submitted';
+$lang['event_info_OnFormBuilderFormDisplay']='Event triggered when a FormBuilder form is displayed';
 
-$lang['event_help_OnFormBuilderFormSubmit']='<p>Event triggered when a FromBuilder form is submitted.</p>
+$lang['event_help_OnFormBuilderFormSubmit']='<p>Event triggered when a FormBuilder form is submitted.</p>
 <h4>Parameters</h4>
 <ul>
 <li><em>form_name</em> - The form name (string)</li>
 <li><em>form_id</em> - The internal form id (int)</li>
 </ul> ';
-$lang['event_help_OnFormBuilderFormSubmitError']='<p>Event triggered if there is an error when a FromBuilder form is submitted</p>
+$lang['event_help_OnFormBuilderFormSubmitError']='<p>Event triggered if there is an error when a FormBuilder form is submitted</p>
 <h4>Parameters</h4>
 <ul>
 <li><em>form_name</em> - The form name (string)</li>
 <li><em>form_id</em> - The internal form id (int)</li>
 <li><em>error</em> - A list of all known errors (string)</li>
 </ul> ';
-$lang['event_help_OnFormBuilderFormDisplay']='<p>Event triggered when a FromBuilder form is displayed</p>
+$lang['event_help_OnFormBuilderFormDisplay']='<p>Event triggered when a FormBuilder form is displayed</p>
 <h4>Parameters</h4>
 <ul>
 <li><em>form_name</em> - The form name (string)</li>
@@ -399,10 +399,12 @@ module's installation directory, assuming the web server has permission to write
 <ul>
 <li>Some field types from FeedbackForms are not implemented in FormBuilder. If there is demand for them, they will be added.</li>
 <li>FormBuilder is not yet integrated with FrontEnd Users. It will be.</li>
+<li>FormBuilder cannot yet be inlined. That should be a simple upgrade down the line.</li>
+<li>FormBuilder does not yet support pretty urls, although that shouldn't matter since the user side is pretty simple.</li>
 </ul>
 
 <h3>Troubleshooting</h3>
-<ol><li> First step is to check you're running CMS 0.13.x or later.</li>
+<ol><li> First step is to check you're running CMS 1.0-svn or later.</li>
 <li> Second step is to read and understand the caveat about WYSIWYG editors up in the
 section <em>Adding a Form to a Page</em>.</li>
 <li> If you're missing fields in an email that gets generated, check the disposition field's template, and make sure you're specifying the missing fields. Seems obvious, but it's an easy mistake to make.</li>
