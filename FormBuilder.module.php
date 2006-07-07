@@ -411,6 +411,16 @@ class FormBuilder extends CMSModule
 		$this->ClearFileLock();
     }
 
+  function GetEventDescription ( $eventname )
+  {
+    return $this->Lang('event_info_'.$eventname );
+  }
+
+  function GetEventHelp ( $eventname )
+  {
+    return $this->Lang('event_help_'.$eventname );
+  }
+
 
 
 

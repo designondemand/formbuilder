@@ -36,6 +36,11 @@ if (!isset($gCms)) exit;
 
 		if (! $finished)
 			{
+			$parms = array();
+    		$parms['form_name'] = $aeform->GetName();
+    		$parms['form_id'] = $aeform->GetId();
+    		$this->SendEvent('OnFormBuilderFormDisplay',$parms);
+
         	echo $this->CreateFormStart($id, 'default', $returnid, 'post', 'multipart/form-data');
         	echo $aeform->RenderForm($id, $params, $returnid);
         	echo $this->CreateFormEnd();
@@ -44,6 +49,11 @@ if (!isset($gCms)) exit;
         	{
         	if ($results[0] == true)
         		{
+				$parms = array();
+    			$parms['form_name'] = $aeform->GetName();
+    			$parms['form_id'] = $aeform->GetId();
+    			$this->SendEvent('OnFormBuilderFormSubmit',$parms);
+
         		$ret = $aeform->GetAttr('redirect_page','-1');
         		if ($ret != -1)
         			{
@@ -52,11 +62,21 @@ if (!isset($gCms)) exit;
         		}
         	else
         		{
-        		echo "Error!: ";
+				$parms = array();
+				$params['error']='';
+        		echo $this->Lang('submission_error');
+        		$show = $this->GetPreference('hide_errors',0);
         		foreach ($results[1] as $thisRes)
         			{
-        			echo $thisRes . '<br />';
+					if ($show)
+						{
+        				echo $thisRes . '<br />';
+      				}
+        			$params['error'] .= $thisRes."\n";
         			}
+    			$parms['form_name'] = $aeform->GetName();
+    			$parms['form_id'] = $aeform->GetId();
+    			$this->SendEvent('OnFormBuilderFormSubmitError',$parms);
         		}
         	}
         echo $aeform->RenderFormFooter();
