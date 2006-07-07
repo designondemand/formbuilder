@@ -46,6 +46,11 @@ if (! $this->CheckAccess()) exit;
 		$db->DropSequence(cms_db_prefix().'module_fb_resp_attr_seq');
 
 		$this->RemovePermission('Modify Forms');
+		
+		$this->RemoveEvent( 'OnFormBuilderFormSubmit' );
+		$this->RemoveEvent( 'OnFormBuilderFormDisplay' );
+		$this->RemoveEvent( 'OnFormBuilderFormSubmitError' );
+
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('uninstalled'));
 
 ?>

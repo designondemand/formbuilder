@@ -235,7 +235,7 @@ $lang['date_october']='October';
 $lang['date_november']='November';
 $lang['date_december']='December';
 
-// Form Submission Headers
+$lang['submission_error'] = 'Sorry! There was an error handling your form submission.';
 $lang['submit_error']='FormBuilder submit error: %s';
 $lang['upload_attach_error'] = 'Upload/Attachment error on file %s (tmp_name: %s, of type %s)';
 $lang['submission_error_file_lock'] = 'Error. Unable to obtain lock for file.';
@@ -244,7 +244,31 @@ $lang['email_default_template'] = "FormBuilder Submission\n";
 $lang['email_template_not_set'] = '<br/>Email Template not yet set!';      
 $lang['missing_cms_mailer'] = 'FormBuilder: Cannot find required module CMSMailer!';  		
 $lang['user_approved_submission']='User approved submission %s from %s';
-  		
+
+$lang['event_info_OnFormBuilderFormSubmit']='Event triggered when a FromBuilder form is submitted';
+$lang['event_info_OnFormBuilderFormSubmitError']='Event triggered if there is an error when a FromBuilder form is submitted';
+$lang['event_info_OnFormBuilderFormDisplay']='Event triggered when a FromBuilder form is displayed';
+
+$lang['event_help_OnFormBuilderFormSubmit']='<p>Event triggered when a FromBuilder form is submitted.</p>
+<h4>Parameters</h4>
+<ul>
+<li><em>form_name</em> - The form name (string)</li>
+<li><em>form_id</em> - The internal form id (int)</li>
+</ul> ';
+$lang['event_help_OnFormBuilderFormSubmitError']='<p>Event triggered if there is an error when a FromBuilder form is submitted</p>
+<h4>Parameters</h4>
+<ul>
+<li><em>form_name</em> - The form name (string)</li>
+<li><em>form_id</em> - The internal form id (int)</li>
+<li><em>error</em> - A list of all known errors (string)</li>
+</ul> ';
+$lang['event_help_OnFormBuilderFormDisplay']='<p>Event triggered when a FromBuilder form is displayed</p>
+<h4>Parameters</h4>
+<ul>
+<li><em>form_name</em> - The form name (string)</li>
+<li><em>form_id</em> - The internal form id (int)</li>
+</ul> ';
+
 // post-install message
 $lang['post_install']="
 <p>Make sure to set the \"Modify Forms\" permissions
