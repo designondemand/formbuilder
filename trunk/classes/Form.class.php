@@ -62,7 +62,7 @@ class fbForm {
 	   		}
 	   if ($this->Id != -1)
 	   		{
-			if ($this->formState == 'submit')
+			if (isset($params['response_id']) && $this->formState == 'submit')
 				{
 	   			$this->formState = 'update';
 	   			}
