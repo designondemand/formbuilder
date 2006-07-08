@@ -110,11 +110,11 @@ if (! $this->CheckAccess()) exit;
 
 		$this->CreatePermission('Modify Forms', 'Modify Forms');
 
-//        include 'includes/SampleData.inc';
-
 		$this->CreateEvent( 'OnFormBuilderFormSubmit' );
 		$this->CreateEvent( 'OnFormBuilderFormDisplay' );
 		$this->CreateEvent( 'OnFormBuilderFormSubmitError' );
+		
+		include 'includes/FormBuilderSampleData.inc';		
 
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('installed',$this->GetVersion()));
 ?>

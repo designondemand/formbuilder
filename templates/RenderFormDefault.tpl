@@ -17,7 +17,7 @@
 			field->hide_name         = 1 if the field name should be hidden, 0 otherwise
 			field->name                 = the field's name
 			field->input                  = the field's input control (e.g., the input field itself)
-			field->input_id              = the of the field's input (useful for <label for="">)
+			field->input_id              = the id of the field's input (useful for <label for="">)
 			field->type                   = the field's data type
 			field->multiple_parts	   = 1 if the field->input is actually a collection of controls
 			
@@ -64,7 +64,27 @@
 	    		{/if}
 	    	{/if}
 	    	{if $entry->multiple_parts == 1}
-    		<table>					<tr>				{section name=numloop loop=$entry->input}	    			<td>{$entry->input[numloop]->input}&nbsp;{$entry->input[numloop]->name}</td>	    			       {if not ($smarty.section.numloop.rownum mod $cols)}                				{if not $smarty.section.numloop.last}                        		</tr><tr>                				{/if}        					{/if}       				{if $smarty.section.numloop.last}                		{math equation = "n - a % n" n=$cols a=$entry->input|@count assign="cells"}                		{if $cells ne $cols}                			{section name=pad loop=$cells}                        		<td>&nbsp;</td>                			{/section}               		 	{/if}                		</tr>        			{/if}	    		{/section}	    		</table>	    	{else}
+    		<table>
+					<tr>
+				{section name=numloop loop=$entry->input}
+	    			<td>{$entry->input[numloop]->input}&nbsp;{$entry->input[numloop]->name}</td>
+	    			       {if not ($smarty.section.numloop.rownum mod $cols)}
+                				{if not $smarty.section.numloop.last}
+                        		</tr><tr>
+                				{/if}
+        					{/if}
+       				{if $smarty.section.numloop.last}
+                		{math equation = "n - a % n" n=$cols a=$entry->input|@count assign="cells"}
+                		{if $cells ne $cols}
+                			{section name=pad loop=$cells}
+                        		<td>&nbsp;</td>
+                			{/section}
+               		 	{/if}
+                		</tr>
+        			{/if}
+	    		{/section}
+	    		</table>
+	    	{else}
 	    		{$entry->input}
 	    	{/if}
 	    	{if $entry->valid == 0} &lt;--- {/if}
