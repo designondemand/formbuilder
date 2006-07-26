@@ -453,11 +453,11 @@ class fbForm {
 	       {
 	       $result = $rs->FetchRow();
            $this->Id = $result['form_id'];
-           if (!isset($params['form_name']) && !empty($params['form_name']))
+           if (!isset($params['form_name']) || empty($params['form_name']))
            		{
            		$this->Name = $result['name'];
            		}
-           if (!isset($params['form_alias']) && !empty($params['form_alias']))
+           if (!isset($params['form_alias']) || empty($params['form_alias']))
            		{
 	       		$this->Alias = $result['alias'];
 	       		}

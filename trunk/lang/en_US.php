@@ -433,7 +433,7 @@ of the license for the full disclaimer.</p>
 
 $lang['changelog'] = 		"
 		    <ul>
-		    <li>Version 0.1 -  2006. Initial Release</li>
+		    <li>Version 0.1 - 8 July 2006. Initial Release</li>
 		";
 
 
