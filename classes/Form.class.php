@@ -22,7 +22,7 @@ class fbForm {
 
 	function fbForm(&$module_ptr, &$params, $loadDeep=false)
 	{
-	   $this->module_ptr = $module_ptr;
+	   $this->module_ptr =& $module_ptr;
 	   $this->Fields = array();
 	   $this->Attrs = array();
 	   $this->formState = 'new';
@@ -637,138 +637,138 @@ class fbForm {
 
 	function AddEditForm($id, $returnid, $message='')
 	{
-		$mod = &$this->module_ptr;
-		$mod->smarty->assign('message',$message);
-		$mod->smarty->assign('formstart',
-			$mod->CreateFormStart($id, 'admin_store_form', $returnid));
-		$mod->smarty->assign('formid',
-			$mod->CreateInputHidden($id, 'form_id', $this->Id));
-		$mod->smarty->assign('tab_start',$mod->StartTabHeaders().
-			$mod->SetTabHeader('maintab',$mod->Lang('tab_main')).
-			$mod->SetTabHeader('addition',$mod->Lang('tab_additional')).
-			$mod->SetTabHeader('tablelayout',$mod->Lang('tab_tablelayout')).
-			$mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout')).
-			
-			$mod->EndTabHeaders() . $mod->StartTabContent());
-
-		$mod->smarty->assign('tabs_end',$mod->EndTabContent());
-		$mod->smarty->assign('maintab_start',$mod->StartTab("maintab"));
-		$mod->smarty->assign('additionaltab_start',$mod->StartTab("addition"));
-		$mod->smarty->assign('tabletab_start',$mod->StartTab("tablelayout"));
-		$mod->smarty->assign('templatetab_start',$mod->StartTab("templatelayout"));
-		$mod->smarty->assign('tab_end',$mod->EndTab());
-		$mod->smarty->assign('form_end',$mod->CreateFormEnd());
-		$mod->smarty->assign('title_form_name',$mod->Lang('title_form_name'));
-		$mod->smarty->assign('input_form_name',
-			$mod->CreateInputText($id, 'form_name',
-			$this->Name, 50));
-		$mod->smarty->assign('title_form_unspecified',$mod->Lang('title_form_unspecified'));
-		$mod->smarty->assign('input_form_unspecified',
-			$mod->CreateInputText($id, 'forma_unspecified',
-			$this->GetAttr('unspecified',$mod->Lang('unspecified')), 50));
-		$mod->smarty->assign('title_form_status',
-			$mod->Lang('title_form_status'));
-		$mod->smarty->assign('text_ready',
-			$mod->Lang('title_ready_for_deployment'));
-		$mod->smarty->assign('title_form_alias',$mod->Lang('title_form_alias'));
-		$mod->smarty->assign('input_form_alias',
-			$mod->CreateInputText($id, 'form_alias',
-			$this->Alias, 50));
-		$mod->smarty->assign('title_form_css_class',
-			$mod->Lang('title_form_css_class'));
-		$mod->smarty->assign('input_form_css_class',
-			$mod->CreateInputText($id, 'forma_css_class',
-				$this->GetAttr('css_class','formbuilderform'), 50,50));
-		$mod->smarty->assign('title_form_fields',
-			$mod->Lang('title_form_fields'));
-		$mod->smarty->assign('title_field_name',
-			$mod->Lang('title_field_name'));
-		$mod->smarty->assign('title_field_type',
-			$mod->Lang('title_field_type'));
-		$mod->smarty->assign('title_field_type',
-			$mod->Lang('title_field_type'));
-		$mod->smarty->assign('title_form_template',
-			$mod->Lang('title_form_template'));
-		$mod->smarty->assign('title_list_delimiter',
-			$mod->Lang('title_list_delimiter'));
-		$mod->smarty->assign('title_redirect_page',
-			$mod->Lang('title_redirect_page'));
-
-		$mod->smarty->assign('title_information',$mod->Lang('information'));
-		$mod->smarty->assign('title_order',$mod->Lang('order'));    
-		$mod->smarty->assign('title_form_displaytype', $mod->Lang('title_form_displaytype'));
-        $mod->smarty->assign('title_field_required_abbrev',$mod->Lang('title_field_required_abbrev'));
-		$mod->smarty->assign('hasdisposition',$this->HasDisposition()?1:0);
-		$maxOrder = 1;
-		if($this->Id > 0)
-    	{
-    		$mod->smarty->assign('submit_button',
-    			$mod->CreateInputSubmit($id, 'submit',
-    			$mod->Lang('save_and_continue')));
-    		$mod->smarty->assign('hidden',
-    			$mod->CreateInputHidden($id, 'form_op',$mod->Lang('updated')));
-			$mod->smarty->assign('adding',0);
-			$mod->smarty->assign('save_button',
-				$mod->CreateInputSubmit($id, 'submit', $mod->Lang('save')));
-			$fieldList = array();
-			$currow = "row1";
-			$count = 1;
-			$last = $this->GetFieldCount();
-			foreach ($this->Fields as $thisField)
-				{
-				$oneset = new stdClass();
-				$oneset->rowclass = $currow;
-				$oneset->name = $mod->CreateLink($id, 'admin_add_edit_field', '', $thisField->GetName(), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
-				$oneset->type = $thisField->GetDisplayType();
-				if ($thisField->IsDisposition() ||
-					!$thisField->DisplayInForm() ||
-					$thisField->IsNonRequirableField())
-					{
-					$oneset->disposition = '.';
-					}
-				else if ($thisField->IsRequired())
-					{
-					$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/true.gif','true','','','systemicon'), array('form_id'=>$this->Id,'active'=>'off','field_id'=>$thisField->GetId()));
-					}
-				else
-					{
-					$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/false.gif','false','','','systemicon'), array('form_id'=>$this->Id,'active'=>'on','field_id'=>$thisField->GetId()));
-					}
-				$oneset->field_status = $thisField->StatusInfo();
-				if ($count > 1)
-					{
-					$oneset->up = $mod->CreateLink($id, 'admin_update_field_order', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/arrow-u.gif','up','','','systemicon'), array('form_id'=>$this->Id,'dir'=>'up','field_id'=>$thisField->GetId()));
-					}
-				else
-					{
-					$oneset->up = '&nbsp;';
-					}
-				if ($count < $last)
-					{
-					$oneset->down=$mod->CreateLink($id, 'admin_update_field_order', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/arrow-d.gif','down','','','systemicon'), array('form_id'=>$this->Id,'dir'=>'down','field_id'=>$thisField->GetId()));
-					}
-				else
-					{
-					$oneset->down = '&nbsp;';
-					}
-				$oneset->editlink = $mod->CreateLink($id, 'admin_add_edit_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/edit.gif','edit','','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
-				$oneset->deletelink = $mod->CreateLink($id, 'admin_delete_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif','delete','','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),$mod->Lang('are_you_sure_delete_field',$thisField->GetName()));
-				($currow == "row1"?$currow="row2":$currow="row1");
-				$count++;
-				if ($thisField->GetOrder() >= $maxOrder)
-					{
-					$maxOrder = $thisField->GetOrder() + 1;
-					}
-				array_push($fieldList, $oneset);
-				}
-			$mod->smarty->assign('fields',$fieldList);
-			$mod->smarty->assign('add_field_link',
-				$mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->cms->variables['admintheme']->DisplayImage('icons/system/newobject.gif',$mod->Lang('title_add_new_field'),'','','systemicon'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', false) . $mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_add_new_field'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', false));
-    		if ($mod->GetPreference('enable_fastadd',1) == 1)
-    			{
-    			$mod->smarty->assign('fastadd',1);
-    			$mod->smarty->assign('title_fastadd',$mod->Lang('title_fastadd'));
-    			$typeInput = "<script type=\"text/javascript\">
+	  $mod = &$this->module_ptr;
+	  $mod->smarty->assign('message',$message);
+	  $mod->smarty->assign('formstart',
+			       $mod->CreateFormStart($id, 'admin_store_form', $returnid));
+	  $mod->smarty->assign('formid',
+			       $mod->CreateInputHidden($id, 'form_id', $this->Id));
+	  $mod->smarty->assign('tab_start',$mod->StartTabHeaders().
+			       $mod->SetTabHeader('maintab',$mod->Lang('tab_main')).
+			       $mod->SetTabHeader('addition',$mod->Lang('tab_additional')).
+			       $mod->SetTabHeader('tablelayout',$mod->Lang('tab_tablelayout')).
+			       $mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout')).
+			       
+			       $mod->EndTabHeaders() . $mod->StartTabContent());
+	  
+	  $mod->smarty->assign('tabs_end',$mod->EndTabContent());
+	  $mod->smarty->assign('maintab_start',$mod->StartTab("maintab"));
+	  $mod->smarty->assign('additionaltab_start',$mod->StartTab("addition"));
+	  $mod->smarty->assign('tabletab_start',$mod->StartTab("tablelayout"));
+	  $mod->smarty->assign('templatetab_start',$mod->StartTab("templatelayout"));
+	  $mod->smarty->assign('tab_end',$mod->EndTab());
+	  $mod->smarty->assign('form_end',$mod->CreateFormEnd());
+	  $mod->smarty->assign('title_form_name',$mod->Lang('title_form_name'));
+	  $mod->smarty->assign('input_form_name',
+			       $mod->CreateInputText($id, 'form_name',
+						     $this->Name, 50));
+	  $mod->smarty->assign('title_form_unspecified',$mod->Lang('title_form_unspecified'));
+	  $mod->smarty->assign('input_form_unspecified',
+			       $mod->CreateInputText($id, 'forma_unspecified',
+						     $this->GetAttr('unspecified',$mod->Lang('unspecified')), 50));
+	  $mod->smarty->assign('title_form_status',
+			       $mod->Lang('title_form_status'));
+	  $mod->smarty->assign('text_ready',
+			       $mod->Lang('title_ready_for_deployment'));
+	  $mod->smarty->assign('title_form_alias',$mod->Lang('title_form_alias'));
+	  $mod->smarty->assign('input_form_alias',
+			       $mod->CreateInputText($id, 'form_alias',
+						     $this->Alias, 50));
+	  $mod->smarty->assign('title_form_css_class',
+			       $mod->Lang('title_form_css_class'));
+	  $mod->smarty->assign('input_form_css_class',
+			       $mod->CreateInputText($id, 'forma_css_class',
+						     $this->GetAttr('css_class','formbuilderform'), 50,50));
+	  $mod->smarty->assign('title_form_fields',
+			       $mod->Lang('title_form_fields'));
+	  $mod->smarty->assign('title_field_name',
+			       $mod->Lang('title_field_name'));
+	  $mod->smarty->assign('title_field_type',
+			       $mod->Lang('title_field_type'));
+	  $mod->smarty->assign('title_field_type',
+			       $mod->Lang('title_field_type'));
+	  $mod->smarty->assign('title_form_template',
+			       $mod->Lang('title_form_template'));
+	  $mod->smarty->assign('title_list_delimiter',
+			       $mod->Lang('title_list_delimiter'));
+	  $mod->smarty->assign('title_redirect_page',
+			       $mod->Lang('title_redirect_page'));
+	  
+	  $mod->smarty->assign('title_information',$mod->Lang('information'));
+	  $mod->smarty->assign('title_order',$mod->Lang('order'));    
+	  $mod->smarty->assign('title_form_displaytype', $mod->Lang('title_form_displaytype'));
+	  $mod->smarty->assign('title_field_required_abbrev',$mod->Lang('title_field_required_abbrev'));
+	  $mod->smarty->assign('hasdisposition',$this->HasDisposition()?1:0);
+	  $maxOrder = 1;
+	  if($this->Id > 0)
+	    {
+	      $mod->smarty->assign('submit_button',
+				   $mod->CreateInputSubmit($id, 'submit',
+							   $mod->Lang('save_and_continue')));
+	      $mod->smarty->assign('hidden',
+				   $mod->CreateInputHidden($id, 'form_op',$mod->Lang('updated')));
+	      $mod->smarty->assign('adding',0);
+	      $mod->smarty->assign('save_button',
+				   $mod->CreateInputSubmit($id, 'submit', $mod->Lang('save')));
+	      $fieldList = array();
+	      $currow = "row1";
+	      $count = 1;
+	      $last = $this->GetFieldCount();
+	      foreach ($this->Fields as $thisField)
+		{
+		  $oneset = new stdClass();
+		  $oneset->rowclass = $currow;
+		  $oneset->name = $mod->CreateLink($id, 'admin_add_edit_field', '', $thisField->GetName(), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
+		  $oneset->type = $thisField->GetDisplayType();
+		  if ($thisField->IsDisposition() ||
+		      !$thisField->DisplayInForm() ||
+		      $thisField->IsNonRequirableField())
+		    {
+		      $oneset->disposition = '.';
+		    }
+		  else if ($thisField->IsRequired())
+		    {
+		      $oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/true.gif','true','','','systemicon'), array('form_id'=>$this->Id,'active'=>'off','field_id'=>$thisField->GetId()));
+		    }
+		  else
+		    {
+		      $oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/false.gif','false','','','systemicon'), array('form_id'=>$this->Id,'active'=>'on','field_id'=>$thisField->GetId()));
+		    }
+		  $oneset->field_status = $thisField->StatusInfo();
+		  if ($count > 1)
+		    {
+		      $oneset->up = $mod->CreateLink($id, 'admin_update_field_order', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/arrow-u.gif','up','','','systemicon'), array('form_id'=>$this->Id,'dir'=>'up','field_id'=>$thisField->GetId()));
+		    }
+		  else
+		    {
+		      $oneset->up = '&nbsp;';
+		    }
+		  if ($count < $last)
+		    {
+		      $oneset->down=$mod->CreateLink($id, 'admin_update_field_order', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/arrow-d.gif','down','','','systemicon'), array('form_id'=>$this->Id,'dir'=>'down','field_id'=>$thisField->GetId()));
+		    }
+		  else
+		    {
+		      $oneset->down = '&nbsp;';
+		    }
+		  $oneset->editlink = $mod->CreateLink($id, 'admin_add_edit_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/edit.gif','edit','','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
+		  $oneset->deletelink = $mod->CreateLink($id, 'admin_delete_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif','delete','','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),$mod->Lang('are_you_sure_delete_field',$thisField->GetName()));
+		  ($currow == "row1"?$currow="row2":$currow="row1");
+		  $count++;
+		  if ($thisField->GetOrder() >= $maxOrder)
+		    {
+		      $maxOrder = $thisField->GetOrder() + 1;
+		    }
+		  array_push($fieldList, $oneset);
+		}
+	      $mod->smarty->assign('fields',$fieldList);
+	      $mod->smarty->assign('add_field_link',
+				   $mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->cms->variables['admintheme']->DisplayImage('icons/system/newobject.gif',$mod->Lang('title_add_new_field'),'','','systemicon'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', false) . $mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_add_new_field'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', false));
+	      if ($mod->GetPreference('enable_fastadd',1) == 1)
+		{
+		  $mod->smarty->assign('fastadd',1);
+		  $mod->smarty->assign('title_fastadd',$mod->Lang('title_fastadd'));
+		  $typeInput = "<script type=\"text/javascript\">
 function fast_add(field_type)
 {
 	var type=field_type.options[field_type.selectedIndex].value;
@@ -777,69 +777,71 @@ function fast_add(field_type)
 	return true;
 }
 </script>";
-				$typeInput = str_replace('&amp;','&',$typeInput); 
-    			$mod->initialize();
-    			$mod->smarty->assign('input_fastadd',$typeInput.$mod->CreateInputDropdown($id, 'field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->field_types), -1,'', 'onchange="fast_add(this)"'));
-    			}							
-		}
-		else
-		{
-			$mod->smarty->assign('save_button','');
-			$mod->smarty->assign('submit_button',
-				$mod->CreateInputSubmit($id, 'submit', $mod->Lang('add')));
-    		$mod->smarty->assign('hidden',
-    			$mod->CreateInputHidden($id, 'form_op',$mod->Lang('added')));
-			$mod->smarty->assign('adding',1);
-		}
-		$mod->smarty->assign('link_notready',"<strong>".$mod->Lang('title_not_ready1')."</strong> ".$mod->Lang('title_not_ready2')." ".$mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_not_ready_link'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder,'dispose_only'=>1), '', false, false,'class="module_fb_link"')." ".$mod->Lang('title_not_ready3')
-		);
+		  $typeInput = str_replace('&amp;','&',$typeInput); 
+		  $mod->initialize();
+		  $mod->smarty->assign('input_fastadd',$typeInput.$mod->CreateInputDropdown($id, 'field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->field_types), -1,'', 'onchange="fast_add(this)"'));
+		}							
+	    }
+	  else
+	    {
+	      $mod->smarty->assign('save_button','');
+	      $mod->smarty->assign('submit_button',
+				   $mod->CreateInputSubmit($id, 'submit', $mod->Lang('add')));
+	      $mod->smarty->assign('hidden',
+				   $mod->CreateInputHidden($id, 'form_op',$mod->Lang('added')));
+	      $mod->smarty->assign('adding',1);
+	    }
+	  $mod->smarty->assign('link_notready',"<strong>".$mod->Lang('title_not_ready1')."</strong> ".$mod->Lang('title_not_ready2')." ".$mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_not_ready_link'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder,'dispose_only'=>1), '', false, false,'class="module_fb_link"')." ".$mod->Lang('title_not_ready3')
+			       );
 
-		$mod->smarty->assign('title_form_submit_button',
-			$mod->Lang('title_form_submit_button'));
-		$mod->smarty->assign('input_form_submit_button',
-			$mod->CreateInputText($id, 'forma_submit_button_text',
-				$this->GetAttr('submit_button_text',$mod->Lang('button_submit')), 35, 35));
+	  $mod->smarty->assign('title_form_submit_button',
+			       $mod->Lang('title_form_submit_button'));
+	  $mod->smarty->assign('input_form_submit_button',
+			       $mod->CreateInputText($id, 'forma_submit_button_text',
+						     $this->GetAttr('submit_button_text',$mod->Lang('button_submit')), 35, 35));
 
-		$mod->smarty->assign('title_form_prev_button',
-			$mod->Lang('title_form_prev_button'));
-		$mod->smarty->assign('input_form_prev_button',
-			$mod->CreateInputText($id, 'forma_prev_button_text',
-				$this->GetAttr('prev_button_text',$mod->Lang('button_previous')), 35, 35));
-
-
-		$mod->smarty->assign('title_form_next_button',
-			$mod->Lang('title_form_next_button'));
-		$mod->smarty->assign('input_form_next_button',
-			$mod->CreateInputText($id, 'forma_next_button_text',
-				$this->GetAttr('next_button_text',$mod->Lang('button_continue')), 35, 35));
-		$mod->smarty->assign('title_form_required_symbol',
-			$mod->Lang('title_form_required_symbol'));
-		$mod->smarty->assign('input_form_required_symbol',
-			$mod->CreateInputText($id, 'forma_required_field_symbol',
-				$this->GetAttr('required_field_symbol','*'), 50));
-		$mod->smarty->assign('input_list_delimiter',
-			$mod->CreateInputText($id, 'forma_list_delimiter',
-				$this->GetAttr('list_delimiter',','), 50));
-
-		$mod->smarty->assign('input_redirect_page',@ContentManager::CreateHierarchyDropdown('',$this->GetAttr('redirect_page','0'), $id.'forma_redirect_page'));
+	  $mod->smarty->assign('title_form_prev_button',
+			       $mod->Lang('title_form_prev_button'));
+	  $mod->smarty->assign('input_form_prev_button',
+			       $mod->CreateInputText($id, 'forma_prev_button_text',
+						     $this->GetAttr('prev_button_text',$mod->Lang('button_previous')), 35, 35));
 
 
-		$displayTypes = array($mod->Lang('disptype_table')=>'tab',
-			$mod->Lang('disptype_css')=>'cssonly',
-			$mod->Lang('disptype_template')=>'template');
-		$mod->smarty->assign('input_form_displaytype',
-			$mod->CreateInputRadioGroup($id, 'forma_form_displaytype', $displayTypes, $this->GetAttr('form_displaytype','tab')));
+	  $mod->smarty->assign('title_form_next_button',
+			       $mod->Lang('title_form_next_button'));
+	  $mod->smarty->assign('input_form_next_button',
+			       $mod->CreateInputText($id, 'forma_next_button_text',
+						     $this->GetAttr('next_button_text',$mod->Lang('button_continue')), 35, 35));
+	  $mod->smarty->assign('title_form_required_symbol',
+			       $mod->Lang('title_form_required_symbol'));
+	  $mod->smarty->assign('input_form_required_symbol',
+			       $mod->CreateInputText($id, 'forma_required_field_symbol',
+						     $this->GetAttr('required_field_symbol','*'), 50));
+	  $mod->smarty->assign('input_list_delimiter',
+			       $mod->CreateInputText($id, 'forma_list_delimiter',
+						     $this->GetAttr('list_delimiter',','), 50));
+
+          global $gCms;
+	  $contentops =& $gCms->GetContentOperations();
+	  $mod->smarty->assign('input_redirect_page',$contentops->CreateHierarchyDropdown('',$this->GetAttr('redirect_page','0'), $id.'forma_redirect_page'));
+
+
+	  $displayTypes = array($mod->Lang('disptype_table')=>'tab',
+				$mod->Lang('disptype_css')=>'cssonly',
+				$mod->Lang('disptype_template')=>'template');
+	  $mod->smarty->assign('input_form_displaytype',
+			       $mod->CreateInputRadioGroup($id, 'forma_form_displaytype', $displayTypes, $this->GetAttr('form_displaytype','tab')));
 				
-		$mod->smarty->assign('title_title_position',
-			$mod->Lang('title_title_position'));
-		$pos = array($mod->Lang('title_table_layout_left')=>'left',$mod->Lang('title_table_layout_above')=>'top');	
-		$mod->smarty->assign('input_title_position',
-			$mod->CreateInputRadioGroup($id, 'forma_title_position',
-				$pos, $this->GetAttr('title_position','left')));		
-		$mod->smarty->assign('input_form_template',
-			$mod->CreateTextArea(false, $id,
-				$this->GetAttr('form_template',$this->DefaultTemplate()), 'forma_form_template'));
-        return $mod->ProcessTemplate('AddEditForm.tpl');
+	  $mod->smarty->assign('title_title_position',
+			       $mod->Lang('title_title_position'));
+	  $pos = array($mod->Lang('title_table_layout_left')=>'left',$mod->Lang('title_table_layout_above')=>'top');	
+	  $mod->smarty->assign('input_title_position',
+			       $mod->CreateInputRadioGroup($id, 'forma_title_position',
+							   $pos, $this->GetAttr('title_position','left')));		
+	  $mod->smarty->assign('input_form_template',
+			       $mod->CreateTextArea(false, $id,
+						    $this->GetAttr('form_template',$this->DefaultTemplate()), 'forma_form_template'));
+	  return $mod->ProcessTemplate('AddEditForm.tpl');
 	}
 
 

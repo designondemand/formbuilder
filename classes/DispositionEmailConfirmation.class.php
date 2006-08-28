@@ -97,11 +97,15 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+	  $mod = &$this->form_ptr->module_ptr;
+	  
+	  global $gCms;
+	  $contentops =& $gCms->GetContentOperations();
 
-		list($main,$adv) = $this->PrePopulateAdminFormBase($formDescriptor);
-		array_push($main,array($mod->Lang('redirect_after_approval'),@ContentManager::CreateHierarchyDropdown('',$this->GetOption('redirect_page','0'), $formDescriptor.'opt_redirect_page')));
-		return array('main'=>$main,'adv'=>$adv);
+	  list($main,$adv) = $this->PrePopulateAdminFormBase($formDescriptor);
+	  array_push($main,array($mod->Lang('redirect_after_approval'),
+				 @$contentops->CreateHierarchyDropdown('',$this->GetOption('redirect_page','0'), $formDescriptor.'opt_redirect_page')));
+	  return array('main'=>$main,'adv'=>$adv);
 	}
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
