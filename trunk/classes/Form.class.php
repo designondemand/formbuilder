@@ -1095,8 +1095,9 @@ function fast_add(field_type)
         $tmpOrderBy = $destField->GetOrder();
         $destField->SetOrder($srcField->GetOrder());
         $srcField->SetOrder($tmpOrderBy);
-        $this->Fields[$src_field_index] = $destField;
-        $this->Fields[$dest_field_index] = $srcField;
+//it seems this makes php4 go crazy fixed by reloading form before showing it again
+#        $this->Fields[$dest_field_index] = $srcField;
+#        $this->Fields[$src_field_index] = $destField;
         $srcField->Store();
         $destField->Store();
     }
