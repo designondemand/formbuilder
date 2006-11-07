@@ -435,7 +435,7 @@ class fbForm {
 				}
 			case 'template':
 				{
-				return $mod->ProcessTemplateFromDatabase('form_'.$this->Id);
+				return $mod->ProcessTemplateFromDatabase('fb_'.$this->Id);
 				}
 			}
     }
