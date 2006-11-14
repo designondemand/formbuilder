@@ -1,7 +1,7 @@
 <?php
 #-------------------------------------------------------------------------
 # Module: FormBuilder
-# Version: 0.1, released  2006
+# Version: 0.2, released 14 Nov 2006
 #
 # Copyright (c) 2006, Samuel Goldstein <sjg@cmsmodules.com>
 # For Information, Support, Bug Reports, etc, please visit the
@@ -93,7 +93,7 @@ class FormBuilder extends CMSModule
 
 	function GetVersion()
 	{
-		return '0.1';
+		return '0.2';
 	}
 
 	function GetAuthor()
