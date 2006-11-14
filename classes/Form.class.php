@@ -381,7 +381,7 @@ class fbForm {
 			$oneset->hide_name = $thisField->HideLabel()?1:0;
 			$oneset->name = $thisField->GetName();
 			$oneset->input = $thisField->GetFieldInput($id, $params, $returnid);
-			$oneset->input_id = '_'.$id;
+			$oneset->input_id = $id.'_'.$thisField->GetID();
 			$oneset->multiple_parts = $thisField->HasMultipleFormComponents()?1:0;
 			$oneset->type = $thisField->GetDisplayType();
 			$mod->smarty->assign($thisField->GetName(),$oneset);
