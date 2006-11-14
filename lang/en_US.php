@@ -433,6 +433,7 @@ of the license for the full disclaimer.</p>
 
 $lang['changelog'] = 		"
 		    <ul>
+		    <li>Version 0.2 - 14 November 2006. Calguy &amp; tsw's bug fixes for field re-ordering and custom templates. Additional bug fixes for field labels.</li>
 		    <li>Version 0.1 - 8 July 2006. Initial Release</li>
 		";
 
