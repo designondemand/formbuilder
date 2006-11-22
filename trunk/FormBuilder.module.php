@@ -305,7 +305,7 @@ class FormBuilder extends CMSModule
 		for($i=0;$i<count($values);$i++)
 			{
 			$paramSet = array('form_id'=>$form_id, 'response_id'=>$values[$i]->id);
-			if ($fm == -1) // fix this, for better efficiency!
+			if (gettype($fm) == "integer") // fix this, for better efficiency!
 				{
 				$fm = $this->GetFormByParams($paramSet, true);
 				}
