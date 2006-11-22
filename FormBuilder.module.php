@@ -38,8 +38,7 @@ class FormBuilder extends CMSModule
 	var $email_regex;
 	var $email_regex_relaxed;
 	var $dbHandle;
-	var $sortField;
-	
+
 	function FormBuilder()
 	{
 		global $gCms;
@@ -406,12 +405,18 @@ class FormBuilder extends CMSModule
 			
 		if (isset($params['sort_field']))
 			{
+			$sf = -1;
 			for($j=0;$j<count($fields);$j++)
 				{
 				if (!strcasecmp($fields[$j]->GetName(),$params['sort_field']))
 					{
-					$this->sortField = $field_list[$fields[$j]->GetId()];
+					$sf = $field_list[$fields[$j]->GetId()];
 					}
+				}
+			// kludge, because sort instantiation breaks under PHP 4, and I can't pass extra params to the sort
+			for($j=0;$j<count($values);$j++)
+				{
+				$values[$j]->sf = $sf;
 				}
 
 			if (isset($params['sort_dir']) && $params['sort_dir'] == 'a')
@@ -434,9 +439,9 @@ class FormBuilder extends CMSModule
 
 	function field_sorter_asc($a, $b)
 	{
-    	return strcasecmp($a->fields[$this->sortField], $b->fields[$this->sortField]);
+    	return strcasecmp($a->fields[$a->sf], $b->fields[$a->sf]);
 	}
-	
+
 	function field_sorter_desc($a, $b)
 	{
     	return strcasecmp($b->fields[$this->sortField], $a->fields[$this->sortField]);
