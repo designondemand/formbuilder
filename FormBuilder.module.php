@@ -38,6 +38,7 @@ class FormBuilder extends CMSModule
 	var $email_regex;
 	var $email_regex_relaxed;
 	var $dbHandle;
+	var $sortField;
 	
 	function FormBuilder()
 	{
@@ -333,6 +334,114 @@ class FormBuilder extends CMSModule
 			}
 		return array($records, $names, $values);
 	}
+
+
+	function GetSortedResponses($form_id, $start_point, $number, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y', &$params)
+	{
+		global $gCms;
+		$db =& $gCms->GetDb();
+		$names = array();
+		$values = array();
+		$sql = 'FROM '.cms_db_prefix().
+        			'module_fb_resp WHERE form_id=?';
+        if ($user_approved)
+        	{
+        	 $sql .= 'and user_approved is not null';
+        	 }
+        if ($admin_approved)
+        	{
+        	$sql .= ' and admin_approved is not null';
+        	}
+        
+        $dbcount = $db->Execute('SELECT COUNT(*) as num '.$sql,array($form_id));
+   
+        $records = 0;
+        if ($dbcount && $row = $dbcount->FetchRow())
+        	{   
+        	$records = $row['num'];
+        	}
+       	$dbresult = $db->Execute('SELECT * '.$sql, array($form_id));
+
+		while ($dbresult && $row = $dbresult->FetchRow())
+			{
+			$oneset = new stdClass();
+			$oneset->id = $row['resp_id'];
+			$oneset->user_approved = (empty($row['user_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['user_approved']))); 
+ 			$oneset->admin_approved = (empty($row['admin_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['admin_approved']))); 
+			$oneset->submitted = date($dateFmt,$db->UnixTimeStamp($row['submitted']));
+			$oneset->fields = array();
+		    array_push($values,$oneset);
+		    }
+		$populate_names = true;
+		$fm = -1;
+		for($i=0;$i<count($values);$i++)
+			{
+			$paramSet = array('form_id'=>$form_id, 'response_id'=>$values[$i]->id);
+			if (gettype($fm) == "integer") // fix this, for better efficiency!
+				{
+				$fm = $this->GetFormByParams($paramSet, true);
+				}
+			else
+				{
+				$fm->LoadResponse($values[$i]->id);
+				}
+			$fields = &$fm->GetFields();
+			for($j=0;$j<count($fields);$j++)
+				{
+				if ($fields[$j]->DisplayInSubmission())
+					{
+					if (isset($field_list[$fields[$j]->GetId()])
+						&& $field_list[$fields[$j]->GetId()] > -1)
+						{
+						if ($populate_names)
+							{
+							$names[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetName();
+							}
+                		$values[$i]->fields[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetHumanReadableValue();
+                		}
+                	}
+        		}
+        	$populate_names = false;
+			}
+			
+		if (isset($params['sort_field']))
+			{
+			for($j=0;$j<count($fields);$j++)
+				{
+				if (!strcasecmp($fields[$j]->GetName(),$params['sort_field']))
+					{
+					$this->sortField = $field_list[$fields[$j]->GetId()];
+					}
+				}
+
+			if (isset($params['sort_dir']) && $params['sort_dir'] == 'a')
+				{
+				usort($values, array("FormBuilder","field_sorter_asc"));
+				}
+			else
+				{
+				usort($values, array("FormBuilder","field_sorter_desc"));
+				}
+			}
+		if ($records > $number)
+			{
+			$values = array_slice( $values, $start_point, $number);
+			//$records = $number;
+			}
+		return array($records, $names, $values);
+	}
+
+
+	function field_sorter_asc($a, $b)
+	{
+    	return strcasecmp($a->fields[$this->sortField], $b->fields[$this->sortField]);
+	}
+	
+	function field_sorter_desc($a, $b)
+	{
+    	return strcasecmp($b->fields[$this->sortField], $a->fields[$this->sortField]);
+	}
+
 	
 /*	
 	function HandleSubmission(&$params, $targetpage, $side='user', $hideError=true)
