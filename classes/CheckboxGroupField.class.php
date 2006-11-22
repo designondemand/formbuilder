@@ -72,6 +72,10 @@ class fbCheckboxGroupField extends fbFieldBase {
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		$names = &$this->GetOptionRef('box_name');
+		if (! is_array($names))
+			{
+			$names = array($names);
+			}		
 		$fieldDisp = array();
 		for ($i=0;$i<count($names);$i++)
 			{
@@ -97,8 +101,20 @@ class fbCheckboxGroupField extends fbFieldBase {
 	{
 		$form = &$this->form_ptr;
 		$names = &$this->GetOptionRef('box_name');
+		if (! is_array($names))
+			{
+			$names = array($names);
+			}		
 		$checked = &$this->GetOptionRef('box_checked');
+		if (! is_array($checked))
+			{
+			$checked = array($checked);
+			}
 		$unchecked = &$this->GetOptionRef('box_unchecked');
+		if (! is_array($unchecked))
+			{
+			$unchecked = array($unchecked);
+			}
 		$fieldRet = array();
 		for ($i=0;$i<count($names);$i++)
 			{

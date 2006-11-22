@@ -1188,7 +1188,7 @@ function fast_add(field_type)
 		    $this->ResetFields();
 
         	$sql = 'SELECT * FROM '.cms_db_prefix().
-        			'module_fb_resp_val WHERE resp_id=?';
+        			'module_fb_resp_val WHERE resp_id=? order by resp_val_id';
         	 $dbresult = $db->Execute($sql, array($response_id));
 		    while ($dbresult && $row = $dbresult->FetchRow())
 		        	{
@@ -1216,7 +1216,7 @@ function fast_add(field_type)
         		return false;
         		}
         	$sql = 'SELECT * FROM '.cms_db_prefix().
-        			'module_fb_resp_val WHERE resp_id=?';
+        			'module_fb_resp_val WHERE resp_id=? order by resp_val_id';
         	 $dbresult = $db->Execute($sql, array($params['response_id']));
 		    while ($dbresult && $row = $dbresult->FetchRow())
 		        	{ // was '__'		        	

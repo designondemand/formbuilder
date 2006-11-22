@@ -24,6 +24,7 @@ $lang['field_type_FileUploadField']='File Upload';
 $lang['field_type_FromEmailAddressField']='Email "From Address" Field';
 $lang['field_type_FromEmailNameField']='Email "From Name" Field';
 $lang['field_type_StaticTextField']='-Static Text';
+$lang['field_type_LinkField']='-Link';
 
 
 // validation types
@@ -191,6 +192,8 @@ $lang['title_form_unspecified']='Text to return for unspecified field values';
 $lang['title_enable_fastadd_long']='Enable fast field adding pulldown for forms?';
 $lang['title_enable_fastadd']='Enable fast field add pulldown?';
 $lang['title_fastadd']='Fast field adder';
+$lang['link_label']='Link Label';
+$lang['link_destination']='Link Destination URL';
 
 $lang['help_variables_for_template']='Variables For Template';
 $lang['help_submission_date']='Date of Submission';
