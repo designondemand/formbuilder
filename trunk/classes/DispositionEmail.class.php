@@ -110,7 +110,8 @@ class fbDispositionEmail extends fbDispositionEmailBase {
     // Send off those emails
 	function DisposeForm()
 	{
-		return $this->SendForm($this->GetOption('destination_address'),$this->GetOption('email_subject'));
+		$tmp = &$this->GetOptionRef('destination_address');
+		return $this->SendForm($tmp,$this->GetOption('email_subject'));
 	}
 
 	function PrePopulateAdminForm($formDescriptor)
