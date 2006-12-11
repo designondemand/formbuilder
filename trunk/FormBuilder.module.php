@@ -47,8 +47,8 @@ class FormBuilder extends CMSModule
 		$this->dbHandle = &$gCms->GetDb();
 		$this->email_regex = "/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i";
 		$this->email_regex_relaxed="/^([\w\d\.\-\_])+\@([\w\d\.\-\_])+$/i";
-		require_once 'classes/Form.class.php';
-		require_once 'classes/FieldBase.class.php';
+		require_once dirname(__FILE__).'/classes/Form.class.php';
+		require_once dirname(__FILE__).'/classes/FieldBase.class.php';
 	}
 
 
