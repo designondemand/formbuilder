@@ -7,7 +7,7 @@
   This project's homepage is: http://www.cmsmadesimple.org
 */
 
-require_once('DispositionEmailBase.class.php');
+require_once(dirname(__FILE__).'/DispositionEmailBase.class.php');
 
 class fbDispositionEmail extends fbDispositionEmailBase {
 
