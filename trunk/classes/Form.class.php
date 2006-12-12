@@ -622,6 +622,7 @@ class fbForm {
 			{
 			$type = 'Field';
 			}
+			$classFile='';
     	if (strlen($classDirPrefix) > 0)
     	   {
     	   $classFile = $classDirPrefix .'/'.$type.'.class.php';
@@ -630,7 +631,7 @@ class fbForm {
            {
            $classFile = $type.'.class.php';
            }
-        require_once $classFile;
+        require_once dirname(__FILE__).'/'.$classFile;
         // class names are prepended with "fb" to prevent namespace clash.
         return ( 'fb'.$type );
     }
