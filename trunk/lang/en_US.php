@@ -70,6 +70,8 @@ $lang['updated']='updated';
 $lang['select_one']='Select One';
 $lang['select_type']='Select Type';
 $lang['to']='To';
+$lang['yes']='Yes';
+$lang['no']='No';
 $lang['recipients']='recipients';
 $lang['destination_count'] = '%s destinations';
 $lang['save']='Save';
@@ -194,6 +196,7 @@ $lang['title_enable_fastadd']='Enable fast field add pulldown?';
 $lang['title_fastadd']='Fast field adder';
 $lang['link_label']='Link Label';
 $lang['link_destination']='Link Destination URL';
+$lang['title_default_set']='Checked by Default?';
 
 $lang['help_variables_for_template']='Variables For Template';
 $lang['help_submission_date']='Date of Submission';

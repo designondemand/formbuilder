@@ -72,10 +72,15 @@ class fbCheckboxGroupField extends fbFieldBase {
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		$names = &$this->GetOptionRef('box_name');
+		$is_set = &$this->GetOptionRef('box_is_set');
 		if (! is_array($names))
 			{
 			$names = array($names);
-			}		
+			}	
+		if (! is_array($is_set))
+			{
+			$is_set = array($is_set);
+			}
 		$fieldDisp = array();
 		for ($i=0;$i<count($names);$i++)
 			{
@@ -90,6 +95,13 @@ class fbCheckboxGroupField extends fbFieldBase {
 			if ($this->Value !== false)
 				{
 				$check_val = $this->FindArrayValue($i);
+				}
+			else
+				{
+				if ($is_set[$i] == 'y')
+					{
+					$check_val = true;
+					}
 				}
 			$thisBox->input = $mod->CreateInputCheckbox($id, '_'.$this->Id.'[]', $i,
 				$check_val !== false?$i:'-1');
@@ -134,7 +146,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	function DoOptionAdd(&$params)
 	{
-		$this->boxAdd = 2;
+		$this->boxAdd = 1;
 	}
 
 	function DoOptionDelete(&$params)
@@ -147,6 +159,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 				$this->RemoveOptionElement('box_name', $thisVal - $delcount);
 				$this->RemoveOptionElement('box_checked', $thisVal - $delcount);
 				$this->RemoveOptionElement('box_unchecked', $thisVal - $delcount);
+				$this->RemoveOptionElement('box_is_set', $thisVal - $delcount);
 				$delcount++;
 				}
 			}
@@ -156,6 +169,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 	function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = &$this->form_ptr->module_ptr;
+		$yesNo = array($mod->Lang('no')=>'n',$mod->Lang('yes')=>'y');
 
 		$this->countBoxes();
 		if ($this->boxAdd > 0)
@@ -166,6 +180,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 		$boxes = '<table class="module_fb_table"><tr><th>'.$mod->Lang('title_checkbox_label').'</th><th>'.
 			$mod->Lang('title_checked_value').'</th><th>'.
 			$mod->Lang('title_unchecked_value').'</th><th>'.
+			$mod->Lang('title_default_set').'</th><th>'.
 			$mod->Lang('title_delete').'</th></tr>';
 
 
@@ -177,7 +192,14 @@ class fbCheckboxGroupField extends fbFieldBase {
             		$mod->CreateInputText($formDescriptor, 'opt_box_checked[]',$this->GetOptionElement('box_checked',$i),25,128).
             		'</td><td>'.
             		$mod->CreateInputText($formDescriptor, 'opt_box_unchecked[]',$this->GetOptionElement('box_unchecked',$i),25,128).
+            		'</td><td>'.            		    
+//            		$mod->CreateInputPulldown($formDescriptor, 'opt_box_is_set[]',$i,$this->GetOptionElement('box_is_set',$i)).
+            		
+            		$mod->CreateInputDropdown($formDescriptor, 'opt_box_is_set[]', $yesNo, -1, $this->GetOptionElement('box_is_set',$i)).
+            		
+            		
             		'</td><td>'.
+//CreateInputCheckbox($id, $name, $value='', $selectedvalue='',
             		$mod->CreateInputCheckbox($formDescriptor, 'del_'.$i, $i,-1).
              		'</td></tr>';
 			}
@@ -213,6 +235,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 		$names = &$this->GetOptionRef('box_name');
 		$checked = &$this->GetOptionRef('box_checked');
 		$unchecked = &$this->GetOptionRef('box_unchecked');
+		$is_set = &$this->GetOptionRef('box_is_set');
 		for ($i=0;$i<count($names);$i++)
 			{
 			if ($names[$i] == '' && $checked[$i] == '' )
@@ -220,6 +243,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 				$this->RemoveOptionElement('box_name', $i);
 				$this->RemoveOptionElement('box_checked', $i);
 				$this->RemoveOptionElement('box_unchecked', $i);
+				$this->RemoveOptionElement('box_is_set', $i);
 				$i--;
 				}
 			}
