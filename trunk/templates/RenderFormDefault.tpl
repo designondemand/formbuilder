@@ -23,7 +23,10 @@
 			
 	   In certain cases, field->input is actually an array of objects rather than an input. This
 	   happens, for example, in CheckBoxGroups or RadioButtonGroups. For them, you
-	   can iterate through field->input->name and field->input->inputs.
+	   can iterate through field->input->name, filed->input->title, and
+	   field->input->inputs. The difference between "name" and "title" is that
+	   "name" is wrapped in the appropriate html label tags, while "title" is
+	   just raw text.
        
        Additional smarty variables that you can use include:
        {$total_pages}           - number of pages for multi-page forms

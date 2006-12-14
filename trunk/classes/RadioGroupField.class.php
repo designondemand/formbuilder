@@ -80,6 +80,7 @@ class fbRadioGroupField extends fbFieldBase {
 			if (strlen($names[$i]) > 0)
 				{
 				$thisBox->name = '<label for="'.$id.'_'.$this->Id.'">'.$names[$i].'</label>';
+				$thisBox->title = $names[$i];
 				}
 			$check_val = false;
 			if ($this->Value !== false)
