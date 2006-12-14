@@ -90,7 +90,7 @@ class fbRadioGroupField extends fbFieldBase {
 				}
 			else
 				{
-				if ($is_set[$i] == 'y')
+				if (isset($is_set[$i]) && $is_set[$i] == 'y')
 					{
 					$check_val = true;
 					}				
@@ -115,7 +115,7 @@ class fbRadioGroupField extends fbFieldBase {
 			}
 		else
 			{
-			return $mod->Lang('unspecified');
+			return $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
 			}	
 	}
 
