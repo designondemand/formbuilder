@@ -441,13 +441,14 @@ class fbFieldBase {
 
 	function GetHumanReadableValue()
 	{
+		$mod = &$this->form_ptr->module_ptr;
 		if ($this->Value !== false)
 			{
 			return $this->Value;
 			}
 		else
 			{
-			return $this->form_ptr->GetAttr('unspecified','[unspecified]');
+			return $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
 			}
 	}
 

@@ -98,7 +98,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 				}
 			else
 				{
-				if ($is_set[$i] == 'y')
+				if (isset($is_set[$i]) && $is_set[$i] == 'y')
 					{
 					$check_val = true;
 					}
