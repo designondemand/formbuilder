@@ -31,6 +31,10 @@ class fbCheckboxField extends fbFieldBase {
 			{
 			$label = '&nbsp;<label for="'.$id.'_'.$this->Id.'">'.$this->GetOption('label').'</label>';
 			}
+		if ($this->Value === false && $this->GetOption('is_checked','0')=='1')
+			{
+			$this->Value = 't';
+			}
 		return $mod->CreateInputCheckbox($id, '_'.$this->Id, 't',$this->Value).$label;
 	}
 
@@ -89,7 +93,9 @@ class fbCheckboxField extends fbFieldBase {
             array($mod->Lang('title_unchecked_value'),
             		$mod->CreateInputText($formDescriptor, 'opt_unchecked_value',
             		$this->GetOption('unchecked_value',$mod->Lang('value_unchecked')),25,255)),            		
-			);
+			array($mod->Lang('title_default_set'),
+				$mod->CreateInputCheckbox($formDescriptor, 'opt_is_checked', '1', $this->GetOption('is_checked','0')))
+				);
 		$adv = array(
 		);
 		return array('main'=>$main,'adv'=>$adv);

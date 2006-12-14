@@ -588,7 +588,8 @@ class fbFieldBase {
 			{
 			return $this->Options[$optionName];
 			}
-		return false;
+		$tmp = false;
+		return $tmp;
 	}
 
 	
