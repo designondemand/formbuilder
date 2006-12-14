@@ -42,7 +42,7 @@ class fbStaticTextField extends fbFieldBase {
 		$mod = &$this->form_ptr->module_ptr;
 		$main = array(
 			array($mod->Lang('title_text'),
-            		$mod->CreateTextArea(false, $formDescriptor,  htmlspecialchars($this->GetOption('text',''), ENT_QUOTES), 'opt_text','pageheadtags'))
+            		$mod->CreateTextArea(false, $formDescriptor,  $this->GetOption('text',''), 'opt_text','pageheadtags'))
 		);
 		$adv = array(
 		);
