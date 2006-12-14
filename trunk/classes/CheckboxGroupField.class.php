@@ -193,8 +193,6 @@ class fbCheckboxGroupField extends fbFieldBase {
             		'</td><td>'.
             		$mod->CreateInputText($formDescriptor, 'opt_box_unchecked[]',$this->GetOptionElement('box_unchecked',$i),25,128).
             		'</td><td>'.            		    
-//            		$mod->CreateInputPulldown($formDescriptor, 'opt_box_is_set[]',$i,$this->GetOptionElement('box_is_set',$i)).
-            		
             		$mod->CreateInputDropdown($formDescriptor, 'opt_box_is_set[]', $yesNo, -1, $this->GetOptionElement('box_is_set',$i)).
             		
             		

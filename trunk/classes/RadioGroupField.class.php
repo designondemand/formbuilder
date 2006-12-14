@@ -72,6 +72,7 @@ class fbRadioGroupField extends fbFieldBase {
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		$names = &$this->GetOptionRef('button_name');
+		$is_set = &$this->GetOptionRef('button_is_set');
 		$fieldDisp = array();
 		for ($i=0;$i<count($names);$i++)
 			{
@@ -86,6 +87,13 @@ class fbRadioGroupField extends fbFieldBase {
 			if ($this->Value !== false)
 				{
 				$check_val = $this->FindArrayValue($i);
+				}
+			else
+				{
+				if ($is_set[$i] == 'y')
+					{
+					$check_val = true;
+					}				
 				}
 			$thisBox->input = '<input type="radio" name="'.$id.'_'.$this->Id.'" value="'.$i.'"';
 			if ($check_val)
@@ -114,7 +122,7 @@ class fbRadioGroupField extends fbFieldBase {
 
 	function DoOptionAdd(&$params)
 	{
-		$this->optionAdd = 2;
+		$this->optionAdd = 1;
 	}
 
 	function DoOptionDelete(&$params)
@@ -126,6 +134,7 @@ class fbRadioGroupField extends fbFieldBase {
 				{
 				$this->RemoveOptionElement('button_name', $thisVal - $delcount);
 				$this->RemoveOptionElement('button_checked', $thisVal - $delcount);
+				$this->RemoveOptionElement('button_is_set', $thisVal - $delcount);
 				$delcount++;
 				}
 			}
@@ -135,6 +144,7 @@ class fbRadioGroupField extends fbFieldBase {
 	function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = &$this->form_ptr->module_ptr;
+		$yesNo = array($mod->Lang('no')=>'n',$mod->Lang('yes')=>'y');
 
 		$this->countBoxes();
 		if ($this->optionAdd > 0)
@@ -144,7 +154,9 @@ class fbRadioGroupField extends fbFieldBase {
 			}
 		$boxes = '<table class="module_fb_table"><tr><th>'.$mod->Lang('title_checkbox_label').'</th><th>'.
 			$mod->Lang('title_checked_value').'</th><th>'.
-			$mod->Lang('title_delete').'</th></tr>';
+			$mod->Lang('title_default_set').'</th><th>'.
+			$mod->Lang('title_delete').
+			'</th></tr>';
 
 
 		for ($i=0;$i<($this->optionCount>1?$this->optionCount:1);$i++)
@@ -154,6 +166,8 @@ class fbRadioGroupField extends fbFieldBase {
             		'</td><td>'.
             		$mod->CreateInputText($formDescriptor, 'opt_button_checked[]',$this->GetOptionElement('button_checked',$i),25,128).
             		'</td><td>'.
+            		$mod->CreateInputDropdown($formDescriptor, 'opt_button_is_set[]', $yesNo, -1, $this->GetOptionElement('button_is_set',$i)).
+					'</td><td>'.
             		$mod->CreateInputCheckbox($formDescriptor, 'del_'.$i, $i,-1).
              		'</td></tr>';
 			}
@@ -194,6 +208,7 @@ class fbRadioGroupField extends fbFieldBase {
 				{
 				$this->RemoveOptionElement('button_name', $i);
 				$this->RemoveOptionElement('button_checked', $i);
+				$this->RemoveOptionElement('button_is_set', $i);
 				$i--;
 				}
 			}
