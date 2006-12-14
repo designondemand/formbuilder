@@ -31,7 +31,7 @@ class fbTextField extends fbFieldBase {
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		return $mod->CreateInputText($id, '_'.$this->Id,
-			htmlspecialchars($this->Value, ENT_QUOTES),
+			$this->Value,
             $this->GetOption('length')<25?$this->GetOption('length'):25,
             $this->GetOption('length'));
 	}

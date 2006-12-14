@@ -25,7 +25,7 @@ class fbTextAreaField extends fbFieldBase {
 	{            
 	   $mod = &$this->form_ptr->module_ptr;
        return $mod->CreateTextArea($this->GetOption('wysiwyg','0') == '1'?true:false,
-       		$id, htmlspecialchars($this->Value, ENT_QUOTES),
+       		$id, $this->Value,
        		'_'.$this->Id);            
 	}
 
