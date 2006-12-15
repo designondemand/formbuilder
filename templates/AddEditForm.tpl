@@ -76,6 +76,10 @@
 		<p class="pageinput">{$input_form_submit_button}</p>
 	</div>
 	<div class="pageoverflow">
+		<p class="pagetext">{$title_submit_button_safety}:</p>
+		<p class="pageinput">{$input_submit_button_safety}</p>
+	</div>
+	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_next_button}:</p>
 		<p class="pageinput">{$input_form_next_button}</p>
 	</div>

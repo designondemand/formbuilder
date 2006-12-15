@@ -391,6 +391,22 @@ class fbForm {
 		$mod->smarty->assign_by_ref('hidden',$hidden);
 		$mod->smarty->assign_by_ref('fields',$fields);
 
+		$jsStr = '';
+		if ($this->GetAttr('input_button_safety','0') == '1')
+			{
+			$jsStr = '<script language="javascript">
+    var submitted = 0;
+    function LockButton (form,element) {
+       if ( ! submitted ) { 
+           form.elements[element].disabled=true;
+           submitted = 1;
+           form.submit;
+       }
+      }
+    }
+</script>';
+			}
+
 		if ($this->Page > 1)
 			{
     	   	$mod->smarty->assign('prev',$mod->CreateInputSubmit($id, 'prev',
@@ -800,7 +816,11 @@ function fast_add(field_type)
 	  $mod->smarty->assign('input_form_submit_button',
 			       $mod->CreateInputText($id, 'forma_submit_button_text',
 						     $this->GetAttr('submit_button_text',$mod->Lang('button_submit')), 35, 35));
-
+	  $mod->smarty->assign('title_submit_button_safety',
+			       $mod->Lang('title_submit_button_safety'));
+     $mod->smarty->assign('input_submit_button_safety',$mod->CreateInputHidden($id,'forma_input_button_safety','0').
+     		$mod->CreateInputCheckbox($id,'forma_input_button_safety','1',$this->GetAttr('input_button_safety','0')).
+	  		$mod->Lang('title_submit_button_safety_help'));
 	  $mod->smarty->assign('title_form_prev_button',
 			       $mod->Lang('title_form_prev_button'));
 	  $mod->smarty->assign('input_form_prev_button',
