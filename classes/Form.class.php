@@ -378,7 +378,11 @@ class fbForm {
 			$oneset->required_symbol = $thisField->IsRequired()?$reqSymbol:'';
 			$oneset->css_class = $thisField->GetOption('css_class');
 			$oneset->valid = $thisField->GetOption('is_valid',true)?1:0;
-			$oneset->hide_name = $thisField->HideLabel()?1:0;
+			$oneset->hide_name = 0;
+			if( (!$thisField->HasLabel()) || $thisField->HideLabel() )
+			  {
+			    $oneset->hide_name = 1;
+			  }
 			$oneset->name = $thisField->GetName();
 			$oneset->input = $thisField->GetFieldInput($id, $params, $returnid);
 			$oneset->input_id = $id.'_'.$thisField->GetID();
