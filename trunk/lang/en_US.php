@@ -444,8 +444,24 @@ of the license for the full disclaimer.</p>
 
 $lang['changelog'] = 		"
 		    <ul>
+                    <li>Version 0.2.1 - not released yet
+                       <p>Many thanks to Utter Design for sponsoring some changes and bugfixes, which include:
+                          <ul>
+                            <li>Add PagesetStart and PageSetEnd field types
+                                <p>These field types allow you to create fieldsets in your form, and organise
+                                   your fields logically for the user.  You can even nest fieldsets, and
+                                   associate a style with them appropriately.  The default template was changed
+                                   to prevent it from wrapping a div around these types of fields.
+                                </p>
+                            </li>
+                            <li>Fixed a problem with DATETIME fields on install
+                                <p>This solves a problem when on install the response table would sometimes not get created when using adodb lite</li>
+                            </li>
+                          </ul>
+                       </p>
 		    <li>Version 0.2 - 14 November 2006. Calguy &amp; tsw's bug fixes for field re-ordering and custom templates. Additional bug fixes for field labels.</li>
 		    <li>Version 0.1 - 8 July 2006. Initial Release</li>
+                    </ul>
 		";
 
 
