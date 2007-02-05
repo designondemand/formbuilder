@@ -81,6 +81,17 @@ class FormBuilder extends CMSModule
 		ksort($this->field_types);
 	}
 
+
+	function AllowAutoInstall()
+	{
+	  return FALSE;
+	}
+
+	function AllowAutoUpgrade()
+	{
+	  return FALSE;
+	}
+
 	function GetName()
 	{
 		return 'FormBuilder';
@@ -93,7 +104,7 @@ class FormBuilder extends CMSModule
 
 	function GetVersion()
 	{
-		return '0.2';
+		return '0.2.1';
 	}
 
 	function GetAuthor()
@@ -151,7 +162,6 @@ class FormBuilder extends CMSModule
 
 	function CheckAccess($permission='Modify Forms')
 	{
-
 		$access = $this->CheckPermission($permission);
 		if (!$access)  {
 			echo "<p class=\"error\">".$this->Lang('you_need_permission',$permission)."</p>";
