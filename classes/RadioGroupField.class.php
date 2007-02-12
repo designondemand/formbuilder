@@ -7,213 +7,214 @@
   This project's homepage is: http://www.cmsmadesimple.org
 */
 
-class fbRadioGroupField extends fbFieldBase {
+class fbRadioGroupField extends fbFieldBase 
+{
 
-	var $optionCount;
-	var $optionAdd;
+  var $optionCount;
+  var $optionAdd;
 	
-	function fbRadioGroupField(&$form_ptr, &$params)
-	{
-        $this->fbFieldBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
-		$this->Type = 'RadioGroupField';
-		$this->DisplayInForm = true;
-		$this->HasAddOp = true;
-		$this->HasDeleteOp = true;
-		$this->NonRequirableField = true;
-		$this->ValidationTypes = array(
+  function fbRadioGroupField(&$form_ptr, &$params)
+  {
+    $this->fbFieldBase($form_ptr, $params);
+    $mod = &$form_ptr->module_ptr;
+    $this->Type = 'RadioGroupField';
+    $this->DisplayInForm = true;
+    $this->HasAddOp = true;
+    $this->HasDeleteOp = true;
+    $this->NonRequirableField = true;
+    $this->ValidationTypes = array(
             );
-        $this->optionAdd = 0;
-        $this->hasMultipleFormComponents = true;
-	}
+    $this->optionAdd = 0;
+    $this->hasMultipleFormComponents = true;
+  }
 
-	function countBoxes()
-	{
-			$tmp = &$this->GetOptionRef('button_name');
-			if (is_array($tmp))
-				{
-	        	$this->optionCount = count($tmp);
-	        	}
-	        elseif ($tmp !== false)
-	        	{
-	        	$this->optionCount = 1;
-	        	}
-	        else
-	        	{
-	        	$this->optionCount = 0;
-	        	}
-	}
+  function countBoxes()
+  {
+    $tmp = &$this->GetOptionRef('button_name');
+    if (is_array($tmp))
+      {
+	$this->optionCount = count($tmp);
+      }
+    elseif ($tmp !== false)
+      {
+	$this->optionCount = 1;
+      }
+    else
+      {
+	$this->optionCount = 0;
+      }
+  }
 
-    function StatusInfo()
-	{
-        $mod = &$this->form_ptr->module_ptr;
-		$this->countBoxes();
-		$ret = $mod->Lang('options',$this->optionCount);
-		if (strlen($this->ValidationType)>0)
-		  {
-		  	$ret .= ", ".array_search($this->ValidationType,$this->ValidationTypes);
-		  }
-		 return $ret;
-	}
+  function StatusInfo()
+  {
+    $mod = &$this->form_ptr->module_ptr;
+    $this->countBoxes();
+    $ret = $mod->Lang('options',$this->optionCount);
+    if (strlen($this->ValidationType)>0)
+      {
+	$ret .= ", ".array_search($this->ValidationType,$this->ValidationTypes);
+      }
+    return $ret;
+  }
 
-	function GetOptionAddButton()
-	{
-		$mod = &$this->form_ptr->module_ptr;
-		return $mod->Lang('add_options');
-	}
+  function GetOptionAddButton()
+  {
+    $mod = &$this->form_ptr->module_ptr;
+    return $mod->Lang('add_options');
+  }
 
-	function GetOptionDeleteButton()
-	{
-		$mod = &$this->form_ptr->module_ptr;
-		return $mod->Lang('delete_options');
-	}
+  function GetOptionDeleteButton()
+  {
+    $mod = &$this->form_ptr->module_ptr;
+    return $mod->Lang('delete_options');
+  }
 
-	function GetFieldInput($id, &$params, $returnid)
-	{
-		$mod = &$this->form_ptr->module_ptr;
-		$names = &$this->GetOptionRef('button_name');
-		$is_set = &$this->GetOptionRef('button_is_set');
-		$fieldDisp = array();
-		for ($i=0;$i<count($names);$i++)
-			{
-			$label = '';
-			$thisBox = new stdClass();
-			if (strlen($names[$i]) > 0)
-				{
-				$thisBox->name = '<label for="'.$id.'_'.$this->Id.'">'.$names[$i].'</label>';
-				$thisBox->title = $names[$i];
-				}
-			$check_val = false;
-			if ($this->Value !== false)
-				{
-				$check_val = $this->FindArrayValue($i);
-				}
-			else
-				{
-				if (isset($is_set[$i]) && $is_set[$i] == 'y')
-					{
-					$check_val = true;
-					}				
-				}
-			$thisBox->input = '<input type="radio" name="'.$id.'_'.$this->Id.'" value="'.$i.'"';
-			if ($check_val)
-				{
-				$thisBox->input .= ' checked="checked"';
-				}
-			$thisBox->input .= ' />';
-			array_push($fieldDisp, $thisBox);
-			}			
-		return $fieldDisp;
-	}
+  function GetFieldInput($id, &$params, $returnid)
+  {
+    $mod = &$this->form_ptr->module_ptr;
+    $names = &$this->GetOptionRef('button_name');
+    $is_set = &$this->GetOptionRef('button_is_set');
+    $fieldDisp = array();
+    for ($i=0;$i<count($names);$i++)
+      {
+	$label = '';
+	$thisBox = new stdClass();
+	if (strlen($names[$i]) > 0)
+	  {
+	    $thisBox->name = '<label for="'.$id.'_'.$this->Id.'">'.$names[$i].'</label>';
+	    $thisBox->title = $names[$i];
+	  }
+	$check_val = false;
+	if ($this->Value !== false)
+	  {
+	    $check_val = $this->FindArrayValue($i);
+	  }
+	else
+	  {
+	    if (isset($is_set[$i]) && $is_set[$i] == 'y')
+	      {
+		$check_val = true;
+	      }				
+	  }
+	$thisBox->input = '<input type="radio" name="'.$id.'_'.$this->Id.'" value="'.$i.'"';
+	if ($check_val)
+	  {
+	    $thisBox->input .= ' checked="checked"';
+	  }
+	$thisBox->input .= ' />';
+	array_push($fieldDisp, $thisBox);
+      }			
+    return $fieldDisp;
+  }
 
-	function GetHumanReadableValue()
-	{
-		$mod = &$this->form_ptr->module_ptr;
-		if ($this->HasValue())
-			{
-			return $this->GetOptionElement('button_checked',$this->Value);
-			}
-		else
-			{
-			return $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
-			}	
-	}
-
-
-	function DoOptionAdd(&$params)
-	{
-		$this->optionAdd = 1;
-	}
-
-	function DoOptionDelete(&$params)
-	{
-		$delcount = 0;
-		foreach ($params as $thisKey=>$thisVal)
-			{
-			if (substr($thisKey,0,4) == 'del_')
-				{
-				$this->RemoveOptionElement('button_name', $thisVal - $delcount);
-				$this->RemoveOptionElement('button_checked', $thisVal - $delcount);
-				$this->RemoveOptionElement('button_is_set', $thisVal - $delcount);
-				$delcount++;
-				}
-			}
-	}
+  function GetHumanReadableValue()
+  {
+    $mod = &$this->form_ptr->module_ptr;
+    if ($this->HasValue())
+      {
+	return $this->GetOptionElement('button_checked',$this->Value);
+      }
+    else
+      {
+	return $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
+      }	
+  }
 
 
-	function PrePopulateAdminForm($formDescriptor)
-	{
-		$mod = &$this->form_ptr->module_ptr;
-		$yesNo = array($mod->Lang('no')=>'n',$mod->Lang('yes')=>'y');
+  function DoOptionAdd(&$params)
+  {
+    $this->optionAdd = 1;
+  }
 
-		$this->countBoxes();
-		if ($this->optionAdd > 0)
-			{
-			$this->optionCount += $this->optionAdd;
-			$this->optionAdd = 0;
-			}
-		$boxes = '<table class="module_fb_table"><tr><th>'.$mod->Lang('title_checkbox_label').'</th><th>'.
-			$mod->Lang('title_checked_value').'</th><th>'.
-			$mod->Lang('title_default_set').'</th><th>'.
-			$mod->Lang('title_delete').
-			'</th></tr>';
-
-
-		for ($i=0;$i<($this->optionCount>1?$this->optionCount:1);$i++)
-			{
-			$boxes .= '<tr><td>'.
-            		$mod->CreateInputText($formDescriptor, 'opt_button_name[]',$this->GetOptionElement('button_name',$i),25,128).
-            		'</td><td>'.
-            		$mod->CreateInputText($formDescriptor, 'opt_button_checked[]',$this->GetOptionElement('button_checked',$i),25,128).
-            		'</td><td>'.
-            		$mod->CreateInputDropdown($formDescriptor, 'opt_button_is_set[]', $yesNo, -1, $this->GetOptionElement('button_is_set',$i)).
-					'</td><td>'.
-            		$mod->CreateInputCheckbox($formDescriptor, 'del_'.$i, $i,-1).
-             		'</td></tr>';
-			}
-		$boxes .= '</table>';
-		$main = array(
-			array($mod->Lang('title_radiogroup_details'),$boxes)
-		);
-		$adv = array();
-		return array('main'=>$main,'adv'=>$adv);
-	}
-
-	function PostPopulateAdminForm(&$mainArray, &$advArray)
-	{
-		$mod = &$this->form_ptr->module_ptr;
-		// remove the "required" field, since this can only be done via validation
-		$reqIndex = -1;
-		for ($i=0;$i<count($mainArray);$i++)
-			{
-			if ($mainArray[$i]->title == $mod->Lang('title_field_required'))
-				{
-				$reqIndex = $i;
-				}
-			}
-		if ($reqIndex != -1)
-			{
-			array_splice($mainArray, $reqIndex,1);
-			}
-	}
+  function DoOptionDelete(&$params)
+  {
+    $delcount = 0;
+    foreach ($params as $thisKey=>$thisVal)
+      {
+	if (substr($thisKey,0,4) == 'del_')
+	  {
+	    $this->RemoveOptionElement('button_name', $thisVal - $delcount);
+	    $this->RemoveOptionElement('button_checked', $thisVal - $delcount);
+	    $this->RemoveOptionElement('button_is_set', $thisVal - $delcount);
+	    $delcount++;
+	  }
+      }
+  }
 
 
-	function PostAdminSubmitCleanup()
-	{
-		$names = &$this->GetOptionRef('button_name');
-		$checked = &$this->GetOptionRef('button_checked');
-		for ($i=0;$i<count($names);$i++)
-			{
-			if ($names[$i] == '' && $checked[$i] == '' )
-				{
-				$this->RemoveOptionElement('button_name', $i);
-				$this->RemoveOptionElement('button_checked', $i);
-				$this->RemoveOptionElement('button_is_set', $i);
-				$i--;
-				}
-			}
-		$this->countBoxes();
-	}
+  function PrePopulateAdminForm($formDescriptor)
+  {
+    $mod = &$this->form_ptr->module_ptr;
+    $yesNo = array($mod->Lang('no')=>'n',$mod->Lang('yes')=>'y');
+
+    $this->countBoxes();
+    if ($this->optionAdd > 0)
+      {
+	$this->optionCount += $this->optionAdd;
+	$this->optionAdd = 0;
+      }
+    $boxes = '<table class="module_fb_table"><tr><th>'.$mod->Lang('title_checkbox_label').'</th><th>'.
+      $mod->Lang('title_checked_value').'</th><th>'.
+      $mod->Lang('title_default_set').'</th><th>'.
+      $mod->Lang('title_delete').
+      '</th></tr>';
+
+
+    for ($i=0;$i<($this->optionCount>1?$this->optionCount:1);$i++)
+      {
+	$boxes .= '<tr><td>'.
+	  $mod->CreateInputText($formDescriptor, 'opt_button_name[]',$this->GetOptionElement('button_name',$i),25,128).
+	  '</td><td>'.
+	  $mod->CreateInputText($formDescriptor, 'opt_button_checked[]',$this->GetOptionElement('button_checked',$i),25,128).
+	  '</td><td>'.
+	  $mod->CreateInputDropdown($formDescriptor, 'opt_button_is_set[]', $yesNo, -1, $this->GetOptionElement('button_is_set',$i)).
+	  '</td><td>'.
+	  $mod->CreateInputCheckbox($formDescriptor, 'del_'.$i, $i,-1).
+	  '</td></tr>';
+      }
+    $boxes .= '</table>';
+    $main = array(
+		  array($mod->Lang('title_radiogroup_details'),$boxes)
+		  );
+    $adv = array();
+    return array('main'=>$main,'adv'=>$adv);
+  }
+
+  function PostPopulateAdminForm(&$mainArray, &$advArray)
+  {
+    $mod = &$this->form_ptr->module_ptr;
+    // remove the "required" field, since this can only be done via validation
+    $reqIndex = -1;
+    for ($i=0;$i<count($mainArray);$i++)
+      {
+	if ($mainArray[$i]->title == $mod->Lang('title_field_required'))
+	  {
+	    $reqIndex = $i;
+	  }
+      }
+    if ($reqIndex != -1)
+      {
+	array_splice($mainArray, $reqIndex,1);
+      }
+  }
+
+
+  function PostAdminSubmitCleanup()
+  {
+    $names = &$this->GetOptionRef('button_name');
+    $checked = &$this->GetOptionRef('button_checked');
+    for ($i=0;$i<count($names);$i++)
+      {
+	if ($names[$i] == '' && $checked[$i] == '' )
+	  {
+	    $this->RemoveOptionElement('button_name', $i);
+	    $this->RemoveOptionElement('button_checked', $i);
+	    $this->RemoveOptionElement('button_is_set', $i);
+	    $i--;
+	  }
+      }
+    $this->countBoxes();
+  }
 }
 
 ?>

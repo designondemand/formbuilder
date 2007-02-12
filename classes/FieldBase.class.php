@@ -652,7 +652,7 @@ class fbFieldBase {
   }
 
   // loadDeep also loads all options for a field.
-  function Load(&$params, $loadDeep=false)
+  function Load($id, &$params, $loadDeep=false)
   {
     $sql = 'SELECT * FROM ' . cms_db_prefix() . 'module_fb_field WHERE field_id=?';
     if($result = $this->form_ptr->module_ptr->dbHandle->GetRow($sql, array($this->Id)))
@@ -704,6 +704,13 @@ class fbFieldBase {
 	      }
 	  }
 	$this->Options = array_merge($tmpOpts,$this->Options);
+
+	if (isset($params['value_'.$this->Name]) &&
+	    (is_array($params['value_'.$this->Name]) ||
+	     strlen($params['value_'.$this->Name]) > 0))
+	  {
+	    $this->SetValue($params['value_'.$this->Name]);
+	  }
       }
     return true;
   }

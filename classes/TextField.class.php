@@ -29,9 +29,9 @@ class fbTextField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
-		return $mod->CreateInputText($id, '_'.$this->Id,
-			$this->Value,
+	  $mod = &$this->form_ptr->module_ptr;
+	  return $mod->CreateInputText($id, '_'.$this->Id,
+				       $this->Value,
             $this->GetOption('length')<25?$this->GetOption('length'):25,
             $this->GetOption('length'));
 	}
