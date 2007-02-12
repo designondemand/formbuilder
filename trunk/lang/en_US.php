@@ -265,6 +265,7 @@ $lang['event_help_OnFormBuilderFormSubmit']='<p>Event triggered when a FormBuild
 <ul>
 <li><em>form_name</em> - The form name (string)</li>
 <li><em>form_id</em> - The internal form id (int)</li>
+<li><em>value_&lt;name&gt;</em> - Supply a default value to a field with the specified name.</li>
 </ul> ';
 $lang['event_help_OnFormBuilderFormSubmitError']='<p>Event triggered if there is an error when a FormBuilder form is submitted</p>
 <h4>Parameters</h4>
