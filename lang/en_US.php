@@ -27,6 +27,7 @@ $lang['field_type_FromEmailAddressField']='Email "From Address" Field';
 $lang['field_type_FromEmailNameField']='Email "From Name" Field';
 $lang['field_type_StaticTextField']='-Static Text';
 $lang['field_type_LinkField']='-Link';
+$lang['field_type_HiddenField'] = 'Hidden Field';
 
 
 // validation types
