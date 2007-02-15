@@ -23,9 +23,29 @@
 	    			{$entry->required_symbol}
 	    		{/if}
 	    	{/if}
-	    	</td><td align="left" valign="top">
+	    	</td><td align="left" valign="top"{if $entry->css_class != ''} class="{$entry->css_class}"{/if}>
 	    	{if $entry->multiple_parts == 1}
-    		<table>					<tr>				{section name=numloop loop=$entry->input}	    			<td>{$entry->input[numloop]->input}&nbsp;{$entry->input[numloop]->name}</td>	    			       {if not ($smarty.section.numloop.rownum mod $cols)}                				{if not $smarty.section.numloop.last}                        		</tr><tr>                				{/if}        					{/if}       				{if $smarty.section.numloop.last}                		{math equation = "n - a % n" n=$cols a=$entry->input|@count assign="cells"}                		{if $cells ne $cols}                			{section name=pad loop=$cells}                        		<td>&nbsp;</td>                			{/section}               		 	{/if}                		</tr>        			{/if}	    		{/section}	    		</table>	    	{else}
+    		<table>
+					<tr>
+				{section name=numloop loop=$entry->input}
+	    			<td>{$entry->input[numloop]->input}&nbsp;{$entry->input[numloop]->name}</td>
+	    			       {if not ($smarty.section.numloop.rownum mod $cols)}
+                				{if not $smarty.section.numloop.last}
+                        		</tr><tr>
+                				{/if}
+        					{/if}
+       				{if $smarty.section.numloop.last}
+                		{math equation = "n - a % n" n=$cols a=$entry->input|@count assign="cells"}
+                		{if $cells ne $cols}
+                			{section name=pad loop=$cells}
+                        		<td>&nbsp;</td>
+                			{/section}
+               		 	{/if}
+                		</tr>
+        			{/if}
+	    		{/section}
+	    		</table>
+	    	{else}
 	    		{$entry->input}
 	    	{/if}
 	    	{if $entry->valid == 0} &lt;--- {/if}
