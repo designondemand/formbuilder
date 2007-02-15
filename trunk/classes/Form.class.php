@@ -1201,6 +1201,7 @@ function fast_add(field_type)
   // this will instantiate the form, and load the results
   function LoadResponse($response_id)
   {
+    echo "DEBUG: LoadResponse $response_id<br/>";
     $db = &$this->module_ptr->dbHandle;
     // loading a response -- at this point, we check that the response
     // is for the correct form_id!
@@ -1221,7 +1222,10 @@ function fast_add(field_type)
 	while ($dbresult && $row = $dbresult->FetchRow())
 	  {
 	    $index = $this->GetFieldIndexFromId($row['field_id']);
-	    $this->Fields[$index]->SetValue($row['value']);
+            if( is_object($this->Fields[$index]) )
+             {
+	       $this->Fields[$index]->SetValue($row['value']);
+             }
 	  }
       }
     else
