@@ -629,9 +629,47 @@ class FormBuilder extends CMSModule
   }
 
 
+  function CreatePageDropdown($id,$name,$current='',
+			      $addtext='',$markdefault =true)
+  {
+    // we get here (hopefully) when the template is changed
+    // in the dropdown.
+    $db =& $this->GetDb();
+    global $gCms;
+    $defaultid = '';
+    if( $markdefault )
+      {
+	$contentops =& $gCms->GetContentOperations();
+	$defaultid = $contentops->GetDefaultPageID();
+      }
+    
+    // get a list of the pages used by this template
+    $mypages = array();
+    $parms = array('content');
+    $q = "SELECT content_id,content_name 
+                FROM ".cms_db_prefix()."content
+               WHERE type = ?
+                 AND active = 1";
+    $dbresult = $db->Execute( $q, $parms );
+    while( $row = $dbresult->FetchRow() )
+      {
+	if( $defaultid != '' && $row['content_id'] == $defaultid )
+	  {
+	    // use a star instead of a word here so I don't have to
+	    // worry about translation stuff
+	    $mypages[$row['content_name'].' (*)'] = $row['content_id'];
+	  }
+	else
+	  {
+	    $mypages[$row['content_name']] = $row['content_id'];
+	  }
+      }
+
+    return $this->CreateInputDropdown($id,$name,$mypages,-1,$current,$addtext);
+  }
 
 
-}
+} // End of Class
 
 # vim:ts=4 sw=4 noet
 ?>

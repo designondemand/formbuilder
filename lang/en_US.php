@@ -119,6 +119,10 @@ $lang['add_destination'] = 'Add Another Destination';
 $lang['delete_destination'] = 'Delete Marked Destinations';
 
 // Field Attribute Titles
+$lang['title_uploads_destpage'] = 'Page to return to with uploads link';
+$lang['title_uploadmodule_summary'] = 'Submitted with formbuilder';
+$lang['title_uploads_category'] = 'Uploads category';
+$lang['title_sendto_uploads'] = 'Send this file to the uploads module';
 $lang['title_legend'] = 'Legend';
 $lang['title_maximum_length']='Maximum Length';
 $lang['title_checkbox_label']='Checkbox label';
@@ -189,6 +193,7 @@ $lang['title_form_displaytype'] = 'Form Display Type';
 $lang['title_hide_errors_long']='Prevent debug / error messages from being seen by users.';
 $lang['title_email_template']='Email Template';
 $lang['title_maximum_size']='Maximum upload file size (kilobytes)';
+$lang['title_maximum_size_long'] = 'This limitation is in addition to any limits set by the php or web server configuration';
 $lang['title_permitted_extensions']='Permitted Extensions';
 $lang['title_permitted_extensions_long']='Enter a comma-separated list, excluding the dot (e.g., "jpg,gif,jpeg"). Spaces will be ignored. Leaving this blank means there will be no restrictions.';
 $lang['title_show_limitations']='Display restrictions?';
@@ -249,6 +254,7 @@ $lang['date_december']='December';
 
 $lang['submission_error'] = 'Sorry! There was an error handling your form submission.';
 $lang['submit_error']='FormBuilder submit error: %s';
+$lang['nouploads_error'] = 'Could not find the uploads module';
 $lang['upload_attach_error'] = 'Upload/Attachment error on file %s (tmp_name: %s, of type %s)';
 $lang['submission_error_file_lock'] = 'Error. Unable to obtain lock for file.';
 

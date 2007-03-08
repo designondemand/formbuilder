@@ -38,7 +38,8 @@ class fbTextField extends fbFieldBase {
 
 	function StatusInfo()
 	{
-		$ret = $this->form_ptr->module_ptr->Lang('abbreviation_length',$this->GetOption('length','80'));
+	  $mod = &$this->form_ptr->module_ptr;
+	  $ret = $mod->Lang('abbreviation_length',$this->GetOption('length','80'));
 		if (strlen($this->ValidationType)>0)
 		  {
 		  	$ret .= ", ".array_search($this->ValidationType,$this->ValidationTypes);
@@ -52,13 +53,15 @@ class fbTextField extends fbFieldBase {
 		$mod = &$this->form_ptr->module_ptr;
 		$main = array(
 			array($mod->Lang('title_maximum_length'),
-            		$mod->CreateInputText($formDescriptor, 'opt_length',
-            		$this->GetOption('length','80'),25,25))
+			      $mod->CreateInputText($formDescriptor, 
+						    'opt_length',
+			         $this->GetOption('length','80'),25,25))
 		);
 		$adv = array(
 			array($mod->Lang('title_field_regex'),
-               array($mod->CreateInputText($formDescriptor, 'opt_regex',
-            		$this->GetOption('regex'),25,255),$mod->Lang('title_regex_help')))	
+			      array($mod->CreateInputText($formDescriptor, 
+							  'opt_regex',
+							  $this->GetOption('regex'),25,255),$mod->Lang('title_regex_help')))	
 		);
 		return array('main'=>$main,'adv'=>$adv);
 	}
