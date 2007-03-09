@@ -220,8 +220,7 @@ function populate(formname)
 		    $uploads_destpage = $field->GetOption('uploads_destpage');
 		    $url = $uploads->CreateLink (-1, 'getfile', $uploads_destpage, '',
 						 array ('upload_id' => $row['upload_id']), '', true);
-		    $replVal = "<a href=\"$url\">".$thisFile['name']."</a>";
-		    echo "DEBUG: it worked: ".$replVal."<br/>";
+		    $replVal = $url;
 		  }
 		else
 		  {
@@ -242,7 +241,7 @@ function populate(formname)
 
 	if( $replVal != '' )
 	  {
-	    $mod->smarty->assign($this->MakeVar($others[$i]->GetName()),$replVal);
+	    $mod->smarty->assign($this->MakeVar($field->GetName()),$replVal);
 	  }
       }
 
