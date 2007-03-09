@@ -35,6 +35,7 @@ class FormBuilder extends CMSModule
 	var $disp_field_types;
 	var $all_validation_types;
 	var $module_ptr;
+	var $module_id;
 	var $email_regex;
 	var $email_regex_relaxed;
 	var $dbHandle;
@@ -45,6 +46,7 @@ class FormBuilder extends CMSModule
 		$this->CMSModule();
 		$this->module_ptr = &$this;
 		$this->dbHandle = &$gCms->GetDb();
+		$this->module_id = '';
 		$this->email_regex = "/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i";
 		$this->email_regex_relaxed="/^([\w\d\.\-\_])+\@([\w\d\.\-\_])+$/i";
 		require_once dirname(__FILE__).'/classes/Form.class.php';
@@ -142,6 +144,12 @@ class FormBuilder extends CMSModule
       return "\n.module_fb_table {font-size: 10px;}\n.module_fb_area_wide {width: 500px;}\n.module_fb_legend{font-size: 9px; margin: 6px; border: 1px solid black;}.module_fb_area_short {width: 500px; height: 100px;}\n.module_fb_link {text-decoration: underline;}\n";
     }
 
+
+    function DoAction($name,$id,$params,$returnid='')
+    {
+      $this->module_id = $id;
+      parent::DoAction($name,$id,$params,$returnid);
+    }
 
 	function GetDependencies()
 	{

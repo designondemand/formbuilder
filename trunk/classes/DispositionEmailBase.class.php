@@ -116,6 +116,9 @@ function populate(formname)
   // Send off those emails
   function SendForm($destination_array, $subject)
   {
+    global $gCms;
+    $mod = &$this->form_ptr->module_ptr;
+
     $mail = $mod->GetModuleInstance('CMSMailer');
     if ($mail == FALSE)
       {
@@ -136,13 +139,8 @@ function populate(formname)
       {
 	$mail->SetFromName($this->GetOption('email_from_name'));
       }
-    $mail->SetSubject($subject);
-    $mail->SetBody(html_entity_decode($message));
     $mail->SetCharSet($this->GetOption('email_encoding','utf-8'));
 
-
-    global $gCms;
-    $mod = &$this->form_ptr->module_ptr;
     $message = $this->GetOption('email_template','');
     if ($message == '')
       {
@@ -166,10 +164,11 @@ function populate(formname)
 		
     for($i=0;$i<count($others);$i++)
       {
+	$field =& $others[$i];
 	$replVal = '';
-	if ($others[$i]->DisplayInSubmission())
+	if ($field->DisplayInSubmission())
 	  {
-	    $replVal = $others[$i]->GetHumanReadableValue();
+	    $replVal = $field->GetHumanReadableValue();
 	    if ($replVal == '')
 	      {
 		$replVal = $unspec;
@@ -185,15 +184,16 @@ function populate(formname)
 	    // if the option is not checked, then the file is added as
 	    // an attachment
 	    //
-	    $_id = $others[$i]->$Id;
-	    if( isset( $_FILES['_'.$_id] ) && $_FILES['_'.$_id]['size'] > 0 )
+	    $_id = $field->GetValue();
+	    if( isset( $_FILES[$_id] ) && $_FILES[$_id]['size'] > 0 )
 	      {
 		$thisFile =& $_FILES[$_id];
 
-		if( $this->GetOption('sendto_uploads') )
+		if( $field->GetOption('sendto_uploads') == 'true' )
 		  {
+		    echo "DEBUG: talking to uploads<br/>";
 		    // we have a file we can send to the uploads
-		    $uploads = $this->GetModuleInstance('Uploads');
+		    $uploads = $mod->GetModuleInstance('Uploads');
 		    if( !$uploads )
 		      {
 			// no uploads module
@@ -203,9 +203,9 @@ function populate(formname)
 		      }
 
 		    $parms = array();
-		    $parms['input_author'] = $this->Lang('anonymous');
-		    $parms['input_summary'] = $this->Lang('title_uploadmodule_summary');
-		    $parms['category'] = $this->GetOption('uploads_category');
+		    $parms['input_author'] = $mod->Lang('anonymous');
+		    $parms['input_summary'] = $mod->Lang('title_uploadmodule_summary');
+		    $parms['category'] = $field->GetOption('uploads_category');
 		    $parms['field_name'] = $_id;
 		    $res = $uploads->AttemptUpload(-1,$parms,-1);
 		    if( $res[0] == false )
@@ -215,14 +215,15 @@ function populate(formname)
 			return array($res, $mod->Lang('upload_attach_error',$res[1]));
 		      }
 
-		    $uploads_destpage = $this->GetOption('uploads_destpage');
-		    $url = $this->CreateLink (-1, 'getfile', $uploads_destpage, '',
-					      array ('upload_id' => $row['upload_id']), '', true);
+		    $uploads_destpage = $field->GetOption('uploads_destpage');
+		    $url = $uploads->CreateLink (-1, 'getfile', $uploads_destpage, '',
+						 array ('upload_id' => $row['upload_id']), '', true);
 		    $replVal = "<a href=\"$url\">".$thisFile['name']."</a>";
 		  }
 		else
 		  {
 		    // we have a file we can attach
+		    echo "DEBUG: "; print_r( $thisFile ); echo "<br/>";
 		    if (! $mail->AddAttachment($thisFile['tmp_name'], $thisFile['name'], "base64", $thisFile['type']))
 		      {
 			// failed upload kills the send.
@@ -231,7 +232,7 @@ function populate(formname)
 						      array($thisFile['name'],$thisFile['tmp_name'] ,$thisFile['type'])));
 		      }
 
-		    // no replvalue for this field
+		    $replVal = $thisFile['name'];
 		  }
 	      }
 	  }
@@ -242,7 +243,10 @@ function populate(formname)
 	  }
       }
 
+    echo "DEBUG: message = $message<br/>";
     $message = $mod->ProcessTemplateFromData( $message );
+    $mail->SetSubject($subject);
+    $mail->SetBody(html_entity_decode($message));
 
     // send the message...
     if (! is_array($destination_array))

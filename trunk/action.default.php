@@ -13,6 +13,7 @@ if (! isset($params['form_id']) && isset($params['form']))
     // get the form by name, not ID
     $params['form_id'] = $this->GetFormIDFromAlias($params['form']);
   }
+
 $aeform = new fbForm($this,$params,true);
 
 echo $aeform->RenderFormHeader();

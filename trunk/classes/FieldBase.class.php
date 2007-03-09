@@ -712,6 +712,8 @@ class fbFieldBase {
 	    $this->SetValue($params['value_'.$this->Name]);
 	  }
       }
+
+
     return true;
   }
 

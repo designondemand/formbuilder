@@ -5,9 +5,9 @@
 
 class fbFileUploadField extends fbFieldBase {
 
-  function ffFileUpload(&$form_ptr, &$params)
+  function fbFileUpload(&$form_ptr, &$params)
   {
-    $this->ffFieldBase($form_ptr, $params);
+    $this->fbFieldBase($form_ptr, $params);
     $mod = &$form_ptr->module_ptr;
     $this->Type = 'FileUpload';
     //    $this->DisplayType = $mod->Lang('field_type_file_upload');
@@ -20,6 +20,18 @@ class fbFileUploadField extends fbFieldBase {
     $mod = &$this->form_ptr->module_ptr;
     $txt = $mod->CreateFileUploadInput($id,'_'.$this->Id);
     return $txt;
+  }
+
+
+  function Load($id, &$params, $loadDeep=false)
+  {
+    $mod = &$this->form_ptr->module_ptr;
+    parent::Load($id,$params,$loadDeep);
+    if( isset( $_FILES ) && isset( $_FILES[$mod->module_id.'_'.$this->Id] ) )
+      {
+	// Okay, a file was uploaded
+	$this->SetValue($mod->module_id.'_'.$this->Id);
+      }
   }
 
   function StatusInfo()
@@ -37,14 +49,14 @@ class fbFileUploadField extends fbFieldBase {
   
   function PrePopulateAdminForm($formDescriptor)
   {
+    $mod = &$this->form_ptr->module_ptr;
     $ms = $this->GetOption('max_size');
     $exts = $this->GetOption('permitted_extensions');
     $show = $this->GetOption('show_details');
-    $sendto_uploads = $this->GetOption('sendto_uploads');
+    $sendto_uploads = $this->GetOption('sendto_uploads','false');
     $uploads_category = $this->GetOption('uploads_category');
     $uploads_destpage = $this->GetOption('uploads_destpage');
 
-    $mod = &$this->form_ptr->module_ptr;
     $main = array(
 		  array($mod->Lang('title_maximum_size').':',
 			$mod->CreateInputText($formDescriptor, 
@@ -63,13 +75,15 @@ class fbFileUploadField extends fbFieldBase {
 		 );
 
     $uploads = $mod->GetModuleInstance('Uploads');
+    $sendto_uploads_list = array($mod->Lang('no')=>0,
+				 $mod->Lang('yes')=>1);
     if( $uploads )
       {
 	$categorylist = $uploads->getCategoryList();
 	$adv = array(
 		     array($mod->Lang('title_sendto_uploads').':',
-			   $mod->CreateInputCheckbox($formDescriptor,
-						     'opt_sendto_uploads','true',
+			   $mod->CreateInputDropdown($formDescriptor,
+						     'opt_sendto_uploads',$sendto_uploads_list,
 						     $sendto_uploads)),
 		     array($mod->Lang('title_uploads_category').':',
 			   $mod->CreateInputDropdown($formDescriptor,
@@ -90,10 +104,10 @@ class fbFileUploadField extends fbFieldBase {
   {
     $result = true;
     $message = '';
-    $ms = $this->GetOptionByKind('max_size');
-    $exts = $this->GetOptionByKind('permitted_extensions');
+    $ms = $this->GetOption('max_size');
+    $exts = $this->GetOption('permitted_extensions');
     $mod = &$this->form_ptr->module_ptr;
-    $fullAlias = '_'.$this->Id;
+    $fullAlias = $mod->module_id.'_'.$this->Id;
     if ($_FILES[$fullAlias]['size'] < 1 && ! $this->Required)
       {
 	return array(true,'');
