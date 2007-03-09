@@ -189,15 +189,15 @@ function populate(formname)
 	      {
 		$thisFile =& $_FILES[$_id];
 
-		if( $field->GetOption('sendto_uploads') == 'true' )
+		if( $field->GetOption('sendto_uploads') )
 		  {
-		    echo "DEBUG: talking to uploads<br/>";
 		    // we have a file we can send to the uploads
 		    $uploads = $mod->GetModuleInstance('Uploads');
 		    if( !$uploads )
 		      {
 			// no uploads module
 			audit(-1, $mod->GetName(), $mod->Lang('submit_error'),$mail->GetErrorInfo());
+			echo "DEBUG: could not get uploads module<br/>";
 		        return array($res, $mod->Lang('nouploads_error'));
 
 		      }
@@ -205,20 +205,23 @@ function populate(formname)
 		    $parms = array();
 		    $parms['input_author'] = $mod->Lang('anonymous');
 		    $parms['input_summary'] = $mod->Lang('title_uploadmodule_summary');
-		    $parms['category'] = $field->GetOption('uploads_category');
+		    $parms['category_id'] = $field->GetOption('uploads_category');
 		    $parms['field_name'] = $_id;
 		    $res = $uploads->AttemptUpload(-1,$parms,-1);
 		    if( $res[0] == false )
 		      {
 			// failed upload kills the send.
 			audit(-1, $mod->GetName(), $mod->Lang('submit_error',$mail->GetErrorInfo()));
-			return array($res, $mod->Lang('upload_attach_error',$res[1]));
+			print_r( $parms );
+			echo "DEBUG: AttemptUpload failed "; print_r( $res ); echo "<br/>";
+			return array($res[0], $mod->Lang('uploads_error',$res[1]));
 		      }
 
 		    $uploads_destpage = $field->GetOption('uploads_destpage');
 		    $url = $uploads->CreateLink (-1, 'getfile', $uploads_destpage, '',
 						 array ('upload_id' => $row['upload_id']), '', true);
 		    $replVal = "<a href=\"$url\">".$thisFile['name']."</a>";
+		    echo "DEBUG: it worked: ".$replVal."<br/>";
 		  }
 		else
 		  {

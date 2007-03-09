@@ -62,6 +62,7 @@ $lang['notice_select_type']='Advanced options are not available until the field 
 $lang['field_name_in_use']='The field name "%s" is already in use. Please use unique field names.';
 
 // abbreviations, verbs, and other general terms
+$lang['anonymous'] = 'Anonymous';
 $lang['abbreviation_length']='Len: %s';
 $lang['boxes']='%s boxes';
 $lang['options']='%s options';
@@ -254,6 +255,7 @@ $lang['date_december']='December';
 
 $lang['submission_error'] = 'Sorry! There was an error handling your form submission.';
 $lang['submit_error']='FormBuilder submit error: %s';
+$lang['uploads_error'] = 'Error committing file to the uploads module: %s';
 $lang['nouploads_error'] = 'Could not find the uploads module';
 $lang['upload_attach_error'] = 'Upload/Attachment error on file %s (tmp_name: %s, of type %s)';
 $lang['submission_error_file_lock'] = 'Error. Unable to obtain lock for file.';
