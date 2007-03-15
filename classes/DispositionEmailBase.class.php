@@ -212,8 +212,6 @@ function populate(formname)
 		      {
 			// failed upload kills the send.
 			audit(-1, $mod->GetName(), $mod->Lang('submit_error',$mail->GetErrorInfo()));
-			print_r( $parms );
-			echo "DEBUG: AttemptUpload failed "; print_r( $res ); echo "<br/>";
 			return array($res[0], $mod->Lang('uploads_error',$res[1]));
 		      }
 
@@ -225,7 +223,6 @@ function populate(formname)
 		else
 		  {
 		    // we have a file we can attach
-		    echo "DEBUG: "; print_r( $thisFile ); echo "<br/>";
 		    if (! $mail->AddAttachment($thisFile['tmp_name'], $thisFile['name'], "base64", $thisFile['type']))
 		      {
 			// failed upload kills the send.
@@ -245,7 +242,6 @@ function populate(formname)
 	  }
       }
 
-    echo "DEBUG: message = $message<br/>";
     $message = $mod->ProcessTemplateFromData( $message );
     $mail->SetSubject($subject);
     $mail->SetBody(html_entity_decode($message));
