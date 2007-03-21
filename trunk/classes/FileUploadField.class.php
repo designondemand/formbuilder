@@ -107,17 +107,22 @@ class fbFileUploadField extends fbFieldBase {
     $ms = $this->GetOption('max_size');
     $exts = $this->GetOption('permitted_extensions');
     $mod = &$this->form_ptr->module_ptr;
-    $fullAlias = $mod->module_id.'_'.$this->Id;
+    $fullAlias = $this->GetValue();
     if ($_FILES[$fullAlias]['size'] < 1 && ! $this->Required)
       {
 	return array(true,'');
       }
-    if ($ms != '' && $_FILES[$fullAlias]['size'] > ($ms * 1000))
+    if ($_FILES[$fullAlias]['size'] < 1 && $this->Required )
+      {
+ 	$result = false;
+ 	$message = $mod->Lang('required_field_missing');
+      }
+    else if ($ms != '' && $_FILES[$fullAlias]['size'] > ($ms * 1000))
       {
 	$message = $mod->Lang('file_too_large'). ' '.($ms * 1000).'kb';
 	$result = false;
       }
-    if ($exts)
+    else if ($exts)
       {
 	$match = false;
 	$legalExts = explode(',',$exts);
