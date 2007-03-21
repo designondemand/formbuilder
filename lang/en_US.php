@@ -40,6 +40,7 @@ $lang['validation_regex_match']='Match Regular Expression';
 $lang['validation_regex_nomatch']='Doesn\'t match Regular Expression';
 
 // validation error messages and other alerts
+$lang['required_field_missing'] = 'A value was not supplied for a required field';
 $lang['please_enter_a_value']='Please enter a value for "%s"';
 $lang['please_enter_a_number']='Please enter a number for "%s"';
 $lang['please_enter_valid'] = 'Please enter a valid entry for "%s"';
