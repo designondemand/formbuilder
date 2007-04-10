@@ -21,6 +21,7 @@ $lang['field_type_DispositionEmail']='*Email Results to set Address(es)';
 $lang['field_type_DispositionEmailConfirmation']='*Validate-via-Email Address';
 $lang['field_type_DispositionFile']='*Write Results to Flat File';
 $lang['field_type_DispositionDatabase']='*Store Results in Database';
+$lang['field_type_DispositionUserTag']='*Call A User Defined Tag With the Form Results';
 $lang['field_type_PageBreakField']='-Page Break';
 $lang['field_type_FileUploadField']='File Upload';
 $lang['field_type_FromEmailAddressField']='Email "From Address" Field';
@@ -121,6 +122,7 @@ $lang['add_destination'] = 'Add Another Destination';
 $lang['delete_destination'] = 'Delete Marked Destinations';
 
 // Field Attribute Titles
+$lang['title_udt_name'] = 'User Defined Tag';
 $lang['title_uploads_destpage'] = 'Page to return to with uploads link';
 $lang['title_uploadmodule_summary'] = 'Submitted with formbuilder';
 $lang['title_uploads_category'] = 'Uploads category';
