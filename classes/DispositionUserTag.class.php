@@ -34,6 +34,7 @@ class fbDispositionUserTag extends  fbFieldBase
     $mod=&$this->form_ptr->module_ptr;
     $others = &$this->form_ptr->GetFields();
     $unspec = $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
+    $params = array();
     for($i=0;$i<count($others);$i++)
       {
 	$replVal = '';
@@ -45,8 +46,12 @@ class fbDispositionUserTag extends  fbFieldBase
 		$replVal = $unspec;
 	      }
 	  }
-	$mod->smarty->assign($this->MakeVar($others[$i]->Getname()),$replVal);
+	$params($others[$i]->GetName(),$replVal);
       }
+
+    global $gCms;
+    $usertagops =& $gCms->GetUserTagOperations();
+    $usertagops->CallUserTag( $this->GetOption('udtname'), $params);
 
     return array(true,'');        
   }
