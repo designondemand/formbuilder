@@ -46,7 +46,7 @@ class fbDispositionUserTag extends  fbFieldBase
 		$replVal = $unspec;
 	      }
 	  }
-	$params($others[$i]->GetName(),$replVal);
+	$params[$others[$i]->GetName()] = $replVal;
       }
 
     global $gCms;
