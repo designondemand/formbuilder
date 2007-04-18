@@ -457,10 +457,14 @@ of the license for the full disclaimer.</p>
 
 $lang['changelog'] = 		"
 		    <ul>
-                    <li>Version 0.2.1 - not released yet
+                    <li>Version 0.2.3
+                      <p>Add the ability to call a selectable user defined tag upon disposition of the form.</p>
+                    </li>
+                    <li>Version 0.2.2
                        <p>Many thanks to Utter Design for sponsoring some changes and bugfixes, which include:
                           <ul>
-                            <li>Add PagesetStart and PageSetEnd field types
+                            <li>Added file upload capabilities to the email disposition</li>
+                            <li>Add PageSetStart and PageSetEnd field types
                                 <p>These field types allow you to create fieldsets in your form, and organise
                                    your fields logically for the user.  You can even nest fieldsets, and
                                    associate a style with them appropriately.  The default template was changed
