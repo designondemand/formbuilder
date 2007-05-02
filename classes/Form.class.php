@@ -572,20 +572,20 @@ class fbForm {
 
   function ExportXML($exportValues = false)
   {
-	$xmlstr = "";
-	$xmlstr = "<form id=\"".$this->Id."\"\n";
+	$xmlstr = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+	$xmlstr .= "<form id=\"".$this->Id."\"\n";
 	$xmlstr .= "\tname=\"".$this->Name."\"\n";
-	$xmlstr .= "\talias=\"".$this->Alias."\"\n";
+	$xmlstr .= "\talias=\"".$this->Alias."\">\n";
    foreach ($this->Attrs as $thisAttrKey=>$thisAttrValue)
       {
-		$xmlstr .= "\t\t<attribute key=\"$thisAttrKey\"><![CDATA[\n$thisAttrValue]]></attribute>\n";
+		$xmlstr .= "\t\t<attribute key=\"$thisAttrKey\"><![CDATA[$thisAttrValue]]></attribute>\n";
 		}
 	foreach($this->Fields as $thisField)
 		{
 			$xmlstr .= $thisField->ExportXML($exportvalues);
-			}
 		}
 	$xmlstr .= "</form>\n";
+	return $xmlstr;
   }
 
 

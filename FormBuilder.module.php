@@ -676,6 +676,15 @@ class FormBuilder extends CMSModule
     return $this->CreateInputDropdown($id,$name,$mypages,-1,$current,$addtext);
   }
 
+	function SuppressAdminOutput(&$request)
+   {
+      if (strpos($_SERVER['QUERY_STRING'],'exportxml') !== false)
+         {
+         return true;
+         }
+      return false;
+   }
+
 
 } // End of Class
 

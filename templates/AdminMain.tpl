@@ -6,7 +6,7 @@
 <thead><tr>
     <th>{$title_form_name}</th>
     <th>{$title_form_alias}</th>
-    <th>&nbsp;</th><th>&nbsp;</th>
+    <th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th>
 </tr>
 </thead>
 
@@ -14,6 +14,7 @@
 	<tr class="{$entry->rowclass}" onmouseover="this.className='{$entry->rowclass}hover';" onmouseout="this.className='{$entry->rowclass}';">
 		<td>{$entry->name}</td>
 		<td>&#123;cms_module module='FormBuilder' form='{$entry->usage}'&#125;</td>
+		<td>{$entry->xml}</td>
 		<td>{$entry->editlink}</td>
 		<td>{$entry->deletelink}</td>
 	</tr>
