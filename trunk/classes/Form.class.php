@@ -570,6 +570,25 @@ class fbForm {
     return true;
   }
 
+  function ExportXML($exportValues = false)
+  {
+	$xmlstr = "";
+	$xmlstr = "<form id=\"".$this->Id."\"\n";
+	$xmlstr .= "\tname=\"".$this->Name."\"\n";
+	$xmlstr .= "\talias=\"".$this->Alias."\"\n";
+   foreach ($this->Attrs as $thisAttrKey=>$thisAttrValue)
+      {
+		$xmlstr .= "\t\t<attribute key=\"$thisAttrKey\"><![CDATA[\n$thisAttrValue]]></attribute>\n";
+		}
+	foreach($this->Fields as $thisField)
+		{
+			$xmlstr .= $thisField->ExportXML($exportvalues);
+			}
+		}
+	$xmlstr .= "</form>\n";
+  }
+
+
   // storeDeep also stores all fields and options for a form
   function Store($storeDeep=false)
   {
