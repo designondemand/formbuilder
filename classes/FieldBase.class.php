@@ -578,6 +578,51 @@ class fbFieldBase {
     return array(true, '');
   }	
 
+  function ExportXML($exportValues = false)
+  {
+	$xmlstr = "\t<field id=\"".$this->Id."\"\n";
+	$xmlstr .= "\\tttype=\"".$this->Type."\"\n";
+	$xmlstr .= "\t\tname=\"".$this->Name."\"\n";
+	$xmlstr .= "\t\tvalidation_type=\"".$this->ValidationType."\"\n";
+	$xmlstr .= "\t\torder_by=\"".$this->OrderBy."\"\n";
+	$xmlstr .= "\t\trequired=\"".$this->Required."\"\n";
+	$xmlstr .= "\t\thide_label=\"".$this->HideLabel."\">\n";
+	foreach($this->Options as $name=>$value)
+		{
+		if (is_array($value))
+			{
+			foreach ($value as $thisVal)
+				{
+				$xmlstr .= "\t\t\t<option name=\"$name\"><![CDATA[$thisVal]]></option>\n";
+				}
+			}
+		else
+			{
+			$xmlstr .= "\t\t\t<option name=\"$name\"><![CDATA[$value]]></option>\n";
+			}
+		}
+	if ($exportValues)
+		{
+		foreach($this->Value as $name=>$value)
+			{
+			if (is_array($value))
+				{
+				foreach ($value as $thisVal)
+					{
+					$xmlstr .= "\t\t\t<value name=\"$name\"><![CDATA[$thisVal]]></value>\n";
+					}
+				}
+			else
+				{
+				$xmlstr .= "\t\t\t<value name=\"$name\"><![CDATA[$value]]></value>\n";
+				}
+			}
+		}
+
+	$xmlstr .= "</field>\n";
+	return $xmlstr;
+  }
+
   function GetOptionNames()
   {
     return array_keys($this->Options);
