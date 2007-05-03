@@ -570,6 +570,12 @@ class fbForm {
     return true;
   }
 
+  function ImportXML()
+  {
+  	// xml_parser_create, xml_parse_into_struct
+  	// class.moduleoperations.inc.php::ExpandXMLPackage
+  }
+
   function ExportXML($exportValues = false)
   {
 	$xmlstr = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
