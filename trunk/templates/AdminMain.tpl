@@ -20,8 +20,8 @@
 	</tr>
 {/foreach}
 
-<tr class="row2"><td colspan="4">&nbsp;</td></tr>
-<tr class="row1"><td colspan="4">
+<tr class="row2"><td colspan="5">&nbsp;</td></tr>
+<tr class="row1"><td colspan="5">
 
 {if $addlink != ''}{$addlink}{$addform}{/if}
 </td></tr>
