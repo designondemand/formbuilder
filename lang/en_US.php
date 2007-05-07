@@ -22,6 +22,7 @@ $lang['field_type_DispositionEmailConfirmation']='*Validate-via-Email Address';
 $lang['field_type_DispositionFile']='*Write Results to Flat File';
 $lang['field_type_DispositionDatabase']='*Store Results in Database';
 $lang['field_type_DispositionUserTag']='*Call A User Defined Tag With the Form Results';
+$lang['field_type_DispositionDeliverToEmailAddressField']='*Email to User-Supplied Email Address';
 $lang['field_type_PageBreakField']='-Page Break';
 $lang['field_type_FileUploadField']='File Upload';
 $lang['field_type_FromEmailAddressField']='Email "From Address" Field';
