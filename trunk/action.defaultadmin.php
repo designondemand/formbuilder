@@ -80,11 +80,16 @@ if (!isset($gCms)) exit;
 		$this->smarty->assign('title_hide_errors',$this->Lang('title_hide_errors'));		
 		$this->smarty->assign('input_hide_errors',$this->CreateInputCheckbox($id, 'hide_errors', 1, $this->GetPreference('hide_errors','1')). $this->Lang('title_hide_errors_long'));		
 		$this->smarty->assign('title_relaxed_email_regex',$this->Lang('title_relaxed_email_regex'));		
-		$this->smarty->assign('input_relaxed_email_regex',$this->CreateInputCheckbox($id, 'relaxed_email_regex', 1, $this->GetPreference('relaxed_email_regex','0')). $this->Lang('title_relaxed_regex_long'));		
+		$this->smarty->assign('input_relaxed_email_regex',$this->CreateInputCheckbox($id, 'relaxed_email_regex', 1, $this->GetPreference('relaxed_email_regex','0')). $this->Lang('title_relaxed_regex_long'));
 
-		$this->smarty->assign('title_enable_fastadd',$this->Lang('title_enable_fastadd'));		
+		$this->smarty->assign('title_enable_fastadd',$this->Lang('title_enable_fastadd'));
 		$this->smarty->assign('input_enable_fastadd',$this->CreateInputCheckbox($id, 'enable_fastadd', 1, $this->GetPreference('enable_fastadd','1')). $this->Lang('title_enable_fastadd_long'));		
-		$this->smarty->assign('title_show_version',$this->Lang('title_show_version'));		
+
+		$this->smarty->assign('title_enable_antispam',$this->Lang('title_enable_antispam'));
+		$this->smarty->assign('input_enable_antispam',$this->CreateInputCheckbox($id, 'enable_antispam', 1, $this->GetPreference('enable_antispam','1')). $this->Lang('title_enable_antispam_long'));
+
+
+		$this->smarty->assign('title_show_version',$this->Lang('title_show_version'));
 		$this->smarty->assign('input_show_version',$this->CreateInputCheckbox($id, 'show_version', 1, $this->GetPreference('show_version','1')). $this->Lang('title_show_version_long'));				
 		$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', $this->Lang('save')));
 		$this->smarty->assign('config_formend',$this->CreateFormEnd());

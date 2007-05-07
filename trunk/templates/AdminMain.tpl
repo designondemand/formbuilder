@@ -47,6 +47,10 @@
 		<p class="pageinput">{$input_show_version}</p>
 	</div>
 	<div class="pageoverflow">
+		<p class="pagetext">{$title_enable_antispam}:</p>
+		<p class="pageinput">{$input_enable_antispam}</p>
+	</div>
+	<div class="pageoverflow">
 		<p class="pagetext">&nbsp;</p>
 		<p class="pageinput">{$submit}</p>
 	</div>
