@@ -41,15 +41,26 @@ if (! $this->CheckAccess()) exit;
 		$sqlarray = $dict->DropTableSQL(cms_db_prefix().'module_fb_resp_attr');
 		$dict->ExecuteSQLArray($sqlarray);
 
+		$sqlarray = $dict->DropTableSQL(cms_db_prefix().'module_fb_ip_log');
+		$dict->ExecuteSQLArray($sqlarray);
+
 		$db->DropSequence(cms_db_prefix().'module_fb_resp_seq');
 		$db->DropSequence(cms_db_prefix().'module_fb_resp_val_seq');
 		$db->DropSequence(cms_db_prefix().'module_fb_resp_attr_seq');
+		$db->DropSequence(cms_db_prefix().'module_fb_ip_log_seq');
 
 		$this->RemovePermission('Modify Forms');
 		
 		$this->RemoveEvent( 'OnFormBuilderFormSubmit' );
 		$this->RemoveEvent( 'OnFormBuilderFormDisplay' );
 		$this->RemoveEvent( 'OnFormBuilderFormSubmitError' );
+
+		$this->RemovePreference('hide_errors');
+		$this->RemovePreference('show_version');
+		$this->RemovePreference('relaxed_email_regex');
+		$this->RemovePreference('enable_fastadd');
+		$this->RemovePreference('enable_antispam');
+
 
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('uninstalled'));
 

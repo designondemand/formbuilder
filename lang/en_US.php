@@ -4,8 +4,8 @@ $lang['friendlyname'] = 'Form Builder';
 
 // field types
 $lang['field_type_']='Field Type Not Set';
-$lang['field_type_FieldsetEnd'] = 'Fieldset End';
-$lang['field_type_FieldsetStart']='Fieldset Start';
+$lang['field_type_FieldsetEnd'] = '-Fieldset End';
+$lang['field_type_FieldsetStart']='-Fieldset Start';
 $lang['field_type_TextField']='Text Input';
 $lang['field_type_TextAreaField']='Text Area';
 $lang['field_type_CheckboxField']='Check Box';
@@ -120,6 +120,8 @@ $lang['add_address'] = 'Add Another Address';
 $lang['delete_address'] = 'Delete Marked Addresses';
 $lang['add_destination'] = 'Add Another Destination';
 $lang['delete_destination'] = 'Delete Marked Destinations';
+$lang['suspected_spam'] = 'Too many emails generated from your IP address. Anti-Spam code has prevented delivery.';
+$lang['suspected_spam_log'] = 'Suspected spam from IP %s stopped.';
 
 // Field Attribute Titles
 $lang['title_udt_name'] = 'User Defined Tag';
@@ -209,6 +211,9 @@ $lang['title_form_unspecified']='Text to return for unspecified field values';
 $lang['title_enable_fastadd_long']='Enable fast field adding pulldown for forms?';
 $lang['title_enable_fastadd']='Enable fast field add pulldown?';
 $lang['title_fastadd']='Fast field adder';
+$lang['title_enable_antispam_long']='Clicking this will only allow 10 emails to be triggered from a given IP address (per hour).';
+$lang['title_enable_antispam']='Enable primitive anti-spam features?';
+
 $lang['link_label']='Link Label';
 $lang['link_destination']='Link Destination URL';
 $lang['title_default_set']='Checked by Default?';
@@ -457,6 +462,11 @@ of the license for the full disclaimer.</p>
 
 $lang['changelog'] = 		"
 		    <ul>
+		    			  <li>Version 0.2.4
+								<p>Added \"Email Form to User-Supplied Address\" disposition. Added primitive anti-spam features.
+								Added XML-based import and export of forms.
+								</p>
+						  </li>
                     <li>Version 0.2.3
                       <p>Add the ability to call a selectable user defined tag upon disposition of the form.</p>
                     </li>

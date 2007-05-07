@@ -119,6 +119,24 @@ function populate(formname)
     global $gCms;
     $mod = &$this->form_ptr->module_ptr;
 
+	 if ($mod->GetPreference('enable_antispam',1))
+	 	{
+		$db =& $gCms->GetDb();
+		$query = 'select count(src_ip) as sent from '.cms_db_prefix().
+			'module_fb_ip_log where src_ip=? AND sent_time > ?';
+	   
+		$dbresult = $db->GetOne($query, array($_SERVER['REMOTE_ADDR'],
+						   trim($db->DBTimeStamp(time() - 3600),"'")));
+
+		if ($dbresult && $dbresult['sent'] > 9)
+			{
+			// too many from this IP address. Kill it.
+	    	$msg = '<hr />'.$mod->Lang('suspected_spam'). '<hr />';
+			audit(-1, $mod->GetName(),$mod->Lang('log_suspected_spam',$_SERVER['REMOTE_ADDR']));
+			return array(false,$msg);
+			}
+		}
+
     $mail = $mod->GetModuleInstance('CMSMailer');
     if ($mail == FALSE)
       {
@@ -261,6 +279,17 @@ function populate(formname)
       {
 	audit(-1, (isset($name)?$name:""), $mod->Lang('submit_error',$mail->GetErrorInfo()));
       }
+    else if ($mod->GetPreference('enable_antispam',1))
+	 	{
+		$db =& $gCms->GetDb();
+
+		$rec_id = $db->GenID(cms_db_prefix().'module_fb_ip_log_seq');
+		$query = 'INSERT INTO '.cms_db_prefix().
+			'module_fb_ip_log (sent_id, src_ip, sent_time) VALUES (?, ?, ?)';
+	   
+		$dbresult = $db->Execute($query, array($rec_id, $_SERVER['REMOTE_ADDR'],
+						   trim($db->DBTimeStamp(time()),"'")));
+		}
     return array($res, $mail->GetErrorInfo());
   }
 

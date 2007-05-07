@@ -106,6 +106,15 @@ if (! $this->CheckAccess()) exit;
 
 		$db->CreateSequence(cms_db_prefix().'module_fb_resp_val_seq');
 
+		$flds = "
+			sent_id I KEY,
+			src_ip C(16),
+			sent_time ".CMS_ADODB_DT
+		";
+		$sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_fb_ip_log', $flds, $taboptarray);
+		$dict->ExecuteSQLArray($sqlarray);
+
+		$db->CreateSequence(cms_db_prefix().'module_fb_ip_log_seq');
 
 		$this->CreatePermission('Modify Forms', 'Modify Forms');
 
