@@ -20,8 +20,9 @@ class fbTimePickerField extends fbFieldBase {
 		$this->ValidationTypes = array(
             $mod->Lang('validation_none')=>'none',
             );
-        $this->flag12hour = array($mod->Lang('title_before_noon'),
-        	$mod->Lang('title_after_noon'));
+      $this->flag12hour = array(
+		  	$mod->Lang('title_before_noon')=>$mod->Lang('title_before_noon'),
+        	$mod->Lang('title_after_noon')=>$mod->Lang('title_after_noon'));
 	}
 
 
@@ -35,15 +36,25 @@ class fbTimePickerField extends fbFieldBase {
 	{
 		$mod = &$this->form_ptr->module_ptr;
        $now = localtime(time(),true);
-       $Mins = range(0,59);
+       $Mins = array();
+       $Hours = array();
+       for ($i=0;$i<60;$i++)
+       	{
+			$mo = sprintf("%02d",$i);
+			$Mins[$mo]=$mo;
+			}
        if ($this->GetOption('24_hour','0') == '0')
        		{
-       		$Hours = range(1,12);
+       		for ($i=1;$i<13;$i++)
+       		{
+					$mo = sprintf("%02d",$i);
+					$Hours[$mo]=$mo;
+				}
 			if ($this->HasValue())
 				{
 				$now['tm_hour'] = $this->GetArrayValue(0);
-				$now['merid'] = $this->GetArrayValue(1);
-				$now['tm_min'] = $this->GetArrayValue(2);
+				$now['merid'] = $this->GetArrayValue(2);
+				$now['tm_min'] = $this->GetArrayValue(1);
 				}
 			else
 				{
@@ -62,13 +73,18 @@ class fbTimePickerField extends fbFieldBase {
        		return $mod->CreateInputDropdown($id, '_'.$this->Id.'[]',
        			$Hours, -1, $now['tm_hour']) .
        				$mod->CreateInputDropdown($id, '_'.$this->Id.'[]',
-       			$this->flasg12hour, -1, $now['merid']).
+       			$Mins, -1, $now['tm_min']) .
        				$mod->CreateInputDropdown($id, '_'.$this->Id.'[]',
-       			$Mins, -1, $now['tm_min']);
+       			$this->flag12hour, -1, $now['merid']);
        		}
        else
        		{
-       		$Hours = range(0,23);
+       		for ($i=0;$i<24;$i++)
+       		{
+					$mo = sprintf("%02d",$i);
+					$Hours[$mo]=$mo;
+				}
+
 			if ($this->HasValue())
 				{
 				$now['tm_hour'] = $this->GetArrayValue(0);
@@ -91,14 +107,13 @@ class fbTimePickerField extends fbFieldBase {
 			if ($this->GetOption('24_hour','0') == '0')
 				{
 				return $this->GetArrayValue(0).':'.
-					$this->GetArrayValue(2).' '.
-					$this->GetArrayValue(1);
+					$this->GetArrayValue(1).' '.
+					$this->GetArrayValue(2);
 				}
 			else
 				{
 				return $this->GetArrayValue(0).':'.
-					$this->GetArrayValue(1).':'.
-					$this->GetArrayValue(2);
+					$this->GetArrayValue(1);
 				}
 			}
 		else
