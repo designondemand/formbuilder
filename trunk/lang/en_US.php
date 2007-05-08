@@ -15,6 +15,7 @@ $lang['field_type_MultiselectField']='Multiselect';
 $lang['field_type_StatePickerField']='U.S. State Picker';
 $lang['field_type_CountryPickerField']='Country Picker';
 $lang['field_type_DatePickerField']='Date Picker';
+$lang['field_type_TimePickerField']='Time Picker';
 $lang['field_type_RadioGroupField']='Radio Button Group';
 $lang['field_type_DispositionDirector']='*Email Results Based on Pulldown';
 $lang['field_type_DispositionEmail']='*Email Results to set Address(es)';
@@ -222,6 +223,9 @@ $lang['title_xml_to_upload']='Upload form as XML file';
 $lang['link_label']='Link Label';
 $lang['link_destination']='Link Destination URL';
 $lang['title_default_set']='Checked by Default?';
+$lang['title_24_hour']='Use 24-hour clock?';
+$lang['title_before_noon'] = 'AM';
+$lang['title_after_noon'] = 'PM';
 
 $lang['help_variables_for_template']='Variables For Template';
 $lang['help_submission_date']='Date of Submission';
@@ -468,8 +472,8 @@ of the license for the full disclaimer.</p>
 $lang['changelog'] = 		"
 		    <ul>
 		    			  <li>Version 0.2.4
-								<p>Added \"Email Form to User-Supplied Address\" disposition. Added primitive anti-spam features.
-								Added XML-based import and export of forms.
+								<p>Added \"Email Form to User-Supplied Address\" disposition. Added TimePicker field type. Added primitive anti-spam features.
+								Added XML-based import and export of forms. 
 								</p>
 						  </li>
                     <li>Version 0.2.3
