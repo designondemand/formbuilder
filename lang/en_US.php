@@ -219,6 +219,7 @@ $lang['title_fastadd']='Fast field adder';
 $lang['title_enable_antispam_long']='Clicking this will only allow 10 emails to be triggered from a given IP address (per hour).';
 $lang['title_enable_antispam']='Enable primitive anti-spam features?';
 $lang['title_xml_to_upload']='Upload form as XML file';
+$lang['title_html_email']='Generate HTML email?';
 
 $lang['link_label']='Link Label';
 $lang['link_destination']='Link Destination URL';
@@ -238,6 +239,7 @@ $lang['help_variable_name']='Variable';
 $lang['help_form_field']='Field Represented';
 $lang['link_back_to_form']='&#171; Back to Form';
 $lang['title_create_sample_template']='Create Sample Template';
+$lang['title_create_sample_html_template']='Create Sample HTML-Email Template';
 $lang['title_create_sample_header']='Create Sample Header';
 $lang['help_tab_symbol']='a tab character';
 $lang['title_file_template']='Template for one line of output file';
@@ -277,7 +279,7 @@ $lang['nouploads_error'] = 'Could not find the uploads module';
 $lang['upload_attach_error'] = 'Upload/Attachment error on file %s (tmp_name: %s, of type %s)';
 $lang['submission_error_file_lock'] = 'Error. Unable to obtain lock for file.';
 
-$lang['email_default_template'] = "FormBuilder Submission\n";
+$lang['email_default_template'] = "FormBuilder Submission";
 $lang['email_template_not_set'] = '<br/>Email Template not yet set!';      
 $lang['missing_cms_mailer'] = 'FormBuilder: Cannot find required module CMSMailer!';  		
 $lang['user_approved_submission']='User approved submission %s from %s';

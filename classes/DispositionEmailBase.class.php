@@ -24,10 +24,16 @@ class fbDispositionEmailBase extends fbFieldBase
 function populate(formname)
     {
     var fname = 'IDopt_email_template';
-    formname[fname].value=TEMPLATE;
+    formname[fname].value=|TEMPLATE|;
     }
+function populate_html(formname)
+    {
+    var fname = 'IDopt_email_template';
+    formname[fname].value=|HTMLTEMPLATE|;
+	 }
 </script>
-<input type=\"button\" value=\"".$mod->Lang('title_create_sample_template')."\" onClick=\"javascript:populate(this.form)\" />";
+<input type=\"button\" value=\"".$mod->Lang('title_create_sample_template')."\" onClick=\"javascript:populate(this.form)\" />
+<input type=\"button\" value=\"".$mod->Lang('title_create_sample_html_template')."\" onClick=\"javascript:populate_html(this.form)\" />";
 
     $this->templateVariables = Array(
 				     '{$sub_form_name}'=>$mod->Lang('title_form_name'),
@@ -81,21 +87,49 @@ function populate(formname)
     return $string;
   }
 
-  function createSampleTemplate()
+  function createSampleTemplate($htmlish=false)
   {
     $mod = &$this->form_ptr->module_ptr;
-    $ret = $mod->Lang('email_default_template');
+    if ($htmlish)
+    	{
+		$ret = "<h1>".$mod->Lang('email_default_template')."</h1>\n";
+		}
+	 else
+	   {
+		$ret = $mod->Lang('email_default_template')."\n";
+		}
     foreach($this->templateVariables as $thisKey=>$thisVal)
       {
-	$ret .= $thisVal.': '.$thisKey."\n";
+		if ($htmlish)
+			{
+			$ret .= '<strong>'.$thisVal.'</strong>: '.$thisKey."<br />\n";
+			}
+		else
+			{
+			$ret .= $thisVal.': '.$thisKey."\n";
+			}
       }
-    $ret .= "\n-------------------------------------------------\n";
+     if ($htmlish)
+     	  {
+		  $ret .= "\n<hr />\n";
+	  	  }
+	  else
+	  	  {
+    	  $ret .= "\n-------------------------------------------------\n";
+    	  }
     $others = &$this->form_ptr->GetFields();
     for($i=0;$i<count($others);$i++)
       {
 	if ($others[$i]->DisplayInSubmission())
 	  {
-	    $ret .= $others[$i]->GetName() . ': {$' . $this->MakeVar($others[$i]->GetName()) . "}\n";
+	  if ($htmlish)
+     	  {
+  			$ret .= '<strong>'.$others[$i]->GetName() . '</strong>: {$' . $this->MakeVar($others[$i]->GetName()) . "}<br />\n";
+  		  }
+  	  else
+  	  	  {
+	     $ret .= $others[$i]->GetName() . ': {$' . $this->MakeVar($others[$i]->GetName()) . "}\n";
+	     }
 	  }
       }
     return $ret;
@@ -160,9 +194,19 @@ function populate(formname)
     $mail->SetCharSet($this->GetOption('email_encoding','utf-8'));
 
     $message = $this->GetOption('email_template','');
-    if ($message == '')
+    $htmlemail = ($this->GetOption('html_email','0') == '1');
+    if ($htmlemail)
+	 	{
+		$mail->IsHTML(true);
+		}
+
+	 if ($message == '')
       {
-	$message = $this->createSampleTemplate();
+		$message = $this->createSampleTemplate(false);
+    	if ($htmlemail)
+	 		{
+			$message2 = $this->createSampleTemplate(true);
+			}
       }
 	  
     $mod->smarty->assign('sub_form_name',$this->form_ptr->GetName());
@@ -262,8 +306,16 @@ function populate(formname)
 
     $message = $mod->ProcessTemplateFromData( $message );
     $mail->SetSubject($subject);
-    $mail->SetBody(html_entity_decode($message));
-
+     if ($htmlemail)
+	 	{
+		$message2 = $mod->ProcessTemplateFromData($message2);
+		$mail->SetAltBody(html_entity_decode($message));
+		$mail->SetBody($message);
+		}
+	 else
+	 	{
+	 	$mail->SetBody(html_entity_decode($message));
+		}
     // send the message...
     if (! is_array($destination_array))
       {
@@ -315,9 +367,12 @@ function populate(formname)
        	
     $ret .= '<tr><td colspan="2">'.$mod->Lang('help_other_fields').'</td></tr>';
         
-    $escapedSample = preg_replace('/\'/',"\\'",$this->createSampleTemplate());
+    $escapedSample = preg_replace('/\'/',"\\'",$this->createSampleTemplate(false));
+    $escapedSampleHTML = preg_replace('/\'/',"\\'",$this->createSampleTemplate(true));
     $escapedSample = preg_replace('/\n/',"\\n'+\n'", $escapedSample);
-    $this->sampleTemplateCode = preg_replace('/TEMPLATE/',"'".$escapedSample."'",$this->sampleTemplateCode);
+    $escapedSampleHTML = preg_replace('/\n/',"\\n'+\n'", $escapedSampleHTML);
+    $this->sampleTemplateCode = preg_replace('/\|TEMPLATE\|/',"'".$escapedSample."'",$this->sampleTemplateCode);
+    $this->sampleTemplateCode = preg_replace('/\|HTMLTEMPLATE\|/',"'".$escapedSampleHTML."'",$this->sampleTemplateCode);
     $this->sampleTemplateCode = preg_replace('/ID/',$formDescriptor, $this->sampleTemplateCode);
     $ret .= '<tr><td colspan="2">'.$this->sampleTemplateCode.'</td></tr>';
     $ret .= '</table>';
@@ -329,9 +384,11 @@ function populate(formname)
 		       array($mod->Lang('title_email_from_address'),$mod->CreateInputText($formDescriptor, 'opt_email_from_address',$this->GetOption('email_from_address',''),25,128)),
 		       ),
 		 array(
+		 		 array($mod->Lang('title_html_email'),$mod->CreateInputCheckbox($formDescriptor, 'opt_html_email',
+            		'1',$this->GetOption('html_email','0'))),
 		       array($mod->Lang('title_email_template'),
 			     array($mod->CreateTextArea(false, $formDescriptor,
-							htmlspecialchars($message),'opt_email_template', 'module_fb_area_wide', '','',0,0),$ret)),
+							($this->GetOption('html_email','0')=='1'?$message:htmlspecialchars($message)),'opt_email_template', 'module_fb_area_wide', '','',0,0),$ret)),
 		       array($mod->Lang('title_email_encoding'),$mod->CreateInputText($formDescriptor, 'opt_email_encoding',$this->GetOption('email_encoding','utf-8'),25,128))
 		       )
 		 );
