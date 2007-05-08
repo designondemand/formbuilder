@@ -109,8 +109,7 @@ if (! $this->CheckAccess()) exit;
 		$flds = "
 			sent_id I KEY,
 			src_ip C(16),
-			sent_time ".CMS_ADODB_DT
-		";
+			sent_time ".CMS_ADODB_DT;
 		$sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_fb_ip_log', $flds, $taboptarray);
 		$dict->ExecuteSQLArray($sqlarray);
 
