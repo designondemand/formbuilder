@@ -166,7 +166,7 @@ class fbFieldBase {
   function DebugDisplay()
   {
     $tmp = $this->form_ptr;
-    $this->form_ptr = '';
+    $this->form_ptr = '[frmptr: '.$tmp->GetId().']';
     debug_display($this);
     $this->form_ptr = $tmp;
   }
@@ -210,6 +210,11 @@ class fbFieldBase {
     return $mod->Lang('delete_options');
   }
 
+  function SetName($name)
+  {
+  	$this->Name = $name;
+  }
+  
   function GetName()
   {
     return $this->Name;
@@ -245,7 +250,12 @@ class fbFieldBase {
   {
     return $this->HasLabel;
   }
-	
+
+  function SetHideLabel($hide)
+  {
+  	$this->HideLabel = $hide?1:0;
+  }
+  	
   function HideLabel()
   {
     return ($this->HideLabel==1?true:false);
@@ -286,6 +296,12 @@ class fbFieldBase {
   {
     return $this->ValidationType;
   }
+
+  function SetValidationType($theType)
+  {
+    $this->ValidationType = $theType;
+  }
+
 
   // override me with a displayable type
   function GetDisplayType()
@@ -685,6 +701,25 @@ class fbFieldBase {
   function SetOption($optionName, $optionValue)
   {
     $this->Options[$optionName] = $optionValue;
+  }
+  
+  function PushOptionElement($optionName, $val)
+  {
+  	if (isset($this->Options[$optionName]))
+  		{
+  		if (is_array($this->Options[$optionName]))
+  			{
+  			array_push($this->Options[$optionName],$val);
+  			}
+  		else
+  			{
+  			$this->Options[$optionName] = array($this->Options[$optionName],$val);
+  			}
+  		}
+  	else
+  		{
+  		$this->Options[$optionName] = $val;
+  		}
   }
 
   function LoadField(&$params)
