@@ -570,10 +570,74 @@ class fbForm {
     return true;
   }
 
-  function ImportXML()
+  function ImportXML(&$params)
   {
   	// xml_parser_create, xml_parse_into_struct
-  	// class.moduleoperations.inc.php::ExpandXMLPackage
+  	$parser = xml_parser_create('');
+   xml_parser_set_option( $parser, XML_OPTION_CASE_FOLDING, 0 );
+   xml_parser_set_option( $parser, XML_OPTION_SKIP_WHITE, 1 );
+	xml_parse_into_struct($parser, file_get_contents($params['xml_file']), $vals);
+	xml_parser_free($parser);
+	$elements = array();
+	$stack = array();
+	foreach ( $vals as $tag )
+		{
+		$index = count( $elements );
+		if ( $tag['type'] == "complete" || $tag['type'] == "open" )
+			{
+			$elements[$index] = array();
+			$elements[$index]['name'] = $tag['tag'];
+			$elements[$index]['attributes'] = empty($tag['attributes']) ? "" : $tag['attributes'];
+			$elements[$index]['content']    = empty($tag['value']) ? "" : $tag['value'];
+			if ( $tag['type'] == "open" )
+				{    # push
+				$elements[$index]['children'] = array();
+				$stack[count($stack)] = &$elements;
+				$elements = &$elements[$index]['children'];
+				}
+        }
+		if ( $tag['type'] == "close" )
+			{    # pop
+			$elements = &$stack[count($stack) - 1];
+			unset($stack[count($stack) - 1]);
+			}
+		}
+	if (!isset($elements[0]) || !isset($elements[0]) || !isset($elements[0]['attributes']))
+		{
+		//parsing failed, or invalid file.
+		}
+	$formAttrs = &$elements[0]['attributes'];
+	if ($this->inXML($formAttrs['name']))
+		{
+		$this->SetName($formAttrs['name']);
+		}
+	if ($this->inXML($formAttrs['alias']))
+		{
+		$this->SetAlias($formAttrs['alias']);
+		}
+	// populate the attributes first, so we can save the form and then start adding fields to it.
+	foreach ($elements[0]['children'] as $thisChild)
+		{
+		if ($thisChild['name'] == 'attribute')
+			{
+			$this->SetAttr($thisChild['attributes']['key'], $thisChild['content']);
+			}
+		}
+	$this->Store();
+	$this->DebugDisplay();
+//	debug_display($elements);
+  }
+
+  function inXML(&$var)
+  {
+  		if (isset($var) && strlen($var) > 0)
+  			{
+			return true;
+			}
+		else
+			{
+			return false;
+			}
   }
 
   function ExportXML($exportValues = false)

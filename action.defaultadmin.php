@@ -92,8 +92,15 @@ if (!isset($gCms)) exit;
 		$this->smarty->assign('title_show_version',$this->Lang('title_show_version'));
 		$this->smarty->assign('input_show_version',$this->CreateInputCheckbox($id, 'show_version', 1, $this->GetPreference('show_version','1')). $this->Lang('title_show_version_long'));				
 		$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', $this->Lang('save')));
-		$this->smarty->assign('config_formend',$this->CreateFormEnd());
-		
+		$this->smarty->assign('end_configform',$this->CreateFormEnd());
+
+      $this->smarty->assign('start_xmlform',$this->CreateFormStart($id,
+			'importxml', $returnid, 'post','multipart/form-data'));
+		$this->smarty->assign('submitxml', $this->CreateInputSubmit($id, 'submit', $this->Lang('upload')));
+		$this->smarty->assign('end_xmlform',$this->CreateFormEnd());
+      $this->smarty->assign('input_xml_to_upload',$this->CreateInputFile($id, 'xmlfile'));
+      $this->smarty->assign('title_xml_to_upload',$this->Lang('title_xml_to_upload'));
+
         $this->smarty->assign_by_ref('forms', $formArray);			
         echo $this->ProcessTemplate('AdminMain.tpl');
 ?>
