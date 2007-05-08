@@ -103,6 +103,7 @@ $lang['file_too_large']='Uploaded file is too large! Maximum size is:';
 $lang['illegal_file_type']='This type of file may not be uploaded. Please check that the extension is correct.';
 $lang['upload'] = 'Upload';
 $lang['form_imported'] = 'Form Imported.';
+$lang['form_import_failed'] = 'Form import failed! There was a problem with the format of the XML file.';
 
 $lang['uninstalled'] = 'Module uninstalled.';
 $lang['installed'] = 'Module version %s installed.';

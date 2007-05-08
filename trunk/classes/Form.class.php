@@ -147,7 +147,7 @@ class fbForm {
   function DebugDisplay()
   {
     $tmp = $this->module_ptr;
-    $this->module_ptr = '';
+    $this->module_ptr = '[mdptr]';
     $template_tmp = $this->GetAttr('form_template','');
     $this->SetAttr('form_template',strlen($template_tmp).' characters');
     $field_tmp = $this->Fields;
@@ -157,7 +157,7 @@ class fbForm {
     $this->Fields = $field_tmp;
     foreach($this->Fields as $fld)
       {
-	$fld->DebugDisplay();
+		$fld->DebugDisplay();
       }
     $this->module_ptr = $tmp;
   }
@@ -605,7 +605,9 @@ class fbForm {
 	if (!isset($elements[0]) || !isset($elements[0]) || !isset($elements[0]['attributes']))
 		{
 		//parsing failed, or invalid file.
+		return false;
 		}
+	$params['form_id'] = -1; // override any form_id values that may be around
 	$formAttrs = &$elements[0]['attributes'];
 	if ($this->inXML($formAttrs['name']))
 		{
@@ -624,8 +626,43 @@ class fbForm {
 			}
 		}
 	$this->Store();
-	$this->DebugDisplay();
-//	debug_display($elements);
+	$params['form_id'] = $this->GetId();
+	foreach ($elements[0]['children'] as $thisChild)
+		{
+		if ($thisChild['name'] == 'field')
+			{
+			$newField = new fbFieldBase($this, $params);
+			$fieldAttrs = &$thisChild['attributes'];
+			if ($this->inXML($fieldAttrs['name']))
+				{
+				$newField->SetName($fieldAttrs['name']);
+				}
+			if ($this->inXML($fieldAttrs['type']))
+				{
+				$newField->SetFieldType($fieldAttrs['type']);
+				}
+			$newField->SetValidationType($fieldAttrs['validation_type']);
+			if ($this->inXML($fieldAttrs['order_by']))
+				{
+				$newField->SetOrder($fieldAttrs['order_by']);
+				}
+			if ($this->inXML($fieldAttrs['required']))
+				{
+				$newField->SetRequired($fieldAttrs['required']);
+				}
+			if ($this->inXML($fieldAttrs['hide_label']))
+				{
+				$newField->SetHideLabel($fieldAttrs['hide_lable']);
+				}
+			foreach ($thisChild['children'] as $thisOpt)
+				{
+				$newField->PushOptionElement($thisOpt['attributes']['name'],
+					$thisOpt['content']);
+				}
+			$newField->Store(true);
+			}
+		}
+	return true;	
   }
 
   function inXML(&$var)

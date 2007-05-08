@@ -6,8 +6,15 @@ if (! $this->CheckAccess()) exit;
 $params['xml_file'] = $_FILES[$id.'xmlfile']['tmp_name'];
 
 $aeform = new fbForm($this, $params, true);
-$aeform->ImportXML($params);
+$res = $aeform->ImportXML($params);
 
-$params['message'] = $this->Lang('form_imported');
+if ($res)
+	{
+	$params['message'] = $this->Lang('form_imported');
+	}
+else
+	{
+	$params['message'] = $this->Lang('form_import_failed');
+	}
 $this->DoAction('defaultadmin', $id, $params);
 ?>
