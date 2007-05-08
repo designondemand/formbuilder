@@ -308,7 +308,8 @@ function populate_html(formname)
     $mail->SetSubject($subject);
      if ($htmlemail)
 	 	{
-		$message2 = $mod->ProcessTemplateFromData($message2);
+		// elijahlofgren: Commenting out because it causes undefined variable error and works with the line commented out.
+		// $message2 = $mod->ProcessTemplateFromData($message2);
 		$mail->SetAltBody(html_entity_decode($message));
 		$mail->SetBody($message);
 		}

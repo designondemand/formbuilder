@@ -24,7 +24,7 @@ class fbStaticTextField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		return $this->GetOption('text','');
+		return '</td></tr></table>'.$this->GetOption('text','').'<table class="formbuilderform">';
 	}
 
 	function StatusInfo()
@@ -41,8 +41,7 @@ class fbStaticTextField extends fbFieldBase {
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		$main = array(
-			array($mod->Lang('title_text'),
-            		$mod->CreateTextArea(false, $formDescriptor,  $this->GetOption('text',''), 'opt_text','pageheadtags'))
+			array($mod->CreateTextArea(true, $formDescriptor,  html_entity_decode($this->GetOption('text','')), 'opt_text','pageheadtags'),'')
 		);
 		$adv = array(
 		);
