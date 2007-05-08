@@ -208,6 +208,10 @@ function populate_html(formname)
 			$message2 = $this->createSampleTemplate(true);
 			}
       }
+    elseif ($htmlemail)
+    	{
+		$message2 = $message;
+		}
 	  
     $mod->smarty->assign('sub_form_name',$this->form_ptr->GetName());
     $mod->smarty->assign('sub_date',date('r'));
@@ -308,10 +312,9 @@ function populate_html(formname)
     $mail->SetSubject($subject);
      if ($htmlemail)
 	 	{
-		// elijahlofgren: Commenting out because it causes undefined variable error and works with the line commented out.
-		// $message2 = $mod->ProcessTemplateFromData($message2);
-		$mail->SetAltBody(html_entity_decode($message));
-		$mail->SetBody($message);
+		$message2 = $mod->ProcessTemplateFromData($message2);
+		$mail->SetAltBody(strip_tags(html_entity_decode($message)));
+		$mail->SetBody($message2);
 		}
 	 else
 	 	{
