@@ -10,6 +10,7 @@ if (! isset($params['form_id']) && isset($params['form']))
 $aeform = new fbForm($this,$params,true);
 
 $spec = $aeform->GetName().".xml";
+$spec = preg_replace('/[^\w\d\.\-\_]/','_',$spec);
 $xmlstr = $aeform->ExportXML(isset($params['export_values'])?true:false);
 
     @ob_clean();

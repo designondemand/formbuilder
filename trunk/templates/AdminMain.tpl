@@ -26,6 +26,9 @@
 {if $addlink != ''}{$addlink}{$addform}{/if}
 </td></tr>
 </table>
+{$start_xmlform}
+{$title_xml_to_upload}{$input_xml_to_upload}{$submitxml}
+{$end_xmlform}
 {$end_tab}
 {$start_configtab}
 {if $may_config == 1}
@@ -54,7 +57,7 @@
 		<p class="pagetext">&nbsp;</p>
 		<p class="pageinput">{$submit}</p>
 	</div>
-	{$config_formend}
+{$end_configform}
 
 {else}
 	<p>{$no_permission}</p>

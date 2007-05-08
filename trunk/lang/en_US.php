@@ -101,6 +101,8 @@ $lang['permitted_extensions']='Extensions';
 $lang['permitted_filetypes']='Allowed file types';
 $lang['file_too_large']='Uploaded file is too large! Maximum size is:';
 $lang['illegal_file_type']='This type of file may not be uploaded. Please check that the extension is correct.';
+$lang['upload'] = 'Upload';
+$lang['form_imported'] = 'Form Imported.';
 
 $lang['uninstalled'] = 'Module uninstalled.';
 $lang['installed'] = 'Module version %s installed.';
@@ -214,6 +216,7 @@ $lang['title_enable_fastadd']='Enable fast field add pulldown?';
 $lang['title_fastadd']='Fast field adder';
 $lang['title_enable_antispam_long']='Clicking this will only allow 10 emails to be triggered from a given IP address (per hour).';
 $lang['title_enable_antispam']='Enable primitive anti-spam features?';
+$lang['title_xml_to_upload']='Upload form as XML file';
 
 $lang['link_label']='Link Label';
 $lang['link_destination']='Link Destination URL';
