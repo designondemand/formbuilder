@@ -25,5 +25,5 @@ if (! $this->CheckAccess()) exit;
 $aeform = new fbForm($this, $params, true);
 
 
-        echo $aeform->AddEditForm($id, $returnid, $this->Lang('field_order_updated'));
+        echo $aeform->AddEditForm($id, $returnid, $this->ShowMessage($this->Lang('field_order_updated')));
 ?>
