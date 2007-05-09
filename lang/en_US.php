@@ -447,12 +447,11 @@ module's installation directory, assuming the web server has permission to write
 </ul></li></li></ul>
 
 <h3>Email and Flat File Templates</h3>
-<p>Man disposition types allow you to create a template for the email that is generated, or for the way the results are written to a file. If you opt not to create a template, the FormBuilder will use it's own best guess, which may or may not work out to your liking. You can always click on the \"Create Sample Template\" and then customize the results.</p>
+<p>Many disposition types allow you to create a template for the email that is generated, or for the way the results are written to a file. If you opt not to create a template, the FormBuilder will use it's own best guess, which may or may not work out to your liking. You can always click on the \"Create Sample Template\" and then customize the results.</p>
 <p>Note that once you've changed a template, it will no longer automatically add new fields. For this reason, it's usually best to create your templates as the last step of creating your form.</p>
 
 <h3>Known Issues</h3>
 <ul>
-<li>Some field types from FeedbackForms are not implemented in FormBuilder. If there is demand for them, they will be added.</li>
 <li>FormBuilder is not yet integrated with FrontEnd Users. It will be.</li>
 <li>FormBuilder cannot yet be inlined. That should be a simple upgrade down the line.</li>
 <li>FormBuilder does not yet support pretty urls, although that shouldn't matter since the user side is pretty simple.</li>
