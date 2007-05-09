@@ -20,7 +20,7 @@ class fbLinkField extends fbFieldBase {
 		$this->ValidationTypes = array(
             $mod->Lang('validation_none')=>'none'
             );
-        $this->hasMultipleFormComponents = true;
+      $this->hasMultipleFormComponents = true;
 	}
 
 	function GetFieldInput($id, &$params, $returnid)
@@ -32,15 +32,17 @@ class fbLinkField extends fbFieldBase {
 			}
 		else
 			{
-			$val = array("","");
+			$val = array($this->GetOption('default_link',''),$this->GetOption('default_link_title',''));
 			} 
 		$fieldDisp = array();
 		$thisBox = new stdClass();
 		$thisBox->name = '<label for="'.$id.'_'.$this->Id.'[]">'.$mod->Lang('link_destination').'</label>';
+		$thisBox->title = $mod->Lang('link_destination');
 		$thisBox->input = $mod->CreateInputText($id, '_'.$this->Id.'[]', $val[0]);
 		array_push($fieldDisp, $thisBox);
 		$thisBox = new stdClass();
 		$thisBox->name = '<label for="'.$id.'_'.$this->Id.'[]">'.$mod->Lang('link_label').'</label>';
+		$thisBox->title = $mod->Lang('link_label');
 		$thisBox->input = $mod->CreateInputText($id, '_'.$this->Id.'[]', $val[1]);
 		array_push($fieldDisp, $thisBox);			
 		return $fieldDisp;
@@ -85,7 +87,9 @@ class fbLinkField extends fbFieldBase {
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		$main = array(
-			);
+             array($mod->Lang('title_default_link'),$mod->CreateInputText($formDescriptor, 'opt_default_link',$this->GetOption('default_link',''),25,128)),
+             array($mod->Lang('title_default_link_title'),$mod->CreateInputText($formDescriptor, 'opt_default_link_title',$this->GetOption('default_link_title',''),25,128))
+		);
 		$adv = array(
 		);
 		return array('main'=>$main,'adv'=>$adv);

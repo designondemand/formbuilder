@@ -29,7 +29,8 @@ $lang['field_type_FileUploadField']='File Upload';
 $lang['field_type_FromEmailAddressField']='Email "From Address" Field';
 $lang['field_type_FromEmailNameField']='Email "From Name" Field';
 $lang['field_type_StaticTextField']='-Static Text';
-$lang['field_type_LinkField']='-Link';
+$lang['field_type_SystemLinkField']='-Static Link';
+$lang['field_type_LinkField']='Link (User-entered)';
 $lang['field_type_HiddenField'] = 'Hidden Field';
 
 
@@ -220,6 +221,11 @@ $lang['title_enable_antispam_long']='Clicking this will only allow 10 emails to 
 $lang['title_enable_antispam']='Enable primitive anti-spam features?';
 $lang['title_xml_to_upload']='Upload form as XML file';
 $lang['title_html_email']='Generate HTML email?';
+$lang['title_link_autopopulate']='Automatically populate?';
+$lang['title_link_autopopulate_help']='Automatically populate with the URL of the page containing the form? (this overrides site page link option below)';
+$lang['title_default_link']='Default link URL';
+$lang['title_default_link_title']='Default link text';
+$lang['title_link_to_sitepage']='Link to site page';
 
 $lang['link_label']='Link Label';
 $lang['link_destination']='Link Destination URL';
@@ -474,8 +480,12 @@ of the license for the full disclaimer.</p>
 $lang['changelog'] = 		"
 		    <ul>
 		    			  <li>Version 0.2.4
-								<p>Added \"Email Form to User-Supplied Address\" disposition. Added TimePicker field type. Added primitive anti-spam features.
-								Added XML-based import and export of forms. 
+								<p>Big release:
+								Added \"Email Form to User-Supplied Address\" disposition.
+								Added \"TimePicker\" field type. Split \"Link\" field into a \"User-supplied Link\" field and a \"Static Link\" field.
+								Added HTML email option and auto-templates for all email dispositions.
+								Added primitive anti-spam features.
+								Added XML-based import and export of forms.
 								</p>
 						  </li>
                     <li>Version 0.2.3
