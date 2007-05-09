@@ -51,6 +51,7 @@ class FormBuilder extends CMSModule
 		$this->email_regex_relaxed="/^([\w\d\.\-\_])+\@([\w\d\.\-\_])+$/i";
 		require_once dirname(__FILE__).'/classes/Form.class.php';
 		require_once dirname(__FILE__).'/classes/FieldBase.class.php';
+		//$this->RegisterModulePlugin();
 	}
 
 
