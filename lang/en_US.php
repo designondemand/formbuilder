@@ -410,6 +410,10 @@ group, but is better when there are a large number of options, as you can limit 
 <li>State. This is a pulldown listing the States of the U.S.</li>
 <li>Countries. This is a pulldown listing the Countries of the world (as of July 2005).</li>
 <li>Date Picker. This is a triple pulldown allowing the user to select a date.</li>
+<li>Time Picker. This is a set of pulldowns allowing the user to select a time (using 12 or 24 hour clock).</li>
+<li>Hidden Field. This allows you to embed a hidden field in your form.</li>
+<li>File Upload. This is a file upload field.</li>
+<li>Link (User Entered). This creates a double input field for getting a link URL and link title.</li>
 </ul></li>
 
 <li>Email-specific Inputs
@@ -420,21 +424,26 @@ group, but is better when there are a large number of options, as you can limit 
 <li>Display Control Fields<ul>
 <li>-Page Break. This allows you to split your feedback form into multiple pages. Each page is
 independently validated. This is good for applications like online surveys.</li>
+<li>-Fieldset Start. Combined with Fieldset End, this allows you to group various fields within your form. Use this to start a given grouping.</li>
+<li>-Fieldset End. Combined with Fieldset Start, this allows you to group various fields within your form. Use this to end a given grouping.</li>
 <li>-Static Text. This allows you to put text or a label in the middle of your form. This is useful for giving additional help text, especially if you're not using a Custom Template to render your form.</li>
+<li>-Static Link. This allows you to put a link to a given page into your form. Optionally, you can have it autopopulate with the page where the form is embedded (useful if you\'re sending results via email).</li>
 </ul></li>
 
 <li>Form Handling Inputs (Dispositions)
+<li>*Call a User Defined Tag With the Form Results. This submits all the form results to the User-Defined Tag you specify. The UDT can handle the results however it wants.</li>
 <ul><li>*Email Results Based on Pulldown. This is useful for web sites where comments get routed based on their subject matter, e.g., bugs get sent to one person, marketing questions to another person, sales requests to someone else, etc. The pulldown is populated with the subjects, and each gets directed to a specific email address. You set up these mappings in the when you create or edit a field of this type. If you use one of these \"Director\" pulldowns, the user must make a selection in order to submit the
 form. This input is part of the form the user sees, although the email addresses are not made visible nor
 are they embedded in the HTML.</li>
 <li>*Email Results to set Address(es). This simply sends the form results to one or more email addresses that you enter when you create or edit this type of field. This field and its name are not visible in the
 form that the user sees. The email addresses are not made visible nor
 are they embedded in the HTML.</li>
+<li>*Email to User-Supplied Address. This puts an input field in the form for the user to populate with an email address. The form results get sent to that address. Beware of Spam abuse! Active the primitive anti-spam features in the FormBuilder configuration screen.</li>
 <li>*Store Results in Database. This will store the form contents in an internal database. You will always use this disposition if you use the form with FormBrowser.</li>
 <li>*Validate via Email. This is a strange and powerful field. It provides the user a mandatory input for their email address. Once they submit their form, the standard form dispositions are not performed -- rather, it send the user an email with a special coded link. If they click on the link, the other form is considered \"approved,\" and the other dispositions are all performed.</li>
 <li>*Write Results to Flat File. This takes the form results and writes them into a text file. You may
 select the name of the file, and set its format. These files are written to the \"output\" directory under the
-module's installation directory, assuming the web server has permission to write there.
+module's installation directory, assuming the web server has permission to write there.</li>
 </ul></li></li></ul>
 
 <h3>Email and Flat File Templates</h3>
@@ -469,12 +478,12 @@ ate the neighbor's nasty little yap dog, for which I was inappropriately gratefu
 <li>To obtain commercial support, please send an email to the author at <a href=\"mailto:sjg@cmsmodules.com\">&lt;sjg@cmsmodules.com&gt;</a>.</li>
 <li>Additional discussion of this module may also be found in the <a href=\"http://forum.cmsmadesimple.org\">CMS Made Simple Forums</a>.</li>
 <li>The author can often be found in the <a href=\"irc://irc.freenode.net/#cms\">CMS IRC Channel</a>.</li>
-<li>Lastly, you may have some success emailing the author directly and grovelling for free support.</li>  
+<li>Lastly, you may have some success emailing the author directly and grovelling for free support.</li>
 </ul>
 <p>As per the GPL, this software is provided as-is. Please read the text
 of the license for the full disclaimer.</p>
 <h3>Copyright and License</h3>
-<p>Copyright &copy; 2006, Samuel Goldstein <a href=\"mailto:sjg@cmsmodules.com\">&lt;sjg@cmsmodules.com&gt;</a>. All Rights Are Reserved.</p>
+<p>Copyright &copy; 2007, Samuel Goldstein <a href=\"mailto:sjg@cmsmodules.com\">&lt;sjg@cmsmodules.com&gt;</a>. All Rights Are Reserved.</p>
 <p>This module has been released under the <a href=\"http://www.gnu.org/licenses/licenses.html#GPL\">GNU Public License</a>. You must agree to this license before using the module.</p>";
 
 $lang['changelog'] = 		"
