@@ -611,7 +611,7 @@ class FormBuilder extends CMSModule
         	{
         	return true;
         	}
-        $sql = "select flock_id from ".cms_db_prefix().
+        $sql = "SELECT flock_id FROM ".cms_db_prefix().
         	"module_fb_flock where flock + interval 15 second < ".$db->sysTimeStamp;
 		$rs = $db->Execute($sql);
         if ($rs && $rs->RecordCount() > 0)

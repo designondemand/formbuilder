@@ -625,6 +625,16 @@ class fbForm {
 			$this->SetAttr($thisChild['attributes']['key'], $thisChild['content']);
 			}
 		}
+	if( isset($params['import_formname']) && 
+	    trim($params['import_formname']) != '')
+	  {
+	    $this->SetName(trim($params['import_formname']));
+	  }
+	if( isset($params['import_formalias']) &&
+	    trim($params['import_formname']) != '')
+	  {
+	    $this->SetAlias(trim($params['import_formalias']));
+	  }
 	$this->Store();
 	$params['form_id'] = $this->GetId();
 	foreach ($elements[0]['children'] as $thisChild)

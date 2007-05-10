@@ -100,6 +100,14 @@ if (!isset($gCms)) exit;
 		$this->smarty->assign('end_xmlform',$this->CreateFormEnd());
       $this->smarty->assign('input_xml_to_upload',$this->CreateInputFile($id, 'xmlfile'));
       $this->smarty->assign('title_xml_to_upload',$this->Lang('title_xml_to_upload'));
+$this->smarty->assign('title_xml_upload_formname',$this->Lang('title_xml_upload_formname'));
+$this->smarty->assign('input_xml_upload_formname',
+		      $this->CreateInputText($id,'import_formname','',25));
+$this->smarty->assign('title_xml_upload_formalias',$this->Lang('title_xml_upload_formalias'));
+$this->smarty->assign('input_xml_upload_formalias',
+		      $this->CreateInputText($id,'import_formalias','',25));
+$smarty->assign('info_leaveempty',$this->Lang('help_leaveempty'));
+$smarty->assign('legend_xml_import',$this->Lang('title_import_legend'));
 
         $this->smarty->assign_by_ref('forms', $formArray);			
         echo $this->ProcessTemplate('AdminMain.tpl');
