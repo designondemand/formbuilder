@@ -26,9 +26,27 @@
 {if $addlink != ''}{$addlink}{$addform}{/if}
 </td></tr>
 </table>
+<fieldset>
+<legend>{$legend_xml_import}</legend>
 {$start_xmlform}
-{$title_xml_to_upload}{$input_xml_to_upload}{$submitxml}
+<div class="pageoverflow">
+  <p class="pagetext">{$title_xml_to_upload}:</p>
+  <p class="pageinput">{$input_xml_to_upload}</p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">{$title_xml_upload_formname}:</p>
+  <p class="pageinput">{$input_xml_upload_formname}&nbsp;<em>{$info_leaveempty}</em></p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">{$title_xml_upload_formalias}:</p>
+  <p class="pageinput">{$input_xml_upload_formalias}&nbsp;<em>{$info_leaveempty}</em></p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">&nbsp;</p>
+  <p class="pageinput">{$submitxml}
+</div>
 {$end_xmlform}
+</fieldset>
 {$end_tab}
 {$start_configtab}
 {if $may_config == 1}
