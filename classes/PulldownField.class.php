@@ -12,9 +12,24 @@ class fbPulldownField extends fbFieldBase {
 	var $optionCount;
 	var $optionAdd;
 
+    function array_sort_by_key($input)
+	{
+		if( !is_array($input) ) return;
+		$a1 = array();
+		foreach( $input as $k => $v ) {
+			$a1[$v] = $k;
+		}
+		asort($a1);
+		$a2 = array();
+		foreach( $a1 as $k => $v ) {
+			$a2[$v] = $k;
+		}
+		return $a2;
+	}
+
 	function fbPulldownField(&$form_ptr, &$params)
 	{
-       $this->fbFieldBase($form_ptr, $params);
+		$this->fbFieldBase($form_ptr, $params);
         $mod = &$form_ptr->module_ptr;
 		$this->Type = 'PulldownField';
 		$this->DisplayInForm = true;
@@ -81,27 +96,30 @@ class fbPulldownField extends fbFieldBase {
 		// why all this? Associative arrays are not guaranteed to preserve
 		// order, except in "chronological" creation order.
 		$sorted =array();
-		if ($this->GetOption('select_one','') != '')
-			{
-			$sorted[' '.$this->GetOption('select_one','')]='';
-			}
-		else
-			{
-			$sorted[' '.$mod->Lang('select_one')]='';
-			}
 		$subjects = &$this->GetOptionRef('option_name');
 
-		if (count($subjects) > 1)
-			{
-			for($i=0;$i<count($subjects);$i++)
-				{
+		if (count($subjects) > 1) {
+			for($i=0;$i<count($subjects);$i++) {
 				$sorted[$subjects[$i]]=($i+1);
-				}
 			}
-		else
-			{
+			print_r( $sorted ); echo '<br/>';
+			if( $this->GetOption('sort') == '1' ) {
+				ksort($sorted);
+			}
+			print_r( $sorted ); echo '<br/>';
+		}
+		else {
 			$sorted[$subjects] = '1';
-			}
+		}
+
+
+		if ($this->GetOption('select_one','') != '') {
+			$sorted = array_merge(array(' '.$this->GetOption('select_one','')=>''),$sorted);
+		}
+		else {
+			$sorted = array_merge(array(' '.$mod->Lang('select_one')=>''),$sorted);
+		}
+		
 		return $mod->CreateInputDropdown($id, '_'.$this->Id, $sorted, -1, $this->Value);
 	}
 
@@ -156,9 +174,13 @@ class fbPulldownField extends fbFieldBase {
 		$dests .= '</table>';
 		$main = array();
 		$adv = array();
-		array_push($main,array($mod->Lang('title_select_one_message'),
-			$mod->CreateInputText($formDescriptor, 'opt_select_one',
-			$this->GetOption('select_one',$mod->Lang('select_one')),25,128)));
+		$main[] = array($mod->Lang('title_select_one_message'),
+						$mod->CreateInputText($formDescriptor, 'opt_select_one',
+											  $this->GetOption('select_one',$mod->Lang('select_one')),25,128));
+		$main[] = array($mod->Lang('sort_options'),
+						$mod->CreateInputDropdown($formDescriptor,'opt_sort',
+												  array('Yes'=>1,'No'=>0),-1,
+												  $this->GetOption('sort',0)));
 		array_push($main,array($mod->Lang('title_pulldown_details'),$dests));
 		return array('main'=>$main,'adv'=>$adv);
 	}
