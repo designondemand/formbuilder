@@ -102,11 +102,9 @@ class fbPulldownField extends fbFieldBase {
 			for($i=0;$i<count($subjects);$i++) {
 				$sorted[$subjects[$i]]=($i+1);
 			}
-			print_r( $sorted ); echo '<br/>';
 			if( $this->GetOption('sort') == '1' ) {
 				ksort($sorted);
 			}
-			print_r( $sorted ); echo '<br/>';
 		}
 		else {
 			$sorted[$subjects] = '1';
