@@ -33,7 +33,7 @@ class fbPulldownField extends fbFieldBase {
         $mod = &$form_ptr->module_ptr;
 		$this->Type = 'PulldownField';
 		$this->DisplayInForm = true;
-		$this->NonRequirableField = false;
+		//$this->NonRequirableField = false;
 		$this->HasAddOp = true;
 		$this->HasDeleteOp = true;
 		$this->ValidationTypes = array(
