@@ -17,6 +17,7 @@ class fbStaticTextField extends fbFieldBase {
 		$this->DisplayInForm = true;
 		$this->DisplayInSubmission = false;
 		$this->NonRequirableField = true;
+		$this->HasLabel = 0;
 		$this->ValidationTypes = array(
             );
 
