@@ -10,21 +10,21 @@
 
 
    Each field has the following attributes:
-       field->display         = 1 if the field should be displayed, 0 otherwise
-       field->required        = 1 if the field is required, 0 otherwise
-       field->required_symbol = the symbol for required fields
-       field->css_class       = the CSS class specified for this field
-       field->valid           = 1 if this field has passed validation, 0 otherwise
-       field->hide_name       = 1 if the field name should be hidden, 0 otherwise
-       field->name            = the field's name
-       field->input           = the field's input control (e.g., the input field itself)
-       field->input_id        = the of the field's input (useful for <label for="">)
-       field->type            = the field's data type
-       field->multiple_parts  = 1 if the field->input is actually a collection of controls
+       entry->display         = 1 if the field should be displayed, 0 otherwise
+       entry->required        = 1 if the field is required, 0 otherwise
+       entry->required_symbol = the symbol for required fields
+       entry->css_class       = the CSS class specified for this field
+       entry->valid           = 1 if this field has passed validation, 0 otherwise
+       entry->hide_name       = 1 if the field name should be hidden, 0 otherwise
+       entry->name            = the field's name
+       entry->input           = the field's input control (e.g., the input field itself)
+       entry->input_id        = the of the field's input (useful for <label for="">)
+       entry->type            = the field's data type
+       entry->multiple_parts  = 1 if the entry->input is actually a collection of controls
 
-   In certain cases, field->input is actually an array of objects rather than an input. This
+   In certain cases, entry->input is actually an array of objects rather than an input. This
    happens, for example, in CheckBoxGroups or RadioButtonGroups. For them, you
-   can iterate through field->input->name and field->input->inputs.
+   can iterate through entry->input->name and entry->input->inputs.
     
 
        Additional smarty variables that you can use include:
