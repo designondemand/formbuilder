@@ -76,6 +76,7 @@ $lang['order']='Order';
 $lang['unspecified']='[unspecified]';
 $lang['added']='added';
 $lang['updated']='updated';
+$lang['sort_options'] = 'Sort options on output';
 $lang['select_one']='Select One';
 $lang['select_type']='Select Type';
 $lang['to']='To';
