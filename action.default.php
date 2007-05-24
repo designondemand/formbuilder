@@ -42,7 +42,7 @@ if (! $finished)
     $parms['form_id'] = $aeform->GetId();
     $this->SendEvent('OnFormBuilderFormDisplay',$parms);
     
-    echo $this->CreateFormStart($id, 'default', $returnid, 'post', 'multipart/form-data');
+    echo $this->CreateFormStart($id, 'default', $returnid, 'post', 'multipart/form-data', false, '', $params);
     echo $aeform->RenderForm($id, $params, $returnid);
     echo $this->CreateFormEnd();
   }
