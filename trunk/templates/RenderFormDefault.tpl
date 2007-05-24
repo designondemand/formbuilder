@@ -50,7 +50,7 @@
 	  {if $entry->display == 1}
 	    	{strip}
                 {* leading div before the tag *}
-                {if $entry->type != "Fieldset Start" && $entry->type != "Fieldset End"}
+                {if $entry->type != "-Fieldset Start" && $entry->type != "-Fieldset End"}
 	    	<div
 	    	{if $entry->required == 1 || $entry->css_class != ''} class=" 
 	    		{if $entry->required == 1}
@@ -97,7 +97,7 @@
 	    	{/if}
 	    	{if $entry->valid == 0} &lt;--- {/if}
                 {* trailing div *}
-                {if $entry->type != "Fieldset Start" && $entry->type != "Fieldset End"}
+                {if $entry->type != "-Fieldset Start" && $entry->type != "-Fieldset End"}
 	    	</div>
                 {/if}
 	    	{/strip}
