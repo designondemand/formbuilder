@@ -17,7 +17,7 @@ class fbFieldBase {
   var $OrderBy;
   var $HideLabel=-1;
   var $HasLabel=1;
-    
+
   var $ValidationTypes;
   var $ValidationType;
 
