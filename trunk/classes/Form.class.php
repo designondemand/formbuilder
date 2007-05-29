@@ -663,7 +663,7 @@ class fbForm {
 				}
 			if ($this->inXML($fieldAttrs['hide_label']))
 				{
-				$newField->SetHideLabel($fieldAttrs['hide_lable']);
+				$newField->SetHideLabel($fieldAttrs['hide_label']);
 				}
 			foreach ($thisChild['children'] as $thisOpt)
 				{
