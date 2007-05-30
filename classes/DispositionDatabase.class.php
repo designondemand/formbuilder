@@ -21,6 +21,7 @@ class fbDispositionDatabase extends fbFieldBase {
 		$this->DisplayInForm = true;
 		$this->DisplayInSubmission = false;
 		$this->HideLabel = 1;
+		$this->NeedsDiv = 0;
 		$this->approvedBy = '';
 	}
 

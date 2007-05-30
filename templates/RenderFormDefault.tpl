@@ -1,6 +1,6 @@
 {literal}
 
-<!-- below, you'll find the "standard CSS template" for displaying FormBuilder Forms
+<!-- Below, you'll find the "standard CSS template" for displaying FormBuilder Forms
    You can edit it to make your form layout look any way you'd like.
    To make the form work, you'll need to always include the {$hidden} and {$submit}
    tags.
@@ -10,21 +10,24 @@
 
 
    Each field has the following attributes:
-       entry->display         = 1 if the field should be displayed, 0 otherwise
-       entry->required        = 1 if the field is required, 0 otherwise
-       entry->required_symbol = the symbol for required fields
-       entry->css_class       = the CSS class specified for this field
-       entry->valid           = 1 if this field has passed validation, 0 otherwise
-       entry->hide_name       = 1 if the field name should be hidden, 0 otherwise
-       entry->name            = the field's name
-       entry->input           = the field's input control (e.g., the input field itself)
-       entry->input_id        = the of the field's input (useful for <label for="">)
-       entry->type            = the field's data type
-       entry->multiple_parts  = 1 if the entry->input is actually a collection of controls
+       field->display         = 1 if the field should be displayed, 0 otherwise
+       field->required        = 1 if the field is required, 0 otherwise
+       field->required_symbol = the symbol for required fields
+       field->css_class       = the CSS class specified for this field
+       field->valid           = 1 if this field has passed validation, 0 otherwise
+       field->hide_name       = 1 if the field name should be hidden, 0 otherwise
+       field->has_label       = 1 if the field type has a label
+       field->needs_div       = 1 if the field needs to be wrapped in a DIV (or table row,
+                                if that's the way you swing)   
+       field->name            = the field's name
+       field->input           = the field's input control (e.g., the input field itself)
+       field->input_id        = the ID of the field's input (useful for <label for="">)
+       field->type            = the field's data type
+       field->multiple_parts  = 1 if the field->input is actually a collection of controls
 
-   In certain cases, entry->input is actually an array of objects rather than an input. This
+   In certain cases, field->input is actually an array of objects rather than an input. This
    happens, for example, in CheckBoxGroups or RadioButtonGroups. For them, you
-   can iterate through entry->input->name and entry->input->inputs.
+   can iterate through field->input->name and field->input->inputs.
     
 
        Additional smarty variables that you can use include:
@@ -33,7 +36,7 @@
        {$title_page_x_of_y} - displays "page x of y" for multi-page forms
        {$css_class}         - CSS Class for the form
        {$form_name}         - Form name
-       {$form_id}           - Form Database ID
+       {$form_id}           - Form database ID
        {$prev}              - "Back" button for multipart forms
 
        Dunno why you'd want some of those, but there you go...
@@ -46,25 +49,22 @@
 <div{if $css_class != ''} class="{$css_class}"{/if}>
 {if $total_pages gt 1}<span>{$title_page_x_of_y}</span>{/if}
 {foreach from=$fields item=entry}
-          <!-- {$entry|print_r} -->
 	  {if $entry->display == 1}
 	    	{strip}
-                {* leading div before the tag *}
-                {if $entry->type != "-Fieldset Start" && $entry->type != "-Fieldset End"}
-	    	<div
-	    	{if $entry->required == 1 || $entry->css_class != ''} class=" 
-	    		{if $entry->required == 1}
-	    			required
-	    		{/if}
-	    		{if $entry->required == 1 && $entry->css_class != ''} {/if}
-	    		{if $entry->css_class != ''}
-	    			{$entry->css_class}
-	    		{/if}
-	    		"
-	    	{/if}
-	    	>
-                {/if}
-                {* begin field output *}
+	    	{if $entry->needs_div == 1}
+            <div
+	    	   {if $entry->required == 1 || $entry->css_class != ''} class="
+	    		  {if $entry->required == 1}
+	    			 required
+	    		  {/if}
+	    		  {if $entry->required == 1 && $entry->css_class != ''} {/if}
+	    		  {if $entry->css_class != ''}
+	    			 {$entry->css_class}
+	    		  {/if}
+	    		  "
+	    	   {/if}
+	    	   >
+         {/if}
 	    	{if $entry->hide_name == 0}
 	    		<label for="{$entry->input_id}">{$entry->name}</label>
 	    		{if $entry->required_symbol != ''}
@@ -72,34 +72,29 @@
 	    		{/if}
 	    	{/if}
 	    	{if $entry->multiple_parts == 1}
-    		<table>
-					<tr>
+
 				{section name=numloop loop=$entry->input}
-	    			<td>{$entry->input[numloop]->input}&nbsp;{$entry->input[numloop]->name}</td>
+	    			<div>{$entry->input[numloop]->input}&nbsp;{$entry->input[numloop]->name}</div>
 	    			       {if not ($smarty.section.numloop.rownum mod $cols)}
                 				{if not $smarty.section.numloop.last}
-                        		</tr><tr>
                 				{/if}
         					{/if}
        				{if $smarty.section.numloop.last}
                 		{math equation = "n - a % n" n=$cols a=$entry->input|@count assign="cells"}
                 		{if $cells ne $cols}
                 			{section name=pad loop=$cells}
-                        		<td>&nbsp;</td>
+                        		<div>&nbsp;</div>
                 			{/section}
                		 	{/if}
-                		</tr>
         			{/if}
 	    		{/section}
-	    		</table>
 	    	{else}
 	    		{$entry->input}
 	    	{/if}
 	    	{if $entry->valid == 0} &lt;--- {/if}
-                {* trailing div *}
-                {if $entry->type != "-Fieldset Start" && $entry->type != "-Fieldset End"}
-	    	</div>
-                {/if}
+         {if $entry->needs_div == 1}
+            </div>
+         {/if}
 	    	{/strip}
 	  {/if}
 {/foreach}
