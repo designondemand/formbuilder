@@ -17,6 +17,7 @@ class fbFieldBase {
   var $OrderBy;
   var $HideLabel=-1;
   var $HasLabel=1;
+  var $NeedsDiv=1;
 
   var $ValidationTypes;
   var $ValidationType;
@@ -250,6 +251,12 @@ class fbFieldBase {
   {
     return $this->HasLabel;
   }
+
+  function NeedsDiv()
+  {
+    return $this->NeedsDiv;
+  }
+
 
   function SetHideLabel($hide)
   {

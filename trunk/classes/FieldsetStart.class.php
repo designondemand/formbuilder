@@ -19,6 +19,7 @@ class fbFieldsetStart extends fbFieldBase {
     $this->NonRequirableField = true;
     $this->ValidationTypes = array();    
     $this->HasLabel = 0;
+    $this->NeedsDiv = 0;
   }
 
   function GetFieldInput($id, &$params, $returnid)

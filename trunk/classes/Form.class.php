@@ -384,6 +384,7 @@ class fbForm {
 	    $oneset->hide_name = 1;
 	  }
 	$oneset->has_label = $thisField->HasLabel();
+	$oneset->needs_div = $thisField->NeedsDiv();
 	$oneset->name = $thisField->GetName();
 	$oneset->input = $thisField->GetFieldInput($id, $params, $returnid);
 	$oneset->input_id = $id.'_'.$thisField->GetID();

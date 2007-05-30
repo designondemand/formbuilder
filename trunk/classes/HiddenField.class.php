@@ -19,6 +19,7 @@ class fbHiddenField extends fbFieldBase
     $this->NonRequirableField = true;
     $this->ValidationTypes = array();
     $this->HasLabel = 0;
+    $this->NeedsDiv = 0;
   }
 
 
