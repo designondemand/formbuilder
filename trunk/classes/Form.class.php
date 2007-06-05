@@ -387,6 +387,8 @@ class fbForm {
 	$oneset->needs_div = $thisField->NeedsDiv();
 	$oneset->name = $thisField->GetName();
 	$oneset->input = $thisField->GetFieldInput($id, $params, $returnid);
+	$oneset->smarty_eval = $thisField->GetSmartyEval()?1:0;
+
 	$oneset->input_id = $id.'_'.$thisField->GetID();
 	$oneset->multiple_parts = $thisField->HasMultipleFormComponents()?1:0;
 	$oneset->type = $thisField->GetDisplayType();

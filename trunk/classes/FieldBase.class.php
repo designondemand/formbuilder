@@ -18,6 +18,7 @@ class fbFieldBase {
   var $HideLabel=-1;
   var $HasLabel=1;
   var $NeedsDiv=1;
+  var $SmartyEval;
 
   var $ValidationTypes;
   var $ValidationType;
@@ -53,6 +54,7 @@ class fbFieldBase {
     $this->modifiesOtherFields = false;
     $this->hasMultipleFormComponents = false;
     $this->DispositionPermitted = true;
+    $this->SmartyEval = false;
 
     if (isset($params['form_id']))
       {
@@ -219,6 +221,16 @@ class fbFieldBase {
   function GetName()
   {
     return $this->Name;
+  }
+
+  function SetSmartyEval($bool)
+  {
+  	$this->SmartyEval = $bool;
+  }
+  
+  function GetSmartyEval()
+  {
+    return $this->SmartyEval;
   }
 
   function GetOrder()

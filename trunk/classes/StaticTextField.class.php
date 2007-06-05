@@ -18,13 +18,15 @@ class fbStaticTextField extends fbFieldBase {
 		$this->DisplayInSubmission = false;
 		$this->NonRequirableField = true;
 		$this->HasLabel = 0;
-		$this->ValidationTypes = array(
-            );
-
+		$this->ValidationTypes = array();
 	}
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
+      if ($this->GetOption('smarty_eval','0') == '1')
+         {
+         $this->SetSmartyEval(true);
+         }
 		return $this->GetOption('text','');
 	}
 
@@ -46,6 +48,9 @@ class fbStaticTextField extends fbFieldBase {
 				$mod->CreateTextArea(false, $formDescriptor,  $this->GetOption('text',''), 'opt_text','pageheadtags'))
 		);
 		$adv = array(
+				array($mod->Lang('title_smarty_eval'),
+				$mod->CreateInputCheckbox($formDescriptor, 'opt_smarty_eval',
+            		'1',$this->GetOption('smarty_eval','0')))
 		);
 		return array('main'=>$main,'adv'=>$adv);
 	}
