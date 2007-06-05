@@ -116,29 +116,31 @@ class fbCheckboxGroupField extends fbFieldBase {
 		$names = &$this->GetOptionRef('box_name');
 		if (! is_array($names))
 			{
-			$names = array($names);
+				$names = array($names);
 			}		
 		$checked = &$this->GetOptionRef('box_checked');
 		if (! is_array($checked))
 			{
-			$checked = array($checked);
+				$checked = array($checked);
 			}
 		$unchecked = &$this->GetOptionRef('box_unchecked');
 		if (! is_array($unchecked))
 			{
-			$unchecked = array($unchecked);
+				$unchecked = array($unchecked);
 			}
 		$fieldRet = array();
 		for ($i=0;$i<count($names);$i++)
 			{
-			if ($this->FindArrayValue($i) === false)
-				{
-				array_push($fieldRet, $unchecked[$i]);
-				}
-			else
-				{
-				array_push($fieldRet, $checked[$i]);
-				}
+				if ($this->FindArrayValue($i) === false)
+					{
+						if( isset($unchecked[$i]) && trim($unchecked[$i]) != '' )
+							$fieldRet[] = $unchecked[$i];
+					}
+				else
+					{
+						if( isset($checked[$i]) && trim($checked[$i]) != '' )
+							$fieldRet[] = $checked[$i];
+					}
 			}
 		return join($form->GetAttr('list_delimiter',','),$fieldRet);			
 	}
