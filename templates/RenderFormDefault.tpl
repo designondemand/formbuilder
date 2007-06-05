@@ -72,12 +72,11 @@
 	    		{/if}
 	    	{/if}
 	    	{if $entry->multiple_parts == 1}
-
 				{section name=numloop loop=$entry->input}
 	    			<div>{$entry->input[numloop]->input}&nbsp;{$entry->input[numloop]->name}</div>
 	    		{/section}
 	    	{else}
-	    		{$entry->input}
+	    		{if $entry->smarty_eval == '1'}{eval var=$entry->input}{else}{$entry->input}{/if}
 	    	{/if}
 	    	{if $entry->valid == 0} &lt;--- {/if}
          {if $entry->needs_div == 1}

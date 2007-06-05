@@ -243,6 +243,7 @@ $lang['title_default_set']='Checked by Default?';
 $lang['title_24_hour']='Use 24-hour clock?';
 $lang['title_before_noon'] = 'AM';
 $lang['title_after_noon'] = 'PM';
+$lang['title_smarty_eval'] = 'Process smarty tags within field?';
 
 $lang['help_leaveempty'] = 'This field may be left empty';
 $lang['help_variables_for_template']='Variables For Template';
