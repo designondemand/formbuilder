@@ -30,8 +30,22 @@ if (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber() > 0) ||
       }
     else if (isset($params['done']) && $params['done']==1)
       {
-	$finished = true;
-	$results = $aeform->Dispose($returnid);
+      $ok = true;
+      $captcha = &$this->getModuleInstance('Captcha');
+      if ($aeform->GetAttr('use_captcha','0')== '1' && $captcha != null)
+         {
+  	      if (! $captcha->CheckCaptcha($params['captcha_phrase']))
+  	         {
+  	         echo $aeform->GetAttr('wrong_captcha',$this->Lang('wrong_captcha'));
+  	         $aeform->PageBack();
+            $ok = false;
+            }
+         }
+      if ($ok)
+         {
+         $finished = true;
+	      $results = $aeform->Dispose($returnid);
+	      }
       }
   }
 

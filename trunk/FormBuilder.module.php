@@ -259,7 +259,7 @@ class FormBuilder extends CMSModule
 			{			
 			$oneset->id = $row['resp_id'];
 			$oneset->user_approved = (empty($row['user_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['user_approved']))); 
- 			$oneset->admin_approved = (empty($row['admin_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['admin_approved']))); 
+ 			$oneset->admin_approved = (empty($row['admin_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['admin_approved'])));
 			$oneset->submitted = date($dateFmt,$db->UnixTimeStamp($row['submitted']));
 			$oneset->fields = array();
 			$oneset->names = array();
