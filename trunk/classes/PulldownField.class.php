@@ -186,19 +186,6 @@ class fbPulldownField extends fbFieldBase {
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
 		$mod = &$this->form_ptr->module_ptr;
-		// remove the "required" field
-		$reqIndex = -1;
-		for ($i=0;$i<count($mainArray);$i++)
-			{
-			if ($mainArray[$i]->title == $mod->Lang('title_field_required'))
-				{
-				$reqIndex = $i;
-				}
-			}
-		if ($reqIndex != -1)
-			{
-			array_splice($mainArray, $reqIndex,1);
-			}
 		if (count($advArray) == 0)
 			{
 			$advArray[0]->title = $mod->Lang('tab_advanced');

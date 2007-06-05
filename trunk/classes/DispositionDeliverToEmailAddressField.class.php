@@ -22,6 +22,7 @@ class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
             );
       $this->ValidationType = 'email';
 	   $this->modifiesOtherFields = false;
+	   $this->Required = 1;
 	}
 
 	function GetFieldInput($id, &$params, $returnid)
