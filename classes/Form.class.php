@@ -432,9 +432,21 @@ class fbForm {
       }
     else
       {
-	$mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'submit',
-							      $this->GetAttr('submit_button_text'),
-							      'class="fbsubmit"'));
+      $captcha = &$mod->getModuleInstance('Captcha');
+      if ($this->GetAttr('use_captcha','0')== '1' && $captcha != null)
+         {
+         $mod->smarty->assign('graphic_captcha',$captcha->getCaptcha());
+         $mod->smarty->assign('title_captcha',$this->GetAttr('title_user_captcha',$mod->Lang('title_user_captcha')));
+         $mod->smarty->assign('input_captcha',$mod->CreateInputText($id, 'captcha_phrase',''));
+         $mod->smarty->assign('has_captcha','1');
+         }
+      else
+         {
+         $mod->smarty->assign('has_captcha','0');
+         }
+	   $mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'submit',
+				$this->GetAttr('submit_button_text'),
+				'class="fbsubmit"'));
       }
 
     // figure out how to render the form, now that it's smarty-ized
@@ -855,9 +867,25 @@ class fbForm {
 			 $mod->Lang('title_list_delimiter'));
     $mod->smarty->assign('title_redirect_page',
 			 $mod->Lang('title_redirect_page'));
-	  
+
+    $captcha = &$mod->getModuleInstance('Captcha');
+    if ($captcha == null)
+         {
+         $mod->smarty->assign('input_use_captcha',
+			   $mod->Lang('title_captcha_not_installed'));
+         $mod->smarty->assign('title_use_captcha','');
+         }
+    else
+         {
+         $mod->smarty->assign('title_use_captcha',
+			   $mod->Lang('title_use_captcha'));
+
+         $mod->smarty->assign('input_use_captcha',$mod->CreateInputHidden($id,'forma_use_cpatcha','0').
+			   $mod->CreateInputCheckbox($id,'forma_use_captcha','1',$this->GetAttr('use_captcha','0')).
+			   $mod->Lang('title_use_captcha_help'));
+			}
     $mod->smarty->assign('title_information',$mod->Lang('information'));
-    $mod->smarty->assign('title_order',$mod->Lang('order'));    
+    $mod->smarty->assign('title_order',$mod->Lang('order'));
     $mod->smarty->assign('title_form_displaytype', $mod->Lang('title_form_displaytype'));
     $mod->smarty->assign('title_field_required_abbrev',$mod->Lang('title_field_required_abbrev'));
     $mod->smarty->assign('hasdisposition',$this->HasDisposition()?1:0);
@@ -972,6 +1000,15 @@ function fast_add(field_type)
 			 $mod->CreateInputText($id, 'forma_prev_button_text',
 					       $this->GetAttr('prev_button_text',$mod->Lang('button_previous')), 35, 35));
 
+    $mod->smarty->assign('input_title_user_captcha',
+			 $mod->CreateInputText($id, 'forma_title_user_captcha',
+                      $this->GetAttr('title_user_captcha',$mod->Lang('title_user_captcha')),35,80));
+    $mod->smarty->assign('title_title_user_captcha',$mod->Lang('title_title_user_captcha'));
+
+    $mod->smarty->assign('input_title_user_captcha_error',
+			 $mod->CreateInputText($id, 'forma_captcha_wrong',
+                      $this->GetAttr('title_user_captcha_error',$mod->Lang('wrong_captcha')),35,80));
+    $mod->smarty->assign('title_user_captcha_error',$mod->Lang('title_user_captcha_error'));
 
     $mod->smarty->assign('title_form_next_button',
 			 $mod->Lang('title_form_next_button'));

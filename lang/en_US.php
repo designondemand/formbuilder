@@ -230,7 +230,13 @@ $lang['title_link_autopopulate_help']='Automatically populate with the URL of th
 $lang['title_default_link']='Default link URL';
 $lang['title_default_link_title']='Default link text';
 $lang['title_link_to_sitepage']='Link to site page';
-
+$lang['title_captcha_not_installed'] = 'You can use <a href="http://www.wikipedia.org/wiki/Captcha" target="_new">"Captcha"</a> to protect form submissions if you install the Captcha module.';
+$lang['title_use_captcha'] = 'Use Captcha to protect form submissions?';
+$lang['title_use_captcha_help'] = 'Check here protect your form with a <a href="http://www.wikipedia.org/wiki/Captcha" target="_new">"Captcha"</a>.';
+$lang['title_user_captcha'] = 'Please confirm that you are not a script by entering the letters from the image.';
+$lang['title_user_captcha_error'] = 'Failed text for Captcha';
+$lang['wrong_captcha']='Captcha was not correct.';
+$lang['title_title_user_captcha'] = 'Help text for Captcha';
 $lang['link_label']='Link Label';
 $lang['link_destination']='Link Destination URL';
 $lang['title_default_set']='Checked by Default?';
@@ -262,7 +268,7 @@ $lang['validation_response_error']='Validation Repsonse Error. Please make sure 
 $lang['validation_no_field_error']='Validation Repsonse Error. No email validation field in this form!';
 
 $lang['title_date_format']='Date Format (standard <a href="http://www.php.net/manual/en/function.date.php">PHP Date Formats</a>)';
-$lang['title_use_wysiwyg']='Use WYSIWYG editor for text Area?';
+$lang['title_use_wysiwyg']='Use WYSIWYG editor for text Area (Admin side only)?';
 
 $lang['disptype_table']='Table/CSS';
 $lang['disptype_css']='Pure CSS';
@@ -352,7 +358,7 @@ Configuration.</p>
 something like {cms_module module='FormBuilder' form='sample_form'}</p>
 <p>By copying this tag into the content of a page, or into a template, will cause that form to be displayed.
 In theory, you can have multiple forms on a page if you really want to. Be careful when pasting the tag
-into a page's content if you use a WYSIWYG editor such as TinyMCE or HTMLArea. These editors may stealthily
+into a page's content if you use a WYSIWYG editor such as TinyMCE, FCKEdit, or HTMLArea. These editors may stealthily
 change the quote marks (\") into HTML entities (&amp;quot;), and the forms will not show up. Try using
 single quotes (') or editing the HTML directly.
 

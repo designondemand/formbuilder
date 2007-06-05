@@ -33,6 +33,9 @@ if (! $this->CheckAccess()) exit;
 
 				$db->CreateSequence(cms_db_prefix().'module_fb_ip_log_seq');
 				}
+			case "0.3":
+			   {
+            }        
 		}
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('upgraded',$this->GetVersion()));
 

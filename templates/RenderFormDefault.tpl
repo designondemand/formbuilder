@@ -18,7 +18,7 @@
        field->hide_name       = 1 if the field name should be hidden, 0 otherwise
        field->has_label       = 1 if the field type has a label
        field->needs_div       = 1 if the field needs to be wrapped in a DIV (or table row,
-                                if that's the way you swing)   
+                                if that's the way you swing)
        field->name            = the field's name
        field->input           = the field's input control (e.g., the input field itself)
        field->input_id        = the ID of the field's input (useful for <label for="">)
@@ -86,5 +86,8 @@
 	    	{/strip}
 	  {/if}
 {/foreach}
+{if $has_captcha == 1}
+<div class="captcha">{$graphic_captcha}{$title_captcha}<br />{$input_captcha}</div>
+{/if}
 <div class="submit">{$prev}{$submit}</div>
 </div>

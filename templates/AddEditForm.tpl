@@ -21,6 +21,10 @@
 		<p class="pageinput">{$input_form_css_class}</p>
 	</div>
 	<div class="pageoverflow">
+		<p class="pagetext">{$title_use_captcha}:</p>
+		<p class="pageinput">{$input_use_captcha}</p>
+	</div>
+	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_displaytype}:</p>
 		<p class="pageinput">{$input_form_displaytype}</p>
 	</div>
@@ -78,6 +82,14 @@
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_submit_button_safety}:</p>
 		<p class="pageinput">{$input_submit_button_safety}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">{$title_title_user_captcha}:</p>
+		<p class="pageinput">{$input_title_user_captcha}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">{$title_user_captcha_error}:</p>
+		<p class="pageinput">{$input_title_user_captcha_error}</p>
 	</div>
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_next_button}:</p>
