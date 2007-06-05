@@ -45,7 +45,7 @@
 {/literal}
 
 
-{$hidden}{assign var="cols" value="3"}
+{$hidden}
 <div{if $css_class != ''} class="{$css_class}"{/if}>
 {if $total_pages gt 1}<span>{$title_page_x_of_y}</span>{/if}
 {foreach from=$fields item=entry}
@@ -75,18 +75,6 @@
 
 				{section name=numloop loop=$entry->input}
 	    			<div>{$entry->input[numloop]->input}&nbsp;{$entry->input[numloop]->name}</div>
-	    			       {if not ($smarty.section.numloop.rownum mod $cols)}
-                				{if not $smarty.section.numloop.last}
-                				{/if}
-        					{/if}
-       				{if $smarty.section.numloop.last}
-                		{math equation = "n - a % n" n=$cols a=$entry->input|@count assign="cells"}
-                		{if $cells ne $cols}
-                			{section name=pad loop=$cells}
-                        		<div>&nbsp;</div>
-                			{/section}
-               		 	{/if}
-        			{/if}
 	    		{/section}
 	    	{else}
 	    		{$entry->input}
