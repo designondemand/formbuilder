@@ -106,6 +106,8 @@ $lang['illegal_file_type']='This type of file may not be uploaded. Please check 
 $lang['upload'] = 'Upload';
 $lang['form_imported'] = 'Form Imported.';
 $lang['form_import_failed'] = 'Form import failed! There was a problem with the format of the XML file.';
+$lang['rows'] = '%s rows';
+$lang['cols'] = '%s cols';
 
 $lang['uninstalled'] = 'Module uninstalled.';
 $lang['installed'] = 'Module version %s installed.';
@@ -240,6 +242,8 @@ $lang['title_24_hour']='Use 24-hour clock?';
 $lang['title_before_noon'] = 'AM';
 $lang['title_after_noon'] = 'PM';
 $lang['title_smarty_eval'] = 'Process smarty tags within field?';
+$lang['title_textarea_rows'] = 'Rows (note: this may be overridden by CSS)';
+$lang['title_textarea_cols'] = 'Columns (note: this may be overridden by CSS)';
 
 $lang['help_leaveempty'] = 'This field may be left empty';
 $lang['help_variables_for_template']='Variables For Template';

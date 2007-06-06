@@ -26,12 +26,18 @@ class fbTextAreaField extends fbFieldBase {
 	   $mod = &$this->form_ptr->module_ptr;
        return $mod->CreateTextArea($this->GetOption('wysiwyg','0') == '1'?true:false,
 				   $id, $this->Value,
-				   '_'.$this->Id,'',$id.'_'.$this->Id);            
-	}
+				   '_'.$this->Id,'',$id.'_'.$this->Id,
+               '','',
+               $this->GetOption('rows','80'),
+               $this->GetOption('cols','15'));
+	//CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $width='80', $cols='15',$forcewysiwyg="",$wantedsyntax="")
+
+   }
 
 
 	function StatusInfo()
 	{
+	   $mod = &$this->form_ptr->module_ptr;
 		$ret = '';
 		if (strlen($this->ValidationType)>0)
 		  {
@@ -45,6 +51,8 @@ class fbTextAreaField extends fbFieldBase {
 		 	{
 		 	$ret .= ' non-wysiwyg';
 		 	}
+		 $ret .=  ', '.$mod->Lang('rows',$this->GetOption('rows','80'));
+		 $ret .=  ', '.$mod->Lang('cols',$this->GetOption('cols','15'));
 		 return $ret;
 	}
 
@@ -53,11 +61,18 @@ class fbTextAreaField extends fbFieldBase {
 	{
 	   $mod = &$this->form_ptr->module_ptr;
 		return array(
-			'main'=>
-				array(array($mod->Lang('title_use_wysiwyg'),
+			'main'=>array(
+         array($mod->Lang('title_use_wysiwyg'),
             		$mod->CreateInputCheckbox($formDescriptor, 'opt_wysiwyg',
-            		'1',$this->GetOption('wysiwyg','0'))))
-         	);
+            		'1',$this->GetOption('wysiwyg','0'))),
+			array($mod->Lang('title_textarea_rows'),
+            		$mod->CreateInputText($formDescriptor, 'opt_rows',
+            		$this->GetOption('rows','80'),5,5)),
+			array($mod->Lang('title_textarea_cols'),
+            		$mod->CreateInputText($formDescriptor, 'opt_cols',
+            		$this->GetOption('cols','15'),5,5))
+               )
+         );
 	}
 
 
