@@ -96,7 +96,6 @@ $lang['configuration']='Configuration';
 $lang['tab_main']='Main';
 $lang['tab_additional']='Form Settings';
 $lang['tab_advanced']='Advanced Settings';
-$lang['tab_tablelayout']='Table-based Layout Options';
 $lang['tab_templatelayout'] = 'Template Layout Options';
 $lang['field_requirement_updated'] = 'Field required state updated.';
 $lang['maximum_size']='Max. Size';
@@ -198,9 +197,6 @@ $lang['no_default']='No Default';
 $lang['redirect_after_approval']='Page to redirect after approval';
 $lang['title_regex_help']='This regular expression will only be used if "validation type" is set to a regex-related option. Include a full Perl-style regex, including the start/stop slashes and flags (e.g., "/image\.(\d+)/i")';
 $lang['title_field_required_abbrev']='Req\'d';
-$lang['title_title_position']='Field Title Position (non-CSS Layout only)';
-$lang['title_table_layout_left']='Title on Left';
-$lang['title_table_layout_above']='Title Above';
 $lang['title_hide_errors']='Hide Errors';
 $lang['title_form_displaytype'] = 'Form Display Type';
 $lang['title_hide_errors_long']='Prevent debug / error messages from being seen by users.';
@@ -270,10 +266,6 @@ $lang['validation_no_field_error']='Validation Repsonse Error. No email validati
 
 $lang['title_date_format']='Date Format (standard <a href="http://www.php.net/manual/en/function.date.php">PHP Date Formats</a>)';
 $lang['title_use_wysiwyg']='Use WYSIWYG editor for text Area (Admin side only)?';
-
-$lang['disptype_table']='Table/CSS';
-$lang['disptype_css']='Pure CSS';
-$lang['disptype_template']='Custom Template';
 
 $lang['admindesc']='Add, edit and manage interactive Forms';
 
@@ -366,20 +358,13 @@ single quotes (') or editing the HTML directly.
 <h3>Working with Forms</h3>
 <p>By clicking on a Form's name, you enter the Form Edit page. There are several tabs, which are described below:</p>
 <h4>Main</h4>
-<p>This is the main place you'll work on your form. Here, you give it a name, an alias (which is used to identify it for placing it in a page or template), and, optionally, a CSS class with which to wrap the whole thing. You also select the display type. Your choices are:</p>
-<ul>
-<li>Table/CSS. The form is created using HTML tables. If you don't know what to choose, this is the easiest option, and will probably do most of what you want. You can still use CSS to style the form if you want.</li>
-<li>Pure CSS. The form is created, with all the fields wrapped in &lt;div&gt; tags. You can then style the form as you see fit.</li>
-<li>Custom Template. Basically, you get a smarty template, a bunch of variables, and you're on your own. You have the power to create whatever you want.</li>
-</ul>
+<p>This is the main place you'll work on your form. Here, you give it a name, an alias (which is used to identify it for placing it in a page or template), and, optionally, a CSS class with which to wrap the whole thing.</p>
 <p>Below this, if you have it enabled, is the \"fast field adder\" pulldown, that lets you quickly add a field to the end of your form by selecting the field type.</p>
 <p>Below this is the list of fields that make up your form. More detail on this is described below.</p>
 <h4>Form Settings</h4>
 <p>Form Settings allows you to customize a lot of the messages and text in the controls for your form. It also allows you to pick a page to redirect users to after a successful form submission.</p>
-<h4>Table-based Layout Options</h4>
-<p>Table-layouts have gotten simpler, so your only option here is the position of the field names relative to the inputs. If you're using a Table/CSS layout, you can use this tab to select the field name positions.</p>
 <h4>Template Layout Options</h4>
-<p>This is where you do your customization work if your form uses a Custom Template.</p>
+<p>This is where you do your customization work of your form\'s smarty Template.</p>
 <p>The form should default to a a Custom template that documents the smarty tags available to you. Unless you're a smarty expert, you probably don't want to mess around with this. If you are a smarty expert, this is where you can unleash your magic.</p>
 <h3>Adding Fields to your Form</h3>
 <p>The types of fields that are currently supported fit into four groups: standard input fields, display control fields, email-specific fields, and form result handling fields (also called Form Dispositions in places):</p>
@@ -461,6 +446,17 @@ module's installation directory, assuming the web server has permission to write
 <h3>Email and Flat File Templates</h3>
 <p>Many disposition types allow you to create a template for the email that is generated, or for the way the results are written to a file. If you opt not to create a template, the FormBuilder will use it's own best guess, which may or may not work out to your liking. You can always click on the \"Create Sample Template\" and then customize the results.</p>
 <p>Note that once you've changed a template, it will no longer automatically add new fields. For this reason, it's usually best to create your templates as the last step of creating your form.</p>
+
+<h3>Styling and CSS</h3>
+<p>Paul Noone graciously provides us all with a pretty good standard CSS that you can use for forms:</p>
+<pre>
+form div {margin-bottom:0em}
+form div div {margin-bottom:0.5em}
+form div div div {margin-bottom:0em}
+fieldset {margin-bottom:1em}
+legend {margin-bottom:0.5em}
+textarea {width:98%}
+</pre>
 
 <h3>Known Issues</h3>
 <ul>

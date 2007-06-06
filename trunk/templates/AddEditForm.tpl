@@ -24,10 +24,6 @@
 		<p class="pagetext">{$title_use_captcha}:</p>
 		<p class="pageinput">{$input_use_captcha}</p>
 	</div>
-	<div class="pageoverflow">
-		<p class="pagetext">{$title_form_displaytype}:</p>
-		<p class="pageinput">{$input_form_displaytype}</p>
-	</div>
 {if $adding==0}
 	{if $fastadd==1}
 		<div class="pageoverflow">
@@ -111,13 +107,6 @@
 		<p class="pagetext">{$title_list_delimiter}:</p>
 		<p class="pageinput">{$input_list_delimiter}</p>
 	</div>
-{$tab_end}
-{$tabletab_start}
-	<div class="pageoverflow">
-		<p class="pagetext">{$title_title_position}:</p>
-		<p class="pageinput">{$input_title_position}</p>
-	</div>
-
 {$tab_end}
 {$templatetab_start}
 	<div class="pageoverflow">
