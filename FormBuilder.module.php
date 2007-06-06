@@ -1,9 +1,9 @@
 <?php
 #-------------------------------------------------------------------------
 # Module: FormBuilder
-# Version: 0.2.3, released 14 Nov 2006
+# Version: 0.3, released 2007
 #
-# Copyright (c) 2006, Samuel Goldstein <sjg@cmsmodules.com>
+# Copyright (c) 2007, Samuel Goldstein <sjg@cmsmodules.com>
 # For Information, Support, Bug Reports, etc, please visit the
 # CMS Made Simple Forge:
 # http://dev.cmsmadesimple.org/projects/formbuilder/
@@ -107,7 +107,8 @@ class FormBuilder extends CMSModule
 
 	function GetVersion()
 	{
-		return '0.2.4';
+		return '0.3';
+		//return '0.2.4';
 	}
 
 	function GetAuthor()

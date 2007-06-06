@@ -1,9 +1,9 @@
 <?php
 /* 
-   FormBuilder. Copyright (c) 2005-2006 Samuel Goldstein <sjg@cmsmodules.com>
+   FormBuilder. Copyright (c) 2005-2007 Samuel Goldstein <sjg@cmsmodules.com>
    More info at http://dev.cmsmadesimple.org/projects/formbuilder
    
-   A Module for CMS Made Simple, Copyright (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
+   A Module for CMS Made Simple, Copyright (c) 2007 by Ted Kulp (wishy@cmsmadesimple.org)
   This project's homepage is: http://www.cmsmadesimple.org
 */
 
@@ -400,19 +400,28 @@ class fbForm {
     $mod->smarty->assign_by_ref('fields',$fields);
 
     $jsStr = '';
+    $jsTrigger = '';
     if ($this->GetAttr('input_button_safety','0') == '1')
       {
-	$jsStr = '<script language="javascript">
+	$jsStr = '<script type="text/javascript">
     var submitted = 0;
-    function LockButton (form,element) {
-       if ( ! submitted ) { 
-           form.elements[element].disabled=true;
+    function LockButton ()
+       {
+       var ret = false;
+       if ( ! submitted )
+          {
+           var item = document.getElementById("fbsubmit");
+           if (item != null)
+             {
+             setTimeout(function() {item.disabled = true}, 0);
+             }
            submitted = 1;
-           form.submit;
-       }
-      }
-    }
+           ret = true;
+          }
+        return ret;
+        }
 </script>';
+      $jsTrigger = " onclick='return LockButton()'";
       }
 
     if ($this->Page > 1)
@@ -446,34 +455,11 @@ class fbForm {
          {
          $mod->smarty->assign('has_captcha','0');
          }
-	   $mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'submit',
+	   $mod->smarty->assign('submit',$jsStr . $mod->CreateInputSubmit($id, 'submit',
 				$this->GetAttr('submit_button_text'),
-				'class="fbsubmit"'));
+				'class="fbsubmit" id="fbsubmit"'.$jsTrigger));
       }
-
-    // figure out how to render the form, now that it's smarty-ized
-    switch ($this->GetAttr('form_displaytype','tab'))
-      {
-      case 'tab':
-	{
-	  if ($this->GetAttr('title_position','left') == 'left')
-	    {
-	      return $mod->ProcessTemplate('RenderFormTableTitleLeft.tpl');
-	    }
-	  else
-	    {
-	      return $mod->ProcessTemplate('RenderFormTableTitleTop.tpl');
-	    }
-	}
-      case 'cssonly':
-	{
-	  return $mod->ProcessTemplate('RenderFormCSS.tpl');
-	}
-      case 'template':
-	{
 	  return $mod->ProcessTemplateFromDatabase('fb_'.$this->Id);
-	}
-      }
   }
 
   function LoadForm($loadDeep=false)
@@ -822,15 +808,13 @@ class fbForm {
     $mod->smarty->assign('tab_start',$mod->StartTabHeaders().
 			 $mod->SetTabHeader('maintab',$mod->Lang('tab_main')).
 			 $mod->SetTabHeader('addition',$mod->Lang('tab_additional')).
-			 $mod->SetTabHeader('tablelayout',$mod->Lang('tab_tablelayout')).
 			 $mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout')).
-			       
+
 			 $mod->EndTabHeaders() . $mod->StartTabContent());
 	  
     $mod->smarty->assign('tabs_end',$mod->EndTabContent());
     $mod->smarty->assign('maintab_start',$mod->StartTab("maintab"));
     $mod->smarty->assign('additionaltab_start',$mod->StartTab("addition"));
-    $mod->smarty->assign('tabletab_start',$mod->StartTab("tablelayout"));
     $mod->smarty->assign('templatetab_start',$mod->StartTab("templatelayout"));
     $mod->smarty->assign('tab_end',$mod->EndTab());
     $mod->smarty->assign('form_end',$mod->CreateFormEnd());
@@ -888,7 +872,6 @@ class fbForm {
 			}
     $mod->smarty->assign('title_information',$mod->Lang('information'));
     $mod->smarty->assign('title_order',$mod->Lang('order'));
-    $mod->smarty->assign('title_form_displaytype', $mod->Lang('title_form_displaytype'));
     $mod->smarty->assign('title_field_required_abbrev',$mod->Lang('title_field_required_abbrev'));
     $mod->smarty->assign('hasdisposition',$this->HasDisposition()?1:0);
     $maxOrder = 1;
@@ -1030,50 +1013,11 @@ function fast_add(field_type)
     $contentops =& $gCms->GetContentOperations();
     $mod->smarty->assign('input_redirect_page',$contentops->CreateHierarchyDropdown('',$this->GetAttr('redirect_page','0'), $id.'forma_redirect_page'));
 
-
-    $displayTypes = array($mod->Lang('disptype_table')=>'tab',
-			  $mod->Lang('disptype_css')=>'cssonly',
-			  $mod->Lang('disptype_template')=>'template');
-    $mod->smarty->assign('input_form_displaytype',
-			 $mod->CreateInputRadioGroup($id, 'forma_form_displaytype', $displayTypes, $this->GetAttr('form_displaytype','tab')));
-				
-    $mod->smarty->assign('title_title_position',
-			 $mod->Lang('title_title_position'));
-    $pos = array($mod->Lang('title_table_layout_left')=>'left',$mod->Lang('title_table_layout_above')=>'top');	
-    $mod->smarty->assign('input_title_position',
-			 $mod->CreateInputRadioGroup($id, 'forma_title_position',
-						     $pos, $this->GetAttr('title_position','left')));		
     $mod->smarty->assign('input_form_template',
 			 $mod->CreateTextArea(false, $id,
 					      $this->GetAttr('form_template',$this->DefaultTemplate()), 'forma_form_template'));
     return $mod->ProcessTemplate('AddEditForm.tpl');
   }
-
-
-  function &OldNewField(&$params)
-    {
-      $aefield = new fbFieldBase($this,$params);
-      if ($aefield->GetId() != -1 )
-	{
-	  // we're loading an extant field
-	  $sql = 'SELECT type FROM ' . cms_db_prefix() . 'module_fb_field WHERE field_id=?';
-	  $rs = $this->module_ptr->dbHandle->Execute($sql, array($aefield->GetId()));
-	  if($rs && $result = $rs->FetchRow())
-	    {
-	      $aefield->SetFieldType($result['type']);
-	    }
-	}
-      // what kind of field?
-      // need to know what kind of object to instantiate!
-      if ($aefield->GetFieldType() != '')
-	{
-	  // OK, instantiating a specific Input class.
-	  $className = $this->MakeClassName($aefield->GetFieldType(), '');
-	  $aefield = new $className($this, $params);
-	}
-      $aefield->LoadField($params);
-      return $aefield;
-    }
 
     function &NewField(&$params)
       {
