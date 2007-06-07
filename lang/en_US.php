@@ -230,7 +230,7 @@ $lang['title_default_link_title']='Default link text';
 $lang['title_link_to_sitepage']='Link to site page';
 $lang['title_captcha_not_installed'] = 'You can use <a href="http://www.wikipedia.org/wiki/Captcha" target="_new">"Captcha"</a> to protect form submissions if you install the Captcha module.';
 $lang['title_use_captcha'] = 'Use Captcha to protect form submissions?';
-$lang['title_use_captcha_help'] = 'Check here protect your form with a <a href="http://www.wikipedia.org/wiki/Captcha" target="_new">"Captcha"</a>.';
+$lang['title_use_captcha_help'] = 'Check here to protect your form with a <a href="http://www.wikipedia.org/wiki/Captcha" target="_new">"Captcha"</a>.';
 $lang['title_user_captcha'] = 'Please confirm that you are not a script by entering the letters from the image.';
 $lang['title_user_captcha_error'] = 'Failed text for Captcha';
 $lang['wrong_captcha']='Captcha was not correct.';
@@ -454,12 +454,59 @@ module's installation directory, assuming the web server has permission to write
 <h3>Styling and CSS</h3>
 <p>Paul Noone graciously provides us all with a pretty good standard CSS that you can use for forms:</p>
 <pre>
-form div {margin-bottom:0em}
-form div div {margin-bottom:0.5em}
-form div div div {margin-bottom:0em}
-fieldset {margin-bottom:1em}
-legend {margin-bottom:0.5em}
-textarea {width:98%}
+	/* Sample FormBuilder CSS base */
+	form {margin-top:0}
+	form, td, th, li { font-size: 100%}
+	form div {margin-bottom:0}
+	fieldset div {
+		margin-bottom:0.5em;
+		margin-left:1em;
+	}
+	fieldset div div {
+		margin-top:0.5em;
+		margin-left:1em
+	}
+	fieldset {
+		margin-bottom:1em;
+		border:1px solid #F60;
+		padding:0.5em
+	}
+	fieldset label {
+		width:auto;
+	}
+	legend {
+		color:#FFF;
+		background:#F60;
+		font-style:italic;
+		font-size:1.2em;
+		margin-bottom:0.5em;
+		padding:0.2em;
+		width:auto;
+		border:1px solid #CCC
+	}
+	textarea {
+		margin: 0.5em 0;
+		width:98%;
+		height: 6em
+	}
+
+	/* Apply this class to text/select input fields with shorter labels
+		to help alignment */
+	.short-label label {float:left; width:10em}
+	.short-label fieldset div input, 
+	.short-label fieldset div select {width:16em}
+
+	/* Pretty up your Captcha image output */
+	.captcha {
+		margin:0.5em 0;
+		width:200px;
+		text-align:center
+	}
+	.captcha img {border:1px solid #F60; margin-bottom:0.5em}
+	.captcha input {width:196px; margin-top:0.5em}
+
+	/* Just a bit more room for the Submit button */
+	.submit {margin-top:0.5em}
 </pre>
 
 <h3>Known Issues</h3>
