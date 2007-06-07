@@ -143,7 +143,7 @@ class FormBuilder extends CMSModule
 
     function AdminStyle()
     {
-      return "\n.module_fb_table {font-size: 10px;}\n.module_fb_area_wide {width: 500px;}\n.module_fb_legend{font-size: 9px; margin: 6px; border: 1px solid black;}.module_fb_area_short {width: 500px; height: 100px;}\n.module_fb_link {text-decoration: underline;}\n";
+      return "\n.module_fb_table {font-size: 10px;}\n.module_fb_area_wide {width: 500px;}\n.module_fb_legend{font-size: 9px; margin: 6px; border: 1px solid black;}.module_fb_area_short {width: 500px; height: 100px;}\n.module_fb_link {text-decoration: underline;}\n.module_fb_fieldset {margin-bottom:2em;}\n";
     }
 
 

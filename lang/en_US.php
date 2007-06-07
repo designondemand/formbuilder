@@ -93,10 +93,6 @@ $lang['automatic']='Automatic';
 $lang['forms']='Forms';
 $lang['form']='Form %s';
 $lang['configuration']='Configuration';
-$lang['tab_main']='Main';
-$lang['tab_additional']='Form Settings';
-$lang['tab_advanced']='Advanced Settings';
-$lang['tab_templatelayout'] = 'Template Layout Options';
 $lang['field_requirement_updated'] = 'Field required state updated.';
 $lang['maximum_size']='Max. Size';
 $lang['permitted_extensions']='Extensions';
@@ -119,6 +115,13 @@ $lang['button_continue'] = 'Continue...';
 
 $lang['value_checked'] = 'Checked';
 $lang['value_unchecked'] = 'Unchecked';
+
+$lang['tab_main']='Main';
+$lang['tab_symbol']='Form Display Settings';
+$lang['tab_submit']='Form Submission';
+$lang['tab_captcha']='Captcha Settings';
+$lang['tab_templatelayout'] = 'Template Layout Options';
+
 
 $lang['add_options'] = 'Add More Options';
 $lang['delete_options'] = 'Delete Marked Options';
@@ -228,7 +231,7 @@ $lang['title_link_autopopulate_help']='Automatically populate with the URL of th
 $lang['title_default_link']='Default link URL';
 $lang['title_default_link_title']='Default link text';
 $lang['title_link_to_sitepage']='Link to site page';
-$lang['title_captcha_not_installed'] = 'You can use <a href="http://www.wikipedia.org/wiki/Captcha" target="_new">"Captcha"</a> to protect form submissions if you install the Captcha module.';
+$lang['title_captcha_not_installed'] = 'You can use <a href="http://www.wikipedia.org/wiki/Captcha" target="_new">"Captcha"</a> to protect form submissions if you install the Captcha module. For more information, <a href="http://dev.cmsmadesimple.org/projects/captcha/">check the Captcha project</a>.';
 $lang['title_use_captcha'] = 'Use Captcha to protect form submissions?';
 $lang['title_use_captcha_help'] = 'Check here to protect your form with a <a href="http://www.wikipedia.org/wiki/Captcha" target="_new">"Captcha"</a>.';
 $lang['title_user_captcha'] = 'Please confirm that you are not a script by entering the letters from the image.';
@@ -244,7 +247,7 @@ $lang['title_after_noon'] = 'PM';
 $lang['title_smarty_eval'] = 'Process smarty tags within field?';
 $lang['title_textarea_rows'] = 'Rows (note: this may be overridden by CSS)';
 $lang['title_textarea_cols'] = 'Columns (note: this may be overridden by CSS)';
-
+$lang['title_form_main']= 'Main Form Details';
 $lang['help_leaveempty'] = 'This field may be left empty';
 $lang['help_variables_for_template']='Variables For Template';
 $lang['help_submission_date']='Date of Submission';
@@ -270,6 +273,9 @@ $lang['validation_no_field_error']='Validation Repsonse Error. No email validati
 
 $lang['title_date_format']='Date Format (standard <a href="http://www.php.net/manual/en/function.date.php">PHP Date Formats</a>)';
 $lang['title_use_wysiwyg']='Use WYSIWYG editor for text Area (Admin side only)?';
+$lang['title_submit_actions'] = 'Form Submission Behavior';
+$lang['title_submit_labels'] = 'Submission Button Labels';
+$lang['title_submit_help'] = 'This page lets you customize Form Submission. It doesn\'t determine what the Form Builder does with the submitted data. You can set that up by adding "Disposition" fields to your form.';
 
 $lang['admindesc']='Add, edit and manage interactive Forms';
 
