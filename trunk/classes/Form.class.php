@@ -807,15 +807,19 @@ class fbForm {
 			 $mod->CreateInputHidden($id, 'form_id', $this->Id));
     $mod->smarty->assign('tab_start',$mod->StartTabHeaders().
 			 $mod->SetTabHeader('maintab',$mod->Lang('tab_main')).
-			 $mod->SetTabHeader('addition',$mod->Lang('tab_additional')).
-			 $mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout')).
+			 $mod->SetTabHeader('submittab',$mod->Lang('tab_submit')).
+			 $mod->SetTabHeader('symboltab',$mod->Lang('tab_symbol')).
+			 $mod->SetTabHeader('captchatab',$mod->Lang('tab_captcha')).
+$mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout')).
 
 			 $mod->EndTabHeaders() . $mod->StartTabContent());
 	  
     $mod->smarty->assign('tabs_end',$mod->EndTabContent());
     $mod->smarty->assign('maintab_start',$mod->StartTab("maintab"));
-    $mod->smarty->assign('additionaltab_start',$mod->StartTab("addition"));
+    $mod->smarty->assign('submittab_start',$mod->StartTab("submittab"));
+    $mod->smarty->assign('symboltab_start',$mod->StartTab("symboltab"));
     $mod->smarty->assign('templatetab_start',$mod->StartTab("templatelayout"));
+    $mod->smarty->assign('captchatab_start',$mod->StartTab("captchatab"));
     $mod->smarty->assign('tab_end',$mod->EndTab());
     $mod->smarty->assign('form_end',$mod->CreateFormEnd());
     $mod->smarty->assign('title_form_name',$mod->Lang('title_form_name'));
@@ -841,6 +845,8 @@ class fbForm {
 					       $this->GetAttr('css_class','formbuilderform'), 50,50));
     $mod->smarty->assign('title_form_fields',
 			 $mod->Lang('title_form_fields'));
+	$mod->smarty->assign('title_form_main',
+			 $mod->Lang('title_form_main'));
     $mod->smarty->assign('title_field_name',
 			 $mod->Lang('title_field_name'));
     $mod->smarty->assign('title_field_type',
@@ -854,17 +860,26 @@ class fbForm {
     $mod->smarty->assign('title_redirect_page',
 			 $mod->Lang('title_redirect_page'));
 
+    $mod->smarty->assign('title_submit_actions',
+			 $mod->Lang('title_submit_actions'));
+    $mod->smarty->assign('title_submit_labels',
+			 $mod->Lang('title_submit_labels'));
+    $mod->smarty->assign('title_submit_help',
+			 $mod->Lang('title_submit_help'));
+
+
     $captcha = &$mod->getModuleInstance('Captcha');
     if ($captcha == null)
          {
-         $mod->smarty->assign('input_use_captcha',
+         $mod->smarty->assign('title_install_captcha',
 			   $mod->Lang('title_captcha_not_installed'));
-         $mod->smarty->assign('title_use_captcha','');
+         $mod->smarty->assign('captcha_installed',0);
          }
     else
          {
          $mod->smarty->assign('title_use_captcha',
 			   $mod->Lang('title_use_captcha'));
+         $mod->smarty->assign('captcha_installed',1);
 
          $mod->smarty->assign('input_use_captcha',$mod->CreateInputHidden($id,'forma_use_cpatcha','0').
 			   $mod->CreateInputCheckbox($id,'forma_use_captcha','1',$this->GetAttr('use_captcha','0')).

@@ -1,6 +1,6 @@
 {if $message != ''}<h4>{$message}</h4>{/if}
 {$formstart}{$formid}{$hidden}{$tab_start}{$maintab_start}
-
+<fieldset class="module_fb_fieldset"><legend>{$title_form_main}</legend>
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_name}:</p>
 		<p class="pageinput">{$input_form_name}</p>
@@ -20,11 +20,9 @@
 		<p class="pagetext">{$title_form_css_class}:</p>
 		<p class="pageinput">{$input_form_css_class}</p>
 	</div>
-	<div class="pageoverflow">
-		<p class="pagetext">{$title_use_captcha}:</p>
-		<p class="pageinput">{$input_use_captcha}</p>
-	</div>
+</fieldset>
 {if $adding==0}
+<fieldset><legend>{$title_form_fields}</legend>
 	{if $fastadd==1}
 		<div class="pageoverflow">
 			<p class="pagetext">{$title_fastadd}</p>
@@ -63,29 +61,26 @@
             </table>
         </div>
      </div>
+</fieldset>
 {/if}
-
-{$tab_end}{$additionaltab_start}
-
+{$tab_end}{$submittab_start}
+	<div class="pageoverflow">
+		<p class="pageinput">{$title_submit_help}</p>
+	</div>
+<fieldset class="module_fb_fieldset"><legend>{$title_submit_actions}</legend>
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_redirect_page}:</p>
 		<p class="pageinput">{$input_redirect_page}</p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_form_submit_button}:</p>
-		<p class="pageinput">{$input_form_submit_button}</p>
-	</div>
-	<div class="pageoverflow">
 		<p class="pagetext">{$title_submit_button_safety}:</p>
 		<p class="pageinput">{$input_submit_button_safety}</p>
 	</div>
+</fieldset>
+<fieldset class="module_fb_fieldset"><legend>{$title_submit_labels}</legend>
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_title_user_captcha}:</p>
-		<p class="pageinput">{$input_title_user_captcha}</p>
-	</div>
-	<div class="pageoverflow">
-		<p class="pagetext">{$title_user_captcha_error}:</p>
-		<p class="pageinput">{$input_title_user_captcha_error}</p>
+		<p class="pagetext">{$title_form_submit_button}:</p>
+		<p class="pageinput">{$input_form_submit_button}</p>
 	</div>
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_next_button}:</p>
@@ -95,6 +90,8 @@
 		<p class="pagetext">{$title_form_prev_button}:</p>
 		<p class="pageinput">{$input_form_prev_button}</p>
 	</div>
+</fieldset>
+{$tab_end}{$symboltab_start}
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_required_symbol}:</p>
 		<p class="pageinput">{$input_form_required_symbol}</p>
@@ -107,6 +104,25 @@
 		<p class="pagetext">{$title_list_delimiter}:</p>
 		<p class="pageinput">{$input_list_delimiter}</p>
 	</div>
+{$tab_end}{$captchatab_start}
+{if $captcha_installed}
+	<div class="pageoverflow">
+		<p class="pagetext">{$title_use_captcha}:</p>
+		<p class="pageinput">{$input_use_captcha}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">{$title_title_user_captcha}:</p>
+		<p class="pageinput">{$input_title_user_captcha}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">{$title_user_captcha_error}:</p>
+		<p class="pageinput">{$input_title_user_captcha_error}</p>
+	</div>
+{else}
+	<div class="pageoverflow">
+		<p class="pageinput">{$title_install_captcha}</p>
+	</div>
+{/if}
 {$tab_end}
 {$templatetab_start}
 	<div class="pageoverflow">
