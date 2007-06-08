@@ -36,14 +36,14 @@ class fbLinkField extends fbFieldBase {
 			} 
 		$fieldDisp = array();
 		$thisBox = new stdClass();
-		$thisBox->name = '<label for="'.$id.'_'.$this->Id.'[]">'.$mod->Lang('link_destination').'</label>';
+		$thisBox->name = '<label for="'.$id.'_'.$this->Id.'_1">'.$mod->Lang('link_destination').'</label>';
 		$thisBox->title = $mod->Lang('link_destination');
-		$thisBox->input = $mod->CreateInputText($id, '_'.$this->Id.'[]', $val[0]);
+		$thisBox->input = $this->TextField($id, '_'.$this->Id.'[]', $val[0],'','','id="'.$id.'_'.$this->Id.'_1"');
 		array_push($fieldDisp, $thisBox);
 		$thisBox = new stdClass();
-		$thisBox->name = '<label for="'.$id.'_'.$this->Id.'[]">'.$mod->Lang('link_label').'</label>';
+		$thisBox->name = '<label for="'.$id.'_'.$this->Id.'_2">'.$mod->Lang('link_label').'</label>';
 		$thisBox->title = $mod->Lang('link_label');
-		$thisBox->input = $mod->CreateInputText($id, '_'.$this->Id.'[]', $val[1]);
+		$thisBox->input = $this->TextField($id, '_'.$this->Id.'[]', $val[1],'','','id="'.$id.'_'.$this->Id.'_2"');
 		array_push($fieldDisp, $thisBox);			
 		return $fieldDisp;
 		

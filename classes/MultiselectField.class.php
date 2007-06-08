@@ -106,7 +106,8 @@ class fbMultiselectField extends fbFieldBase {
 			{
 			$val = $this->Value;
 			}
-		return $mod->CreateInputSelectList($id, '_'.$this->Id.'[]', $sorted,$val, $this->GetOption('lines','3'));
+		return $mod->CreateInputSelectList($id, '_'.$this->Id.'[]', $sorted,$val, $this->GetOption('lines','3'),
+         'id="'.$id. '_'.$this->Id.'"');
 	}
 
 

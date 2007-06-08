@@ -66,7 +66,7 @@
 	    	   >
          {/if}
 	    	{if $entry->hide_name == 0}
-	    		<label for="{$entry->input_id}">{$entry->name}</label>
+    		   <label{if $entry->multiple_parts != 1} for="{$entry->input_id}"{/if}>{$entry->name}</label>
 	    		{if $entry->required_symbol != ''}
 	    			{$entry->required_symbol}
 	    		{/if}

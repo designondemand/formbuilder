@@ -105,7 +105,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 			{
 			$sorted[$subjects] = '1';
 			}
-		return $mod->CreateInputDropdown($id, '_'.$this->Id, $sorted, -1, $this->Value);
+		return $mod->CreateInputDropdown($id, '_'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'"');
 	}
 
 
