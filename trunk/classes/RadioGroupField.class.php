@@ -81,7 +81,7 @@ class fbRadioGroupField extends fbFieldBase
 	$thisBox = new stdClass();
 	if (strlen($names[$i]) > 0)
 	  {
-	    $thisBox->name = '<label for="'.$id.'_'.$this->Id.'">'.$names[$i].'</label>';
+	    $thisBox->name = '<label for="'.$id.'_'.$this->Id.'_'.$i.'">'.$names[$i].'</label>';
 	    $thisBox->title = $names[$i];
 	  }
 	$check_val = false;
@@ -101,7 +101,7 @@ class fbRadioGroupField extends fbFieldBase
 	  {
 	    $thisBox->input .= ' checked="checked"';
 	  }
-	$thisBox->input .= ' />';
+	$thisBox->input .= ' id="'.$id. '_'.$this->Id.'_'.$i.'" />';
 	array_push($fieldDisp, $thisBox);
       }			
     return $fieldDisp;

@@ -750,6 +750,27 @@ class fbFieldBase {
     return;
   }
 
+  // customized version of API function CreateTextInput. This doesn't throw in an ID that's the same as the field name.
+  function TextField($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+{
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $size = cms_htmlentities($size);
+  $maxlength = cms_htmlentities($maxlength);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="text" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  return $text;
+}
+
+
   // loadDeep also loads all options for a field.
   function Load($id, &$params, $loadDeep=false)
   {

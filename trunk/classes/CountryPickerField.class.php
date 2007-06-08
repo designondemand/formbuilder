@@ -134,7 +134,7 @@ class fbCountryPickerField extends fbFieldBase {
 		  $this->SetValue($this->GetOption('default',''));
 		  }
 
-		return $mod->CreateInputDropdown($id, '_'.$this->Id, $this->Countries, -1, $this->Value);
+		return $mod->CreateInputDropdown($id, '_'.$this->Id, $this->Countries, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'"');
 	}
 
 	function PrePopulateAdminForm($formDescriptor)

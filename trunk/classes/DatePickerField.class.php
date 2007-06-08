@@ -64,9 +64,9 @@ class fbDatePickerField extends fbFieldBase {
 			}
 
 
-       return $mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $Days, -1, $today['mday']) .
-       			$mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $this->Months, -1, $today['mon']).
-       			$mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $Year, -1, $today['year']);
+       return $mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $Days, -1, $today['mday'], 'id="'.$id. '_'.$this->Id.'_1"') .
+       			$mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $this->Months, -1, $today['mon'], 'id="'.$id. '_'.$this->Id.'_2"').
+       			$mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $Year, -1, $today['year'],'id="'.$id. '_'.$this->Id.'_3"');
 	}
 
 	function GetHumanReadableValue()
