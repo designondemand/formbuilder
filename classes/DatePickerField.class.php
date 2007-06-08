@@ -33,12 +33,18 @@ class fbDatePickerField extends fbFieldBase {
             $mod->Lang('date_october')=>10,
             $mod->Lang('date_november')=>11,
             $mod->Lang('date_december')=>12);
+    $this->hasMultipleFormComponents = true;
+    $this->labelSubComponents = false;
 	}
 
 
     function StatusInfo()
 	{
-		return '';
+      $mod = &$this->form_ptr->module_ptr;
+      $today = getdate();
+		return $mod->Lang("date_range",array($this->GetOption('start_year',($today['year']-10)) ,
+         $this->GetOption('end_year',($today['year']+10)))).
+         ($this->GetOption('default_year','-1')!=='-1'?' ('.$this->GetOption('default_year','-1').')':'');
 	}
 
 
@@ -52,7 +58,7 @@ class fbDatePickerField extends fbFieldBase {
          	$Days[$i]=$i;
          }
        $Year = array();
-       for ($i=$today['year']-10;$i<$today['year']+10;$i++)
+       for ($i=$this->GetOption('start_year',($today['year']-10));$i<$this->GetOption('end_year',($today['year']+10))+1;$i++)
          {
          	$Year[$i]=$i;
          }
@@ -62,11 +68,30 @@ class fbDatePickerField extends fbFieldBase {
 			$today['mon'] = $this->GetArrayValue(1);
 			$today['year'] = $this->GetArrayValue(2);			
 			}
+		else if ($this->GetOption('default_year','-1') != '-1')
+		   {
+         $today['year'] = $this->GetOption('default_year','-1');
+         }
 
+      $ret = array();
+      $day = new stdClass();
+      $day->input = $mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $Days, -1, $today['mday'], 'id="'.$id. '_'.$this->Id.'_1"');
+ 		$day->title = $mod->Lang('day');
+ 		$day->name = '<label for="'.$id.'_'.$this->Id.'_1">'.$mod->Lang('day').'</label>';
+ 		array_push($ret, $day);
 
-       return $mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $Days, -1, $today['mday'], 'id="'.$id. '_'.$this->Id.'_1"') .
-       			$mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $this->Months, -1, $today['mon'], 'id="'.$id. '_'.$this->Id.'_2"').
-       			$mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $Year, -1, $today['year'],'id="'.$id. '_'.$this->Id.'_3"');
+      $mon = new stdClass();
+      $mon->input = $mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $this->Months, -1, $today['mon'], 'id="'.$id. '_'.$this->Id.'_2"');
+ 		$mon->title = $mod->Lang('mon');
+ 		$mon->name = '<label for="'.$id.'_'.$this->Id.'_2">'.$mod->Lang('mon').'</label>';
+ 		array_push($ret, $mon);
+
+      $yr = new stdClass();
+      $yr->input = $mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $Year, -1, $today['year'],'id="'.$id. '_'.$this->Id.'_3"');
+      $yr->name = '<label for="'.$id.'_'.$this->Id.'_3">'.$mod->Lang('year').'</label>';
+      $yr->title = $mod->Lang('year');
+      array_push($ret,$yr);
+      return $ret;
 	}
 
 	function GetHumanReadableValue()
@@ -86,11 +111,23 @@ class fbDatePickerField extends fbFieldBase {
 	function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = &$this->form_ptr->module_ptr;
+      $today = getdate();
 		$main = array(
 			array($mod->Lang('title_date_format'),
             		array($mod->CreateInputText($formDescriptor, 'opt_date_format',
             		$this->GetOption('date_format','j F Y'),25,25),$mod->Lang('help_date_format'))
-		));
+		    ),
+		   array($mod->Lang('title_start_year'),
+            		$mod->CreateInputText($formDescriptor, 'opt_start_year',
+            		    $this->GetOption('start_year',($today['year']-10)),10,10)),
+		   array($mod->Lang('title_end_year'),
+            		$mod->CreateInputText($formDescriptor, 'opt_end_year',
+            		    $this->GetOption('end_year',($today['year']+10)),10,10)),
+		   array($mod->Lang('title_default_year'),
+            		array($mod->CreateInputText($formDescriptor, 'opt_default_year',
+            		    $this->GetOption('default_year','-1'),10,10),$mod->Lang('title_default_year_help'))
+         )
+      );
 		return array('main'=>$main,array());
 	}
 

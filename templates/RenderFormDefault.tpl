@@ -22,8 +22,11 @@
        field->name            = the field's name
        field->input           = the field's input control (e.g., the input field itself)
        field->input_id        = the ID of the field's input (useful for <label for="">)
-       field->type            = the field's data type
+       field->type            = the field's data type:
+                                
        field->multiple_parts  = 1 if the field->input is actually a collection of controls
+       field->label_parts     = 1 if the collection of controls has separate labels for each
+                                control
 
    In certain cases, field->input is actually an array of objects rather than an input. This
    happens, for example, in CheckBoxGroups or RadioButtonGroups. For them, you
@@ -73,7 +76,9 @@
 	    	{/if}
 	    	{if $entry->multiple_parts == 1}
 				{section name=numloop loop=$entry->input}
-	    			<div>{$entry->input[numloop]->input}&nbsp;{$entry->input[numloop]->name}</div>
+	    			{if $entry->label_parts == 1}<div>{$entry->input[numloop]->input}&nbsp;{$entry->input[numloop]->name}</div>
+	    			{else}{$entry->input[numloop]->input}
+	    			{/if}
 	    		{/section}
 	    	{else}
 	    		{if $entry->smarty_eval == '1'}{eval var=$entry->input}{else}{$entry->input}{/if}

@@ -391,6 +391,7 @@ class fbForm {
 
 	$oneset->input_id = $id.'_'.$thisField->GetID();
 	$oneset->multiple_parts = $thisField->HasMultipleFormComponents()?1:0;
+	$oneset->label_parts = $thisField->LabelSubComponents()?1:0;
 	$oneset->type = $thisField->GetDisplayType();
 	$mod->smarty->assign($thisField->GetName(),$oneset);
 	array_push($fields,$oneset);

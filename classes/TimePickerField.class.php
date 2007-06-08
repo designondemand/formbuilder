@@ -23,12 +23,15 @@ class fbTimePickerField extends fbFieldBase {
       $this->flag12hour = array(
 		  	$mod->Lang('title_before_noon')=>$mod->Lang('title_before_noon'),
         	$mod->Lang('title_after_noon')=>$mod->Lang('title_after_noon'));
+    $this->hasMultipleFormComponents = true;
+    $this->labelSubComponents = false;
 	}
 
 
     function StatusInfo()
 	{
-		return '';
+      $mod = &$this->form_ptr->module_ptr;
+		return ($this->GetOption('24_hour','0') == '0'?$mod->Lang('12_hour'):$mod->Lang('24_hour'));
 	}
 
 
@@ -38,6 +41,7 @@ class fbTimePickerField extends fbFieldBase {
        $now = localtime(time(),true);
        $Mins = array();
        $Hours = array();
+       $ret = array();
        for ($i=0;$i<60;$i++)
        	{
 			$mo = sprintf("%02d",$i);
@@ -70,12 +74,27 @@ class fbTimePickerField extends fbFieldBase {
 					}
 				}
 
-       		return $mod->CreateInputDropdown($id, '_'.$this->Id.'[]',
-       			$Hours, -1, $now['tm_hour']) .
-       				$mod->CreateInputDropdown($id, '_'.$this->Id.'[]',
-       			$Mins, -1, $now['tm_min']) .
-       				$mod->CreateInputDropdown($id, '_'.$this->Id.'[]',
-       			$this->flag12hour, -1, $now['merid']);
+            $hr = new stdClass();
+            $hr->input = $mod->CreateInputDropdown($id, '_'.$this->Id.'[]',
+       			$Hours, -1, $now['tm_hour'],'id="'.$id.'_'.$this->Id.'_1"');
+       		$hr->title = $mod->Lang('hour');
+       		$hr->name = '<label for="'.$id.'_'.$this->Id.'_1">'.$mod->Lang('hour').'</label>';
+       		array_push($ret, $hr);
+       		
+            $min = new stdClass();
+            $min->input = $mod->CreateInputDropdown($id, '_'.$this->Id.'[]',
+       			$Mins, -1, $now['tm_min'],'id="'.$id.'_'.$this->Id.'_2"');
+       		$min->title = $mod->Lang('min');
+       		$min->name = '<label for="'.$id.'_'.$this->Id.'_2">'.$mod->Lang('min').'</label>';
+       		array_push($ret, $min);
+
+            $mer = new stdClass();
+            $mer->input = $mod->CreateInputDropdown($id, '_'.$this->Id.'[]',
+       			$this->flag12hour, -1, $now['merid'], 'id="'.$id.'_'.$this->Id.'_3"');
+            $mer->name = '<label for="'.$id.'_'.$this->Id.'_3">'.$mod->Lang('merid').'</label>';
+            $mer->title = $mod->Lang('merid');
+            array_push($ret,$mer);
+            return $ret;
        		}
        else
        		{
@@ -90,10 +109,21 @@ class fbTimePickerField extends fbFieldBase {
 				$now['tm_hour'] = $this->GetArrayValue(0);
 				$now['tm_min'] = $this->GetArrayValue(1);
 				}
-       		return $mod->CreateInputDropdown($id, '_'.$this->Id.'[]',
-       			$Hours, -1, $now['tm_hour']) .
-       				$mod->CreateInputDropdown($id, '_'.$this->Id.'[]',
-       			$Mins, -1, $now['tm_min']);
+            $hr = new stdClass();
+            $hr->input = $mod->CreateInputDropdown($id, '_'.$this->Id.'[]',
+       			$Hours, -1, $now['tm_hour'],'id="'.$id.'_'.$this->Id.'_1"');
+       		$hr->title = $mod->Lang('hour');
+       		$hr->name = '<label for="'.$id.'_'.$this->Id.'_1">'.$mod->Lang('hour').'</label>';
+       		array_push($ret, $hr);
+       		
+            $min = new stdClass();
+            $min->input = $mod->CreateInputDropdown($id, '_'.$this->Id.'[]',
+       			$Mins, -1, $now['tm_min'],'id="'.$id.'_'.$this->Id.'_2"');
+       		$min->title = $mod->Lang('min');
+       		$min->name = '<label for="'.$id.'_'.$this->Id.'_2">'.$mod->Lang('min').'</label>';
+       		array_push($ret, $min);
+
+            return $ret;
        		}
 
 
