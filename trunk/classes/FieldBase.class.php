@@ -31,6 +31,7 @@ class fbFieldBase {
   var $HasDeleteOp;
   var $modifiesOtherFields;
   var $hasMultipleFormComponents;
+  var $labelSubComponents;
 
   var $Value=false;
   var $form_ptr;
@@ -55,6 +56,7 @@ class fbFieldBase {
     $this->hasMultipleFormComponents = false;
     $this->DispositionPermitted = true;
     $this->SmartyEval = false;
+    $this->labelSubComponents = true;
 
     if (isset($params['form_id']))
       {
@@ -122,6 +124,12 @@ class fbFieldBase {
   {
     return $this->hasMultipleFormComponents;
   }
+
+  function LabelSubComponents()
+  {
+    return $this->labelSubComponents;
+  }
+
 
   function GetFieldInputId($id, &$params, $returnid)
   {
@@ -756,8 +764,8 @@ class fbFieldBase {
   $value = cms_htmlentities($value);
   $id = cms_htmlentities($id);
   $name = cms_htmlentities($name);
-  $size = cms_htmlentities($size);
-  $maxlength = cms_htmlentities($maxlength);
+  $size = ($size!=''?cms_htmlentities($size):10);
+  $maxlength = ($maxlength!=''?cms_htmlentities($maxlength):255);
 
   $value = str_replace('"', '&quot;', $value);
   

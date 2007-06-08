@@ -104,6 +104,12 @@ $lang['form_imported'] = 'Form Imported.';
 $lang['form_import_failed'] = 'Form import failed! There was a problem with the format of the XML file.';
 $lang['rows'] = '%s rows';
 $lang['cols'] = '%s cols';
+$lang['12_hour'] = '12 Hour Clock';
+$lang['24_hour'] = '24 Hour Clock';
+$lang['hour'] = 'Hour';
+$lang['min'] = 'Minute';
+$lang['merid'] = 'Meridian';
+$lang['date_range'] = 'Range: %s - %s';
 
 $lang['uninstalled'] = 'Module uninstalled.';
 $lang['installed'] = 'Module version %s installed.';
@@ -120,6 +126,7 @@ $lang['tab_main']='Main';
 $lang['tab_symbol']='Form Display Settings';
 $lang['tab_submit']='Form Submission';
 $lang['tab_captcha']='Captcha Settings';
+$lang['tab_advanced']='Advanced Settings';
 $lang['tab_templatelayout'] = 'Template Layout Options';
 
 
@@ -276,6 +283,11 @@ $lang['title_use_wysiwyg']='Use WYSIWYG editor for text Area (Admin side only)?'
 $lang['title_submit_actions'] = 'Form Submission Behavior';
 $lang['title_submit_labels'] = 'Submission Button Labels';
 $lang['title_submit_help'] = 'This page lets you customize Form Submission. It doesn\'t determine what the Form Builder does with the submitted data. You can set that up by adding "Disposition" fields to your form.';
+$lang['title_start_year'] = 'Year range start';
+$lang['title_end_year'] = 'Year range end';
+$lang['title_default_year'] = 'Default Year';
+$lang['title_default_year_help'] = '(Set to -1 for default year to be the current year)';
+
 
 $lang['admindesc']='Add, edit and manage interactive Forms';
 
