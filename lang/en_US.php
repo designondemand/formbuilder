@@ -273,11 +273,7 @@ $lang['help_tab_symbol']='a tab character';
 $lang['title_file_template']='Template for one line of output file';
 $lang['title_file_header']='Template for the header of output file';
 $lang['title_confirmation_url']='URL to click for form confirmation';
-$lang['no_referrer_info']='No HTTP_REFERER info available (probably due to use of User Email Validation)';
-$lang['validation_param_error']='Validation Parameter Error. Please make sure you copy the URL from your email correctly!';
-$lang['validation_response_error']='Validation Repsonse Error. Please make sure you copy the URL from your email correctly!';
-$lang['validation_no_field_error']='Validation Repsonse Error. No email validation field in this form!';
-
+$lang['title_value'] = 'Value (see Advanced Tab if you use Smarty tags)';
 $lang['title_date_format']='Date Format (standard <a href="http://www.php.net/manual/en/function.date.php">PHP Date Formats</a>)';
 $lang['title_use_wysiwyg']='Use WYSIWYG editor for text Area (Admin side only)?';
 $lang['title_submit_actions'] = 'Form Submission Behavior';
@@ -288,6 +284,10 @@ $lang['title_end_year'] = 'Year range end';
 $lang['title_default_year'] = 'Default Year';
 $lang['title_default_year_help'] = '(Set to -1 for default year to be the current year)';
 
+$lang['no_referrer_info']='No HTTP_REFERER info available (probably due to use of User Email Validation)';
+$lang['validation_param_error']='Validation Parameter Error. Please make sure you copy the URL from your email correctly!';
+$lang['validation_response_error']='Validation Repsonse Error. Please make sure you copy the URL from your email correctly!';
+$lang['validation_no_field_error']='Validation Repsonse Error. No email validation field in this form!';
 
 $lang['admindesc']='Add, edit and manage interactive Forms';
 

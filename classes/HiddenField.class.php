@@ -26,9 +26,38 @@ class fbHiddenField extends fbFieldBase
   function GetFieldInput($id, &$params, $returnid)
   {
     $mod = &$this->form_ptr->module_ptr;
-    return $mod->CreateInputHidden($id, '_'.$this->Id,
+    if ($this->GetOption('smarty_eval','0') == '1')
+      {
+      $this->SetSmartyEval(true);
+      }
+   if ($this->Value !== false)
+      {
+      return $mod->CreateInputHidden($id, '_'.$this->Id,
 				   $this->Value);
+		}
+	else
+	   {
+      return $mod->CreateInputHidden($id, '_'.$this->Id,
+				   $this->GetOption('value',''));
+      }
   }
+
+	function PrePopulateAdminForm($formDescriptor)
+	{
+		$mod = &$this->form_ptr->module_ptr;
+		$main = array(
+				array($mod->Lang('title_value'),
+            		$mod->CreateInputText($formDescriptor, 'opt_value',$this->GetOption('value',''),25,128))
+		);
+		$adv = array(
+				array($mod->Lang('title_smarty_eval'),
+				$mod->CreateInputCheckbox($formDescriptor, 'opt_smarty_eval',
+            		'1',$this->GetOption('smarty_eval','0')))
+		);
+		return array('main'=>$main,'adv'=>$adv);
+	}
+
+
 }
 
 ?>
