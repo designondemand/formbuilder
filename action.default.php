@@ -69,14 +69,57 @@ if (! $finished)
 	 $parms['form_id'] = $aeform->GetId();
 	 $this->SendEvent('OnFormBuilderFormSubmit',$parms);
 	 
-	 $ret = $aeform->GetAttr('redirect_page','-1');
-	 if ($ret != -1)
-	   {
-	     $this->RedirectContent($ret);
+	 $act = $aeform->GetAttr('submit_action','text');
+	 if ($act == 'text')
+	 	{
+	 	$message = $aeform->GetAttr('submit_response','');
+    	$this->smarty->assign('sub_form_name',$aeform->GetName());
+    	$this->smarty->assign('sub_date',date('r'));
+    	$this->smarty->assign('sub_host',$_SERVER['SERVER_NAME']);
+    	$this->smarty->assign('sub_source_ip',$_SERVER['REMOTE_ADDR']);
+    	if (empty($_SERVER['HTTP_REFERER']))
+      		{
+			$this->smarty->assign('sub_url',$this->Lang('no_referrer_info'));
+      		}
+    	else
+      		{
+			$this->smarty->assign('sub_url',$_SERVER['HTTP_REFERER']);
+      		}
+    	$others = &$aeform->GetFields();
+    	$unspec = $aeform->GetAttr('unspecified',$this->Lang('unspecified'));
+		
+    	for($i=0;$i<count($others);$i++)
+      		{
+			$field =& $others[$i];
+			$replVal = '';
+			if ($field->DisplayInSubmission())
+	 			 {
+	 			 $replVal = $field->GetHumanReadableValue();
+	    		 if ($replVal == '')
+	      			{
+					$replVal = $unspec;
+	      			}
+	  			}
+	  		if( $replVal != '' )
+	  			{
+	    		$this->smarty->assign($aeform->MakeVar($field->GetName()),
+	    			$replVal);
+	    		$this->smarty->assign('fld_'.$field->GetId(),$replVal);
+	  			}
+			}
+		echo $this->ProcessTemplateFromData( $message );
+	 	}
+	 else if ($act == 'redir')
+	 	{
+	 	$ret = $aeform->GetAttr('redirect_page','-1');
+	 	if ($ret != -1)
+	   		{
+	     	$this->RedirectContent($ret);
+	   		}
 	   }
    }
-     else
-       {
+ else
+     {
 	 $parms = array();
 	 $params['error']='';
 	 echo $this->Lang('submission_error');
