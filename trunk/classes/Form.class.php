@@ -19,6 +19,8 @@ class fbForm {
   var $Attrs;
   var $Fields;
   var $formState;
+  var $sampleTemplateCode;
+  var $templateVariables;
 
   function fbForm(&$module_ptr, &$params, $loadDeep=false)
   {
@@ -80,6 +82,14 @@ class fbForm {
 	    $this->module_ptr->SetTemplate('fb_'.$this->Id,$thisParamVal);
 	  }
       }
+
+    $this->templateVariables = Array(
+		'{$sub_form_name}'=>$this->module_ptr->Lang('title_form_name'),
+		'{$sub_date}'=>$this->module_ptr->Lang('help_submission_date'),
+		'{$sub_host}'=>$this->module_ptr->Lang('help_server_name'),
+		'{$sub_source_ip}'=>$this->module_ptr->Lang('help_sub_source_ip'),
+		'{$sub_url}'=>$this->module_ptr->Lang('help_sub_url')
+	);
   }
 
   function SetAttributes($attrArray)
@@ -195,6 +205,170 @@ class fbForm {
 	    $ret = true;
 	  }
       }
+    return $ret;
+  }
+
+  function AddTemplateVariable($name,$def)
+  {
+    $theKey = '{$'.$name.'}';
+    $this->templateVariables[$theKey] = $def;
+  }
+
+  function MakeVar($string)
+  {
+    $maxvarlen = 24;
+    $string = strtolower(preg_replace('/\s+/','_',$string));
+    $string = strtolower(preg_replace('/\W/','_',$string));
+    if (strlen($string) > $maxvarlen)
+      {
+	$string = substr($string,0,$maxvarlen);
+	$pos = strrpos($string,'_');
+	if ($pos !== false)
+	  {
+	    $string = substr($string,0,$pos);
+	  }
+      }
+    return $string;
+  }
+
+  function createSampleTemplateJavascript($fieldName='opt_email_template', $includeHTML=true, $includeText=true)
+  {
+    $jsCode = "<script type=\"text/javascript\">\n
+function populate(formname)
+    {
+    var fname = 'ID".$fieldName."';
+    formname[fname].value=|TEMPLATE|;
+    }
+function populate_html(formname)
+    {
+    var fname = 'ID".$fieldName."';
+    formname[fname].value=|HTMLTEMPLATE|;
+	 }
+</script>";
+	if ($includeText)
+		{
+		$jsCode .= "<input type=\"button\" value=\"".
+$this->module_ptr->Lang('title_create_sample_template')."\" onClick=\"javascript:populate(this.form)\" />";
+		}
+	if ($includeHTML)
+		{
+		$jsCode .= "<input type=\"button\" value=\"".
+$this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javascript:populate_html(this.form)\" />";
+		}
+  return $jsCode;
+  }
+
+
+  function createSampleTemplate($htmlish=false,$email=true)
+  {
+    $mod = &$this->module_ptr;
+    $ret = "";
+	if ($email)
+		{
+    	if ($htmlish)
+    		{
+			$ret .= "<h1>".$mod->Lang('email_default_template')."</h1>\n";
+			}
+	 	else
+	 		{
+			$ret .= $mod->Lang('email_default_template')."\n";
+			}
+    	foreach($this->templateVariables as $thisKey=>$thisVal)
+      		{
+			if ($htmlish)
+				{
+				$ret .= '<strong>'.$thisVal.'</strong>: '.$thisKey."<br />\n";
+				}
+			else
+				{
+				$ret .= $thisVal.': '.$thisKey."\n";
+				}
+      		}
+     	if ($htmlish)
+     	  	{
+		  	$ret .= "\n<hr />\n";
+	  	  	}
+	  	else
+	  	  	{
+    	  	$ret .= "\n-------------------------------------------------\n";
+    	  	}
+    	  }
+	else
+		{
+		if ($htmlish)
+			{
+			$ret .= '<h2>';
+			}
+		$ret .= $mod->Lang('thanks');
+		if ($htmlish)
+			{
+			$ret .= '</h2>';
+			}
+		}
+    $others = &$this->GetFields();
+    for($i=0;$i<count($others);$i++)
+      {
+	if ($others[$i]->DisplayInSubmission())
+	  {
+	  if ($htmlish)
+     	  {
+  			$ret .= '<strong>'.$others[$i]->GetName() . '</strong>: {$fld_' .   			$others[$i]->GetId(). "}<br />\n";
+  		  }
+  	  else
+  	  	  {
+	     $ret .= $others[$i]->GetName() . ': {$fld_' .$others[$i]->GetId() 	     . "}\n";
+	     }
+	  }
+      }
+    return $ret;
+  }
+
+
+  function AdminTemplateHelp($formDescriptor,$fieldName='',
+  	$includeHTML=true, $includeText=true)
+  {
+    $mod = &$this->module_ptr;
+    $ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_template').'</th></tr>';
+    $ret .= '<tr><th>'.$mod->Lang('help_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';
+    $odd = false;
+    foreach($this->templateVariables as $thisKey=>$thisVal)
+      {
+		$ret .= '<tr><td class="'.($odd?'odd':'even').
+		'">'.$thisKey.'</td><td class="'.($odd?'odd':'even').
+		'">'.$thisVal.'</td></tr>';
+      $odd = ! $odd;
+      }
+
+    $others = &$this->GetFields();
+    for($i=0;$i<count($others);$i++)
+      {
+	if ($others[$i]->DisplayInSubmission())
+	  {                
+	    $ret .= '<tr><td class="'.($odd?'odd':'even').
+	    '">{$'.$this->MakeVar($others[$i]->GetName()).
+	    '} / {$fld_'.
+	    $others[$i]->GetId().
+	    '}</td><td class="'.($odd?'odd':'even').
+	    '">' .$others[$i]->GetName() . '</td></tr>';
+	  	$odd = ! $odd;
+	  }
+      }
+       	
+    $ret .= '<tr><td colspan="2">'.$mod->Lang('help_other_fields').'</td></tr>';
+        
+    $escapedSample = preg_replace('/\'/',"\\'",$this->createSampleTemplate(false));
+    $escapedSampleHTML = preg_replace('/\'/',"\\'",$this->createSampleTemplate(true));
+    $escapedSample = preg_replace('/\n/',"\\n'+\n'", $escapedSample);
+    $escapedSampleHTML = preg_replace('/\n/',"\\n'+\n'", $escapedSampleHTML);
+    
+    $sampleTemplateCode = preg_replace('/\|TEMPLATE\|/',"'".$escapedSample."'",
+    	$this->createSampleTemplateJavascript($fieldName, $includeHTML, $includeText));
+    $sampleTemplateCode = preg_replace('/\|HTMLTEMPLATE\|/',"'".$escapedSampleHTML."'",
+    	$sampleTemplateCode);
+    $sampleTemplateCode = preg_replace('/ID/',$formDescriptor,
+    	$sampleTemplateCode);
+    $ret .= '<tr><td colspan="2">'.$sampleTemplateCode.'</td></tr>';
+    $ret .= '</table>';
     return $ret;
   }
 
@@ -1046,7 +1220,9 @@ function fast_add(field_type)
 					      
     $mod->smarty->assign('input_submit_response',
 			 $mod->CreateTextArea(false, $id,
-					      $this->GetAttr('submit_response',$this->DefaultSummary()), 'forma_submit_response'));
+					      $this->GetAttr('submit_response',$this->createSampleTemplate(true,false)), 'forma_submit_response','module_fb_area_wide'));
+	$mod->smarty->assign('help_submit_response',
+		$this->AdminTemplateHelp($id,'forma_submit_response',true,false));
     return $mod->ProcessTemplate('AddEditForm.tpl');
   }
 

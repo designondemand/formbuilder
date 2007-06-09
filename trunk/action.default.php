@@ -74,7 +74,7 @@ if (! $finished)
 	   {
 	     $this->RedirectContent($ret);
 	   }
-       }
+   }
      else
        {
 	 $parms = array();
