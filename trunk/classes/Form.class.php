@@ -1220,7 +1220,7 @@ function fast_add(field_type)
 					      
     $mod->smarty->assign('input_submit_response',
 			 $mod->CreateTextArea(false, $id,
-					      $this->GetAttr('submit_response',$this->createSampleTemplate(true,false)), 'forma_submit_response','module_fb_area_wide'));
+					      $this->GetAttr('submit_response',''), 'forma_submit_response','module_fb_area_wide'));
 	$mod->smarty->assign('help_submit_response',
 		$this->AdminTemplateHelp($id,'forma_submit_response',true,false));
     return $mod->ProcessTemplate('AddEditForm.tpl');
