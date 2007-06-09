@@ -124,11 +124,13 @@ function populate_html(formname)
 	  {
 	  if ($htmlish)
      	  {
-  			$ret .= '<strong>'.$others[$i]->GetName() . '</strong>: {$' . $this->MakeVar($others[$i]->GetName()) . "}<br />\n";
+  			$ret .= '<strong>'.$others[$i]->GetName() . '</strong>: {$fld_' . /*$this->MakeVar($others[$i]->GetName())*/
+  			$others[$i]->GetId(). "}<br />\n";
   		  }
   	  else
   	  	  {
-	     $ret .= $others[$i]->GetName() . ': {$' . $this->MakeVar($others[$i]->GetName()) . "}\n";
+	     $ret .= $others[$i]->GetName() . ': {$fld_' .$others[$i]->GetId() /*$this->MakeVar($others[$i]->GetName())*/
+	     . "}\n";
 	     }
 	  }
       }
@@ -305,6 +307,7 @@ function populate_html(formname)
 	if( $replVal != '' )
 	  {
 	    $mod->smarty->assign($this->MakeVar($field->GetName()),$replVal);
+	    $mod->smarty->assign('fld_'.$field->GetId(),$replVal);
 	  }
       }
 
@@ -355,9 +358,13 @@ function populate_html(formname)
     $message = $this->GetOption('email_template','');
     $ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_template').'</th></tr>';
     $ret .= '<tr><th>'.$mod->Lang('help_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';
+    $odd = false;
     foreach($this->templateVariables as $thisKey=>$thisVal)
       {
-	$ret .= '<tr><td>'.$thisKey.'</td><td>'.$thisVal.'</td></tr>';
+		$ret .= '<tr><td class="'.($odd?'odd':'even').
+		'">'.$thisKey.'</td><td class="'.($odd?'odd':'even').
+		'">'.$thisVal.'</td></tr>';
+      $odd = ! $odd;
       }
 
     $others = &$this->form_ptr->GetFields();
@@ -365,7 +372,13 @@ function populate_html(formname)
       {
 	if ($others[$i]->DisplayInSubmission())
 	  {                
-	    $ret .= '<tr><td>{$'.$this->MakeVar($others[$i]->GetName()) .'}</td><td>' .$others[$i]->GetName() . '</td></tr>';
+	    $ret .= '<tr><td class="'.($odd?'odd':'even').
+	    '">{$'.$this->MakeVar($others[$i]->GetName()).
+	    '} / {$fld_'.
+	    $others[$i]->GetId().
+	    '}</td><td class="'.($odd?'odd':'even').
+	    '">' .$others[$i]->GetName() . '</td></tr>';
+	  	$odd = ! $odd;
 	  }
       }
        	

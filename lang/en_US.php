@@ -263,7 +263,7 @@ $lang['help_submission_date']='Date of Submission';
 $lang['help_server_name']='Your server';
 $lang['help_sub_source_ip']='IP address of person using form';
 $lang['help_sub_url']='URL of page containing form';
-$lang['help_other_fields']='Other fields will be available as you add them to the form.';
+$lang['help_other_fields']='Alternate field names can be used interchangeably (especially useful if Smarty is choking on characters outside of ASCII 32-126). <br />Other fields will be available as you add them to the form.';
 $lang['help_date_format']='See <a href="http://www.php.net/manual/en/function.date.php" target=_NEW>the PHP Manual</a> for formatting help.';
 $lang['help_variable_name']='Variable';
 $lang['help_form_field']='Field Represented';
