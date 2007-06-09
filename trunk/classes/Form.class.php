@@ -1047,7 +1047,11 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
     $mod->smarty->assign('title_submit_labels',
 			 $mod->Lang('title_submit_labels'));
     $mod->smarty->assign('title_submit_help',
+$mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true','','','systemicon').
 			 $mod->Lang('title_submit_help'));
+	$mod->smarty->assign('title_submit_response_help',
+$mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true','','','systemicon').
+			$mod->Lang('title_submit_response_help'));
 
     $submitActions = array($mod->Lang('display_text')=>'text',
          $mod->Lang('redirect_to_page')=>'redir');

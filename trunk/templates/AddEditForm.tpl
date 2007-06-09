@@ -64,9 +64,11 @@
 </fieldset>
 {/if}
 {$tab_end}{$submittab_start}
+	<fieldset>
 	<div class="pageoverflow">
 		<p class="pageinput">{$title_submit_help}</p>
 	</div>
+	</fieldset>
 <fieldset class="module_fb_fieldset"><legend>{$title_submit_actions}</legend>
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_submit_action}:</p>
@@ -135,6 +137,11 @@
 	</div>
 {$tab_end}
 {$submittemplatetab_start}
+	<fieldset>
+	<div class="pageoverflow">
+		<p class="pageinput">{$title_submit_response_help}</p>
+	</div>
+	</fieldset>
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_submit_response}:</p>
 		<p class="pageinput">{$input_submit_response}</p>
