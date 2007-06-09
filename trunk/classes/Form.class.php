@@ -807,19 +807,20 @@ class fbForm {
     $mod->smarty->assign('formid',
 			 $mod->CreateInputHidden($id, 'form_id', $this->Id));
     $mod->smarty->assign('tab_start',$mod->StartTabHeaders().
-			 $mod->SetTabHeader('maintab',$mod->Lang('tab_main')).
-			 $mod->SetTabHeader('submittab',$mod->Lang('tab_submit')).
-			 $mod->SetTabHeader('symboltab',$mod->Lang('tab_symbol')).
-			 $mod->SetTabHeader('captchatab',$mod->Lang('tab_captcha')).
-$mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout')).
-
-			 $mod->EndTabHeaders() . $mod->StartTabContent());
+         $mod->SetTabHeader('maintab',$mod->Lang('tab_main')).
+         $mod->SetTabHeader('submittab',$mod->Lang('tab_submit')).
+         $mod->SetTabHeader('symboltab',$mod->Lang('tab_symbol')).
+         $mod->SetTabHeader('captchatab',$mod->Lang('tab_captcha')).
+         $mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout')).
+         $mod->SetTabHeader('submittemplate',$mod->Lang('tab_submissiontemplate')).
+			$mod->EndTabHeaders() . $mod->StartTabContent());
 	  
     $mod->smarty->assign('tabs_end',$mod->EndTabContent());
     $mod->smarty->assign('maintab_start',$mod->StartTab("maintab"));
     $mod->smarty->assign('submittab_start',$mod->StartTab("submittab"));
     $mod->smarty->assign('symboltab_start',$mod->StartTab("symboltab"));
     $mod->smarty->assign('templatetab_start',$mod->StartTab("templatelayout"));
+    $mod->smarty->assign('submittemplatetab_start',$mod->StartTab("submittemplate"));
     $mod->smarty->assign('captchatab_start',$mod->StartTab("captchatab"));
     $mod->smarty->assign('tab_end',$mod->EndTab());
     $mod->smarty->assign('form_end',$mod->CreateFormEnd());
@@ -860,6 +861,12 @@ $mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout')).
 			 $mod->Lang('title_list_delimiter'));
     $mod->smarty->assign('title_redirect_page',
 			 $mod->Lang('title_redirect_page'));
+			 
+    $mod->smarty->assign('title_submit_action',
+			 $mod->Lang('title_submit_action'));
+    $mod->smarty->assign('title_submit_response',
+			 $mod->Lang('title_submit_response'));
+
 
     $mod->smarty->assign('title_submit_actions',
 			 $mod->Lang('title_submit_actions'));
@@ -868,6 +875,10 @@ $mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout')).
     $mod->smarty->assign('title_submit_help',
 			 $mod->Lang('title_submit_help'));
 
+    $submitActions = array($mod->Lang('display_text')=>'text',
+         $mod->Lang('redirect_to_page')=>'redir');
+    $mod->smarty->assign('input_submit_action',
+          $mod->CreateInputRadioGroup($id, 'forma_submit_action', $submitActions, $this->GetAttr('submit_action','text')));
 
     $captcha = &$mod->getModuleInstance('Captcha');
     if ($captcha == null)
@@ -991,10 +1002,10 @@ function fast_add(field_type)
 			 $mod->CreateInputText($id, 'forma_submit_button_text',
 					       $this->GetAttr('submit_button_text',$mod->Lang('button_submit')), 35, 35));
     $mod->smarty->assign('title_submit_button_safety',
-			 $mod->Lang('title_submit_button_safety'));
+			 $mod->Lang('title_submit_button_safety_help'));
     $mod->smarty->assign('input_submit_button_safety',$mod->CreateInputHidden($id,'forma_input_button_safety','0').
 			 $mod->CreateInputCheckbox($id,'forma_input_button_safety','1',$this->GetAttr('input_button_safety','0')).
-			 $mod->Lang('title_submit_button_safety_help'));
+			 $mod->Lang('title_submit_button_safety'));
     $mod->smarty->assign('title_form_prev_button',
 			 $mod->Lang('title_form_prev_button'));
     $mod->smarty->assign('input_form_prev_button',
@@ -1032,6 +1043,10 @@ function fast_add(field_type)
     $mod->smarty->assign('input_form_template',
 			 $mod->CreateTextArea(false, $id,
 					      $this->GetAttr('form_template',$this->DefaultTemplate()), 'forma_form_template'));
+					      
+    $mod->smarty->assign('input_submit_response',
+			 $mod->CreateTextArea(false, $id,
+					      $this->GetAttr('submit_response',$this->DefaultSummary()), 'forma_submit_response'));
     return $mod->ProcessTemplate('AddEditForm.tpl');
   }
 
@@ -1316,7 +1331,13 @@ function fast_add(field_type)
   {
     return file_get_contents(dirname(__FILE__).'/../templates/RenderFormDefault.tpl');
   }
-    
+
+  function DefaultSummary()
+  {
+    return file_get_contents(dirname(__FILE__).'/../templates/RenderFormDefaultResult.tpl');
+  }
+
+
   function DeleteField($field_id)
   {
     $index = $this->GetFieldIndexFromId($field_id);

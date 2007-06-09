@@ -110,6 +110,7 @@ $lang['hour'] = 'Hour';
 $lang['min'] = 'Minute';
 $lang['merid'] = 'Meridian';
 $lang['date_range'] = 'Range: %s - %s';
+$lang['thanks'] = 'Thanks! Your submissions have been received.';
 
 $lang['uninstalled'] = 'Module uninstalled.';
 $lang['installed'] = 'Module version %s installed.';
@@ -127,7 +128,8 @@ $lang['tab_symbol']='Form Display Settings';
 $lang['tab_submit']='Form Submission';
 $lang['tab_captcha']='Captcha Settings';
 $lang['tab_advanced']='Advanced Settings';
-$lang['tab_templatelayout'] = 'Template Layout Options';
+$lang['tab_templatelayout'] = 'Form Template';
+$lang['tab_submissiontemplate'] = 'Submission Template';
 
 
 $lang['add_options'] = 'Add More Options';
@@ -190,7 +192,7 @@ $lang['title_show_version']='Show Form Builder Version?';
 $lang['title_show_version_long']='This will embed your installed version number of Form Builder module in a comment, to aid in debugging';
 $lang['title_add_new_field']='Add New Field';
 $lang['title_form_submit_button']='Form Submit Button Text';
-$lang['title_submit_button_safety']='Add Javascript to Submit Button to prevent multiple submissions?';
+$lang['title_submit_button_safety']='Add Javascript to final Submit Button that will help prevent multiple submissions?';
 $lang['title_submit_button_safety_help']='Add safety script';
 $lang['title_form_next_button']='Form "Next" Button Text (used for multipage forms)';
 $lang['title_form_prev_button'] = 'Form "Previous" Button Text (used for multipage forms)';
@@ -283,6 +285,10 @@ $lang['title_start_year'] = 'Year range start';
 $lang['title_end_year'] = 'Year range end';
 $lang['title_default_year'] = 'Default Year';
 $lang['title_default_year_help'] = '(Set to -1 for default year to be the current year)';
+$lang['title_submit_action'] = 'After form is submitted';
+$lang['title_submit_response'] = 'Response to display';
+$lang['display_text'] = 'Display "Submission Template"';
+$lang['redirect_to_page'] = 'Redirect to site page';
 
 $lang['no_referrer_info']='No HTTP_REFERER info available (probably due to use of User Email Validation)';
 $lang['validation_param_error']='Validation Parameter Error. Please make sure you copy the URL from your email correctly!';

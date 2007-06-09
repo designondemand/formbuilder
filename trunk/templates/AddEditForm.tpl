@@ -69,15 +69,19 @@
 	</div>
 <fieldset class="module_fb_fieldset"><legend>{$title_submit_actions}</legend>
 	<div class="pageoverflow">
+		<p class="pagetext">{$title_submit_action}:</p>
+		<p class="pageinput">{$input_submit_action}</p>
+	</div>
+	<div class="pageoverflow">
 		<p class="pagetext">{$title_redirect_page}:</p>
 		<p class="pageinput">{$input_redirect_page}</p>
 	</div>
+</fieldset>
+<fieldset class="module_fb_fieldset"><legend>{$title_submit_labels}</legend>
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_submit_button_safety}:</p>
 		<p class="pageinput">{$input_submit_button_safety}</p>
 	</div>
-</fieldset>
-<fieldset class="module_fb_fieldset"><legend>{$title_submit_labels}</legend>
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_submit_button}:</p>
 		<p class="pageinput">{$input_form_submit_button}</p>
@@ -128,6 +132,12 @@
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_template}:</p>
 		<p class="pageinput">{$input_form_template}</p>
+	</div>
+{$tab_end}
+{$submittemplatetab_start}
+	<div class="pageoverflow">
+		<p class="pagetext">{$title_submit_response}:</p>
+		<p class="pageinput">{$input_submit_response}</p>
 	</div>
 {$tab_end}
 {$tabs_end}
