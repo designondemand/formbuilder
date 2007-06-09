@@ -138,6 +138,7 @@
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_submit_response}:</p>
 		<p class="pageinput">{$input_submit_response}</p>
+		{$help_submit_response}
 	</div>
 {$tab_end}
 {$tabs_end}
