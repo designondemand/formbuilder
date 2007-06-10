@@ -293,6 +293,7 @@ $lang['title_submit_response'] = 'Response to display';
 $lang['display_text'] = 'Display "Submission Template"';
 $lang['redirect_to_page'] = 'Redirect to site page';
 $lang['title_submit_response_help'] = 'This template is for display to the user after the form is submitted. This template does not effect emails generated or other form dispositions -- you set those templates (where appropriate) in the "advanced" tab for those disposition fields.';
+$lang['title_destination_page'] = 'Destination Page';
 
 $lang['no_referrer_info']='No HTTP_REFERER info available (probably due to use of User Email Validation)';
 $lang['validation_param_error']='Validation Parameter Error. Please make sure you copy the URL from your email correctly!';
