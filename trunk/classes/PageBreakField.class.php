@@ -71,10 +71,6 @@ class fbPageBreakField extends fbFieldBase {
 		return array(true,'');
 	}
 	
-	function AdminValidate()
-	{
-		return array(true,'');
-	}
 }
 
 ?>
