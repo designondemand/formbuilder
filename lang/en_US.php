@@ -476,8 +476,8 @@ independently validated. This is good for applications like online surveys.</li>
 </ul></li>
 
 <li>Form Handling Inputs (Dispositions)
-<li>*Call a User Defined Tag With the Form Results. This submits all the form results to the User-Defined Tag you specify. The UDT can handle the results however it wants.</li>
-<ul><li>*Email Results Based on Pulldown. This is useful for web sites where comments get routed based on their subject matter, e.g., bugs get sent to one person, marketing questions to another person, sales requests to someone else, etc. The pulldown is populated with the subjects, and each gets directed to a specific email address. You set up these mappings in the when you create or edit a field of this type. If you use one of these \"Director\" pulldowns, the user must make a selection in order to submit the
+<ul><li>*Call a User Defined Tag With the Form Results. This submits all the form results to the User-Defined Tag you specify. The UDT can handle the results however it wants.</li>
+<li>*Email Results Based on Pulldown. This is useful for web sites where comments get routed based on their subject matter, e.g., bugs get sent to one person, marketing questions to another person, sales requests to someone else, etc. The pulldown is populated with the subjects, and each gets directed to a specific email address. You set up these mappings in the when you create or edit a field of this type. If you use one of these \"Director\" pulldowns, the user must make a selection in order to submit the
 form. This input is part of the form the user sees, although the email addresses are not made visible nor
 are they embedded in the HTML.</li>
 <li>*Email Results to set Address(es). This simply sends the form results to one or more email addresses that you enter when you create or edit this type of field. This field and its name are not visible in the
@@ -583,8 +583,8 @@ section <em>Adding a Form to a Page</em>.</li>
 <li> Just mess around and try clicking on links and icons and stuff. See what happens.</li>
 <li> Last resport is to email me or catch me on IRC and we can go from there.</li>
 </ol> 
-<p>This is a fairly early version, if not a rank beta release, and it is probably still buggy. While I've done all I can
-to make sure no egregious bugs have crept in, I have to admit that during testing, this program
+<p>This is no longer a particularly early version, but it is probably still buggy. While I've done all I can
+to make sure no egregious bugs have crept in, I have to admit that during early testing, this program
 revealed seven cockroaches, two earwigs, a small family of aphids, and a walking-stick insect. It also
 ate the neighbor's nasty little yap dog, for which I was inappropriately grateful.</p>
 <p>The final release will include bug fixes, documentation, and unconditional love.</p>
