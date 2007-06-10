@@ -18,6 +18,7 @@ $lang['field_type_DatePickerField']='Date Picker';
 $lang['field_type_TimePickerField']='Time Picker';
 $lang['field_type_RadioGroupField']='Radio Button Group';
 $lang['field_type_DispositionDirector']='*Email Results Based on Pulldown';
+$lang['field_type_DispositionPageRedirector']='*Redirect to Page Based on Pulldown';
 $lang['field_type_DispositionEmail']='*Email Results to set Address(es)';
 $lang['field_type_DispositionEmailConfirmation']='*Validate-via-Email Address';
 $lang['field_type_DispositionFile']='*Write Results to Flat File';
@@ -478,6 +479,7 @@ form that the user sees. The email addresses are not made visible nor
 are they embedded in the HTML.</li>
 <li>*Email to User-Supplied Address. This puts an input field in the form for the user to populate with an email address. The form results get sent to that address. Beware of Spam abuse! Active the primitive anti-spam features in the FormBuilder configuration screen.</li>
 <li>*Store Results in Database. This will store the form contents in an internal database. You will always use this disposition if you use the form with FormBrowser.</li>
+<li>*Redirect to Page Based on Pulldown. This allows you to redirect the form to a different site page depending on its value. If you have multiple dispositions, make sure this is used last.</li>
 <li>*Validate via Email. This is a strange and powerful field. It provides the user a mandatory input for their email address. Once they submit their form, the standard form dispositions are not performed -- rather, it send the user an email with a special coded link. If they click on the link, the other form is considered \"approved,\" and the other dispositions are all performed.</li>
 <li>*Write Results to Flat File. This takes the form results and writes them into a text file. You may
 select the name of the file, and set its format. These files are written to the \"output\" directory under the
