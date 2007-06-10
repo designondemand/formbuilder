@@ -31,7 +31,7 @@ $lang['field_type_FromEmailNameField']='Email "From Name" Field';
 $lang['field_type_StaticTextField']='-Static Text';
 $lang['field_type_SystemLinkField']='-Static Link';
 $lang['field_type_LinkField']='Link (User-entered)';
-$lang['field_type_HiddenField'] = 'Hidden Field';
+$lang['field_type_HiddenField'] = '-Hidden Field';
 
 
 // validation types
@@ -390,11 +390,21 @@ single quotes (') or editing the HTML directly.
 <p>This is the main place you'll work on your form. Here, you give it a name, an alias (which is used to identify it for placing it in a page or template), and, optionally, a CSS class with which to wrap the whole thing.</p>
 <p>Below this, if you have it enabled, is the \"fast field adder\" pulldown, that lets you quickly add a field to the end of your form by selecting the field type.</p>
 <p>Below this is the list of fields that make up your form. More detail on this is described below.</p>
-<h4>Form Settings</h4>
-<p>Form Settings allows you to customize a lot of the messages and text in the controls for your form. It also allows you to pick a page to redirect users to after a successful form submission.</p>
-<h4>Template Layout Options</h4>
-<p>This is where you do your customization work of your form\'s smarty Template.</p>
-<p>The form should default to a a Custom template that documents the smarty tags available to you. Unless you're a smarty expert, you probably don't want to mess around with this. If you are a smarty expert, this is where you can unleash your magic.</p>
+<h4>Form Submission</h4>
+<p>When the form is submitted, you can either redirect the user to another page of your site, or you can present the user some message (which can contain any of the user's form entries, or just static text). In this tab, you select which of these approaches you wish to use, and, if you chose redirection, it allows you to pick the page to redirect users to after a successful form submission.</p>
+<p>Also on this page, you can specify the labels of various submission buttons (\"Previous\", \"next\", \"submit\"). You can also opt to have some Javascript added to the last page of a form that will prevent multiple submissions (useful on slow servers).</p>
+<h4>Form Display Options</h4>
+<p>This tab allows for other form customizations, like the symbol to show for required fields.</p>
+<h4>Captcha Settings</h4>
+<p>If you have installed the Captcha module, this tab lets you configure the Captcha settings for your form.</p>
+<h4>Form Template</h4>
+<p>This is where you do your customization work of your form\'s Smarty Template.</p>
+<p>The form should default to a Custom template that documents the Smarty tags available to you.</p>
+<p>Unless you're a Smarty expert, you probably don't want to mess around with this. If you are a Smarty expert, this is where you can unleash your magic.</p>
+<h4>Submission Template</h4>
+<p>If, in the Form Submission tab, you selected 'Display \"Submission Template\", this is where you can create that template. There is a display of which smarty variables are available to you, and a button to generate a sample template.</p>
+<p>If you're a Smarty expert, you can do all manner of creative and powerful things here. If you're not a Smarty expert, you might just want to use the default.
+</p>
 <h3>Adding Fields to your Form</h3>
 <p>The types of fields that are currently supported fit into four groups: standard input fields, display control fields, email-specific fields, and form result handling fields (also called Form Dispositions in places):</p>
 <ul>
@@ -437,7 +447,6 @@ group, but is better when there are a large number of options, as you can limit 
 <li>Countries. This is a pulldown listing the Countries of the world (as of July 2005).</li>
 <li>Date Picker. This is a triple pulldown allowing the user to select a date.</li>
 <li>Time Picker. This is a set of pulldowns allowing the user to select a time (using 12 or 24 hour clock).</li>
-<li>Hidden Field. This allows you to embed a hidden field in your form.</li>
 <li>File Upload. This is a file upload field.</li>
 <li>Link (User Entered). This creates a double input field for getting a link URL and link title.</li>
 </ul></li>
@@ -452,6 +461,7 @@ group, but is better when there are a large number of options, as you can limit 
 independently validated. This is good for applications like online surveys.</li>
 <li>-Fieldset Start. Combined with Fieldset End, this allows you to group various fields within your form. Use this to start a given grouping.</li>
 <li>-Fieldset End. Combined with Fieldset Start, this allows you to group various fields within your form. Use this to end a given grouping.</li>
+<li>-Hidden Field. This allows you to embed a hidden field in your form.</li>
 <li>-Static Text. This allows you to put text or a label in the middle of your form. This is useful for giving additional help text, especially if you're not using a Custom Template to render your form.</li>
 <li>-Static Link. This allows you to put a link to a given page into your form. Optionally, you can have it autopopulate with the page where the form is embedded (useful if you\'re sending results via email).</li>
 </ul></li>

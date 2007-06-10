@@ -45,7 +45,7 @@ class fbStaticTextField extends fbFieldBase {
 		$mod = &$this->form_ptr->module_ptr;
 		$main = array(
 				array($mod->Lang('title_text'),
-				$mod->CreateTextArea(false, $formDescriptor,  $this->GetOption('text',''), 'opt_text','pageheadtags'))
+				$mod->CreateTextArea((get_preference(get_userid(), 'use_wysiwyg')=='1'), $formDescriptor,  $this->GetOption('text',''), 'opt_text','pageheadtags'))
 		);
 		$adv = array(
 				array($mod->Lang('title_smarty_eval'),
