@@ -1131,8 +1131,8 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	      {
 		$oneset->down = '&nbsp;';
 	      }
-	    $oneset->editlink = $mod->CreateLink($id, 'admin_add_edit_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/edit.gif','edit','','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
-	    $oneset->deletelink = $mod->CreateLink($id, 'admin_delete_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif','delete','','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),$mod->Lang('are_you_sure_delete_field',$thisField->GetName()));
+	    $oneset->editlink = $mod->CreateLink($id, 'admin_add_edit_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/edit.gif',$mod->Lang('edit'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
+	    $oneset->deletelink = $mod->CreateLink($id, 'admin_delete_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif',$mod->Lang('delete'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),$mod->Lang('are_you_sure_delete_field',$thisField->GetName()));
 	    ($currow == "row1"?$currow="row2":$currow="row1");
 	    $count++;
 	    if ($thisField->GetOrder() >= $maxOrder)

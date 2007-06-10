@@ -111,6 +111,8 @@ $lang['min'] = 'Minute';
 $lang['merid'] = 'Meridian';
 $lang['date_range'] = 'Range: %s - %s';
 $lang['thanks'] = 'Thanks! Your submissions have been received.';
+$lang['edit'] = 'Edit';
+$lang['delete'] = 'Delete';
 
 $lang['uninstalled'] = 'Module uninstalled.';
 $lang['installed'] = 'Module version %s installed.';
