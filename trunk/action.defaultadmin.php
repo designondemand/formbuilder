@@ -85,6 +85,13 @@ if (!isset($gCms)) exit;
 		$this->smarty->assign('title_enable_fastadd',$this->Lang('title_enable_fastadd'));
 		$this->smarty->assign('input_enable_fastadd',$this->CreateInputCheckbox($id, 'enable_fastadd', 1, $this->GetPreference('enable_fastadd','1')). $this->Lang('title_enable_fastadd_long'));		
 
+
+		$this->smarty->assign('title_require_fieldnames',$this->Lang('title_require_fieldnames'));		
+		$this->smarty->assign('input_require_fieldnames',$this->CreateInputCheckbox($id, 'require_fieldnames', 1, $this->GetPreference('require_fieldnames','1')). $this->Lang('title_require_fieldnames_long'));		
+
+$this->smarty->assign('title_unique_fieldnames',$this->Lang('title_unique_fieldnames'));		
+		$this->smarty->assign('input_unique_fieldnames',$this->CreateInputCheckbox($id, 'unique_fieldnames', 1, $this->GetPreference('unique_fieldnames','1')). $this->Lang('title_unique_fieldnames_long'));		
+
 		$this->smarty->assign('title_enable_antispam',$this->Lang('title_enable_antispam'));
 		$this->smarty->assign('input_enable_antispam',$this->CreateInputCheckbox($id, 'enable_antispam', 1, $this->GetPreference('enable_antispam','1')). $this->Lang('title_enable_antispam_long'));
 

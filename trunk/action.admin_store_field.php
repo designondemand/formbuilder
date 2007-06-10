@@ -9,7 +9,7 @@
 if (!isset($gCms)) exit;
 if (! $this->CheckAccess()) exit;
 
-$aeform = new fbForm($this, $params);
+$aeform = new fbForm($this, $params, true);
 $aefield = $aeform->NewField($params);
 $val = $aefield->AdminValidate();
 if ($val[0])
