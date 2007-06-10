@@ -152,7 +152,11 @@ class fbDispositionEmail extends fbDispositionEmailBase {
     {
 		$mod = &$this->form_ptr->module_ptr;
     	$opt = &$this->GetOptionRef('destination_address');
-		list($ret, $message) = $this->DoesFieldNameExist();
+  		list($ret, $message) = $this->DoesFieldHaveName();
+		if ($ret)
+			{
+			list($ret, $message) = $this->DoesFieldNameExist();
+			}		
 		if ($opt === false || count($opt) == 0)
 			{
 			$ret = false;
