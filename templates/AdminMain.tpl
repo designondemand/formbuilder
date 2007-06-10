@@ -60,6 +60,14 @@
 		<p class="pageinput">{$input_hide_errors}</p>
 	</div>
 	<div class="pageoverflow">
+		<p class="pagetext">{$title_require_fieldnames}:</p>
+		<p class="pageinput">{$input_require_fieldnames}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">{$title_unique_fieldnames}:</p>
+		<p class="pageinput">{$input_unique_fieldnames}</p>
+	</div>
+	<div class="pageoverflow">
 		<p class="pagetext">{$title_relaxed_email_regex}:</p>
 		<p class="pageinput">{$input_relaxed_email_regex}</p>
 	</div>

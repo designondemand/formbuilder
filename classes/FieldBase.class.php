@@ -591,22 +591,40 @@ class fbFieldBase {
 
   function DoesFieldNameExist()
   {
-    $mod = $this->form_ptr->module_ptr;
+    $mod = &$this->form_ptr->module_ptr;
 		
     // field name in use??
-    if ($this->form_ptr->HasFieldNamed($this->GetName()))
+    if ($mod->GetPreference('unique_fieldnames','1') == '1' &&
+    	$this->form_ptr->HasFieldNamed($this->GetName()))
       {
-	return array(false,$mod->Lang('field_name_in_use',$this->GetName()).'<br />');
-      }
-		
+		return array(false,$mod->Lang('field_name_in_use',$this->GetName()).
+		'<br />');
+      }		
     return array(true,'');
   }
+
+
+   function DoesFieldHaveName()
+   {
+    $mod = &$this->form_ptr->module_ptr;
+  	if ($mod->GetPreference('require_fieldnames','1') == '1' &&
+  		strlen($this->GetName()) < 1)
+  		{
+  		return array(false, $mod->Lang('field_no_name').'<br />');
+  		}
+	return array(true,'');   
+   }
 
   // override me, if needed. Returns an array: first value is a true or
   // false (whether or not the value is valid), the second is a message
   function AdminValidate()
   {
-    return $this->DoesFieldNameExist();
+  	list($ret, $message) = $this->DoesFieldHaveName();
+	if ($ret)
+		{
+		list($ret, $message) = $this->DoesFieldNameExist();
+		}
+	return array($ret, $message);
   }
 
 

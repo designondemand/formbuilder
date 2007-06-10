@@ -65,7 +65,8 @@ $lang['must_specify_one_destination']='You need to specify at least one destinat
 $lang['are_you_sure_delete_form']='Are you sure you want to delete the form %s?';
 $lang['are_you_sure_delete_field']='Are you sure you want to delete the field %s?';
 $lang['notice_select_type']='Advanced options are not available until the field type has been set.';
-$lang['field_name_in_use']='The field name "%s" is already in use. Please use unique field names.';
+$lang['field_name_in_use']='The field name "%s" is already in use. Please use unique field names, or disable unique field names in the Form Builder configuration.';
+$lang['field_no_name'] = 'Fields must be named, unless you disable this in the Form Builder configuration.';
 
 // abbreviations, verbs, and other general terms
 $lang['anonymous'] = 'Anonymous';
@@ -294,6 +295,10 @@ $lang['display_text'] = 'Display "Submission Template"';
 $lang['redirect_to_page'] = 'Redirect to site page';
 $lang['title_submit_response_help'] = 'This template is for display to the user after the form is submitted. This template does not effect emails generated or other form dispositions -- you set those templates (where appropriate) in the "advanced" tab for those disposition fields.';
 $lang['title_destination_page'] = 'Destination Page';
+$lang['title_require_fieldnames'] = 'Require Fieldnames';
+$lang['title_require_fieldnames_long'] = 'Require fields to have a name?';
+$lang['title_unique_fieldnames'] = 'Require Unique Fieldnames';
+$lang['title_unique_fieldnames_long'] = 'Require fields to have unique names?';
 
 $lang['no_referrer_info']='No HTTP_REFERER info available (probably due to use of User Email Validation)';
 $lang['validation_param_error']='Validation Parameter Error. Please make sure you copy the URL from your email correctly!';
@@ -489,8 +494,21 @@ module's installation directory, assuming the web server has permission to write
 
 <h3>Email and Flat File Templates</h3>
 <p>Many disposition types allow you to create a template for the email that is generated, or for the way the results are written to a file. If you opt not to create a template, the FormBuilder will use it's own best guess, which may or may not work out to your liking. You can always click on the \"Create Sample Template\" and then customize the results.</p>
-<p>Note that once you've changed a template, it will no longer automatically add new fields. For this reason, it's usually best to create your templates as the last step of creating your form.</p>
+<p>To the right, you'll find a legend which lists all of the variables that are available to you to use in your template. As of version 0.3, variables have two names, one based on the field name, the other based on the field ID. If you use field names that have characters outside of the ASCII 32-126 range, it will be safer to use the ID-based variables.</p>
+<p><strong>Note that once you've changed a template, it will no longer automatically add new fields.</strong> For this reason, it's usually best to create your templates as the last step of creating your form.</p>
+<p>As of version 0.2.4, you can opt to send any of these emails as HTML email. There should be a checkbox at the top of the template page for this. There is also a \"Create Sample HTML Template\" button over in the legend area. For HTML email, the email body will also provide the default text-only values.</p>
 
+<h3>Configuration</h3>
+<p>There are some global configuration options for FormBuilder:</p>
+<ul>
+<li>Enable fast field add pulldown. This enables the pulldown on the Form Edit page which saves a step in the creation of new fields.</li>
+<li>Hide Errors. This is set by default. Unchecking it will cause more detailed errors to be displayed if there are problems when you submit your form.</li>
+<li>Require Field Names. Typically, you will want form fields to be named so you can tell which is which. However, in some cases, you might want to have nameless fields. Uncheck this if you want to allow nameless fields.</li>
+<li>Unique Field Names. Typically, you will want form fields to have unique names so you can tell which is which. Uncheck this if you want to allow fields to share names.</li>
+<li>Use relaxed email validation. This uses a less restrictive regular expression for validating email; e.g., x@y will be allowed, where typically x@y.tld is required.</li>
+<li>Show Form Builder Version. Displays the version of FormBuilder you're using in a comment when the form is generated. Typically only useful when debugging.</li>
+<li>Enable primitive anti-spam features. When turned on, this allows any given IP address to only generate 10 emails per hour.</li>
+</ul>
 <h3>Styling and CSS</h3>
 <p>Paul Noone graciously provides us all with a pretty good standard CSS that you can use for forms:</p>
 <pre>
@@ -561,6 +579,7 @@ module's installation directory, assuming the web server has permission to write
 <li> Second step is to read and understand the caveat about WYSIWYG editors up in the
 section <em>Adding a Form to a Page</em>.</li>
 <li> If you're missing fields in an email that gets generated, check the disposition field's template, and make sure you're specifying the missing fields. Seems obvious, but it's an easy mistake to make.</li>
+<li>Uncheck the \"Hide Errors\" checkbox in the global options, and see what message gets displayed when you submit your form.</li>
 <li> Just mess around and try clicking on links and icons and stuff. See what happens.</li>
 <li> Last resport is to email me or catch me on IRC and we can go from there.</li>
 </ol> 

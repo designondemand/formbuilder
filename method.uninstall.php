@@ -60,6 +60,8 @@ if (! $this->CheckAccess()) exit;
 		$this->RemovePreference('relaxed_email_regex');
 		$this->RemovePreference('enable_fastadd');
 		$this->RemovePreference('enable_antispam');
+		$this->RemovePreference('require_fieldnames');
+		$this->RemovePreference('unique_fieldnames');
 
 
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('uninstalled'));

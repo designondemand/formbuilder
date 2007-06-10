@@ -198,13 +198,13 @@ class fbForm {
   function HasFieldNamed($name)
   {
     $ret = false;
-    for($i=0;$i<count($this->Fields);$i++)
-      {
-	if ($this->Fields[$i]->GetName() == $name)
-	  {
-	    $ret = true;
-	  }
-      }
+    foreach($this->Fields as $fld)
+		{
+		if ($fld->GetName() == $name)
+			{
+			$ret = true;
+			}
+		}
     return $ret;
   }
 
