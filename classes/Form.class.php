@@ -864,25 +864,6 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
 			}
   }
 
-  function ExportXML($exportValues = false)
-  {
-	$xmlstr = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
-	$xmlstr .= "<form id=\"".$this->Id."\"\n";
-	$xmlstr .= "\tname=\"".$this->Name."\"\n";
-	$xmlstr .= "\talias=\"".$this->Alias."\">\n";
-   foreach ($this->Attrs as $thisAttrKey=>$thisAttrValue)
-      {
-		$xmlstr .= "\t\t<attribute key=\"$thisAttrKey\"><![CDATA[$thisAttrValue]]></attribute>\n";
-		}
-	foreach($this->Fields as $thisField)
-		{
-			$xmlstr .= $thisField->ExportXML($exportvalues);
-		}
-	$xmlstr .= "</form>\n";
-	return $xmlstr;
-  }
-
-
   // storeDeep also stores all fields and options for a form
   function Store($storeDeep=false)
   {
@@ -1144,6 +1125,9 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	$mod->smarty->assign('fields',$fieldList);
 	$mod->smarty->assign('add_field_link',
 			     $mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->cms->variables['admintheme']->DisplayImage('icons/system/newobject.gif',$mod->Lang('title_add_new_field'),'','','systemicon'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', false) . $mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_add_new_field'),array('form_id'=>$this->Id, 'order_by'=>$maxOrder), '', false));
+	$mod->smarty->assign('order_field_link',
+			     $mod->CreateLink($id, 'admin_reorder_form', $returnid,$mod->cms->variables['admintheme']->DisplayImage('icons/system/reorder.gif',$mod->Lang('title_reorder_form'),'','','systemicon'),array('form_id'=>$this->Id), '', false) . $mod->CreateLink($id, 'admin_reorder_form', $returnid,$mod->Lang('title_reorder_form'),array('form_id'=>$this->Id), '', false));
+			     			     
 	if ($mod->GetPreference('enable_fastadd',1) == 1)
 	  {
 	    $mod->smarty->assign('fastadd',1);
@@ -1720,6 +1704,25 @@ function fast_add(field_type)
   {
     return substr($dt,1,strlen($dt)-2);
   }
+  
+  function ExportXML($exportValues = false)
+  {
+	$xmlstr = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+	$xmlstr .= "<form id=\"".$this->Id."\"\n";
+	$xmlstr .= "\tname=\"".$this->Name."\"\n";
+	$xmlstr .= "\talias=\"".$this->Alias."\">\n";
+   foreach ($this->Attrs as $thisAttrKey=>$thisAttrValue)
+      {
+		$xmlstr .= "\t\t<attribute key=\"$thisAttrKey\"><![CDATA[$thisAttrValue]]></attribute>\n";
+		}
+	foreach($this->Fields as $thisField)
+		{
+			$xmlstr .= $thisField->ExportXML($exportvalues);
+		}
+	$xmlstr .= "</form>\n";
+	return $xmlstr;
+  }
+  
     
 }
 
