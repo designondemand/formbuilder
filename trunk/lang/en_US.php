@@ -299,6 +299,7 @@ $lang['title_require_fieldnames'] = 'Require Fieldnames';
 $lang['title_require_fieldnames_long'] = 'Require fields to have a name?';
 $lang['title_unique_fieldnames'] = 'Require Unique Fieldnames';
 $lang['title_unique_fieldnames_long'] = 'Require fields to have unique names?';
+$lang['title_reorder_form'] = 'Reorder Fields';
 
 $lang['no_referrer_info']='No HTTP_REFERER info available (probably due to use of User Email Validation)';
 $lang['validation_param_error']='Validation Parameter Error. Please make sure you copy the URL from your email correctly!';

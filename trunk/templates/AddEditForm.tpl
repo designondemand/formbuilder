@@ -56,7 +56,7 @@
 					</tr>
 				{/foreach}
                	<tr><td colspan="8" class="row2">&nbsp;</td></tr>
-               	<tr><td colspan="8" class="row1">{$add_field_link}</td></tr>
+               	<tr><td colspan="8" class="row1">{$add_field_link} &nbsp; {$order_field_link}</td></tr>
 				</tbody>
             </table>
         </div>
