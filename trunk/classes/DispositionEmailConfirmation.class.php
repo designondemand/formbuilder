@@ -26,7 +26,7 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
        		);
        	$this->ValidationType = 'email';
        	$this->modifiesOtherFields = true;
-       	$this->AddTemplateVariable('confirm_url',
+       	$this->form_ptr->AddTemplateVariable('confirm_url',
        		$mod->Lang('title_confirmation_url'));
        	$this->approvedToGo = false;
     }
