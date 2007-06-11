@@ -115,6 +115,9 @@ $lang['date_range'] = 'Range: %s - %s';
 $lang['thanks'] = 'Thanks! Your submissions have been received.';
 $lang['edit'] = 'Edit';
 $lang['delete'] = 'Delete';
+$lang['day'] = 'Day';
+$lang['mon'] = 'Month';
+$lang['year'] = 'Year';
 
 $lang['uninstalled'] = 'Module uninstalled.';
 $lang['installed'] = 'Module version %s installed.';
@@ -146,6 +149,8 @@ $lang['add_destination'] = 'Add Another Destination';
 $lang['delete_destination'] = 'Delete Marked Destinations';
 $lang['suspected_spam'] = 'Too many emails generated from your IP address. Anti-Spam code has prevented delivery.';
 $lang['suspected_spam_log'] = 'Suspected spam from IP %s stopped.';
+$lang['reorder'] = 'Reorder Fields';
+$lang['cancel'] = 'Cancel';
 
 // Field Attribute Titles
 $lang['title_udt_name'] = 'User Defined Tag';
