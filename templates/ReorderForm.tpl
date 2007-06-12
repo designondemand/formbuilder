@@ -10,11 +10,15 @@ function send_order_var(form_desc)
       var nodes = elem.childNodes;
       for (i=0;i<nodes.length;i++)
          {
-         //str = str + nodes.
-         console.debug(nodes[i].id);
+         str = str + nodes[i].id + ',';
          }
       }
-   return false;
+   var fld = document.getElementById('orderpass');
+   if (fld)
+		{
+		fld.value = str;
+		}
+   return true;
    }
 </script>
 {/literal}
@@ -22,12 +26,12 @@ function send_order_var(form_desc)
 {$start_form}
 <ul id="parent0" class="sortableList">
 {foreach from=$fields item=thisField}
-		<li id="fld_{$thisField->id}"><strong>{$thisField->name}</strong> - {$thisField->type}</li>
+		<li id="{$thisField->id}"><strong>{$thisField->name}</strong> - {$thisField->type}</li>
 {/foreach}
 
 </ul>
 <br />
-<input type="hidden" name="order" value="" />
+{$hidden}<input type="hidden" id="orderpass" name="{$id}order" value="" />
 {$submit}
 {$end_form}
 

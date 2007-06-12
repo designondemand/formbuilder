@@ -1496,12 +1496,6 @@ function fast_add(field_type)
     return file_get_contents(dirname(__FILE__).'/../templates/RenderFormDefault.tpl');
   }
 
-  function DefaultSummary()
-  {
-    return file_get_contents(dirname(__FILE__).'/../templates/RenderFormDefaultResult.tpl');
-  }
-
-
   function DeleteField($field_id)
   {
     $index = $this->GetFieldIndexFromId($field_id);
@@ -1523,7 +1517,6 @@ function fast_add(field_type)
   // this will instantiate the form, and load the results
   function LoadResponse($response_id)
   {
-    echo "DEBUG: LoadResponse $response_id<br/>";
     $db = &$this->module_ptr->dbHandle;
     // loading a response -- at this point, we check that the response
     // is for the correct form_id!
