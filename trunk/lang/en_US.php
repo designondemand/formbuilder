@@ -29,6 +29,7 @@ $lang['field_type_PageBreakField']='-Page Break';
 $lang['field_type_FileUploadField']='File Upload';
 $lang['field_type_FromEmailAddressField']='Email "From Address" Field';
 $lang['field_type_FromEmailNameField']='Email "From Name" Field';
+$lang['field_type_FromEmailSubjectField']='Email "Subject" Field';
 $lang['field_type_StaticTextField']='-Static Text';
 $lang['field_type_SystemLinkField']='-Static Link';
 $lang['field_type_LinkField']='Link (User-entered)';
@@ -469,6 +470,7 @@ group, but is better when there are a large number of options, as you can limit 
 <li>Email-specific Inputs
 <ul><li>Email From Address Field. This allows users to provide their email address. The email generated when the form gets handled will use this address in the \"From\" field.</li>
 <li>Email From Name Field. This allows users to provide their name. The email generated when the form gets handled will use this name in the \"From\" field.</li>
+<li>Email Subject Field. This allows users to provide a subject for their email. The email generated when the form gets handled will use this in the \"Subject\" field. This may cause trouble with certain dispositions that want to control the Email Subject, so use it with caution.</li>
 </ul></li>
 
 <li>Display Control Fields<ul>

@@ -121,7 +121,20 @@ if (! $this->CheckAccess()) exit;
 		$this->CreateEvent( 'OnFormBuilderFormDisplay' );
 		$this->CreateEvent( 'OnFormBuilderFormSubmitError' );
 		
-		include 'includes/FormBuilderSampleData.inc';		
+		//include 'includes/FormBuilderSampleData.inc';	
+		$path = dirname(__FILE__).'/includes';
+		$dir=opendir($path);
+   		while ($filespec=readdir($dir))
+   			{
+   			$params = array();
+   			$aeform = '';
+       		if (preg_match('/.xml$/',$filespec) > 0)
+       			{
+       			$params['xml_file'] = $path.'/'.$filespec;
+       			$aeform = new fbForm($this, $params, true);
+				$res = $aeform->ImportXML($params);
+       			}
+       		}
 
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('installed',$this->GetVersion()));
 ?>
