@@ -9,23 +9,27 @@
 if (!isset($gCms)) exit;
 if (! $this->CheckAccess()) exit;
 
-echo '<script src="'.dirname(dirname(dirname(__FILE__))).'/lib/scriptaculous/scriptaculous.js" type="text/javascript"></script>';
 
 $aeform = new fbForm($this, $params, true);
 
-$listArray = array();
-$output = '';
-$output .= '<ul id="parent0" class="sortableList">'."\n";
-
+$fields = array();
 foreach ($aeform->GetFields() as $thisField)
-	{
-   $output .= '<li id="fld_'.$thisField->GetId().'">'.$thisField->GetName().'</li>';
-	}
-$output .= '</ul>';
+   {
+   $fld = new StdClass();
+   $fld->id = $thisField->GetId();
+   $fld->name = $thisField->GetName();
+   $fld->type = $thisField->GetFieldType();
+   array_push($fields, $fld);
+   }
 
-echo $output;
-//$sortableLists->printForm($_SERVER['PHP_SELF'], 'post', $this->Lang('reorder'), 'button', 'sortableListForm', $this->Lang('cancel'), $output);
+$this->smarty->assign('start_form',$this->CreateFormStart($id,
+			'admin_reorder_store', $returnid, 'post'));
+$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', $this->Lang('reorder'),'onclick="return send_order_var()"'));
+$this->smarty->assign('end_form',$this->CreateFormEnd());
+$this->smarty->assign_by_ref('fields',$fields);
+$this->smarty->assign('scriptaculous',
+   '<script src="'.dirname(dirname(dirname(__FILE__))).
+   '/lib/scriptaculous/scriptaculous.js" type="text/javascript"></script>');
+
+echo $this->ProcessTemplate('ReorderForm.tpl');
 ?>
-<script type="text/javascript">
-Sortable.create('parent0',{tag:'li'});
-</script>
