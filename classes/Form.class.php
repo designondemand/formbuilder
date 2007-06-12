@@ -197,12 +197,12 @@ class fbForm {
 
   function HasFieldNamed($name)
   {
-    $ret = false;
+    $ret = -1;
     foreach($this->Fields as $fld)
 		{
 		if ($fld->GetName() == $name)
 			{
-			$ret = true;
+			$ret = $fld->GetId();
 			}
 		}
     return $ret;
@@ -324,7 +324,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
   }
 
 
-  function AdminTemplateHelp($formDescriptor,$fieldName='',
+  function AdminTemplateHelp($formDescriptor,$fieldName='opt_email_template',
   	$includeHTML=true, $includeText=true)
   {
     $mod = &$this->module_ptr;
@@ -752,7 +752,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
   	// xml_parser_create, xml_parse_into_struct
   	$parser = xml_parser_create('');
    xml_parser_set_option( $parser, XML_OPTION_CASE_FOLDING, 0 );
-   xml_parser_set_option( $parser, XML_OPTION_SKIP_WHITE, 1 );
+   xml_parser_set_option( $parser, XML_OPTION_SKIP_WHITE, 0 ); // was 1
 	xml_parse_into_struct($parser, file_get_contents($params['xml_file']), $vals);
 	xml_parser_free($parser);
 	$elements = array();
@@ -1710,7 +1710,7 @@ function fast_add(field_type)
 		}
 	foreach($this->Fields as $thisField)
 		{
-			$xmlstr .= $thisField->ExportXML($exportvalues);
+			$xmlstr .= $thisField->ExportXML($exportValues);
 		}
 	$xmlstr .= "</form>\n";
 	return $xmlstr;

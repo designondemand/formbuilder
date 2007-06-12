@@ -595,7 +595,7 @@ class fbFieldBase {
 		
     // field name in use??
     if ($mod->GetPreference('unique_fieldnames','1') == '1' &&
-    	$this->form_ptr->HasFieldNamed($this->GetName()))
+    	$this->form_ptr->HasFieldNamed($this->GetName()) != $this->Id)
       {
 		return array(false,$mod->Lang('field_name_in_use',$this->GetName()).
 		'<br />');

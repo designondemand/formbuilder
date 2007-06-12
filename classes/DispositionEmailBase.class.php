@@ -50,7 +50,7 @@ class fbDispositionEmailBase extends fbFieldBase
   {
     return true;
   }
-
+  
   // Send off those emails
   function SendForm($destination_array, $subject)
   {
