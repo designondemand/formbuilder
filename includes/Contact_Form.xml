@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form id="2"
+	name="Contact Form"
+	alias="contact">
+		<attribute key="redirect_page"><![CDATA[-1]]></attribute>
+		<attribute key="input_button_safety"><![CDATA[0]]></attribute>
+		<attribute key="submit_button_text"><![CDATA[Submit Form]]></attribute>
+		<attribute key="next_button_text"><![CDATA[Continue...]]></attribute>
+		<attribute key="prev_button_text"><![CDATA[Back...]]></attribute>
+		<attribute key="required_field_symbol"><![CDATA[*]]></attribute>
+		<attribute key="unspecified"><![CDATA[[unspecified]]]></attribute>
+		<attribute key="list_delimiter"><![CDATA[,]]></attribute>
+		<attribute key="use_cpatcha"><![CDATA[0]]></attribute>
+		<attribute key="title_user_captcha"><![CDATA[Please confirm that you are not a script by entering the letters from the image.]]></attribute>
+		<attribute key="css_class"><![CDATA[contactform]]></attribute>
+		<attribute key="captcha_wrong"><![CDATA[Captcha was not correct.]]></attribute>
+		<attribute key="form_template"><![CDATA[{literal}
+
+<!-- Below, you'll find the "standard CSS template" for displaying FormBuilder Forms
+   You can edit it to make your form layout look any way you'd like.
+   To make the form work, you'll need to always include the {$hidden} and {$submit}
+   tags.
+
+   You can access your form fields either using the $fields array, as demonstrated below,
+   or by directly accessing fields by their names (e.g., {$myfield->input} )
+
+
+   Each field has the following attributes:
+       field->display         = 1 if the field should be displayed, 0 otherwise
+       field->required        = 1 if the field is required, 0 otherwise
+       field->required_symbol = the symbol for required fields
+       field->css_class       = the CSS class specified for this field
+       field->valid           = 1 if this field has passed validation, 0 otherwise
+       field->hide_name       = 1 if the field name should be hidden, 0 otherwise
+       field->has_label       = 1 if the field type has a label
+       field->needs_div       = 1 if the field needs to be wrapped in a DIV (or table row,
+                                if that's the way you swing)
+       field->name            = the field's name
+       field->input           = the field's input control (e.g., the input field itself)
+       field->input_id        = the ID of the field's input (useful for <label for="">)
+       field->type            = the field's data type:
+                                
+       field->multiple_parts  = 1 if the field->input is actually a collection of controls
+       field->label_parts     = 1 if the collection of controls has separate labels for each
+                                control
+
+   In certain cases, field->input is actually an array of objects rather than an input. This
+   happens, for example, in CheckBoxGroups or RadioButtonGroups. For them, you
+   can iterate through field->input->name and field->input->inputs.
+    
+
+       Additional smarty variables that you can use include:
+       {$total_pages}       - number of pages for multi-page forms
+       {$this_page}         - number fo the current page for multi-page forms
+       {$title_page_x_of_y} - displays "page x of y" for multi-page forms
+       {$css_class}         - CSS Class for the form
+       {$form_name}         - Form name
+       {$form_id}           - Form database ID
+       {$prev}              - "Back" button for multipart forms
+
+       Dunno why you'd want some of those, but there you go...
+-->
+
+{/literal}
+
+
+{$hidden}
+<div{if $css_class != ''} class="{$css_class}"{/if}>
+{if $total_pages gt 1}<span>{$title_page_x_of_y}</span>{/if}
+{foreach from=$fields item=entry}
+	  {if $entry->display == 1}
+	    	{strip}
+	    	{if $entry->needs_div == 1}
+            <div
+	    	   {if $entry->required == 1 || $entry->css_class != ''} class="
+	    		  {if $entry->required == 1}
+	    			 required
+	    		  {/if}
+	    		  {if $entry->required == 1 && $entry->css_class != ''} {/if}
+	    		  {if $entry->css_class != ''}
+	    			 {$entry->css_class}
+	    		  {/if}
+	    		  "
+	    	   {/if}
+	    	   >
+         {/if}
+	    	{if $entry->hide_name == 0}
+    		   <label{if $entry->multiple_parts != 1} for="{$entry->input_id}"{/if}>{$entry->name}
+    		{if $entry->required_symbol != ''}
+	    			{$entry->required_symbol}
+	    		{/if}</label>
+{else if $entry->required_symbol != ''}{$entry->required_symbol}
+		    	{/if}
+	    	{if $entry->multiple_parts == 1}
+				{section name=numloop loop=$entry->input}
+	    			{if $entry->label_parts == 1}<div>{$entry->input[numloop]->input}&nbsp;{$entry->input[numloop]->name}</div>
+	    			{else}{$entry->input[numloop]->input}
+	    			{/if}
+	    		{/section}
+	    	{else}
+	    		{if $entry->smarty_eval == '1'}{eval var=$entry->input}{else}{$entry->input}{/if}
+	    	{/if}
+	    	{if $entry->valid == 0} &lt;--- {/if}
+         {if $entry->needs_div == 1}
+            </div>
+         {/if}
+	    	{/strip}
+	  {/if}
+{/foreach}
+{if $has_captcha == 1}
+<div class="captcha">{$graphic_captcha}{$title_captcha}<br />{$input_captcha}</div>
+{/if}
+<div class="submit">{$prev}{$submit}</div>
+</div>]]></attribute>
+		<attribute key="submit_response"><![CDATA[]]></attribute>
+		<attribute key="submit_action"><![CDATA[text]]></attribute>
+	<field id="13"
+		type="DispositionEmail"
+		name="UPDATE THIS FIELD"
+		validation_type=""
+		order_by="1"
+		required="0"
+		hide_label="0">
+			<option name="email_subject"><![CDATA[No Subject Set]]></option>
+			<option name="email_from_name"><![CDATA[No Name Given]]></option>
+			<option name="email_from_address"><![CDATA[nobody@sample.com]]></option>
+			<option name="destination_address"><![CDATA[samuelg@themeander.org]]></option>
+			<option name="email_template"><![CDATA[]]></option>
+			<option name="email_encoding"><![CDATA[utf-8]]></option>
+</field>
+	<field id="14"
+		type="StaticTextField"
+		name="CSS"
+		validation_type=""
+		order_by="2"
+		required="0"
+		hide_label="0">
+			<option name="text"><![CDATA[<style type="text/css">
+.contactform fieldset {padding: 1em; background-color: #eee;}
+.contactform fieldset legend {font-weight: bold;}
+.contactform div {width: 100%; padding: 0.25em 0 0.25em 0;}
+.contactform div label {display: block; width: 10em; }
+.contactform div.required {color: #f00;}
+</style>]]></option>
+			<option name="css_class"><![CDATA[]]></option>
+</field>
+	<field id="7"
+		type="FieldsetStart"
+		name="Contact Fieldset"
+		validation_type=""
+		order_by="3"
+		required="0"
+		hide_label="0">
+			<option name="legend"><![CDATA[Contact]]></option>
+			<option name="css_class"><![CDATA[]]></option>
+</field>
+	<field id="8"
+		type="FromEmailNameField"
+		name="Your Name"
+		validation_type=""
+		order_by="4"
+		required="0"
+		hide_label="0">
+			<option name="css_class"><![CDATA[]]></option>
+</field>
+	<field id="9"
+		type="FromEmailAddressField"
+		name="Your Email Address"
+		validation_type="email"
+		order_by="5"
+		required="0"
+		hide_label="0">
+			<option name="css_class"><![CDATA[]]></option>
+</field>
+	<field id="10"
+		type="FromEmailSubjectField"
+		name="Subject"
+		validation_type=""
+		order_by="6"
+		required="0"
+		hide_label="0">
+			<option name="css_class"><![CDATA[]]></option>
+</field>
+	<field id="11"
+		type="TextAreaField"
+		name="Message"
+		validation_type=""
+		order_by="7"
+		required="1"
+		hide_label="0">
+			<option name="rows"><![CDATA[60]]></option>
+			<option name="cols"><![CDATA[5]]></option>
+			<option name="css_class"><![CDATA[]]></option>
+</field>
+	<field id="12"
+		type="FieldsetEnd"
+		name="Contact Fieldset End"
+		validation_type=""
+		order_by="8"
+		required="0"
+		hide_label="0">
+			<option name="css_class"><![CDATA[]]></option>
+</field>
+</form>
