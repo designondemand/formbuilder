@@ -3,7 +3,17 @@
 <script type="text/javascript">
 function send_order_var(form_desc)
    {
-   alert("hi");
+   var elem = document.getElementById('parent0');
+   if (elem)
+      {
+      var str = '';
+      var nodes = elem.childNodes;
+      for (i=0;i<nodes.length;i++)
+         {
+         //str = str + nodes.
+         console.debug(nodes[i].id);
+         }
+      }
    return false;
    }
 </script>
