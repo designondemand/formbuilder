@@ -1052,7 +1052,7 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 			   $mod->Lang('title_use_captcha'));
          $mod->smarty->assign('captcha_installed',1);
 
-         $mod->smarty->assign('input_use_captcha',$mod->CreateInputHidden($id,'forma_use_cpatcha','0').
+         $mod->smarty->assign('input_use_captcha',$mod->CreateInputHidden($id,'forma_use_captcha','0').
 			   $mod->CreateInputCheckbox($id,'forma_use_captcha','1',$this->GetAttr('use_captcha','0')).
 			   $mod->Lang('title_use_captcha_help'));
 			}
