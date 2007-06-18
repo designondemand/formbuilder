@@ -1,4 +1,3 @@
-{$scriptaculous}
 {literal}
 <script type="text/javascript">
 function send_order_var(form_desc)
