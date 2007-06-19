@@ -611,40 +611,56 @@ of the license for the full disclaimer.</p>
 <p>Copyright &copy; 2007, Samuel Goldstein <a href=\"mailto:sjg@cmsmodules.com\">&lt;sjg@cmsmodules.com&gt;</a>. All Rights Are Reserved.</p>
 <p>This module has been released under the <a href=\"http://www.gnu.org/licenses/licenses.html#GPL\">GNU Public License</a>. You must agree to this license before using the module.</p>";
 
-$lang['changelog'] = 		"
-		    <ul>
-		    			  <li>Version 0.2.4
-								<p>Big release:
-								Added \"Email Form to User-Supplied Address\" disposition.
-								Added \"TimePicker\" field type. Split \"Link\" field into a \"User-supplied Link\" field and a \"Static Link\" field.
-								Added HTML email option and auto-templates for all email dispositions.
-								Added primitive anti-spam features.
-								Added XML-based import and export of forms.
-								</p>
-						  </li>
-                    <li>Version 0.2.3
-                      <p>Add the ability to call a selectable user defined tag upon disposition of the form.</p>
-                    </li>
-                    <li>Version 0.2.2
-                       <p>Many thanks to Utter Design for sponsoring some changes and bugfixes, which include:
-                          <ul>
-                            <li>Added file upload capabilities to the email disposition</li>
-                            <li>Add PageSetStart and PageSetEnd field types
-                                <p>These field types allow you to create fieldsets in your form, and organise
-                                   your fields logically for the user.  You can even nest fieldsets, and
-                                   associate a style with them appropriately.  The default template was changed
-                                   to prevent it from wrapping a div around these types of fields.
-                                </p>
-                            </li>
-                            <li>Fixed a problem with DATETIME fields on install
-                                <p>This solves a problem when on install the response table would sometimes not get created when using adodb lite</li>
-                            </li>
-                          </ul>
-                       </p>
-		    <li>Version 0.2 - 14 November 2006. Calguy &amp; tsw's bug fixes for field re-ordering and custom templates. Additional bug fixes for field labels.</li>
-		    <li>Version 0.1 - 8 July 2006. Initial Release</li>
-                    </ul>
-		";
+$lang['changelog'] = "
+<ul>
+<li>Version 0.3
+   <ul>
+      <li>Added Captcha module support.</li>
+      <li>Reworked labeling of form elements to be XHTML compliant</li>
+      <li>Added Paul Noone's new, improved contact form templates</li>
+      <li>Implementation of Email Subject Field</li>
+      <li>Added admin-specifiable values to hidden field type, which may contain parsable smarty tags</li>
+      <li>Text Area Field now allows specification of rows and cols in the admin, instead of CSS</li>
+      <li>Added Drag'n'Drop reordering of form fields.</li>
+      <li>Added non-blank field name and unique field name global configuration options and validation</li>
+      <li>Implemented templated display of form results upon submission in addition to page redirecting</li>
+      <li></li>
+   </ul>
+</li>
+<li>Version 0.2.4 - 09 May 2007
+   <p>Big release:<ul>
+   <li>Added \"Email Form to User-Supplied Address\" disposition.</li>
+   <li>Added \"TimePicker\" field type. Split \"Link\" field into a \"User-supplied Link\" field and a \"Static Link\" field.</li>
+   <li>Added HTML email option and auto-templates for all email dispositions.</li>
+   <li>Added primitive anti-spam features.</li>
+   <li>Added XML-based import and export of forms.</li>
+   </ul>
+   </p>
+</li>
+<li>Version 0.2.3
+   <p>Add the ability to call a selectable user defined tag upon disposition of the form.</p>
+</li>
+<li>Version 0.2.2
+   <p>Many thanks to Utter Design for sponsoring some changes and bugfixes, which include:
+   <ul>
+      <li>Added file upload capabilities to the email disposition</li>
+      <li>Add PageSetStart and PageSetEnd field types
+      <p>These field types allow you to create fieldsets in your form, and organise
+      your fields logically for the user.  You can even nest fieldsets, and
+      associate a style with them appropriately.  The default template was changed
+      to prevent it from wrapping a div around these types of fields.
+      </p>
+      </li>
+      <li>Fixed a problem with DATETIME fields on install
+      <p>This solves a problem when on install the response table would sometimes not get created when using adodb lite</li>
+      </li>
+   </ul>
+   </p>
+</li>
+<li>Version 0.2 - 14 November 2006. Calguy &amp; tsw's bug fixes for field re-ordering and custom templates. Additional bug fixes for field labels.</li>
+<li>Version 0.1 - 8 July 2006. Initial Release</li>
+</ul>
+";
 
 
 ?>
