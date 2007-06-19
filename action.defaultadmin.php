@@ -1,6 +1,6 @@
 <?php
 /* 
-   FormBuilder. Copyright (c) 2005-2006 Samuel Goldstein <sjg@cmsmodules.com>
+   FormBuilder. Copyright (c) 2005-2007 Samuel Goldstein <sjg@cmsmodules.com>
    More info at http://dev.cmsmadesimple.org/projects/formbuilder
    
    A Module for CMS Made Simple, Copyright (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
@@ -89,7 +89,7 @@ if (!isset($gCms)) exit;
 		$this->smarty->assign('title_require_fieldnames',$this->Lang('title_require_fieldnames'));		
 		$this->smarty->assign('input_require_fieldnames',$this->CreateInputCheckbox($id, 'require_fieldnames', 1, $this->GetPreference('require_fieldnames','1')). $this->Lang('title_require_fieldnames_long'));		
 
-$this->smarty->assign('title_unique_fieldnames',$this->Lang('title_unique_fieldnames'));		
+      $this->smarty->assign('title_unique_fieldnames',$this->Lang('title_unique_fieldnames'));
 		$this->smarty->assign('input_unique_fieldnames',$this->CreateInputCheckbox($id, 'unique_fieldnames', 1, $this->GetPreference('unique_fieldnames','1')). $this->Lang('title_unique_fieldnames_long'));		
 
 		$this->smarty->assign('title_enable_antispam',$this->Lang('title_enable_antispam'));
@@ -107,14 +107,14 @@ $this->smarty->assign('title_unique_fieldnames',$this->Lang('title_unique_fieldn
 		$this->smarty->assign('end_xmlform',$this->CreateFormEnd());
       $this->smarty->assign('input_xml_to_upload',$this->CreateInputFile($id, 'xmlfile'));
       $this->smarty->assign('title_xml_to_upload',$this->Lang('title_xml_to_upload'));
-$this->smarty->assign('title_xml_upload_formname',$this->Lang('title_xml_upload_formname'));
-$this->smarty->assign('input_xml_upload_formname',
+      $this->smarty->assign('title_xml_upload_formname',$this->Lang('title_xml_upload_formname'));
+      $this->smarty->assign('input_xml_upload_formname',
 		      $this->CreateInputText($id,'import_formname','',25));
-$this->smarty->assign('title_xml_upload_formalias',$this->Lang('title_xml_upload_formalias'));
-$this->smarty->assign('input_xml_upload_formalias',
+      $this->smarty->assign('title_xml_upload_formalias',$this->Lang('title_xml_upload_formalias'));
+      $this->smarty->assign('input_xml_upload_formalias',
 		      $this->CreateInputText($id,'import_formalias','',25));
-$smarty->assign('info_leaveempty',$this->Lang('help_leaveempty'));
-$smarty->assign('legend_xml_import',$this->Lang('title_import_legend'));
+      $smarty->assign('info_leaveempty',$this->Lang('help_leaveempty'));
+      $smarty->assign('legend_xml_import',$this->Lang('title_import_legend'));
 
         $this->smarty->assign_by_ref('forms', $formArray);			
         echo $this->ProcessTemplate('AdminMain.tpl');

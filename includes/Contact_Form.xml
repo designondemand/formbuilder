@@ -2,14 +2,6 @@
 <form id="1"
 	name="Contact Form"
 	alias="contact">
-		<attribute key="submit_button_text"><![CDATA[Submit Form]]></attribute>
-		<attribute key="next_button_text"><![CDATA[Continue...]]></attribute>
-		<attribute key="prev_button_text"><![CDATA[Back...]]></attribute>
-		<attribute key="required_field_symbol"><![CDATA[*]]></attribute>
-		<attribute key="unspecified"><![CDATA[[unspecified]]]></attribute>
-		<attribute key="list_delimiter"><![CDATA[,]]></attribute>
-		<attribute key="use_cpatcha"><![CDATA[0]]></attribute>
-		<attribute key="title_user_captcha"><![CDATA[Please confirm that you are not a script by entering the letters from the image.]]></attribute>
 		<attribute key="css_class"><![CDATA[contactform]]></attribute>
 		<attribute key="captcha_wrong"><![CDATA[Captcha was not correct.]]></attribute>
 		<attribute key="form_template"><![CDATA[{literal}
@@ -207,20 +199,41 @@
 <div class="submit">{$prev}{$submit}</div>
 
 </div>]]></attribute>
+		<attribute key="use_captcha"><![CDATA[0]]></attribute>
+		<attribute key="submit_action"><![CDATA[text]]></attribute>
+		<attribute key="title_user_captcha"><![CDATA[Please confirm that you are not a script by entering the letters from the image.]]></attribute>
+		<attribute key="next_button_text"><![CDATA[Continue...]]></attribute>
+		<attribute key="prev_button_text"><![CDATA[Back...]]></attribute>
+		<attribute key="required_field_symbol"><![CDATA[*]]></attribute>
+		<attribute key="unspecified"><![CDATA[[unspecified]]]></attribute>
+		<attribute key="submit_button_text"><![CDATA[Submit Form]]></attribute>
 		<attribute key="input_button_safety"><![CDATA[0]]></attribute>
 		<attribute key="redirect_page"><![CDATA[-1]]></attribute>
-		<attribute key="submit_response"><![CDATA[<h1>Your Comments Sent</h1>
+		<attribute key="submit_response"><![CDATA[<p>Thank you, <strong>{$your_name}</strong>.</p>
 
-<strong>Your Name</strong>: {$fld_4}<br />
+<p>Your submission has been successful. You may wish to print this page as a reference.</p>
 
-<strong>Your Email Address</strong>: {$fld_5}<br />
-
-<strong>Subject</strong>: {$fld_6}<br />
-
-<strong>Message</strong>: {$fld_7}<br />
-
-]]></attribute>
-		<attribute key="submit_action"><![CDATA[text]]></attribute>
+<h3>Contact Details</h3>
+<p>
+<strong>Name</strong>: {$your_name}<br />
+<strong>Email</strong>: <a href="mailto:{$your_email_address}">{$your_email_address}</a><br />
+</p>
+<h3>Feedback Details</h3>
+<p>
+<strong>Subject</strong>: {$subject}<br />
+<strong>Comments</strong>:<br />
+{$message}
+</p> 
+<h4>Other information</h4>
+<p>
+<strong>Date of Submission</strong>: {$sub_date}<br />
+<strong>Form Name</strong>: {$sub_form_name}<br />
+<strong>URL of page containing form</strong>: {$sub_url}<br />
+<strong>Domain</strong>: {$sub_host}<br />
+<strong>Your IP address</strong>: {$sub_source_ip}
+</p> ]]></attribute>
+		<attribute key="list_delimiter"><![CDATA[,]]></attribute>
+		<attribute key="use_cpatcha"><![CDATA[]]></attribute>
 	<field id="1"
 		type="DispositionEmail"
 		name="UPDATE THIS FIELD"
@@ -232,8 +245,70 @@
 			<option name="email_from_name"><![CDATA[No Name Given]]></option>
 			<option name="email_from_address"><![CDATA[nobody@sample.com]]></option>
 			<option name="destination_address"><![CDATA[you@yourdomain.com]]></option>
-			<option name="email_template"><![CDATA[]]></option>
+			<option name="email_template"><![CDATA[<html>
+<head>
+{literal}
+<style type="text/css">
+<!--
+
+body {font:85%/1.3 Verdana,Arial,sans}
+h1, h2, h3, h4, h5, h6 { margin: 0px }
+h1 { font-size: 2.2em; padding: 0px; }
+h2 { font-size: 1.8em; font-weight: normal }
+h2, h3, h4, h5 { font-family: Arial, Geneva; margin-top: 1em; }
+h3 {
+   font-size: 1.65em;
+   font-weight: normal;
+   font-style:italic;
+   color: #F60;
+   border-bottom: 1px solid #000;
+}
+h4 {
+   font-size: 1.25em;
+   padding: 0em 0.2em;
+   color:#005CAB;
+   border-top:1px solid #000;
+   border-bottom:1px solid #000;
+   margin-top: 0
+}
+h5 { font-size: 1.2em; font-style:italic; color:#005CAB}
+h6 { font-size: 0.9em; color:#666; font-variant:small-caps}
+p { margin: 0.5em 0 1em; line-height: 1.4; }
+hr { border:0; border-top:1px solid #F60; height:1px;  font-size:1px; background: #F60; color: #fff}
+
+.dotted-border {border: 1px dotted #F60; padding: 0.5em}
+
+-->
+</style>
+{/literal}
+<basefont face="Verdana, Arial, Helvetica, sans-serif" color="#000000" size="3" />
+</head>
+<body>
+<h1>Feedback from {$sub_host}-{$sub_form_name}</h1>
+
+<h2>Contact Details</h2>
+<div class="dotted-border">
+<strong>Name</strong>: {$your_name}<br />
+<strong>Email</strong>: {$your_email_address}<br />
+</div>
+<h2>Feedback Details</h2>
+<div class="dotted-border">
+<strong>Subject</strong>: {$subject}<br />
+<strong>Comments</strong>:<br />
+{$message}
+</div>
+<h3>Other information</h3>
+<p>
+<strong>Date of Submission</strong>: {$sub_date}<br />
+<strong>Form Name</strong>: {$sub_form_name}<br />
+<strong>URL of page containing form</strong>: {$sub_url}<br />
+<strong>Domain:</strong> {$sub_host}<br />
+<strong>Sender's IP</strong>: {$sub_source_ip}
+</p>
+</body>
+</html> ]]></option>
 			<option name="email_encoding"><![CDATA[utf-8]]></option>
+			<option name="html_email"><![CDATA[1]]></option>
 </field>
 	<field id="2"
 		type="StaticTextField"
