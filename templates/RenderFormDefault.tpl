@@ -48,7 +48,7 @@
 {/literal}
 
 
-{$hidden}
+{$fb_hidden}
 <div{if $css_class != ''} class="{$css_class}"{/if}>
 {if $total_pages gt 1}<span>{$title_page_x_of_y}</span>{/if}
 {foreach from=$fields item=entry}

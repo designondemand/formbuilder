@@ -1,5 +1,5 @@
 {if $message != ''}<h4>{$message}</h4>{/if}
-{$formstart}{$formid}{$hidden}{$tab_start}{$maintab_start}
+{$formstart}{$formid}{$fb_hidden}{$tab_start}{$maintab_start}
 <fieldset class="module_fb_fieldset"><legend>{$title_form_main}</legend>
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_name}:</p>
