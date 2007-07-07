@@ -1,6 +1,6 @@
 {if $message != ''}<h4>{$message}</h4>{/if}
 {$backtoform_nav}<br />
-{$start_form}{$hidden}{$op}{$tab_start}
+{$start_form}{$fb_hidden}{$op}{$tab_start}
 {$maintab_start}
 	{foreach from=$mainList item=entry}
 		<div class="pageoverflow">

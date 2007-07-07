@@ -571,7 +571,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
 	array_push($fields,$oneset);
       }
 
-    $mod->smarty->assign_by_ref('hidden',$hidden);
+    $mod->smarty->assign_by_ref('fb_hidden',$hidden);
     $mod->smarty->assign_by_ref('fields',$fields);
 
     $jsStr = '';
@@ -1066,7 +1066,7 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	$mod->smarty->assign('submit_button',
 			     $mod->CreateInputSubmit($id, 'submit',
 						     $mod->Lang('save_and_continue')));
-	$mod->smarty->assign('hidden',
+	$mod->smarty->assign('fb_hidden',
 			     $mod->CreateInputHidden($id, 'form_op',$mod->Lang('updated')));
 	$mod->smarty->assign('adding',0);
 	$mod->smarty->assign('save_button',
@@ -1151,7 +1151,7 @@ function fast_add(field_type)
 	$mod->smarty->assign('save_button','');
 	$mod->smarty->assign('submit_button',
 			     $mod->CreateInputSubmit($id, 'submit', $mod->Lang('add')));
-	$mod->smarty->assign('hidden',
+	$mod->smarty->assign('fb_hidden',
 			     $mod->CreateInputHidden($id, 'form_op',$mod->Lang('added')));
 	$mod->smarty->assign('adding',1);
       }
@@ -1314,7 +1314,7 @@ function fast_add(field_type)
       }
 
 
-    $mod->smarty->assign('hidden', $mod->CreateInputHidden($id, 'form_id', $this->Id) . $mod->CreateInputHidden($id, 'field_id', $aefield->GetId()) . $mod->CreateInputHidden($id, 'order_by', $aefield->GetOrder()).
+    $mod->smarty->assign('fb_hidden', $mod->CreateInputHidden($id, 'form_id', $this->Id) . $mod->CreateInputHidden($id, 'field_id', $aefield->GetId()) . $mod->CreateInputHidden($id, 'order_by', $aefield->GetOrder()).
 			 $mod->CreateInputHidden($id,'set_from_form','1'));
 
     if (!$aefield->IsDisposition() && !$aefield->IsNonRequirableField())

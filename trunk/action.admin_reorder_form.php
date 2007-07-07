@@ -27,7 +27,7 @@ $this->smarty->assign('start_form',$this->CreateFormStart($id,
 $this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', $this->Lang('reorder'),'onclick="return send_order_var()"'));
 $this->smarty->assign('end_form',$this->CreateFormEnd());
 $this->smarty->assign('id',$id);
-$this->smarty->assign('hidden',$this->CreateInputHidden($id,'form_id',$params['form_id']));
+$this->smarty->assign('fb_hidden',$this->CreateInputHidden($id,'form_id',$params['form_id']));
 $this->smarty->assign_by_ref('fields',$fields);
 $this->smarty->assign('scriptaculous',
    '<script src="'.dirname(dirname(dirname(__FILE__))).
