@@ -75,20 +75,6 @@ class fbTextAreaField extends fbFieldBase {
          );
 	}
 
-
-	function Validate()
-	{
-		$result = true;
-		$message = '';
-		$mod = &$this->form_ptr->module_ptr;
-		switch ($this->ValidationType)
-		  {
-		  	   case 'none':
-		  	       break;
-		  }
-		return array($result, $message);
-	}
-
 }
 
 ?>

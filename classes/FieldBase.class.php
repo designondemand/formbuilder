@@ -22,6 +22,8 @@ class fbFieldBase {
 
   var $ValidationTypes;
   var $ValidationType;
+  var $validated = true;
+  var $validationErrorText;
 
   var $DisplayInForm;
   var $DisplayInSubmission;
@@ -329,6 +331,16 @@ class fbFieldBase {
     $this->ValidationType = $theType;
   }
 
+  function IsValid()
+  {
+  	return $this->validated;
+  }
+  
+  function GetValidationErrorText()
+  {
+  	return $this->validationErrorText;
+  }
+
 
   // override me with a displayable type
   function GetDisplayType()
@@ -487,7 +499,9 @@ class fbFieldBase {
   // the value is valid), the second is a message
   function Validate()
   {
-    return array(true,'');
+  	$this->validated = true;
+  	$this->validationErrorText = '';
+    return array($this->validated, $this->validatedErrorText);
   }
 
 

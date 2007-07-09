@@ -178,12 +178,6 @@ class fbDispositionEmail extends fbDispositionEmailBase {
         return array($ret,$message);       
     }
 
-
-	function Validate()
-	{
-		return array(true, '');
-	}
-
 }
 
 ?>

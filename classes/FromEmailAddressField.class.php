@@ -53,8 +53,8 @@ class fbFromEmailAddressField extends fbFieldBase {
 
 	function Validate()
 	{
-		$result = true;
-		$message = '';
+		$this->validated = true;
+		$this->validationErrorText = '';
 		$mod = &$this->form_ptr->module_ptr;
 		switch ($this->ValidationType)
 		  {
@@ -62,12 +62,12 @@ class fbFromEmailAddressField extends fbFieldBase {
                   if ($this->Value !== false &&
                       ! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $this->Value))
                     {
-                    $result = false;
-                    $message = $mod->Lang('please_enter_an_email',$this->Name);
+                    $this->validated = false;
+                    $this->validationErrorText = $mod->Lang('please_enter_an_email',$this->Name);
                     }
 		  	       break;
 		  }
-		return array($result, $message);
+		return array($this->validated, $this->validationErrorText);
 	}
 }
 

@@ -376,7 +376,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
   function Validate()
   {
     $validated = true;
-    $message = '';
+    $message = array();
     $formPageCount=1;
     $valPage = $this->Page - 1;
     for($i=0;$i<count($this->Fields);$i++)
@@ -393,7 +393,8 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
 	    $this->Fields[$i]->IsRequired() &&
 	    $this->Fields[$i]->HasValue() == false)
 	  {
-	    $message .= "<h4>".$this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName())."</h4>\n";
+	    array_push($message,
+	    	$this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName()));
 	    $validated = false;
 	    $this->Fields[$i]->SetOption('is_valid',false);
 	  }
@@ -402,7 +403,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
 	    $res = $this->Fields[$i]->Validate();
 	    if ($res[0] != true)
 	      {
-		$message .= "<h4>". $res[1]."</h4>\n";
+		array_push($message,$res[1]);
 		$validated = false;
 		$this->Fields[$i]->SetOption('is_valid',false);
 	      }
@@ -551,7 +552,9 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
 	$oneset->required = $thisField->IsRequired()?1:0;
 	$oneset->required_symbol = $thisField->IsRequired()?$reqSymbol:'';
 	$oneset->css_class = $thisField->GetOption('css_class');
-	$oneset->valid = $thisField->GetOption('is_valid',true)?1:0;
+//	$oneset->valid = $thisField->GetOption('is_valid',true)?1:0;
+	$oneset->valid = $thisField->validated?1:0;
+	$oneset->error = $thisField->GetOption('is_valid',true)?'':$thisField->validationErrorText;
 	$oneset->hide_name = 0;
 	if( (!$thisField->HasLabel()) || $thisField->HideLabel() )
 	  {
