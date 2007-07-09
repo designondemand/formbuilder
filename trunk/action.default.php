@@ -16,17 +16,23 @@ if (! isset($params['form_id']) && isset($params['form']))
 
 $aeform = new fbForm($this,$params,true);
 
-echo $aeform->RenderFormHeader();
+//echo $aeform->RenderFormHeader();
+$this->smarty->assign('fb_form_header', $aeform->RenderFormHeader());
+$this->smarty->assign('fb_form_footer',$aeform->RenderFormFooter());
+
 $finished = false;
 if (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber() > 0) ||
     (isset($params['done'])&& $params['done']==1))
-  {
+    {
     $res = $aeform->Validate();
     
     if ($res[0] === false)
       {
-	echo $res[1]."\n";
-	$aeform->PageBack();
+	  // echo $res[1]."\n";
+	  $this->smarty->assign('fb_form_validation_errors',$res[1]);
+	  $this->smarty->assign('fb_form_has_validation_errors',1);
+	  
+	  $aeform->PageBack();
       }
     else if (isset($params['done']) && $params['done']==1)
       {
@@ -36,7 +42,9 @@ if (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber() > 0) ||
          {
   	      if (! $captcha->CheckCaptcha($params['captcha_phrase']))
   	         {
-  	         echo $aeform->GetAttr('wrong_captcha',$this->Lang('wrong_captcha'));
+  	         $this->smarty->assign('captcha_error',$aeform->GetAttr('wrong_captcha',$this->Lang('wrong_captcha')));
+  	         
+  	         //echo $aeform->GetAttr('wrong_captcha',$this->Lang('wrong_captcha'));
   	         $aeform->PageBack();
             $ok = false;
             }
@@ -56,9 +64,11 @@ if (! $finished)
     $parms['form_id'] = $aeform->GetId();
     $this->SendEvent('OnFormBuilderFormDisplay',$parms);
     
-    echo $this->CreateFormStart($id, 'default', $returnid, 'post', 'multipart/form-data', false, '' /* , $params */);
-    echo $aeform->RenderForm($id, $params, $returnid);
-    echo $this->CreateFormEnd();
+    $this->smarty->assign('fb_form_start',$this->CreateFormStart($id, 'default', $returnid, 'post', 'multipart/form-data', false, ''));
+    
+    //echo $this->CreateFormStart($id, 'default', $returnid, 'post', 'multipart/form-data', false, '' /* , $params */);
+    
+    $this->smarty->assign('fb_form_end',$this->CreateFormEnd());
   }
  else
    {
@@ -122,20 +132,21 @@ if (! $finished)
      {
 	 $parms = array();
 	 $params['error']='';
-	 echo $this->Lang('submission_error');
+	 $this->smarty->assign('fb_submission_error',
+	 	$this->Lang('submission_error'));
+
+	 //echo $this->Lang('submission_error');
 	 $show = $this->GetPreference('hide_errors',0);
-	 foreach ($results[1] as $thisRes)
-	   {
-	     if ($show)
-	       {
-		 echo $thisRes . '<br />';
-	       }
-	     $params['error'] .= $thisRes."\n";
-	   }
+	 $this->smarty->assign('fb_submission_error_list',$results[1]);
+	 $this->smarty->assign('fb_show_submission_errors',$show);
+
 	 $parms['form_name'] = $aeform->GetName();
 	 $parms['form_id'] = $aeform->GetId();
 	 $this->SendEvent('OnFormBuilderFormSubmitError',$parms);
        }
    }
-echo $aeform->RenderFormFooter();
+
+//echo $aeform->RenderFormFooter();
+    echo $aeform->RenderForm($id, $params, $returnid);
+
 ?>

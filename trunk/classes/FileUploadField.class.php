@@ -102,8 +102,8 @@ class fbFileUploadField extends fbFieldBase {
 
   function Validate()
   {
-    $result = true;
-    $message = '';
+  	$this->validated = true;
+  	$this->validationErrorText = '';
     $ms = $this->GetOption('max_size');
     $exts = $this->GetOption('permitted_extensions');
     $mod = &$this->form_ptr->module_ptr;
@@ -114,13 +114,13 @@ class fbFileUploadField extends fbFieldBase {
       }
     if ($_FILES[$fullAlias]['size'] < 1 && $this->Required )
       {
- 	$result = false;
- 	$message = $mod->Lang('required_field_missing');
+ 	$this->validated = false;
+ 	$this->validationErrorText = $mod->Lang('required_field_missing');
       }
     else if ($ms != '' && $_FILES[$fullAlias]['size'] > ($ms * 1000))
       {
-	$message = $mod->Lang('file_too_large'). ' '.($ms * 1000).'kb';
-	$result = false;
+	$this->validationErrorText = $mod->Lang('file_too_large'). ' '.($ms * 1000).'kb';
+	$this->validated = false;
       }
     else if ($exts)
       {
@@ -139,11 +139,11 @@ class fbFileUploadField extends fbFieldBase {
 	  }
 	if (! $match)
 	  {
-	    $message = $mod->Lang('illegal_file_type');
-	    $result = false;
+	    $this->validationErrorText = $mod->Lang('illegal_file_type');
+	    $this->validated = false;
 	  }
       }
-    return array($result, $message);
+    return array($this->validated, $this->validationErrorText);
   }
   
 }

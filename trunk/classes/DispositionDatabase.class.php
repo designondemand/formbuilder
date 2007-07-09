@@ -105,11 +105,6 @@ class fbDispositionDatabase extends fbFieldBase {
 		return array(true,'');	   
 	}
 
-	function Validate()
-	{
-		return array(true, '');
-	}
-
 }
 
 ?>

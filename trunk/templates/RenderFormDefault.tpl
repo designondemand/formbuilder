@@ -1,3 +1,25 @@
+{$fb_form_header}
+{if $fb_form_has_validation_errors}<div class="error">
+<ul>
+{foreach from=$fb_form_validation_errors item=thisErr}
+<li>{$thisErr}</li>
+{/foreach}
+</ul></div>{/if}
+{if $captcha_error}
+<div class="error">{$captcha_error}</div>
+{/if}
+{if $fb_submission_error}
+<div class="error">{$fb_submission_error}</div>
+	{if $fb_show_submission_errors}
+	<div class="error">
+	<ul>
+	{foreach from=$fb_submission_error_list item=thisErr}
+	<li>{$thisErr}</li>
+	{/foreach}
+	</ul></div>
+	{/if}
+{/if}
+
 {literal}
 
 <!-- Below, you'll find the "standard CSS template" for displaying FormBuilder Forms
@@ -47,7 +69,7 @@
 
 {/literal}
 
-
+{$fb_form_start}
 {$fb_hidden}
 <div{if $css_class != ''} class="{$css_class}"{/if}>
 {if $total_pages gt 1}<span>{$title_page_x_of_y}</span>{/if}
@@ -84,7 +106,7 @@
          {else}
             {if $entry->smarty_eval == '1'}{eval var=$entry->input}{else}{$entry->input}{/if}
          {/if}
-         {if $entry->valid == 0} &lt;--- {/if}
+         {if $entry->valid == 0} &lt;--- {$entry->error}{/if}
          {if $entry->needs_div == 1}
             </div>
          {/if}
@@ -96,3 +118,5 @@
 {/if}
 <div class="submit">{$prev}{$submit}</div>
 </div>
+{$fb_form_end}
+{$fb_form_footer}

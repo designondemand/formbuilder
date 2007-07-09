@@ -98,20 +98,6 @@ class fbSystemLinkField extends fbFieldBase {
 		return array('main'=>$main,'adv'=>$adv);
 	}
 
-	function Validate()
-	{
-		$mod = &$this->form_ptr->module_ptr;
-		$result = true;
-		$message = '';
-
-		switch ($this->ValidationType)
-		  {
-		  	   case 'none':
-		  	       break;
-		  }
-		return array($result, $message);
-	}
-
 }
 
 ?>
