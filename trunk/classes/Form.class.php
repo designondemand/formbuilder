@@ -988,6 +988,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
     $mod->smarty->assign('input_form_name',
 			 $mod->CreateInputText($id, 'form_name',
 					       $this->Name, 50));
+	$mod->smarty->assign('help_template_variables',$mod->Lang('template_variable_help'));
     $mod->smarty->assign('title_form_unspecified',$mod->Lang('title_form_unspecified'));
     $mod->smarty->assign('input_form_unspecified',
 			 $mod->CreateInputText($id, 'forma_unspecified',

@@ -69,9 +69,11 @@ if (! $finished)
     //echo $this->CreateFormStart($id, 'default', $returnid, 'post', 'multipart/form-data', false, '' /* , $params */);
     
     $this->smarty->assign('fb_form_end',$this->CreateFormEnd());
+    $this->smarty->assign('fb_form_done',0);
   }
  else
    {
+    $this->smarty->assign('fb_form_done',1);
      if ($results[0] == true)
        {
 	 $parms = array();
