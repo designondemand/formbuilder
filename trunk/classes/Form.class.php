@@ -397,6 +397,8 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
 	    	$this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName()));
 	    $validated = false;
 	    $this->Fields[$i]->SetOption('is_valid',false);
+	    $this->Fields[$i]->validationErrorText = 	$this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName());
+	    $this->Fields[$i]->validated = false;
 	  }
 	else if ($this->Fields[$i]->GetValue() != $this->module_ptr->Lang('unspecified'))
 	  { 
