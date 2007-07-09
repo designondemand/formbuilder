@@ -135,6 +135,9 @@
 		<p class="pagetext">{$title_form_template}:</p>
 		<p class="pageinput">{$input_form_template}</p>
 	</div>
+	<div class="pageoverflow">
+	{$help_template_variables}
+	</div>
 {$tab_end}
 {$submittemplatetab_start}
 	<fieldset>

@@ -364,6 +364,53 @@ $lang['event_help_OnFormBuilderFormDisplay']='<p>Event triggered when a FormBuil
 <li><em>form_id</em> - The internal form id (int)</li>
 </ul> ';
 
+$lang['template_variable_help'] = "
+<h3>Form Template Variables</h3>
+<p>You can edit it to make your form layout look any way you'd like.
+   To make the form work, you'll need to always include the &#123;\$fb_hidden} and &#123;\$submit}
+   tags.</p>
+
+<p>You can access your form fields either using the \$fields array or by directly accessing fields by their names (e.g., &#123;\$myfield->input} )</p>
+
+
+<p>Each field has the following attributes:</p>
+<table>
+<tr><th>Field</th><th>Value</th></tr>
+<tr><td>field->display</td><td>1 if the field should be displayed, 0 otherwise</td></tr>
+<tr><td>field->required</td><td>1 if the field is required, 0 otherwise</td></tr>
+<tr><td>field->required_symbol</td><td>the symbol for required fields</td></tr>
+<tr><td>field->css_class</td><td>the CSS class specified for this field</td></tr>
+<tr><td>field->valid</td><td>1 if this field has passed validation, 0 otherwise</td></tr>
+<tr><td>field->error</td><td>Text of the validation problem, in the event that this field did not validate</td></tr>
+<tr><td>field->hide_name</td><td>1 if the field name should be hidden, 0 otherwise</td></tr>
+<tr><td>field->has_label</td><td>1 if the field type has a label</td></tr>
+<tr><td>field->needs_div</td><td>1 if the field needs to be wrapped in a DIV (or table row, if that's the way you swing)</td></tr>
+<tr><td>field->name</td><td>the field's name</td></tr>
+<tr><td>field->input</td><td>the field's input control (e.g., the input field itself)</td></tr>
+<tr><td>field->input_id</td><td>the ID of the field's input (useful for <label for=\"\">)</td></tr>
+<tr><td>field->type</td><td>the field's data type</td></tr>
+                                
+<tr><td>field->multiple_parts</td><td>1 if the field->input is actually a collection of controls</td></tr>
+<tr><td>field->label_parts</td><td>1 if the collection of controls has separate labels for each control</td></tr>
+</table>
+
+<p>In certain cases, field->input is actually an array of objects rather than an input. This happens, for example, in CheckBoxGroups or RadioButtonGroups. For them, you can iterate through field->input->name and field->input->inputs.</p>
+    
+<p>Additional smarty variables that you can use include:</p>
+<table>
+<tr><th>Variable</th><th>Value</th></tr>
+<tr><td>total_pages</td><td>number of pages for multi-page forms</td></tr>
+<tr><td>this_page</td><td>number fo the current page for multi-page forms</td></tr>
+<tr><td>title_page_x_of_y</td><td>displays \"page x of y\" for multi-page forms</td></tr>
+<tr><td>css_class</td><td>CSS Class for the form</td></tr>
+<tr><td>form_name</td><td>Form name</td></tr>
+<tr><td>form_id</td><td>Form database ID</td></tr>
+<tr><td>prev</td><td>\"Back\" button for multipart forms</td></tr>
+<tr><td>submit</td><td>\"Continue\" or \"Submit\" button for multipart forms, adjusts automatically</td></tr>
+</table>
+<p>Dunno why you'd want some of those, but there you go...</p>
+";
+
 // post-install message
 $lang['post_install']="
 <p>Make sure to set the \"Modify Forms\" permissions
@@ -414,7 +461,7 @@ single quotes (') or editing the HTML directly.
 <h4>Captcha Settings</h4>
 <p>If you have installed the Captcha module, this tab lets you configure the Captcha settings for your form.</p>
 <h4>Form Template</h4>
-<p>This is where you do your customization work of your form\'s Smarty Template.</p>
+<p>This is where you do your customization work of your form's Smarty Template. See the section called Form Template Variables below.</p>
 <p>The form should default to a Custom template that documents the Smarty tags available to you.</p>
 <p>Unless you're a Smarty expert, you probably don't want to mess around with this. If you are a Smarty expert, this is where you can unleash your magic.</p>
 <h4>Submission Template</h4>
@@ -574,6 +621,9 @@ module's installation directory, assuming the web server has permission to write
 	/* Just a bit more room for the Submit button */
 	.submit {margin-top:0.5em}
 </pre>
+
+<h3>Form Template Variables</h3>
+".$lang['template_variable_help']."
 
 <h3>Known Issues</h3>
 <ul>
