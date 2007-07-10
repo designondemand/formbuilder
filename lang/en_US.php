@@ -306,6 +306,13 @@ $lang['title_require_fieldnames_long'] = 'Require fields to have a name?';
 $lang['title_unique_fieldnames'] = 'Require Unique Fieldnames';
 $lang['title_unique_fieldnames_long'] = 'Require fields to have unique names?';
 $lang['title_reorder_form'] = 'Reorder Fields';
+$lang['title_load_template'] = 'Load template';
+
+$lang['default_template'] = 'Default Template';
+$lang['table_left_template'] = 'Table Template, Titles on left';
+$lang['table_top_template'] = 'Table Template, Title on top';
+$lang['form_template_name'] = 'Template from %s';
+$lang['template_are_you_sure']='Are you sure you want to overwrite your template with the selected template? (Even if you say OK, you will still need to save the change)';
 
 $lang['no_referrer_info']='No HTTP_REFERER info available (probably due to use of User Email Validation)';
 $lang['validation_param_error']='Validation Parameter Error. Please make sure you copy the URL from your email correctly!';

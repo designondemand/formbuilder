@@ -684,6 +684,10 @@ class FormBuilder extends CMSModule
          {
          return true;
          }
+      elseif (strpos($_SERVER['QUERY_STRING'],'admin_get_template') !== false)
+         {
+         return true;
+         }
       return false;
    }
 

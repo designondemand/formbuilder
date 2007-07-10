@@ -960,6 +960,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
 
   function AddEditForm($id, $returnid, $message='')
   {
+    global $gCms;
     $mod = &$this->module_ptr;
     $mod->smarty->assign('message',$message);
     $mod->smarty->assign('formstart',
@@ -988,6 +989,31 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
     $mod->smarty->assign('input_form_name',
 			 $mod->CreateInputText($id, 'form_name',
 					       $this->Name, 50));
+	
+	
+	$mod->smarty->assign('template_are_you_sure',$mod->Lang('template_are_you_sure'));
+	$mod->smarty->assign('title_load_template',$mod->Lang('title_load_template'));
+	$modLink = $mod->CreateLink($id, 'admin_get_template', $returnid, '', array(), '', true);
+	list($mod_path, $mod_param) = explode('?',$modLink);
+	$mod->smarty->assign('mod_path',$mod_path);
+	$mod->smarty->assign('mod_param',$mod_param);
+	
+	$templateList = array(''=>'',$mod->Lang('default_template')=>'RenderFormDefault.tpl',
+		$mod->Lang('table_left_template')=>'RenderFormTableTitleLeft.tpl',
+		$mod->Lang('table_top_template')=>'RenderFormTableTitleTop.tpl');
+		
+	$allForms = $mod->GetForms();
+	foreach ($allForms as $thisForm)
+		{
+		if ($thisForm['form_id'] != $this->Id)
+			{
+			$templateList[$mod->Lang('form_template_name',$thisForm['name'])] =
+				$thisForm['form_id'];
+			}
+		}
+	
+	$mod->smarty->assign('input_load_template',$mod->CreateInputDropdown($id,
+		'fb_template_load', $templateList, -1, '', 'id="fb_template_load" onchange="getTemplate()"'));
 	$mod->smarty->assign('help_template_variables',$mod->Lang('template_variable_help'));
     $mod->smarty->assign('title_form_unspecified',$mod->Lang('title_form_unspecified'));
     $mod->smarty->assign('input_form_unspecified',
@@ -1204,13 +1230,12 @@ function fast_add(field_type)
 			 $mod->CreateInputText($id, 'forma_list_delimiter',
 					       $this->GetAttr('list_delimiter',','), 50));
 
-    global $gCms;
     $contentops =& $gCms->GetContentOperations();
     $mod->smarty->assign('input_redirect_page',$contentops->CreateHierarchyDropdown('',$this->GetAttr('redirect_page','0'), $id.'forma_redirect_page'));
 
     $mod->smarty->assign('input_form_template',
 			 $mod->CreateTextArea(false, $id,
-					      $this->GetAttr('form_template',$this->DefaultTemplate()), 'forma_form_template'));
+					      $this->GetAttr('form_template',$this->DefaultTemplate()), 'forma_form_template','','fb_form_template'));
 					      
     $mod->smarty->assign('input_submit_response',
 			 $mod->CreateTextArea(false, $id,
