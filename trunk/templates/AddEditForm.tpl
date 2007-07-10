@@ -1,3 +1,41 @@
+<script type="text/javascript">
+{literal}
+function getTemplate()
+	{		
+	var selector = document.getElementById('fb_template_load');
+	if (selector)
+		{
+		var templ = selector[selector.selectedIndex].value;
+
+		if (templ.length > 0 && confirm('{/literal}{$template_are_you_sure}{literal}'))
+			{
+			var url = '{/literal}{$mod_path}{literal}';
+			var pars = '{/literal}{$mod_param}{literal}&m1_tid='+templ;
+		
+			var myAjax = new Ajax.Request(
+				url, 
+				{
+					method: 'get', 
+					parameters: pars,
+					onFailure: reportError,
+					onComplete: replaceTemplate
+				});		
+			}
+		}
+	}
+function reportError(request)
+	{
+		alert('Sorry. There was an error.');
+	}
+
+function replaceTemplate(originalRequest)
+	{
+		//put returned template in the textarea
+		$('fb_form_template').value = originalRequest.responseText;
+	}
+
+{/literal}
+</script>
 {if $message != ''}<h4>{$message}</h4>{/if}
 {$formstart}{$formid}{$fb_hidden}{$tab_start}{$maintab_start}
 <fieldset class="module_fb_fieldset"><legend>{$title_form_main}</legend>
@@ -132,11 +170,15 @@
 {$tab_end}
 {$templatetab_start}
 	<div class="pageoverflow">
+		<p class="pagetext">{$title_load_template}:</p>
+		<p class="pageinput">{$input_load_template}</p>
+	</div>
+	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_template}:</p>
 		<p class="pageinput">{$input_form_template}</p>
 	</div>
 	<div class="pageoverflow">
-	{$help_template_variables}
+		<p class="pageinput">{$help_template_variables}</p>
 	</div>
 {$tab_end}
 {$submittemplatetab_start}
