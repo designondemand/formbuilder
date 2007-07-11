@@ -192,6 +192,7 @@ $lang['title_not_ready2']='Please add a field to the form so that the user\'s in
 $lang['title_not_ready_link']='use this shortcut';
 $lang['title_form_alias']='Form Alias';
 $lang['title_form_fields']='Form Fields';
+$lang['title_field_id']='Field Id';
 $lang['title_field_name']='Field Name';
 $lang['title_radiogroup_details']='Radio Button Group Details';
 $lang['title_field_type']='Field Type';

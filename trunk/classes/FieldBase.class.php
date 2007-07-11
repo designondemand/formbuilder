@@ -871,6 +871,13 @@ class fbFieldBase {
 	  {
 	    $this->SetValue($params['value_'.$this->Name]);
 	  }
+	
+	if (isset($params['value_fld'.$this->Id]) &&
+	    (is_array($params['value_fld'.$this->Id]) ||
+	     strlen($params['value_fld'.$this->Id]) > 0))
+	  {
+	    $this->SetValue($params['value_fld'.$this->Id]);
+	  }
       }
 
 
