@@ -95,6 +95,11 @@ if (!isset($gCms)) exit;
 		$this->smarty->assign('title_enable_antispam',$this->Lang('title_enable_antispam'));
 		$this->smarty->assign('input_enable_antispam',$this->CreateInputCheckbox($id, 'enable_antispam', 1, $this->GetPreference('enable_antispam','1')). $this->Lang('title_enable_antispam_long'));
 
+$smarty->assign('title_show_fieldids',$this->Lang('title_show_fieldids'));
+$smarty->assign('input_show_fieldids',
+		$this->CreateInputcheckbox($id,'show_fieldids',1,
+					   $this->GetPreference('show_fieldids','0')). $this->Lang('title_show_fieldids_long'));
+
 
 		$this->smarty->assign('title_show_version',$this->Lang('title_show_version'));
 		$this->smarty->assign('input_show_version',$this->CreateInputCheckbox($id, 'show_version', 1, $this->GetPreference('show_version','1')). $this->Lang('title_show_version_long'));				
