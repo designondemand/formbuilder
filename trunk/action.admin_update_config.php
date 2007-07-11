@@ -20,6 +20,8 @@ if (! $this->CheckAccess()) exit;
 		$this->SetPreference('enable_fastadd',isset($params['enable_fastadd'])?$params['enable_fastadd']:0);
 		$this->SetPreference('enable_antispam',isset($params['enable_antispam'])?$params['enable_antispam']:0);
 
+                $this->SetPreference('show_fieldids',isset($params['show_fieldids'])?$params['show_fieldids']:0);
+
 		$params['message'] = $this->Lang('configuration_updated');
         $this->DoAction('defaultadmin', $id, $params);
 

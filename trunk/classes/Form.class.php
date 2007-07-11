@@ -1038,8 +1038,11 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
 			 $mod->Lang('title_form_fields'));
 	$mod->smarty->assign('title_form_main',
 			 $mod->Lang('title_form_main'));
-    $mod->smarty->assign('title_field_id',
-			 $mod->Lang('title_field_id'));
+    if( $mod->GetPreference('show_fieldids',0) != 0 )
+      {
+	$mod->smarty->assign('title_field_id',
+			     $mod->Lang('title_field_id'));
+      }
     $mod->smarty->assign('title_field_name',
 			 $mod->Lang('title_field_name'));
     $mod->smarty->assign('title_field_type',
@@ -1116,7 +1119,10 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	    $oneset = new stdClass();
 	    $oneset->rowclass = $currow;
 	    $oneset->name = $mod->CreateLink($id, 'admin_add_edit_field', '', $thisField->GetName(), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
-	    $oneset->id = $mod->CreateLink($id, 'admin_add_edit_field', '', $thisField->GetId(), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
+	    if( $mod->GetPreference('show_fieldids',0) != 0 )
+	      {
+		$oneset->id = $mod->CreateLink($id, 'admin_add_edit_field', '', $thisField->GetId(), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
+	      }
 	    $oneset->type = $thisField->GetDisplayType();
 	    if ($thisField->IsDisposition() ||
 		!$thisField->DisplayInForm() ||

@@ -73,8 +73,12 @@ function replaceTemplate(originalRequest)
 		<p class="pagetext">{$title_form_fields}</p>
 		<div class="pageinput">
 			<table class="module_fb_table">
+	       	{if isset($title_field_id)}
                 <thead><tr><th>{$title_field_id}</th>
                 	<th>{$title_field_name}</th>
+		{else}
+                <thead><tr><th>{$title_field_name}</th>
+		{/if}
                 	<th>{$title_field_type}</th>
                 	<th>{$title_field_required_abbrev}</th>
                 	<th>{$title_information}</th>
@@ -84,7 +88,9 @@ function replaceTemplate(originalRequest)
 				<tbody>
 				{foreach from=$fields item=entry}
 					<tr class="{$entry->rowclass}" onmouseover="this.className='{$entry->rowclass}hover';" onmouseout="this.className='{$entry->rowclass}';">
+				{if isset($title_field_id)}
 					<td>{$entry->id}</td>
+				{/if}
 					<td>{$entry->name}</td>
 					<td>{$entry->type}</td>
 					<td>{$entry->disposition}</td>
