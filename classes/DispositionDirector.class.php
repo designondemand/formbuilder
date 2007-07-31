@@ -20,7 +20,6 @@ class fbDispositionDirector extends fbDispositionEmailBase {
         $mod = &$form_ptr->module_ptr;
 		$this->Type = 'DispositionDirector';
 		$this->DisplayInForm = true;
-		$this->NonRequirableField = false;
 		$this->IsDisposition = true;
 		$this->HasAddOp = true;
 		$this->HasDeleteOp = true;
@@ -169,19 +168,6 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
 		$mod = &$this->form_ptr->module_ptr;
-		// remove the "required" field
-		$reqIndex = -1;
-		for ($i=0;$i<count($mainArray);$i++)
-			{
-			if ($mainArray[$i]->title == $mod->Lang('title_field_required'))
-				{
-				$reqIndex = $i;
-				}
-			}
-		if ($reqIndex != -1)
-			{
-			array_splice($mainArray, $reqIndex,1);
-			}
 		// remove the "email subject" field
 		$hideIndex = -1;
 		for ($i=0;$i<count($mainArray);$i++)

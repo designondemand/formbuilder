@@ -390,7 +390,7 @@ class fbFieldBase {
 	    $validInput = $mod->Lang('automatic');
 	  }
 				
-	// requirable?
+	// requirable? FIX-ME
 	if (!$this->IsDisposition() && !$this->IsNonRequirableField())
 	  {
 	    array_push($main, array($mod->Lang('title_field_required'),$mod->CreateInputCheckbox($formDescriptor, 'required', 1, $this->IsRequired()).$mod->Lang('title_field_required_long')));
@@ -445,22 +445,25 @@ class fbFieldBase {
   }
 
   // clear fields unused by invisible dispositions
-  function HiddenDispositionFields(&$mainArray, &$advArray)
+  function HiddenDispositionFields(&$mainArray, &$advArray, $hideReq=true)
   {
     $mod = &$this->form_ptr->module_ptr;
-    // remove the "required" field
-    $reqIndex = -1;
-    for ($i=0;$i<count($mainArray);$i++)
-      {
-	if ($mainArray[$i]->title == $mod->Lang('title_field_required'))
-	  {
-	    $reqIndex = $i;
-	  }
-      }
-    if ($reqIndex != -1)
-      {
-	array_splice($mainArray, $reqIndex,1);
-      }
+    if ($hideReq)
+    	{
+    	// remove the "required" field
+    	$reqIndex = -1;
+    	for ($i=0;$i<count($mainArray);$i++)
+      		{
+			if ($mainArray[$i]->title == $mod->Lang('title_field_required'))
+	  			{
+	    		$reqIndex = $i;
+	  			}
+      		}
+    	if ($reqIndex != -1)
+      		{
+			array_splice($mainArray, $reqIndex,1);
+      		}
+     	}
     // remove the "hide name" field
     $hideIndex = -1;
     for ($i=0;$i<count($advArray);$i++)

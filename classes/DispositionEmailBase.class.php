@@ -266,7 +266,8 @@ class fbDispositionEmailBase extends fbFieldBase
 		       array($mod->Lang('title_email_from_address'),$mod->CreateInputText($formDescriptor, 'opt_email_from_address',$this->GetOption('email_from_address',''),25,128)),
 		       ),
 		 array(
-		 		 array($mod->Lang('title_html_email'),$mod->CreateInputCheckbox($formDescriptor, 'opt_html_email',
+		 		 array($mod->Lang('title_html_email'),
+		 		 	$mod->CreateInputHidden($formDescriptor,'opt_html_email','0').$mod->CreateInputCheckbox($formDescriptor, 'opt_html_email',
             		'1',$this->GetOption('html_email','0'))),
 		       array($mod->Lang('title_email_template'),
 			     array($mod->CreateTextArea(false, $formDescriptor,
