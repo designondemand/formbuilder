@@ -66,6 +66,7 @@
                		{else}
                			{$entry->input[numloop]->input}
                		{/if}
+               		{if $entry->input[numloop]->op}{$entry->input[numloop]->op}{/if}
             	{/section}
          	{else}
             	{if $entry->smarty_eval == '1'}{eval var=$entry->input}{else}{$entry->input}{/if}

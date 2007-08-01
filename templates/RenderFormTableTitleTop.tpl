@@ -65,7 +65,7 @@
     		<table>
 					<tr>
 				{section name=numloop loop=$entry->input}
-	    			<td>{$entry->input[numloop]->input}&nbsp;{$entry->input[numloop]->name}</td>
+	    			<td>{$entry->input[numloop]->input}&nbsp;{$entry->input[numloop]->name}{if $entry->input[numloop]->op}&nbsp;{$entry->input[numloop]->op}{/if}</td>
 	    			       {if not ($smarty.section.numloop.rownum mod $cols)}
                 				{if not $smarty.section.numloop.last}
                         		</tr><tr>

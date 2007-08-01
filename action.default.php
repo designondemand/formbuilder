@@ -44,7 +44,6 @@ if (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber() > 0) ||
   	         {
   	         $this->smarty->assign('captcha_error',$aeform->GetAttr('wrong_captcha',$this->Lang('wrong_captcha')));
   	         
-  	         //echo $aeform->GetAttr('wrong_captcha',$this->Lang('wrong_captcha'));
   	         $aeform->PageBack();
             $ok = false;
             }
@@ -65,8 +64,6 @@ if (! $finished)
     $this->SendEvent('OnFormBuilderFormDisplay',$parms);
     
     $this->smarty->assign('fb_form_start',$this->CreateFormStart($id, 'default', $returnid, 'post', 'multipart/form-data', false, ''));
-    
-    //echo $this->CreateFormStart($id, 'default', $returnid, 'post', 'multipart/form-data', false, '' /* , $params */);
     
     $this->smarty->assign('fb_form_end',$this->CreateFormEnd());
     $this->smarty->assign('fb_form_done',0);
