@@ -31,6 +31,8 @@ class fbFieldBase {
   var $NonRequirableField;
   var $HasAddOp;
   var $HasDeleteOp;
+  var $HasUserAddOp;
+  var $HasUserDeleteOp;
   var $modifiesOtherFields;
   var $hasMultipleFormComponents;
   var $labelSubComponents;
@@ -54,6 +56,8 @@ class fbFieldBase {
     $this->NonRequirableField = false;
     $this->HasAddOp = false;
     $this->HasDeleteOp = false;
+    $this->HasUserAddOp = false;
+    $this->HasUserDeleteOp = false;
     $this->modifiesOtherFields = false;
     $this->hasMultipleFormComponents = false;
     $this->DispositionPermitted = true;

@@ -7,6 +7,7 @@ $lang['field_type_']='Field Type Not Set';
 $lang['field_type_FieldsetEnd'] = '-Fieldset End';
 $lang['field_type_FieldsetStart']='-Fieldset Start';
 $lang['field_type_TextField']='Text Input';
+$lang['field_type_TextFieldExpandable']='Text Input (Multiple)';
 $lang['field_type_TextAreaField']='Text Area';
 $lang['field_type_CheckboxField']='Check Box';
 $lang['field_type_CheckboxGroupField']='Check Box Group';
