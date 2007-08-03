@@ -25,29 +25,7 @@ class fbTextFieldExpandable extends fbFieldBase {
             $mod->Lang('validation_regex_match')=>'regex_match',
             $mod->Lang('validation_regex_nomatch')=>'regex_nomatch'
             );
-        $this->hasMultipleFormComponents = true;
-            
-        foreach ($params as $thisParam)
-            {
-            if (substr($thisParam,0,4) == 'FeX_')
-                {
-                $pts = explode('_',$thisParam);
-                if ($pts[1] == $this->Id)
-                    {
-                    // expand
-                    error_log("Expanding");
-                    }
-                }
-            else if (substr($thisParam,0,4) == 'FeD_')
-                {
-                $pts = explode('_',$thisParam);
-                if ($pts[1] == $this->Id)
-                    {
-                    // expand
-                    error_log("Deleting row ".$pts[2]);
-                    }
-                }
-            }
+      $this->hasMultipleFormComponents = true;
 
 	}
 
@@ -55,22 +33,51 @@ class fbTextFieldExpandable extends fbFieldBase {
 	function GetFieldInput($id, &$params, $returnid)
 	{
 	  $mod = &$this->form_ptr->module_ptr;
-	  if (! is_array($this->Value))
+	 //debug_display($this->Value);
+
+     if (! is_array($this->Value))
 	      {
-	      $vals = 5;
+	      $vals = 1;
 	      }
 	  else
 	      {
 	      $vals = count($this->Value);
 	      }
+      foreach ($params as $pKey=>$pVal)
+         {
+         if (substr($pKey,0,4) == 'FeX_')
+            {
+            $pts = explode('_',$pKey);
+            if ($pts[1] == $this->Id)
+               {
+               // expand
+               $this->Value[$vals]='';
+               $vals++;
+               }
+            }
+         else if (substr($pKey,0,4) == 'FeD_')
+            {
+            $pts = explode('_',$pKey);
+            if ($pts[1] == $this->Id)
+               {
+               // delete row
+               if (isset($this->Value[$pts[2]]))
+                  {
+                  array_splice($this->Value, $pts[2], 1);
+                  }
+               $vals--;
+               }
+            }
+         }
+
 	  $ret = array();
 	  for ($i=0;$i<$vals;$i++)
 	    {
 	    $thisRow = new stdClass();
         $thisRow->name = '';
         $thisRow->title = '';
-	    $thisRow->input = $mod->CreateInputText($id, '_'.$this->Id.'_'.$i,
-				       $this->Value,
+	    $thisRow->input = $mod->CreateInputText($id, '_'.$this->Id.'[]',
+				       $this->Value[$i],
             $this->GetOption('length')<25?$this->GetOption('length'):25,
             $this->GetOption('length'));
         $thisRow->op = $mod->CreateInputSubmit($id, 'FeD_'.$this->Id.'_'.$i, 'X');
