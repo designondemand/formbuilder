@@ -128,57 +128,64 @@ class fbTextFieldExpandable extends fbFieldBase {
 		$this->validated = true;
 		$this->validtionErrorText = '';
 		$mod = &$this->form_ptr->module_ptr;
-		switch ($this->ValidationType)
-		  {
+		if (! is_array($this->Value))
+		    {
+		    $this->Value = array($this->Value);
+		    }
+		foreach ($this->Value as $thisVal)
+		    {
+		    switch ($this->ValidationType)
+		    {
 		  	   case 'none':
 		  	       break;
 		  	   case 'numeric':
-                  if ($this->Value !== false &&
-                      ! preg_match("/^([\d\.\,])+$/i", $this->Value))
+                  if ($thisVal !== false &&
+                      ! preg_match("/^([\d\.\,])+$/i", $thisVal))
                       {
                       $this->validated = false;
                       $this->validtionErrorText = $mod->Lang('please_enter_a_number',$this->Name);
                       }
 		  	       break;
 		  	   case 'integer':
-                  if ($this->Value !== false &&
-                  	! preg_match("/^([\d])+$/i", $this->Value) ||
-                      intval($this->Value) != $this->Value)
+                  if ($thisVal !== false &&
+                  	! preg_match("/^([\d])+$/i", $thisVal) ||
+                      intval($thisVal) != $thisVal)
                     {
                     $this->validated = false;
                     $this->validtionErrorText = $mod->Lang('please_enter_an_integer',$this->Name);
                     }
 		  	       break;
 		  	   case 'email':
-                  if ($this->Value !== false &&
-                      ! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $this->Value))
+                  if ($thisVal !== false &&
+                      ! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $thisVal))
                     {
                     $this->validated = false;
                     $this->validtionErrorText = $mod->Lang('please_enter_an_email',$this->Name);
                     }
 		  	       break;
 		  	   case 'regex_match':
-                  if ($this->Value !== false &&
-                      ! preg_match($this->GetOption('regex','/.*/'), $this->Value))
+                  if ($thisVal !== false &&
+                      ! preg_match($this->GetOption('regex','/.*/'), $thisVal))
                     {
                     $this->validated = false;
                     $this->validtionErrorText = $mod->Lang('please_enter_valid',$this->Name);
                     }
 		  	   	   break;
 		  	   case 'regex_nomatch':
-                  if ($this->Value !== false &&
-                       preg_match($this->GetOption('regex','/.*/'), $this->Value))
+                  if ($thisVal !== false &&
+                       preg_match($this->GetOption('regex','/.*/'), $thisVal))
                     {
                     $this->validated = false;
                     $this->validtionErrorText = $mod->Lang('please_enter_valid',$this->Name);
                     }
 		  	   	   break;
 		  }
-		if ($this->GetOption('length',0) > 0 && strlen($this->Value) > $this->GetOption('length',0))
+		if ($this->GetOption('length',0) > 0 && strlen($thisVal) > $this->GetOption('length',0))
 			{
 			$this->validated = false;
 			$this->validtionErrorText = $mod->Lang('please_enter_no_longer',$this->GetOption('length',0));
 			}
+		}
 		return array($this->validated, $this->validtionErrorText);
 	}
 }
