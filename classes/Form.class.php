@@ -40,18 +40,45 @@ class fbForm {
       {
 	$this->Name = $params['form_name'];
       }
-    if (isset($params['continue']))
+
+   $fieldExpandOp = false;
+
+   foreach($params as $pKey=>$pVal)
       {
-	$this->Page = $params['continue'];
+      if (substr($pKey,0,4) == 'FeX_' || substr($pKey,0,4) == 'FeD_')
+         {
+         // expanding or shrinking a field
+         $fieldExpandOp = true;
+         }
+      }
+
+    if ($fieldExpandOp)
+      {
+      $params['done'] = 0;
+      if (isset($params['continue']))
+         {
+	      $this->Page = $params['continue'] - 1;
+         }
+      else
+         {
+	      $this->Page = 1;
+         }
       }
     else
       {
-	$this->Page = 1;
-      }
-    if (isset($params['prev']) && isset($params['previous']))
-      {
-	$this->Page = $params['previous'];
-	$params['done'] = 0;
+      if (isset($params['continue']))
+         {
+	      $this->Page = $params['continue'];
+         }
+      else
+         {
+	      $this->Page = 1;
+         }
+      if (isset($params['prev']) && isset($params['previous']))
+         {
+	      $this->Page = $params['previous'];
+	      $params['done'] = 0;
+         }
       }
     $this->formTotalPages = 1;
     if (isset($params['done'])&& $params['done']==1)
@@ -460,7 +487,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
 	      }
 	  }
       }
-    return array($retCode,$resArray);		
+    return array($retCode,$resArray);
   }
 
   function RenderFormHeader()
@@ -492,8 +519,9 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
       {
 	$this->Load($this->Id,$params,true);
       }
+
     $reqSymbol = $this->GetAttr('required_field_symbol','*');
-				
+
     $mod->smarty->assign('title_page_x_of_y',$mod->Lang('title_page_x_of_y',array($this->Page,$this->formTotalPages)));
 		
     $mod->smarty->assign('css_class',$this->GetAttr('css_class',''));
@@ -501,7 +529,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
     $mod->smarty->assign('this_page',$this->Page);
     $mod->smarty->assign('form_name',$this->Name);
     $mod->smarty->assign('form_id',$this->Id);
-		
+
     $hidden = $mod->CreateInputHidden($id, 'form_id', $this->Id);
     $hidden .= $mod->CreateInputHidden($id, 'continue', ($this->Page + 1));
     if (isset($params['browser_id']))
