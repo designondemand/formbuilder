@@ -21,6 +21,7 @@ class fbSystemLinkField extends fbFieldBase {
             $mod->Lang('validation_none')=>'none'
             );
         $this->hasMultipleFormComponents = true;
+        $this->sortable = false;
 	}
 
 	function GetFieldInput($id, &$params, $returnid)

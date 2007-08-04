@@ -84,7 +84,6 @@ class FormBuilder extends CMSModule
 		ksort($this->field_types);
 	}
 
-
 	function AllowAutoInstall()
 	{
 	  return FALSE;
@@ -107,8 +106,7 @@ class FormBuilder extends CMSModule
 
 	function GetVersion()
 	{
-		return '0.3';
-		//return '0.2.4';
+		return '0.4';
 	}
 
 	function GetAuthor()
@@ -161,7 +159,7 @@ class FormBuilder extends CMSModule
 	// may be too stringent, but better safe than sorry.
 	function MinimumCMSVersion()
 	{
-		return '1.0-svn';
+		return '1.1';
 	}
 
 	function InstallPostMessage()

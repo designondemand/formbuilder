@@ -94,6 +94,28 @@ class fbDatePickerField extends fbFieldBase {
       return $ret;
 	}
 
+   function CompareTo($val)
+   {
+      $td = 0;
+      $od = 0;
+      if ($this->HasValue())
+			{
+			$td = mktime ( 1, 1, 1, $this->GetArrayValue(1),  $this->GetArrayValue(0), $this->GetArrayValue(2) );
+			}
+		$o = $val->GetValue();
+      if ($o->HasValue())
+			{
+			$od = mktime ( 1, 1, 1, $o->GetArrayValue(1),  $o->GetArrayValue(0), $o->GetArrayValue(2) );
+			}
+      if ($td == $od)
+         {
+         return 0;
+         }
+      return ($td < $od) ? -1 : 1;
+   }
+
+
+
 	function GetHumanReadableValue()
 	{
 		$mod = &$this->form_ptr->module_ptr;

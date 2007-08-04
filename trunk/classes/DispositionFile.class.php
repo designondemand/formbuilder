@@ -21,6 +21,7 @@ class fbDispositionFile extends  fbFieldBase
     $this->IsDisposition = true;
     $this->NonRequirableField = true;
     $this->DisplayInForm = false;
+    $this->sortable = false;
     $this->sampleTemplateCode = "<script type=\"text/javascript\">\n
 function populate_file(formname)
     {

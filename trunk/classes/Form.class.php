@@ -566,14 +566,14 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
 		  {
 		    $hidden .= $mod->CreateInputHidden($id,
 						       $testIndex.'[]',
-						       htmlspecialchars($val,ENT_QUOTES));
+						       /*htmlspecialchars($val,ENT_QUOTES)*/ $this->unmy_htmlentities($val));
 		  }
 	      }
 	    else
 	      {
 		$hidden .= $mod->CreateInputHidden($id,
 						   $testIndex,
-						   htmlspecialchars($params[$testIndex],ENT_QUOTES));
+						   /*htmlspecialchars($params[$testIndex],ENT_QUOTES)*/ $this->unmy_htmlentities($params[$testIndex]));
 	      }
 	    continue;
 	  }
@@ -674,6 +674,31 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
   {
     return $this->Load($this->Id, array(), $loadDeep);
   }
+
+function unmy_htmlentities($val)
+{
+	if ($val == "")
+	{
+		return "";
+	}
+	$val = html_entity_decode($val);
+	$val = str_replace("&amp;","&",$val);
+	$val = str_replace("&#60;&#33;--","<!--",$val);
+	$val = str_replace("--&#62;","-->",$val);
+	$val = str_replace("&gt;",">", $val);
+	$val = str_replace("&lt;","<",$val);
+	$val = str_replace("&quot;","\"",$val);
+	$val = str_replace("&#036;","\$",$val);
+	$val = str_replace("&#33;","!",$val);
+	$val = str_replace("&#39;","'",$val);
+
+	// Uncomment if you need to convert unicode chars
+	return $val;
+}
+
+
+
+
 
   function Load($formId, &$params, $loadDeep=false)
   {

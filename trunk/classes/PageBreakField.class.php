@@ -19,6 +19,7 @@ class fbPageBreakField extends fbFieldBase {
 		//$this->ValidationTypes = array($mod->Lang('validation_none')=>'none');
 		$this->ValidationTypes = array();
 		$this->NonRequirableField = true;
+		$this->sortable = false;
 	}
 
 	function GetFieldInput($id, &$params, $return_id)
