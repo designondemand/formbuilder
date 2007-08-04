@@ -139,6 +139,10 @@ class fbDispositionEmailBase extends fbFieldBase
 	if ($field->DisplayInSubmission())
 	  {
 	    $replVal = $field->GetHumanReadableValue();
+	    if ($htmlemail)
+	        {
+            $replVal = htmlspecialchars($replVal);
+            }
 	    if ($replVal == '')
 	      {
 		$replVal = $unspec;
