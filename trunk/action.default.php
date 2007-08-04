@@ -118,7 +118,7 @@ else
             $replVal = '';
             if ($field->DisplayInSubmission())
                {
-               $replVal = $field->GetHumanReadableValue();
+               $replVal = htmlspecialchars($field->GetHumanReadableValue());
                if ($replVal == '')
                   {
                   $replVal = $unspec;
