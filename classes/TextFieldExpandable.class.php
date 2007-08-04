@@ -80,14 +80,14 @@ class fbTextFieldExpandable extends fbFieldBase {
 				       $this->Value[$i],
             $this->GetOption('length')<25?$this->GetOption('length'):25,
             $this->GetOption('length'));
-        $thisRow->op = $mod->CreateInputSubmit($id, 'FeD_'.$this->Id.'_'.$i, 'X');
+        $thisRow->op = $mod->CreateInputSubmit($id, 'FeD_'.$this->Id.'_'.$i, $this->GetOption('del_button','X'));
         array_push($ret, $thisRow);
         }
       $thisRow = new stdClass();
       $thisRow->name = '';
       $thisRow->title = '';
       $thisRow->input = '';
-      $thisRow->op = $mod->CreateInputSubmit($id, 'FeX_'.$this->Id, '+');
+      $thisRow->op = $mod->CreateInputSubmit($id, 'FeX_'.$this->Id, $this->GetOption('add_button','+'));
       array_push($ret, $thisRow);
       return $ret;
 	}
@@ -103,6 +103,17 @@ class fbTextFieldExpandable extends fbFieldBase {
 		 return $ret;
 	}
 
+	function GetHumanReadableValue()
+	{
+		$form = &$this->form_ptr;
+      if (! is_array($this->Value))
+	      {
+	      $this->Value = array($this->Value);
+	      }
+		return join($form->GetAttr('list_delimiter',','),$this->Value);
+	}
+
+
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
@@ -111,7 +122,15 @@ class fbTextFieldExpandable extends fbFieldBase {
 			array($mod->Lang('title_maximum_length'),
 			      $mod->CreateInputText($formDescriptor, 
 						    'opt_length',
-			         $this->GetOption('length','80'),25,25))			         
+			         $this->GetOption('length','80'),25,25)),
+			array($mod->Lang('title_add_button_text'),
+			      $mod->CreateInputText($formDescriptor,
+						    'opt_add_button',
+			         $this->GetOption('add_button','+'),15,25)),
+			array($mod->Lang('title_del_button_text'),
+			      $mod->CreateInputText($formDescriptor,
+						    'opt_del_button',
+			         $this->GetOption('del_button','X'),15,25))
 		);
 		$adv = array(
 			array($mod->Lang('title_field_regex'),

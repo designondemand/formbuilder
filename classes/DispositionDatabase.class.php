@@ -23,6 +23,7 @@ class fbDispositionDatabase extends fbFieldBase {
 		$this->HideLabel = 1;
 		$this->NeedsDiv = 0;
 		$this->approvedBy = '';
+		$this->sortable = false;
 	}
 
 	function GetFieldInput($id, &$params, $returnid)

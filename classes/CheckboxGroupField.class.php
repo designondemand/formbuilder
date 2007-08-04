@@ -25,6 +25,7 @@ class fbCheckboxGroupField extends fbFieldBase {
             );
         $this->boxAdd = 0;
         $this->hasMultipleFormComponents = true;
+        $this->sortable = false;
 	}
 
 	function countBoxes()

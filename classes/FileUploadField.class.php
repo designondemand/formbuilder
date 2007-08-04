@@ -13,6 +13,7 @@ class fbFileUploadField extends fbFieldBase {
     //    $this->DisplayType = $mod->Lang('field_type_file_upload');
     $this->ValidationTypes = array(
 				   $mod->Lang('validation_none')=>'none');
+	 $this->sortable = false;
   }
 
   function GetFieldInput($id, &$params, $returnid)

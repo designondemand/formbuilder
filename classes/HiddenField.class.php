@@ -20,6 +20,7 @@ class fbHiddenField extends fbFieldBase
     $this->ValidationTypes = array();
     $this->HasLabel = 0;
     $this->NeedsDiv = 0;
+    $this->sortable = false;
   }
 
 

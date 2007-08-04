@@ -21,6 +21,7 @@ class fbCheckboxField extends fbFieldBase {
             $mod->Lang('validation_none')=>'none',
             $mod->Lang('validation_must_check')=>'checked'
             );
+      $this->sortable = false;
 	}
 
 	function GetFieldInput($id, &$params, $returnid)

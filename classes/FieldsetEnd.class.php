@@ -20,6 +20,7 @@ class fbFieldsetEnd extends fbFieldBase {
     $this->ValidationTypes = array();    
     $this->HasLabel = 0;
     $this->NeedsDiv = 0;
+    $this->sortable = false;
   }
 
   function GetFieldInput($id, &$params, $returnid)

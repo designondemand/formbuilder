@@ -24,6 +24,7 @@ class fbMultiselectField extends fbFieldBase {
 		$this->ValidationTypes = array(
             );
         $this->optionAdd = 0;
+        $this->sortable = false;
 	}
 
 	function GetOptionAddButton()

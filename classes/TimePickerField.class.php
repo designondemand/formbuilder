@@ -129,6 +129,26 @@ class fbTimePickerField extends fbFieldBase {
 
 	}
 
+   function CompareTo($val)
+   {
+      $tt = 0;
+      $ot = 0;
+      if ($this->HasValue())
+			{
+			$tt = $this->GetArrayValue(0) * 60 + $this->GetArrayValue(1);
+			}
+		$o = $val->GetValue();
+      if ($o->HasValue())
+			{
+			$ot = $o->GetArrayValue(0) * 60 + $o->GetArrayValue(1);
+			}
+      if ($tt == $ot)
+         {
+         return 0;
+         }
+      return ($tt < $ot) ? -1 : 1;
+   }
+
 	function GetHumanReadableValue()
 	{
 		$mod = &$this->form_ptr->module_ptr;

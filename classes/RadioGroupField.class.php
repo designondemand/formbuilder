@@ -26,6 +26,7 @@ class fbRadioGroupField extends fbFieldBase
             );
     $this->optionAdd = 0;
     $this->hasMultipleFormComponents = true;
+
   }
 
   function countBoxes()

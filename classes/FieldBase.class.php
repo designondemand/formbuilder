@@ -41,6 +41,7 @@ class fbFieldBase {
   var $form_ptr;
   var $Options;
   var $loaded;
+  var $sortable;
 
   function fbFieldBase(&$form_ptr, &$params)
   {
@@ -63,6 +64,7 @@ class fbFieldBase {
     $this->DispositionPermitted = true;
     $this->SmartyEval = false;
     $this->labelSubComponents = true;
+    $this->sortable = true;
 
     if (isset($params['form_id']))
       {
@@ -122,7 +124,7 @@ class fbFieldBase {
 	(is_array($params['_'.$this->Id]) ||
 	 strlen($params['_'.$this->Id]) > 0))
       {
-	$this->SetValue($params['_'.$this->Id]);
+	   $this->SetValue($params['_'.$this->Id]);
       }
   }
 
@@ -251,7 +253,7 @@ class fbFieldBase {
   {
     return $this->OrderBy;
   }
-	
+
   function SetOrder($order)
   {
     $this->OrderBy = $order;
@@ -584,18 +586,46 @@ class fbFieldBase {
   // override me, if necessary to convert type or something.
   function SetValue($valStr)
   {
+    $fm = &$this->form_ptr;
     if ($this->Value === false)
       {
-	$this->Value = $valStr;
+      if (is_array($valStr))
+         {
+         $this->Value = $valStr;
+         for ($i=0;$i<count($this->Value);$i++)
+            {
+            while ( $this->Value[$i] != $fm->unmy_htmlentities($this->Value[$i]))
+               {
+               $this->Value[$i] = $fm->unmy_htmlentities($this->Value[$i]);
+               }
+            }
+         }
+      else
+         {
+         while ($this->Value != $fm->unmy_htmlentities($valStr))
+            {
+	         $this->Value = $fm->unmy_htmlentities($valStr);
+	         }
+	      }
       }
     else
       {
+      while ($valStr != $fm->unmy_htmlentities($valStr))
+         {
+         $valStr = $fm->unmy_htmlentities($valStr);
+         }
 	if (! is_array($this->Value))
 	  {
 	    $this->Value = array($this->Value);
 	  }
 	array_push($this->Value,$valStr);
       }
+  }
+
+  // override me, as necessary
+  function CompareTo($val)
+  {
+    return strcmp($val->GetHumanReadableValue(), $this->GetHumanReadableValue());
   }
 
   function RequiresValidation()
@@ -800,9 +830,9 @@ class fbFieldBase {
   // customized version of API function CreateTextInput. This doesn't throw in an ID that's the same as the field name.
   function TextField($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
 {
-  $value = cms_htmlentities($value);
-  $id = cms_htmlentities($id);
-  $name = cms_htmlentities($name);
+  $value = cms_htmlentities(html_entity_decode($value));
+  $id = cms_htmlentities(html_entity_decode($id));
+  $name = cms_htmlentities(html_entity_decode($name));
   $size = ($size!=''?cms_htmlentities($size):10);
   $maxlength = ($maxlength!=''?cms_htmlentities($maxlength):255);
 

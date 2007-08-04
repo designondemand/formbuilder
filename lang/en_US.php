@@ -311,6 +311,8 @@ $lang['title_unique_fieldnames'] = 'Require Unique Fieldnames';
 $lang['title_unique_fieldnames_long'] = 'Require fields to have unique names?';
 $lang['title_reorder_form'] = 'Reorder Fields';
 $lang['title_load_template'] = 'Load template';
+$lang['title_add_button_text'] = 'Add Button text';
+$lang['title_del_button_text'] = 'Delete Button text';
 
 $lang['default_template'] = 'Default Template';
 $lang['table_left_template'] = 'Table Template, Titles on left';
@@ -617,7 +619,7 @@ module's installation directory, assuming the web server has permission to write
 	/* Apply this class to text/select input fields with shorter labels
 		to help alignment */
 	.short-label label {float:left; width:10em}
-	.short-label fieldset div input, 
+	.short-label fieldset div input,
 	.short-label fieldset div select {width:16em}
 
 	/* Pretty up your Captcha image output */
