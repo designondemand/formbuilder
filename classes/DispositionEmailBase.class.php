@@ -218,6 +218,7 @@ class fbDispositionEmailBase extends fbFieldBase
       }
 
     $message = $mod->ProcessTemplateFromData( $message );
+    $subject = $mod->ProcessTemplateFromData( $subject );
     $mail->SetSubject($subject);
      if ($htmlemail)
 	 	{
@@ -265,7 +266,7 @@ class fbDispositionEmailBase extends fbFieldBase
 
     return array(
 		 array(
-		       array($mod->Lang('title_email_subject'),$mod->CreateInputText($formDescriptor, 'opt_email_subject',$this->GetOption('email_subject',''),25,128)),
+		       array($mod->Lang('title_email_subject'),$mod->CreateInputText($formDescriptor, 'opt_email_subject',$this->GetOption('email_subject',''),50).'<br/>'.$mod->Lang('canuse_smarty')),
 		       array($mod->Lang('title_email_from_name'),$mod->CreateInputText($formDescriptor, 'opt_email_from_name',$this->GetOption('email_from_name',$mod->Lang('friendlyname')),25,128)),
 		       array($mod->Lang('title_email_from_address'),$mod->CreateInputText($formDescriptor, 'opt_email_from_address',$this->GetOption('email_from_address',''),25,128)),
 		       ),
