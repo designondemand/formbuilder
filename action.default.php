@@ -116,6 +116,7 @@ else
             {
             $field =& $others[$i];
             $replVal = '';
+            $replVals = array();
             if ($field->DisplayInSubmission())
                {
                $replVal = htmlspecialchars($field->GetHumanReadableValue());
@@ -123,13 +124,17 @@ else
                   {
                   $replVal = $unspec;
 	      			}
+	    		if ($field->HasMultipleValues())
+	        		{
+	        		$replVals = $field->GetValue();
+	        		}
                }
-            if( $replVal != '' )
-               {
-               $this->smarty->assign($aeform->MakeVar($field->GetName()),
+           $this->smarty->assign($aeform->MakeVar($field->GetName()),
                   $replVal);
-               $this->smarty->assign('fld_'.$field->GetId(),$replVal);
-               }
+           $this->smarty->assign('fld_'.$field->GetId(),$replVal);
+           $this->smarty->assign($aeform->MakeVar($field->GetName()).'_array',
+                  $replVals);
+           $this->smarty->assign('fld_'.$field->GetId().'_array',$replVals);
             }
          echo $this->ProcessTemplateFromData( $message );
          }

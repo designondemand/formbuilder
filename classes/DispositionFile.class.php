@@ -91,15 +91,23 @@ function populate_header(formname)
     for($i=0;$i<count($others);$i++)
       {
 	$replVal = '';
+	$replVals = array();
 	if ($others[$i]->DisplayInSubmission())
 	  {
 	    $replVal = $others[$i]->GetHumanReadableValue();
 	    if ($replVal == '')
 	      {
-		$replVal = $unspec;
+		  $replVal = $unspec;
 	      }
+	    if ($others[$i]->HasMultipleValues())
+	        {
+	        $replVals = $others[$i]->GetValue();
+	        }
 	  }
-	$mod->smarty->assign($this->MakeVar($others[$i]->Getname()),$replVal);
+	  $mod->smarty->assign($this->MakeVar($others[$i]->Getname()),$replVal);
+	  $mod->smarty->assign('fld_'.$others[$i]->GetId(),$replVal);
+$mod->smarty->assign($this->MakeVar($others[$i]->Getname()).'_array',$replVals);
+$mod->smarty->assign('fld_'.$others[$i]->GetId().'_array',$replVals);
       }
 
     $newline = $mod->ProcessTemplateFromData( $line );

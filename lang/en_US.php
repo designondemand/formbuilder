@@ -279,6 +279,7 @@ $lang['help_server_name']='Your server';
 $lang['help_sub_source_ip']='IP address of person using form';
 $lang['help_sub_url']='URL of page containing form';
 $lang['help_other_fields']='Alternate field names can be used interchangeably (especially useful if Smarty is choking on characters outside of ASCII 32-126). <br />Other fields will be available as you add them to the form.';
+$lang['help_array_fields']='Fields that have multiple values may also be accessed via the smarty value of $fieldname_array or $fld_#_array.';
 $lang['help_date_format']='See <a href="http://www.php.net/manual/en/function.date.php" target=_NEW>the PHP Manual</a> for formatting help.';
 $lang['help_variable_name']='Variable';
 $lang['help_form_field']='Field Represented';
@@ -401,6 +402,7 @@ $lang['template_variable_help'] = "
 <tr><td>field->needs_div</td><td>1 if the field needs to be wrapped in a DIV (or table row, if that's the way you swing)</td></tr>
 <tr><td>field->name</td><td>the field's name</td></tr>
 <tr><td>field->input</td><td>the field's input control (e.g., the input field itself)</td></tr>
+<tr><td>field->op</td><td>a control button associated with the field if applicable (e.g., the delete button for expandable text input)</td></tr>
 <tr><td>field->input_id</td><td>the ID of the field's input (useful for <label for=\"\">)</td></tr>
 <tr><td>field->type</td><td>the field's data type</td></tr>
                                 

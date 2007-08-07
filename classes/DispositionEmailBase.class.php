@@ -136,6 +136,7 @@ class fbDispositionEmailBase extends fbFieldBase
       {
 	$field =& $others[$i];
 	$replVal = '';
+	$replVals = array();
 	if ($field->DisplayInSubmission())
 	  {
 	    $replVal = $field->GetHumanReadableValue();
@@ -147,6 +148,10 @@ class fbDispositionEmailBase extends fbFieldBase
 	      {
 		$replVal = $unspec;
 	      }
+	    if ($field->HasMultipleValues())
+	        {
+	        $replVals = $field->GetValue();
+	        }
 	  }
 	if( get_class($others[$i]) == 'fbFileUploadField' )
 	  {
@@ -210,11 +215,11 @@ class fbDispositionEmailBase extends fbFieldBase
 	      }
 	  }
 
-	if( $replVal != '' )
-	  {
-	    $mod->smarty->assign($form->MakeVar($field->GetName()),$replVal);
-	    $mod->smarty->assign('fld_'.$field->GetId(),$replVal);
-	  }
+	 $mod->smarty->assign($form->MakeVar($field->GetName()),$replVal);
+	 $mod->smarty->assign('fld_'.$field->GetId(),$replVal);
+	 $mod->smarty->assign($form->MakeVar($field->GetName()).'_array',$replVals);
+	 $mod->smarty->assign('fld_'.$field->GetId().'_array',$replVals);
+
       }
 
     $message = $mod->ProcessTemplateFromData( $message );
