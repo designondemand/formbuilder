@@ -138,6 +138,17 @@ class fbFieldBase {
     return $this->labelSubComponents;
   }
 
+  function HasMultipleValues()
+  {
+  	if ($this->hasMultipleFormComponents || $this->HasUserAddOp)
+  		{
+  		return true;
+  		}
+  	else
+  		{
+  		return false;
+  		}
+  }
 
   function GetFieldInputId($id, &$params, $returnid)
   {

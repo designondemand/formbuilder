@@ -381,6 +381,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
 	  }
       }
        	
+    $ret .= '<tr><td colspan="2">'.$mod->Lang('help_array_fields').'</td></tr>';
     $ret .= '<tr><td colspan="2">'.$mod->Lang('help_other_fields').'</td></tr>';
         
     $escapedSample = preg_replace('/\'/',"\\'",$this->createSampleTemplate(false));
