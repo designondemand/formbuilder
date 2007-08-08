@@ -141,7 +141,7 @@ $lang['tab_templatelayout'] = 'Form Template';
 $lang['tab_submissiontemplate'] = 'Submission Template';
 
 
-$lang['canuse_smarty'] = '<em>Smarty variables are avlid in this field.<em>';
+$lang['canuse_smarty'] = '<em>Smarty variables are valid in this field.<em>';
 $lang['add_options'] = 'Add More Options';
 $lang['delete_options'] = 'Delete Marked Options';
 $lang['add_checkboxes'] = 'Add More Checkboxes';
