@@ -28,8 +28,9 @@ class fbTextAreaField extends fbFieldBase {
 				   $id, $this->Value,
 				   '_'.$this->Id,'',$id.'_'.$this->Id,
                '','',
-               $this->GetOption('rows','80'),
-               $this->GetOption('cols','15'));
+               $this->GetOption('cols','80')
+               $this->GetOption('rows','15'),
+               );
 	//CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $width='80', $cols='15',$forcewysiwyg="",$wantedsyntax="")
 
    }
@@ -51,8 +52,8 @@ class fbTextAreaField extends fbFieldBase {
 		 	{
 		 	$ret .= ' non-wysiwyg';
 		 	}
-		 $ret .=  ', '.$mod->Lang('rows',$this->GetOption('rows','80'));
-		 $ret .=  ', '.$mod->Lang('cols',$this->GetOption('cols','15'));
+		 $ret .=  ', '.$mod->Lang('rows',$this->GetOption('rows','15'));
+		 $ret .=  ', '.$mod->Lang('cols',$this->GetOption('cols','80'));
 		 return $ret;
 	}
 
@@ -67,10 +68,10 @@ class fbTextAreaField extends fbFieldBase {
             		'1',$this->GetOption('wysiwyg','0'))),
 			array($mod->Lang('title_textarea_rows'),
             		$mod->CreateInputText($formDescriptor, 'opt_rows',
-            		$this->GetOption('rows','80'),5,5)),
+            		$this->GetOption('rows','15'),5,5)),
 			array($mod->Lang('title_textarea_cols'),
             		$mod->CreateInputText($formDescriptor, 'opt_cols',
-            		$this->GetOption('cols','15'),5,5))
+            		$this->GetOption('cols','80'),5,5))
                )
          );
 	}
