@@ -28,8 +28,8 @@ class fbTextAreaField extends fbFieldBase {
 				   $id, $this->Value,
 				   '_'.$this->Id,'',$id.'_'.$this->Id,
                '','',
-               $this->GetOption('cols','80')
-               $this->GetOption('rows','15'),
+               $this->GetOption('cols','80'),
+               $this->GetOption('rows','15')
                );
 	//CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $width='80', $cols='15',$forcewysiwyg="",$wantedsyntax="")
 
