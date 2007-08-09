@@ -251,6 +251,21 @@ class fbDispositionDirector extends fbDispositionEmailBase {
         }
         return array($ret,$message);
     }
+    
+    function Validate()
+    {
+         $mod = &$this->form_ptr->module_ptr;
+         $result = true;
+         $message = '';
+
+         if ($this->Value == false)
+            {
+            $result = false;
+            $message .=
+$mod->Lang('must_specify_one_destination').'</br>';
+            }
+        return array($result,$message);
+    }
 
 }
 ?>
