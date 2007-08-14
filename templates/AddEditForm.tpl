@@ -10,7 +10,7 @@ function getTemplate()
 		if (templ.length > 0 && confirm('{/literal}{$template_are_you_sure}{literal}'))
 			{
 			var url = '{/literal}{$mod_path}{literal}';
-			var pars = '{/literal}{$mod_param}{literal}&m1_tid='+templ;
+			var pars = '{/literal}{$mod_param}{literal}&m1_fbrp_tid='+templ;
 		
 			var myAjax = new Ajax.Request(
 				url, 

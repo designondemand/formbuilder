@@ -16,14 +16,14 @@ if ($val[0])
   {
     $aefield->PostAdminSubmitCleanup();
     $aefield->Store(true);
-    $params['message']=$params['op'];
+    $params['fbrp_message']=$params['fbrp_op'];
     $this->DoAction('admin_add_edit_form', $id, $params);
   }
  else
    {
      $aefield->LoadField($params);
-     $params['message'] = $val[1];
-     echo $aeform->AddEditField($id, $aefield, (isset($params['dispose_only'])?$params['dispose_only']:0), $returnid, isset($params['message'])?$params['message']:'');
+     $params['fbrp_message'] = $val[1];
+     echo $aeform->AddEditField($id, $aefield, (isset($params['fbrp_dispose_only'])?$params['fbrp_dispose_only']:0), $returnid, isset($params['fbrp_message'])?$params['fbrp_message']:'');
    }
 
 ?>

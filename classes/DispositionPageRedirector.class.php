@@ -50,7 +50,7 @@ class fbDispositionPageRedirector extends fbFieldBase {
 		$delcount = 0;
 		foreach ($params as $thisKey=>$thisVal)
 			{
-			if (substr($thisKey,0,4) == 'del_')
+			if (substr($thisKey,0,9) == 'fbrp_del_')
 				{
 				$this->RemoveOptionElement('destination_page', $thisVal - $delcount);
 				$this->RemoveOptionElement('destination_subject', $thisVal - $delcount);
@@ -104,7 +104,7 @@ class fbDispositionPageRedirector extends fbFieldBase {
 			{
 			$sorted[$subjects] = '1';
 			}
-		return $mod->CreateInputDropdown($id, '_'.$this->Id, $sorted, -1, $this->Value);
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value);
 	}
 
 
@@ -152,11 +152,11 @@ class fbDispositionPageRedirector extends fbFieldBase {
 		for ($i=0;$i<($this->addressCount>1?$this->addressCount:1);$i++)
 			{
 			$dests .=  '<tr><td>';
-            		$dests .= $mod->CreateInputText($formDescriptor, 'opt_destination_subject[]',$this->GetOptionElement('destination_subject',$i),25,128);
+            		$dests .= $mod->CreateInputText($formDescriptor, 'fbrp_opt_destination_subject[]',$this->GetOptionElement('destination_subject',$i),25,128);
             		$dests .= '</td><td>';
-			$dests .=     			$contentops->CreateHierarchyDropdown('',$this->GetOptionElement('destination_page',$i), $id.'opt_destination_page[]');
+			$dests .=     			$contentops->CreateHierarchyDropdown('',$this->GetOptionElement('destination_page',$i), $id.'fbrp_opt_destination_page[]');
 			$dests .= '</td><td>';
-            		$dests .= $mod->CreateInputCheckbox($formDescriptor, 'del_'.$i, $i,-1);
+            		$dests .= $mod->CreateInputCheckbox($formDescriptor, 'fbrp_del_'.$i, $i,-1);
              		$dests .= '</td></tr>';
             		//$mod->CreateInputText($formDescriptor, 'opt_destination_page[]',$this->GetOptionElement('destination_page',$i),25,128).
 
@@ -166,7 +166,7 @@ class fbDispositionPageRedirector extends fbFieldBase {
 		$adv = array();
 		$main = array();
 		array_push($main,array($mod->Lang('title_select_one_message'),
-			$mod->CreateInputText($formDescriptor, 'opt_select_one',
+			$mod->CreateInputText($formDescriptor, 'fbrp_opt_select_one',
 			$this->GetOption('select_one',$mod->Lang('select_one')),25,128)));
 
 		array_push($main,array($mod->Lang('title_director_details'),$dests));

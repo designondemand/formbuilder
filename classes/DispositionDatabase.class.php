@@ -33,7 +33,7 @@ class fbDispositionDatabase extends fbFieldBase {
 			{
 			return '';
 			}
-		return $mod->CreateInputHidden($id, '_'.$this->Id,	
+		return $mod->CreateInputHidden($id, 'fbrp__'.$this->Id,	
 			$this->EncodeReqId($this->Value));
 	}
 

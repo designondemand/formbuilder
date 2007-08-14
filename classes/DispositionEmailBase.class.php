@@ -271,19 +271,19 @@ class fbDispositionEmailBase extends fbFieldBase
 
     return array(
 		 array(
-		       array($mod->Lang('title_email_subject'),$mod->CreateInputText($formDescriptor, 'opt_email_subject',$this->GetOption('email_subject',''),50).'<br/>'.$mod->Lang('canuse_smarty')),
-		       array($mod->Lang('title_email_from_name'),$mod->CreateInputText($formDescriptor, 'opt_email_from_name',$this->GetOption('email_from_name',$mod->Lang('friendlyname')),25,128)),
-		       array($mod->Lang('title_email_from_address'),$mod->CreateInputText($formDescriptor, 'opt_email_from_address',$this->GetOption('email_from_address',''),25,128)),
+		       array($mod->Lang('title_email_subject'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_subject',$this->GetOption('email_subject',''),50).'<br/>'.$mod->Lang('canuse_smarty')),
+		       array($mod->Lang('title_email_from_name'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_from_name',$this->GetOption('email_from_name',$mod->Lang('friendlyname')),25,128)),
+		       array($mod->Lang('title_email_from_address'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_from_address',$this->GetOption('email_from_address',''),25,128)),
 		       ),
 		 array(
 		 		 array($mod->Lang('title_html_email'),
-		 		 	$mod->CreateInputHidden($formDescriptor,'opt_html_email','0').$mod->CreateInputCheckbox($formDescriptor, 'opt_html_email',
+		 		 	$mod->CreateInputHidden($formDescriptor,'fbrp_opt_html_email','0').$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_html_email',
             		'1',$this->GetOption('html_email','0'))),
 		       array($mod->Lang('title_email_template'),
 			     array($mod->CreateTextArea(false, $formDescriptor,
-							($this->GetOption('html_email','0')=='1'?$message:htmlspecialchars($message)),'opt_email_template', 'module_fb_area_wide', '','',0,0),
+							($this->GetOption('html_email','0')=='1'?$message:htmlspecialchars($message)),'fbrp_opt_email_template', 'module_fb_area_wide', '','',0,0),
 							$this->form_ptr->AdminTemplateHelp($formDescriptor))),
-		       array($mod->Lang('title_email_encoding'),$mod->CreateInputText($formDescriptor, 'opt_email_encoding',$this->GetOption('email_encoding','utf-8'),25,128))
+		       array($mod->Lang('title_email_encoding'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_encoding',$this->GetOption('email_encoding','utf-8'),25,128))
 		       )
 		 );
   }

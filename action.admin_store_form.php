@@ -11,13 +11,13 @@ if (! $this->CheckAccess()) exit;
 
         $aeform = new fbForm($this, $params, true);
         $aeform->Store();
-        if ($params['submit'] == $this->Lang('save'))
+        if ($params['fbrp_submit'] == $this->Lang('save'))
             {
-            $params['message'] = $this->Lang('form',$params['form_op']);
+            $params['fbrp_message'] = $this->Lang('form',$params['fbrp_form_op']);
             $this->DoAction('defaultadmin', $id, $params);
             }
         else
         	{
-			echo $aeform->AddEditForm($id, $returnid,$this->Lang('form',$params['form_op']));
+			echo $aeform->AddEditForm($id, $returnid,$this->Lang('form',$params['fbrp_form_op']));
 			}
 ?>

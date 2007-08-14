@@ -70,7 +70,7 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 	function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = &$this->form_ptr->module_ptr;
-		return $mod->CreateInputText($id, '_'.$this->Id,
+		return $mod->CreateInputText($id, 'fbrp__'.$this->Id,
 			htmlspecialchars($this->Value, ENT_QUOTES),25,80);
 	}
 
@@ -85,7 +85,7 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 			list($rid,$code) = $this->form_ptr->StoreResponse();
 					
 			$mod->smarty->assign('confirm_url',$mod->CreateFrontendLink('', $returnid,
-				'validate', '', array('f'=>$this->form_ptr->GetId(),'r'=>$rid,'c'=>$code), '',
+				'validate', '', array('fbrp_f'=>$this->form_ptr->GetId(),'fbrp_r'=>$rid,'fbrp_c'=>$code), '',
 				true,false,'',true));
 			return $this->SendForm($this->GetValue(),$this->GetOption('email_subject'));
 			}
@@ -104,7 +104,7 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 
 	  list($main,$adv) = $this->PrePopulateAdminFormBase($formDescriptor);
 	  array_push($main,array($mod->Lang('redirect_after_approval'),
-				 @$contentops->CreateHierarchyDropdown('',$this->GetOption('redirect_page','0'), $formDescriptor.'opt_redirect_page')));
+				 @$contentops->CreateHierarchyDropdown('',$this->GetOption('redirect_page','0'), $formDescriptor.'fbrp_opt_redirect_page')));
 	  return array('main'=>$main,'adv'=>$adv);
 	}
 

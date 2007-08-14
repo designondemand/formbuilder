@@ -25,7 +25,7 @@ if (!isset($gCms)) exit;
         $this->smarty->assign('title_form_alias',$this->Lang('title_form_alias'));
         $this->smarty->assign('start_configform',$this->CreateFormStart($id,
 			'admin_update_config', $returnid));
-        $this->smarty->assign('message', isset($params['message'])?$params['message']:'');
+        $this->smarty->assign('message', isset($params['fbrp_message'])?$params['fbrp_message']:'');
 
 		$formArray = array();
 		$currow = "row1";
@@ -78,46 +78,46 @@ if (!isset($gCms)) exit;
 			}
 	
 		$this->smarty->assign('title_hide_errors',$this->Lang('title_hide_errors'));		
-		$this->smarty->assign('input_hide_errors',$this->CreateInputCheckbox($id, 'hide_errors', 1, $this->GetPreference('hide_errors','1')). $this->Lang('title_hide_errors_long'));		
+		$this->smarty->assign('input_hide_errors',$this->CreateInputCheckbox($id, 'fbrp_hide_errors', 1, $this->GetPreference('hide_errors','1')). $this->Lang('title_hide_errors_long'));		
 		$this->smarty->assign('title_relaxed_email_regex',$this->Lang('title_relaxed_email_regex'));		
-		$this->smarty->assign('input_relaxed_email_regex',$this->CreateInputCheckbox($id, 'relaxed_email_regex', 1, $this->GetPreference('relaxed_email_regex','0')). $this->Lang('title_relaxed_regex_long'));
+		$this->smarty->assign('input_relaxed_email_regex',$this->CreateInputCheckbox($id, 'fbrp_relaxed_email_regex', 1, $this->GetPreference('relaxed_email_regex','0')). $this->Lang('title_relaxed_regex_long'));
 
 		$this->smarty->assign('title_enable_fastadd',$this->Lang('title_enable_fastadd'));
-		$this->smarty->assign('input_enable_fastadd',$this->CreateInputCheckbox($id, 'enable_fastadd', 1, $this->GetPreference('enable_fastadd','1')). $this->Lang('title_enable_fastadd_long'));		
+		$this->smarty->assign('input_enable_fastadd',$this->CreateInputCheckbox($id, 'fbrp_enable_fastadd', 1, $this->GetPreference('enable_fastadd','1')). $this->Lang('title_enable_fastadd_long'));		
 
 
 		$this->smarty->assign('title_require_fieldnames',$this->Lang('title_require_fieldnames'));		
-		$this->smarty->assign('input_require_fieldnames',$this->CreateInputCheckbox($id, 'require_fieldnames', 1, $this->GetPreference('require_fieldnames','1')). $this->Lang('title_require_fieldnames_long'));		
+		$this->smarty->assign('input_require_fieldnames',$this->CreateInputCheckbox($id, 'fbrp_require_fieldnames', 1, $this->GetPreference('require_fieldnames','1')). $this->Lang('title_require_fieldnames_long'));		
 
       $this->smarty->assign('title_unique_fieldnames',$this->Lang('title_unique_fieldnames'));
-		$this->smarty->assign('input_unique_fieldnames',$this->CreateInputCheckbox($id, 'unique_fieldnames', 1, $this->GetPreference('unique_fieldnames','1')). $this->Lang('title_unique_fieldnames_long'));		
+		$this->smarty->assign('input_unique_fieldnames',$this->CreateInputCheckbox($id, 'fbrp_unique_fieldnames', 1, $this->GetPreference('unique_fieldnames','1')). $this->Lang('title_unique_fieldnames_long'));		
 
 		$this->smarty->assign('title_enable_antispam',$this->Lang('title_enable_antispam'));
-		$this->smarty->assign('input_enable_antispam',$this->CreateInputCheckbox($id, 'enable_antispam', 1, $this->GetPreference('enable_antispam','1')). $this->Lang('title_enable_antispam_long'));
+		$this->smarty->assign('input_enable_antispam',$this->CreateInputCheckbox($id, 'fbrp_enable_antispam', 1, $this->GetPreference('enable_antispam','1')). $this->Lang('title_enable_antispam_long'));
 
 $smarty->assign('title_show_fieldids',$this->Lang('title_show_fieldids'));
 $smarty->assign('input_show_fieldids',
-		$this->CreateInputcheckbox($id,'show_fieldids',1,
+		$this->CreateInputcheckbox($id,'fbrp_show_fieldids',1,
 					   $this->GetPreference('show_fieldids','0')). $this->Lang('title_show_fieldids_long'));
 
 
 		$this->smarty->assign('title_show_version',$this->Lang('title_show_version'));
-		$this->smarty->assign('input_show_version',$this->CreateInputCheckbox($id, 'show_version', 1, $this->GetPreference('show_version','1')). $this->Lang('title_show_version_long'));				
-		$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', $this->Lang('save')));
+		$this->smarty->assign('input_show_version',$this->CreateInputCheckbox($id, 'fbrp_show_version', 1, $this->GetPreference('show_version','1')). $this->Lang('title_show_version_long'));				
+		$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'fbrp_submit', $this->Lang('save')));
 		$this->smarty->assign('end_configform',$this->CreateFormEnd());
 
       $this->smarty->assign('start_xmlform',$this->CreateFormStart($id,
 			'importxml', $returnid, 'post','multipart/form-data'));
-		$this->smarty->assign('submitxml', $this->CreateInputSubmit($id, 'submit', $this->Lang('upload')));
+		$this->smarty->assign('submitxml', $this->CreateInputSubmit($id, 'fbrp_submit', $this->Lang('upload')));
 		$this->smarty->assign('end_xmlform',$this->CreateFormEnd());
-      $this->smarty->assign('input_xml_to_upload',$this->CreateInputFile($id, 'xmlfile'));
+      $this->smarty->assign('input_xml_to_upload',$this->CreateInputFile($id, 'fbrp_xmlfile'));
       $this->smarty->assign('title_xml_to_upload',$this->Lang('title_xml_to_upload'));
       $this->smarty->assign('title_xml_upload_formname',$this->Lang('title_xml_upload_formname'));
       $this->smarty->assign('input_xml_upload_formname',
-		      $this->CreateInputText($id,'import_formname','',25));
+		      $this->CreateInputText($id,'fbrp_import_formname','',25));
       $this->smarty->assign('title_xml_upload_formalias',$this->Lang('title_xml_upload_formalias'));
       $this->smarty->assign('input_xml_upload_formalias',
-		      $this->CreateInputText($id,'import_formalias','',25));
+		      $this->CreateInputText($id,'fbrp_import_formalias','',25));
       $smarty->assign('info_leaveempty',$this->Lang('help_leaveempty'));
       $smarty->assign('legend_xml_import',$this->Lang('title_import_legend'));
 

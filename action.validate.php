@@ -7,16 +7,16 @@
   This project's homepage is: http://www.cmsmadesimple.org
 */
 		
-if (!isset($params['f']) || !isset($params['r']) || !isset($params['c']))
+if (!isset($params['fbrp_f']) || !isset($params['fbrp_r']) || !isset($params['fbrp_c']))
 	{
 	echo $this->Lang('validation_param_error');
 	}
-$params['response_id']=$params['r'];
-$params['form_id']=$params['f'];
-$params['user_form_validate']=true;
+$params['response_id']=$params['fbrp_r'];
+$params['form_id']=$params['fbrp_f'];
+$params['fbrp_user_form_validate']=true;
 $aeform = new fbForm($this, $params, true);
 
-if (!$aeform->CheckResponse($params['f'], $params['r'], $params['c']))
+if (!$aeform->CheckResponse($params['fbrp_f'], $params['fbrp_r'], $params['fbrp_c']))
 	{
 	echo $this->Lang('validation_response_error');
 	}
@@ -32,7 +32,7 @@ for($i=0;$i<count($fields);$i++)
 	}
 if ($confirmationField != -1)
 	{
-	$fields[$confirmationField]->ApproveToGo($params['r']);
+	$fields[$confirmationField]->ApproveToGo($params['fbrp_r']);
 	$results = $aeform->Dispose($returnid);
 	if ($results[0] == true)
 		{

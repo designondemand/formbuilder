@@ -24,7 +24,7 @@ foreach ($aeform->GetFields() as $thisField)
 
 $this->smarty->assign('start_form',$this->CreateFormStart($id,
 			'admin_reorder_store', $returnid, 'post'));
-$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', $this->Lang('reorder'),'onclick="return send_order_var()"'));
+$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'fbrp_submit', $this->Lang('reorder'),'onclick="return send_order_var()"'));
 $this->smarty->assign('end_form',$this->CreateFormEnd());
 $this->smarty->assign('id',$id);
 $this->smarty->assign('fb_hidden',$this->CreateInputHidden($id,'form_id',$params['form_id']));

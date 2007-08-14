@@ -45,20 +45,20 @@ class fbTextFieldExpandable extends fbFieldBase {
 	      }
       foreach ($params as $pKey=>$pVal)
          {
-         if (substr($pKey,0,4) == 'FeX_')
+         if (substr($pKey,0,9) == 'fbrp_FeX_')
             {
             $pts = explode('_',$pKey);
-            if ($pts[1] == $this->Id)
+            if ($pts[2] == $this->Id)
                {
                // expand
                $this->Value[$vals]='';
                $vals++;
                }
             }
-         else if (substr($pKey,0,4) == 'FeD_')
+         else if (substr($pKey,0,9) == 'fbrp_FeD_')
             {
             $pts = explode('_',$pKey);
-            if ($pts[1] == $this->Id)
+            if ($pts[2] == $this->Id)
                {
                // delete row
                if (isset($this->Value[$pts[2]]))
@@ -76,18 +76,18 @@ class fbTextFieldExpandable extends fbFieldBase {
 	    $thisRow = new stdClass();
         $thisRow->name = '';
         $thisRow->title = '';
-	    $thisRow->input = $mod->CreateInputText($id, '_'.$this->Id.'[]',
+	    $thisRow->input = $mod->CreateInputText($id, 'fbrp__'.$this->Id.'[]',
 				       $this->Value[$i],
             $this->GetOption('length')<25?$this->GetOption('length'):25,
             $this->GetOption('length'));
-        $thisRow->op = $mod->CreateInputSubmit($id, 'FeD_'.$this->Id.'_'.$i, $this->GetOption('del_button','X'));
+        $thisRow->op = $mod->CreateInputSubmit($id, 'fbrp_FeD_'.$this->Id.'_'.$i, $this->GetOption('del_button','X'));
         array_push($ret, $thisRow);
         }
       $thisRow = new stdClass();
       $thisRow->name = '';
       $thisRow->title = '';
       $thisRow->input = '';
-      $thisRow->op = $mod->CreateInputSubmit($id, 'FeX_'.$this->Id, $this->GetOption('add_button','+'));
+      $thisRow->op = $mod->CreateInputSubmit($id, 'fbrp_FeX_'.$this->Id, $this->GetOption('add_button','+'));
       array_push($ret, $thisRow);
       return $ret;
 	}
@@ -121,21 +121,21 @@ class fbTextFieldExpandable extends fbFieldBase {
 		$main = array(
 			array($mod->Lang('title_maximum_length'),
 			      $mod->CreateInputText($formDescriptor, 
-						    'opt_length',
+						    'fbrp_opt_length',
 			         $this->GetOption('length','80'),25,25)),
 			array($mod->Lang('title_add_button_text'),
 			      $mod->CreateInputText($formDescriptor,
-						    'opt_add_button',
+						    'fbrp_opt_add_button',
 			         $this->GetOption('add_button','+'),15,25)),
 			array($mod->Lang('title_del_button_text'),
 			      $mod->CreateInputText($formDescriptor,
-						    'opt_del_button',
+						    'fbrp_opt_del_button',
 			         $this->GetOption('del_button','X'),15,25))
 		);
 		$adv = array(
 			array($mod->Lang('title_field_regex'),
 			      array($mod->CreateInputText($formDescriptor, 
-							  'opt_regex',
+							  'fbrp_opt_regex',
 							  $this->GetOption('regex'),25,255),$mod->Lang('title_regex_help')))	
 		);
 		return array('main'=>$main,'adv'=>$adv);

@@ -19,7 +19,7 @@ class fbFileUploadField extends fbFieldBase {
   function GetFieldInput($id, &$params, $returnid)
   {
     $mod = &$this->form_ptr->module_ptr;
-    $txt = $mod->CreateFileUploadInput($id,'_'.$this->Id);
+    $txt = $mod->CreateFileUploadInput($id,'fbrp__'.$this->Id);
     return $txt;
   }
 
@@ -61,16 +61,16 @@ class fbFileUploadField extends fbFieldBase {
     $main = array(
 		  array($mod->Lang('title_maximum_size').':',
 			$mod->CreateInputText($formDescriptor, 
-					      'opt_max_size', $ms, 5, 5).
+					      'fbrp_opt_max_size', $ms, 5, 5).
 			' '.$mod->Lang('title_maximum_size_long')),
 		  array($mod->Lang('title_permitted_extensions').':',
 			$mod->CreateInputText($formDescriptor, 
-					      'opt_permitted_extensions',
+					      'fbrp_opt_permitted_extensions',
 					      $exts,25,80).'<br/>'.
 			$mod->Lang('title_permitted_extensions_long')),
 		  array($mod->Lang('title_show_limitations').':',
 			$mod->CreateInputCheckbox($formDescriptor, 
-						  'opt_show_details', 'true', 
+						  'fbrp_opt_show_details', 'true', 
 						  $show).
 			' '.$mod->Lang('title_show_limitations_long'))
 		 );
@@ -84,15 +84,15 @@ class fbFileUploadField extends fbFieldBase {
 	$adv = array(
 		     array($mod->Lang('title_sendto_uploads').':',
 			   $mod->CreateInputDropdown($formDescriptor,
-						     'opt_sendto_uploads',$sendto_uploads_list,
+						     'fbrp_opt_sendto_uploads',$sendto_uploads_list,
 						     $sendto_uploads)),
 		     array($mod->Lang('title_uploads_category').':',
 			   $mod->CreateInputDropdown($formDescriptor,
-						     'opt_uploads_category',$categorylist,
+						     'fbrp_opt_uploads_category',$categorylist,
 						     $uploads_category)),
 		     array($mod->Lang('title_uploads_destpage').':',
 			   $mod->CreatePageDropdown($formDescriptor,
-						    'opt_uploads_destpage',$uploads_destpage))
+						    'fbrp_opt_uploads_destpage',$uploads_destpage))
 						  
 		     );
       }

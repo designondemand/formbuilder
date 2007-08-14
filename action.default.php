@@ -28,7 +28,7 @@ $fieldExpandOp = false;
 
 foreach($params as $pKey=>$pVal)
    {
-   if (substr($pKey,0,4) == 'FeX_' || substr($pKey,0,4) == 'FeD_')
+   if (substr($pKey,0,9) == 'fbrp_FeX_' || substr($pKey,0,9) == 'fbrp_FeD_')
       {
       // expanding or shrinking a field
       $fieldExpandOp = true;
@@ -37,7 +37,7 @@ foreach($params as $pKey=>$pVal)
 
 if ( !$fieldExpandOp &&
     (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber() > 0) ||
-     (isset($params['done'])&& $params['done']==1)))
+     (isset($params['fbrp_done'])&& $params['fbrp_done']==1)))
     {
     $res = $aeform->Validate();
     
@@ -49,13 +49,13 @@ if ( !$fieldExpandOp &&
 	  
 	  $aeform->PageBack();
       }
-    else if (isset($params['done']) && $params['done']==1)
+    else if (isset($params['fbrp_done']) && $params['fbrp_done']==1)
       {
       $ok = true;
       $captcha = &$this->getModuleInstance('Captcha');
       if ($aeform->GetAttr('use_captcha','0')== '1' && $captcha != null)
          {
-  	      if (! $captcha->CheckCaptcha($params['captcha_phrase']))
+  	      if (! $captcha->CheckCaptcha($params['fbrp_captcha_phrase']))
   	         {
   	         $this->smarty->assign('captcha_error',$aeform->GetAttr('wrong_captcha',$this->Lang('wrong_captcha')));
   	         
@@ -150,7 +150,7 @@ else
    else
       {
       $parms = array();
-      $params['error']='';
+      $params['fbrp_error']='';
       $this->smarty->assign('fb_submission_error',
 	 	$this->Lang('submission_error'));
 

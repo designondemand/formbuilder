@@ -213,14 +213,14 @@ $mod->smarty->assign('fld_'.$others[$i]->GetId().'_array',$replVals);
     $main = array();
     $adv = array();
     array_push($main,array($mod->Lang('title_file_name'),
-			   $mod->CreateInputText($formDescriptor, 'opt_filespec',
+			   $mod->CreateInputText($formDescriptor, 'fbrp_opt_filespec',
 						 $this->GetOption('filespec','form_submissions.txt'),25,128)));
     array_push($adv,array($mod->Lang('title_file_template'),
 			  array($mod->CreateTextArea(false, $formDescriptor,
-						     htmlspecialchars($this->GetOption('file_template','')),'opt_file_template', 'module_fb_area_short', '','',0,0),$ret)));
+						     htmlspecialchars($this->GetOption('file_template','')),'fbrp_opt_file_template', 'module_fb_area_short', '','',0,0),$ret)));
     array_push($adv,array($mod->Lang('title_file_header'),
 			  $mod->CreateTextArea(false, $formDescriptor,
-					       htmlspecialchars($this->GetOption('file_header','')),'opt_file_header', 'module_fb_area_short', '','',0,0)));
+					       htmlspecialchars($this->GetOption('file_header','')),'fbrp_opt_file_header', 'module_fb_area_short', '','',0,0)));
 
     return array('main'=>$main,'adv'=>$adv);
   }

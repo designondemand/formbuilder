@@ -649,7 +649,7 @@ module's installation directory, assuming the web server has permission to write
 </ul>
 
 <h3>Troubleshooting</h3>
-<ol><li> First step is to check you're running CMS 1.0-svn or later.</li>
+<ol><li> First step is to check you're running CMS 1.1 or later.</li>
 <li> Second step is to read and understand the caveat about WYSIWYG editors up in the
 section <em>Adding a Form to a Page</em>.</li>
 <li> If you're missing fields in an email that gets generated, check the disposition field's template, and make sure you're specifying the missing fields. Seems obvious, but it's an easy mistake to make.</li>
@@ -679,6 +679,16 @@ of the license for the full disclaimer.</p>
 
 $lang['changelog'] = "
 <ul>
+<li>Version 0.4
+	<ul>
+		<li>Upped minimum CMS version to 1.1</li>
+		<li>Bug fixes</li>
+		<li>Massive rejiggering of code to work with CMS MS 1.1 parameter sanitizing regime</li>
+		<li>Added field types: \"TextField (Multiple),\" \"Computed Field,\"</li>
+		<li>Added template copying for Form Templates, gave versions of old table-based templates to soothe the raging masses.</li>
+		<li></li>
+	</ul>
+</li>
 <li>Version 0.3
    <ul>
       <li>Added Captcha module support.</li>

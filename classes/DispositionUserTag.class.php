@@ -107,7 +107,7 @@ class fbDispositionUserTag extends  fbFieldBase
       }
     $main[] = array($mod->Lang('title_udt_name'),
 		    $mod->CreateInputDropdown($formDescriptor,
-					      'opt_udtname',$usertaglist,-1,
+					      'fbrp_opt_udtname',$usertaglist,-1,
 					      $this->GetOption('udtname')));
 
     return array('main'=>$main,'adv'=>$adv);

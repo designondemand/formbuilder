@@ -33,12 +33,12 @@ class fbHiddenField extends fbFieldBase
       }
    if ($this->Value !== false)
       {
-      return $mod->CreateInputHidden($id, '_'.$this->Id,
+      return $mod->CreateInputHidden($id, 'fbrp__'.$this->Id,
 				   $this->Value);
 		}
 	else
 	   {
-      return $mod->CreateInputHidden($id, '_'.$this->Id,
+      return $mod->CreateInputHidden($id, 'fbrp__'.$this->Id,
 				   $this->GetOption('value',''));
       }
   }
@@ -48,11 +48,11 @@ class fbHiddenField extends fbFieldBase
 		$mod = &$this->form_ptr->module_ptr;
 		$main = array(
 				array($mod->Lang('title_value'),
-            		$mod->CreateInputText($formDescriptor, 'opt_value',$this->GetOption('value',''),25,128))
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_value',$this->GetOption('value',''),25,128))
 		);
 		$adv = array(
 				array($mod->Lang('title_smarty_eval'),
-				$mod->CreateInputCheckbox($formDescriptor, 'opt_smarty_eval',
+				$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_smarty_eval',
             		'1',$this->GetOption('smarty_eval','0')))
 		);
 		return array('main'=>$main,'adv'=>$adv);

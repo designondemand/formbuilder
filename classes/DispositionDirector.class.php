@@ -50,7 +50,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 		$delcount = 0;
 		foreach ($params as $thisKey=>$thisVal)
 			{
-			if (substr($thisKey,0,4) == 'del_')
+			if (substr($thisKey,0,9) == 'fbrp_del_')
 				{
 				$this->RemoveOptionElement('destination_address', $thisVal - $delcount);
 				$this->RemoveOptionElement('destination_subject', $thisVal - $delcount);
@@ -104,7 +104,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 			{
 			$sorted[$subjects] = '1';
 			}
-		return $mod->CreateInputDropdown($id, '_'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'"');
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'"');
 	}
 
 
@@ -149,17 +149,17 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 		for ($i=0;$i<($this->addressCount>1?$this->addressCount:1);$i++)
 			{
 			$dests .=  '<tr><td>'.
-            		$mod->CreateInputText($formDescriptor, 'opt_destination_subject[]',$this->GetOptionElement('destination_subject',$i),25,128).
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_destination_subject[]',$this->GetOptionElement('destination_subject',$i),25,128).
             		'</td><td>'.
-            		$mod->CreateInputText($formDescriptor, 'opt_destination_address[]',$this->GetOptionElement('destination_address',$i),25,128).
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_destination_address[]',$this->GetOptionElement('destination_address',$i),25,128).
             		'</td><td>'.
-            		$mod->CreateInputCheckbox($formDescriptor, 'del_'.$i, $i,-1).
+            		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_del_'.$i, $i,-1).
              		'</td></tr>';
 			}
 		$dests .= '</table>';
 		list($main,$adv) = $this->PrePopulateAdminFormBase($formDescriptor);
 		array_push($main,array($mod->Lang('title_select_one_message'),
-			$mod->CreateInputText($formDescriptor, 'opt_select_one',
+			$mod->CreateInputText($formDescriptor, 'fbrp_opt_select_one',
 			$this->GetOption('select_one',$mod->Lang('select_one')),25,128)));
 		array_push($main,array($mod->Lang('title_director_details'),$dests));
 		return array('main'=>$main,'adv'=>$adv);

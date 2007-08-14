@@ -36,7 +36,7 @@ class fbCheckboxField extends fbFieldBase {
 			{
 			$this->Value = 't';
 			}
-		return $mod->CreateInputCheckbox($id, '_'.$this->Id, 't',$this->Value,' id="'.$id.'_'.$this->Id.'"').$label;
+		return $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id, 't',$this->Value,' id="'.$id.'_'.$this->Id.'"').$label;
 	}
 
 	function GetHumanReadableValue()
@@ -86,16 +86,16 @@ class fbCheckboxField extends fbFieldBase {
 		$mod = &$this->form_ptr->module_ptr;
 		$main = array(
 			array($mod->Lang('title_checkbox_label'),
-            		$mod->CreateInputText($formDescriptor, 'opt_label',
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_label',
             		$this->GetOption('label',''),25,255)),
             array($mod->Lang('title_checked_value'),
-            		$mod->CreateInputText($formDescriptor, 'opt_checked_value',
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_checked_value',
             		$this->GetOption('checked_value',$mod->Lang('value_checked')),25,255)),
             array($mod->Lang('title_unchecked_value'),
-            		$mod->CreateInputText($formDescriptor, 'opt_unchecked_value',
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_unchecked_value',
             		$this->GetOption('unchecked_value',$mod->Lang('value_unchecked')),25,255)),
 			array($mod->Lang('title_default_set'),
-				$mod->CreateInputCheckbox($formDescriptor, 'opt_is_checked', '1', $this->GetOption('is_checked','0')))
+				$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_is_checked', '1', $this->GetOption('is_checked','0')))
 				);
 		$adv = array(
 		);

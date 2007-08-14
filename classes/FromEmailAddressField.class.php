@@ -25,7 +25,7 @@ class fbFromEmailAddressField extends fbFieldBase {
 	function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = &$this->form_ptr->module_ptr;
-		return $mod->CreateInputText($id, '_'.$this->Id,
+		return $mod->CreateInputText($id, 'fbrp__'.$this->Id,
 			htmlspecialchars($this->Value, ENT_QUOTES),
            25,128);
 	}

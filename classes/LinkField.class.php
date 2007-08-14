@@ -87,8 +87,8 @@ class fbLinkField extends fbFieldBase {
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		$main = array(
-             array($mod->Lang('title_default_link'),$mod->CreateInputText($formDescriptor, 'opt_default_link',$this->GetOption('default_link',''),25,128)),
-             array($mod->Lang('title_default_link_title'),$mod->CreateInputText($formDescriptor, 'opt_default_link_title',$this->GetOption('default_link_title',''),25,128))
+             array($mod->Lang('title_default_link'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_default_link',$this->GetOption('default_link',''),25,128)),
+             array($mod->Lang('title_default_link_title'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_default_link_title',$this->GetOption('default_link_title',''),25,128))
 		);
 		$adv = array(
 		);

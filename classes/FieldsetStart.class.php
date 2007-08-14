@@ -56,7 +56,7 @@ class fbFieldsetStart extends fbFieldBase {
     $mod = &$this->form_ptr->module_ptr;
     $main = array(
 		  array($mod->Lang('title_legend'),
-            		$mod->CreateInputText($formDescriptor,'opt_legend',
+            		$mod->CreateInputText($formDescriptor,'fbrp_opt_legend',
 					      $this->GetOption('legend',''), 50)));
     $adv = array();
     return array('main'=>$main,'adv'=>$adv);
