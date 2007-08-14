@@ -50,7 +50,7 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 		$delcount = 0;
 		foreach ($params as $thisKey=>$thisVal)
 			{
-			if (substr($thisKey,0,4) == 'del_')
+			if (substr($thisKey,0,9) == 'fbrp_del_')
 				{
 				$this->RemoveOptionElement('destination_address', $thisVal - $delcount);
 				$delcount++;
@@ -131,9 +131,9 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 		for ($i=0;$i<($this->addressCount>1?$this->addressCount:1);$i++)
 			{
 			$dests .= '<tr><td>'.
-            		$mod->CreateInputText($formDescriptor, 'opt_destination_address[]',$this->GetOptionElement('destination_address',$i),25,128).
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_destination_address[]',$this->GetOptionElement('destination_address',$i),25,128).
             		'</td><td>'.
-            		$mod->CreateInputCheckbox($formDescriptor, 'del_'.$i, $i,-1).
+            		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_del_'.$i, $i,-1).
              		'</td></tr>';
 			}
 		$dests .= '</table>';

@@ -9,7 +9,7 @@
 if (!isset($gCms)) exit;
 if (! $this->CheckAccess()) exit;
 
-$order_list = explode(',',$params['order']);
+$order_list = explode(',',$params['fbrp_order']);
 $count = 1;
 
 if (! is_array($order_list))

@@ -14,7 +14,7 @@ if (! $this->CheckAccess()) exit;
         $aefield = $aeform->GetFieldById($params['field_id']);
 		if ($aefield !== false)
 			{
-			$aefield->SetRequired($params['active']=='on'?true:false);
+			$aefield->SetRequired($params['fbrp_active']=='on'?true:false);
 			$aefield->Store();
 			}
 		echo $aeform->AddEditForm($id, $returnid, $this->Lang('field_requirement_updated'));

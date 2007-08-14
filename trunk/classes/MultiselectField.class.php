@@ -49,7 +49,7 @@ class fbMultiselectField extends fbFieldBase {
 		$delcount = 0;
 		foreach ($params as $thisKey=>$thisVal)
 			{
-			if (substr($thisKey,0,4) == 'del_')
+			if (substr($thisKey,0,9) == 'fbrp_del_')
 				{
 				$this->RemoveOptionElement('option_name', $thisVal - $delcount);
 				$this->RemoveOptionElement('option_value', $thisVal - $delcount);
@@ -107,7 +107,7 @@ class fbMultiselectField extends fbFieldBase {
 			{
 			$val = $this->Value;
 			}
-		return $mod->CreateInputSelectList($id, '_'.$this->Id.'[]', $sorted,$val, $this->GetOption('lines','3'),
+		return $mod->CreateInputSelectList($id, 'fbrp__'.$this->Id.'[]', $sorted,$val, $this->GetOption('lines','3'),
          'id="'.$id. '_'.$this->Id.'"');
 	}
 
@@ -152,17 +152,17 @@ class fbMultiselectField extends fbFieldBase {
 		for ($i=0;$i<($this->optionCount>1?$this->optionCount:1);$i++)
 			{
 			$dests .=  '<tr><td>'.
-            		$mod->CreateInputText($formDescriptor, 'opt_option_name[]',$this->GetOptionElement('option_name',$i),25,128).
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_option_name[]',$this->GetOptionElement('option_name',$i),25,128).
             		'</td><td>'.
-            		$mod->CreateInputText($formDescriptor, 'opt_option_value[]',$this->GetOptionElement('option_value',$i),25,128).
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_option_value[]',$this->GetOptionElement('option_value',$i),25,128).
             		'</td><td>'.
-            		$mod->CreateInputCheckbox($formDescriptor, 'del_'.$i, $i,-1).
+            		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_del_'.$i, $i,-1).
              		'</td></tr>';
 			}
 		$dests .= '</table>';
 		$main = array();
 		$adv = array();
-		array_push($main,array($mod->Lang('title_lines_to_show'),$mod->CreateInputText($formDescriptor, 'opt_lines',$this->GetOption('lines','3'),10,10)));
+		array_push($main,array($mod->Lang('title_lines_to_show'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_lines',$this->GetOption('lines','3'),10,10)));
 		array_push($main,array($mod->Lang('title_multiselect_details'),$dests));
 		return array('main'=>$main,'adv'=>$adv);
 	}

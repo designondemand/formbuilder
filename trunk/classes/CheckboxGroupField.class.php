@@ -104,7 +104,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 					$check_val = true;
 					}
 				}
-			$thisBox->input = $mod->CreateInputCheckbox($id, '_'.$this->Id.'[]', $i,
+			$thisBox->input = $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id.'[]', $i,
 				$check_val !== false?$i:'-1',' id="'.$id.'_'.$this->Id.'_'.$i.'"');
 			array_push($fieldDisp, $thisBox);
 			}			
@@ -157,7 +157,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 		$delcount = 0;
 		foreach ($params as $thisKey=>$thisVal)
 			{
-			if (substr($thisKey,0,4) == 'del_')
+			if (substr($thisKey,0,9) == 'fbrp_del_')
 				{
 				$this->RemoveOptionElement('box_name', $thisVal - $delcount);
 				$this->RemoveOptionElement('box_checked', $thisVal - $delcount);
@@ -190,18 +190,18 @@ class fbCheckboxGroupField extends fbFieldBase {
 		for ($i=0;$i<($this->boxCount>1?$this->boxCount:1);$i++)
 			{
 			$boxes .= '<tr><td>'.
-            		$mod->CreateInputText($formDescriptor, 'opt_box_name[]',$this->GetOptionElement('box_name',$i),25,128).
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_box_name[]',$this->GetOptionElement('box_name',$i),25,128).
             		'</td><td>'.
-            		$mod->CreateInputText($formDescriptor, 'opt_box_checked[]',$this->GetOptionElement('box_checked',$i),25,128).
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_box_checked[]',$this->GetOptionElement('box_checked',$i),25,128).
             		'</td><td>'.
-            		$mod->CreateInputText($formDescriptor, 'opt_box_unchecked[]',$this->GetOptionElement('box_unchecked',$i),25,128).
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_box_unchecked[]',$this->GetOptionElement('box_unchecked',$i),25,128).
             		'</td><td>'.            		    
-            		$mod->CreateInputDropdown($formDescriptor, 'opt_box_is_set[]', $yesNo, -1, $this->GetOptionElement('box_is_set',$i)).
+            		$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_box_is_set[]', $yesNo, -1, $this->GetOptionElement('box_is_set',$i)).
             		
             		
             		'</td><td>'.
 //CreateInputCheckbox($id, $name, $value='', $selectedvalue='',
-            		$mod->CreateInputCheckbox($formDescriptor, 'del_'.$i, $i,-1).
+            		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_del_'.$i, $i,-1).
              		'</td></tr>';
 			}
 		$boxes .= '</table>';

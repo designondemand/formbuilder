@@ -97,7 +97,7 @@ class fbRadioGroupField extends fbFieldBase
 		$check_val = true;
 	      }				
 	  }
-	$thisBox->input = '<input type="radio" name="'.$id.'_'.$this->Id.'" value="'.$i.'"';
+	$thisBox->input = '<input type="radio" name="fbrp_'.$id.'_'.$this->Id.'" value="'.$i.'"';
 	if ($check_val)
 	  {
 	    $thisBox->input .= ' checked="checked"';
@@ -132,7 +132,7 @@ class fbRadioGroupField extends fbFieldBase
     $delcount = 0;
     foreach ($params as $thisKey=>$thisVal)
       {
-	if (substr($thisKey,0,4) == 'del_')
+	if (substr($thisKey,0,9) == 'fbrp_del_')
 	  {
 	    $this->RemoveOptionElement('button_name', $thisVal - $delcount);
 	    $this->RemoveOptionElement('button_checked', $thisVal - $delcount);
@@ -164,13 +164,13 @@ class fbRadioGroupField extends fbFieldBase
     for ($i=0;$i<($this->optionCount>1?$this->optionCount:1);$i++)
       {
 	$boxes .= '<tr><td>'.
-	  $mod->CreateInputText($formDescriptor, 'opt_button_name[]',$this->GetOptionElement('button_name',$i),25,128).
+	  $mod->CreateInputText($formDescriptor, 'fbrp_opt_button_name[]',$this->GetOptionElement('button_name',$i),25,128).
 	  '</td><td>'.
-	  $mod->CreateInputText($formDescriptor, 'opt_button_checked[]',$this->GetOptionElement('button_checked',$i),25,128).
+	  $mod->CreateInputText($formDescriptor, 'fbrp_opt_button_checked[]',$this->GetOptionElement('button_checked',$i),25,128).
 	  '</td><td>'.
-	  $mod->CreateInputDropdown($formDescriptor, 'opt_button_is_set[]', $yesNo, -1, $this->GetOptionElement('button_is_set',$i)).
+	  $mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_button_is_set[]', $yesNo, -1, $this->GetOptionElement('button_is_set',$i)).
 	  '</td><td>'.
-	  $mod->CreateInputCheckbox($formDescriptor, 'del_'.$i, $i,-1).
+	  $mod->CreateInputCheckbox($formDescriptor, 'fbrp_del_'.$i, $i,-1).
 	  '</td></tr>';
       }
     $boxes .= '</table>';

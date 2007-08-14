@@ -30,7 +30,7 @@ class fbTextField extends fbFieldBase {
 	function GetFieldInput($id, &$params, $returnid)
 	{
 	  $mod = &$this->form_ptr->module_ptr;
-	  return $mod->CreateInputText($id, '_'.$this->Id,
+	  return $mod->CreateInputText($id, 'fbrp__'.$this->Id,
 				       $this->Value,
             $this->GetOption('length')<25?$this->GetOption('length'):25,
             $this->GetOption('length'));
@@ -54,13 +54,13 @@ class fbTextField extends fbFieldBase {
 		$main = array(
 			array($mod->Lang('title_maximum_length'),
 			      $mod->CreateInputText($formDescriptor, 
-						    'opt_length',
+						    'fbrp_opt_length',
 			         $this->GetOption('length','80'),25,25))
 		);
 		$adv = array(
 			array($mod->Lang('title_field_regex'),
 			      array($mod->CreateInputText($formDescriptor, 
-							  'opt_regex',
+							  'fbrp_opt_regex',
 							  $this->GetOption('regex'),25,255),$mod->Lang('title_regex_help')))	
 		);
 		return array('main'=>$main,'adv'=>$adv);

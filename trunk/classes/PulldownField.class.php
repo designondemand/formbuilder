@@ -63,7 +63,7 @@ class fbPulldownField extends fbFieldBase {
 		$delcount = 0;
 		foreach ($params as $thisKey=>$thisVal)
 			{
-			if (substr($thisKey,0,4) == 'del_')
+			if (substr($thisKey,0,9) == 'fbrp_del_')
 				{
 				$this->RemoveOptionElement('option_name', $thisVal - $delcount);
 				$this->RemoveOptionElement('option_value', $thisVal - $delcount);
@@ -118,7 +118,7 @@ class fbPulldownField extends fbFieldBase {
 			$sorted = array_merge(array(' '.$mod->Lang('select_one')=>''),$sorted);
 		}
 		
-		return $mod->CreateInputDropdown($id, '_'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'"');
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'"');
 	}
 
 
@@ -162,21 +162,21 @@ class fbPulldownField extends fbFieldBase {
 		for ($i=0;$i<($this->optionCount>1?$this->optionCount:1);$i++)
 			{
 			$dests .=  '<tr><td>'.
-            		$mod->CreateInputText($formDescriptor, 'opt_option_name[]',$this->GetOptionElement('option_name',$i),25,128).
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_option_name[]',$this->GetOptionElement('option_name',$i),25,128).
             		'</td><td>'.
-            		$mod->CreateInputText($formDescriptor, 'opt_option_value[]',$this->GetOptionElement('option_value',$i),25,128).
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_option_value[]',$this->GetOptionElement('option_value',$i),25,128).
             		'</td><td>'.
-            		$mod->CreateInputCheckbox($formDescriptor, 'del_'.$i, $i,-1).
+            		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_del_'.$i, $i,-1).
              		'</td></tr>';
 			}
 		$dests .= '</table>';
 		$main = array();
 		$adv = array();
 		$main[] = array($mod->Lang('title_select_one_message'),
-						$mod->CreateInputText($formDescriptor, 'opt_select_one',
+						$mod->CreateInputText($formDescriptor, 'fbrp_opt_select_one',
 											  $this->GetOption('select_one',$mod->Lang('select_one')),25,128));
 		$main[] = array($mod->Lang('sort_options'),
-						$mod->CreateInputDropdown($formDescriptor,'opt_sort',
+						$mod->CreateInputDropdown($formDescriptor,'fbrp_opt_sort',
 												  array('Yes'=>1,'No'=>0),-1,
 												  $this->GetOption('sort',0)));
 		array_push($main,array($mod->Lang('title_pulldown_details'),$dests));

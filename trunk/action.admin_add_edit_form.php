@@ -10,6 +10,6 @@ if (!isset($gCms)) exit;
 if (! $this->CheckAccess()) exit;
 
 		$aeform = new fbForm($this, $params, true);
-		echo $aeform->AddEditForm($id, $returnid, isset($params['message'])?$this->ShowMessage($params['message']):'');
+		echo $aeform->AddEditForm($id, $returnid, isset($params['fbrp_message'])?$this->ShowMessage($params['fbrp_message']):'');
 
 ?>

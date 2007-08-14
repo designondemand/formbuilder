@@ -12,6 +12,6 @@ if (! $this->CheckAccess()) exit;
         $aeform = new fbForm($this, $params, true);
         $aeform->Delete();
 
-        $params['message'] = $this->Lang('form_deleted');
+        $params['fbrp_message'] = $this->Lang('form_deleted');
         $this->DoAction('defaultadmin', $id, $params);
 ?>

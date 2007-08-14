@@ -11,7 +11,7 @@ if (! $this->CheckAccess()) exit;
 
         $aeform = new fbForm($this, $params, true);
         $srcIndex = $aeform->GetFieldIndexFromId($params['field_id']);
-        if ($params['dir'] == 'up')
+        if ($params['fbrp_dir'] == 'up')
             {
             $destIndex = $srcIndex - 1;
             }

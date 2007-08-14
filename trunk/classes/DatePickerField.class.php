@@ -75,19 +75,19 @@ class fbDatePickerField extends fbFieldBase {
 
       $ret = array();
       $day = new stdClass();
-      $day->input = $mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $Days, -1, $today['mday'], 'id="'.$id. '_'.$this->Id.'_1"');
+      $day->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]', $Days, -1, $today['mday'], 'id="'.$id. '_'.$this->Id.'_1"');
  		$day->title = $mod->Lang('day');
  		$day->name = '<label for="'.$id.'_'.$this->Id.'_1">'.$mod->Lang('day').'</label>';
  		array_push($ret, $day);
 
       $mon = new stdClass();
-      $mon->input = $mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $this->Months, -1, $today['mon'], 'id="'.$id. '_'.$this->Id.'_2"');
+      $mon->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]', $this->Months, -1, $today['mon'], 'id="'.$id. '_'.$this->Id.'_2"');
  		$mon->title = $mod->Lang('mon');
  		$mon->name = '<label for="'.$id.'_'.$this->Id.'_2">'.$mod->Lang('mon').'</label>';
  		array_push($ret, $mon);
 
       $yr = new stdClass();
-      $yr->input = $mod->CreateInputDropdown($id, '_'.$this->Id.'[]', $Year, -1, $today['year'],'id="'.$id. '_'.$this->Id.'_3"');
+      $yr->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]', $Year, -1, $today['year'],'id="'.$id. '_'.$this->Id.'_3"');
       $yr->name = '<label for="'.$id.'_'.$this->Id.'_3">'.$mod->Lang('year').'</label>';
       $yr->title = $mod->Lang('year');
       array_push($ret,$yr);
@@ -136,17 +136,17 @@ class fbDatePickerField extends fbFieldBase {
       $today = getdate();
 		$main = array(
 			array($mod->Lang('title_date_format'),
-            		array($mod->CreateInputText($formDescriptor, 'opt_date_format',
+            		array($mod->CreateInputText($formDescriptor, 'fbrp_opt_date_format',
             		$this->GetOption('date_format','j F Y'),25,25),$mod->Lang('help_date_format'))
 		    ),
 		   array($mod->Lang('title_start_year'),
-            		$mod->CreateInputText($formDescriptor, 'opt_start_year',
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_start_year',
             		    $this->GetOption('start_year',($today['year']-10)),10,10)),
 		   array($mod->Lang('title_end_year'),
-            		$mod->CreateInputText($formDescriptor, 'opt_end_year',
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_end_year',
             		    $this->GetOption('end_year',($today['year']+10)),10,10)),
 		   array($mod->Lang('title_default_year'),
-            		array($mod->CreateInputText($formDescriptor, 'opt_default_year',
+            		array($mod->CreateInputText($formDescriptor, 'fbrp_opt_default_year',
             		    $this->GetOption('default_year','-1'),10,10),$mod->Lang('title_default_year_help'))
          )
       );

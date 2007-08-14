@@ -144,6 +144,23 @@ class FormBuilder extends CMSModule
       return "\n.module_fb_table {font-size: 10px;}\n.module_fb_area_wide {width: 500px;}\n.module_fb_legend{font-size: 9px; margin: 6px; border: 1px solid black;}.module_fb_area_short {width: 500px; height: 100px;}\n.module_fb_link {text-decoration: underline;}\n.module_fb_fieldset {margin-bottom:2em;}\n.odd {background-color: #fff;text-align:left;vertical-alignment: top;}\n.even {background-color: #ddd;text-align:left;vertical-alignment: top;}\n";
     }
 
+	function SetParameters()
+	{
+    	$this->RestrictUnknownParams();
+    	$this->CreateParameter('fbrp_*','null',$this->Lang('formbuilder_params_general'));
+		$this->SetParameterType(CLEAN_REGEXP.'/fbrp_.*/',CLEAN_STRING);
+		$this->CreateParameter('form_id','null',$this->Lang('formbuilder_params_form_id'));
+    	$this->SetParameterType('form_id',CLEAN_INT);
+		$this->CreateParameter('form','null',$this->Lang('formbuilder_params_form_name'));
+    	$this->SetParameterType('form',CLEAN_STRING);
+    	
+		$this->CreateParameter('field_id','null',$this->Lang('formbuilder_params_field_id'));
+    	$this->SetParameterType('field_id',CLEAN_INT);
+
+		$this->CreateParameter('response_id','null',$this->Lang('formbuilder_params_response_id'));
+    	$this->SetParameterType('response_id',CLEAN_INT);
+
+  	}
 
     function DoAction($name,$id,$params,$returnid='')
     {
@@ -422,12 +439,12 @@ class FormBuilder extends CMSModule
         	$populate_names = false;
 			}
 			
-		if (isset($params['sort_field']))
+		if (isset($params['fbrp_sort_field']))
 			{
 			$sf = -1;
 			for($j=0;$j<count($fields);$j++)
 				{
-				if (!strcasecmp($fields[$j]->GetName(),$params['sort_field']))
+				if (!strcasecmp($fields[$j]->GetName(),$params['fbrp_sort_field']))
 					{
 					$sf = $field_list[$fields[$j]->GetId()];
 					}
@@ -438,7 +455,7 @@ class FormBuilder extends CMSModule
 				$values[$j]->sf = $sf;
 				}
 
-			if (isset($params['sort_dir']) && $params['sort_dir'] == 'a')
+			if (isset($params['fbrp_sort_dir']) && $params['fbrp_sort_dir'] == 'a')
 				{
 				usort($values, array("FormBuilder","field_sorter_asc"));
 				}
@@ -467,88 +484,6 @@ class FormBuilder extends CMSModule
 	}
 
 	
-/*	
-	function HandleSubmission(&$params, $targetpage, $side='user', $hideError=true)
-	{
-        if (! isset($params['form_id']) && isset($params['form']))
-            {
-            // get the form by name, not ID
-            $params['form_id'] = $this->GetFormIDFromAlias($params['form']);
-            }
-        $aeform = new fbForm($this,$params,true);
-
-        echo $aeform->RenderFormHeader();
-        $finished = false;
-        if (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber() > 0) ||
-        	(isset($params['done'])&& $params['done']==1))
-            {
-        	$res = $aeform->Validate();
-
-            if ($res[0] === false)
-                {
-                echo $res[1]."\n";
-                $aeform->PageBack();
-                }
-            else if (isset($params['done']) && $params['done']==1)
-            	{
-            	$finished = true;
-            	$results = $aeform->Dispose($returnid);
-            	}
-            }
-
-		if (! $finished)
-			{
-			$parms = array();
-    		$parms['form_name'] = $aeform->GetName();
-    		$parms['form_id'] = $aeform->GetId();
-    		$this->SendEvent('OnFormBuilderFormDisplay',$parms);
-
-        	echo $this->CreateFormStart($id, 'default', $returnid, 'post', 'multipart/form-data');
-        	echo $aeform->RenderForm($id, $params, $returnid);
-        	echo $this->CreateFormEnd();
-        	}
-        else
-        	{
-        	if ($results[0] == true)
-        		{
-				$parms = array();
-    			$parms['form_name'] = $aeform->GetName();
-    			$parms['form_id'] = $aeform->GetId();
-    			$this->SendEvent('OnFormBuilderFormSubmit',$parms);
-
-        		$ret = $aeform->GetAttr('redirect_page','-1');
-        		if ($ret != -1)
-        			{
-        			$this->RedirectContent($ret);
-        			}
-        		}
-        	else
-        		{
-				$parms = array();
-				$params['error']='';
-        		echo $this->Lang('submission_error');
-        		$show = $this->GetPreference('hide_errors',0);
-        		foreach ($results[1] as $thisRes)
-        			{
-					if ($show)
-						{
-        				echo $thisRes . '<br />';
-      				}
-        			$params['error'] .= $thisRes."\n";
-        			}
-    			$parms['form_name'] = $aeform->GetName();
-    			$parms['form_id'] = $aeform->GetId();
-    			$this->SendEvent('OnFormBuilderFormSubmitError',$parms);
-        		}
-        	}
-        echo $aeform->RenderFormFooter();
-
-
-
-	}
-*/
-
-
 	// For a given form, returns an array of response objects
 	function ListResponses($form_id, $sort_order='submitted')
 	{
@@ -673,7 +608,7 @@ class FormBuilder extends CMSModule
 	  }
       }
 
-    return $this->CreateInputDropdown($id,$name,$mypages,-1,$current,$addtext);
+    return $this->CreateInputDropdown($id,'fbrp_'.$name,$mypages,-1,$current,$addtext);
   }
 
 	function SuppressAdminOutput(&$request)

@@ -134,7 +134,7 @@ class fbCountryPickerField extends fbFieldBase {
 		  $this->SetValue($this->GetOption('default',''));
 		  }
 
-		return $mod->CreateInputDropdown($id, '_'.$this->Id, $this->Countries, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'"');
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $this->Countries, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'"');
 	}
 
 	function PrePopulateAdminForm($formDescriptor)
@@ -144,10 +144,10 @@ class fbCountryPickerField extends fbFieldBase {
 
 		$main = array(
 			array($mod->Lang('title_select_default_country'),
-            		$mod->CreateInputDropdown($formDescriptor, 'opt_default',
+            		$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_default',
             		$this->Countries, -1, $this->GetOption('default',''))),
 			array($mod->Lang('title_select_one_message'),
-            		$mod->CreateInputText($formDescriptor, 'opt_select_one',
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_select_one',
             		$this->GetOption('select_one',$mod->Lang('select_one'))))
 		);
 		return array('main'=>$main,array());

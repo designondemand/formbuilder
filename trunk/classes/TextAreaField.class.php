@@ -26,7 +26,7 @@ class fbTextAreaField extends fbFieldBase {
 	   $mod = &$this->form_ptr->module_ptr;
        return $mod->CreateTextArea($this->GetOption('wysiwyg','0') == '1'?true:false,
 				   $id, $this->Value,
-				   '_'.$this->Id,'',$id.'_'.$this->Id,
+				   'fbrp__'.$this->Id,'',$id.'_'.$this->Id,
                '','',
                $this->GetOption('cols','80'),
                $this->GetOption('rows','15')
@@ -64,13 +64,13 @@ class fbTextAreaField extends fbFieldBase {
 		return array(
 			'main'=>array(
          array($mod->Lang('title_use_wysiwyg'),
-            		$mod->CreateInputCheckbox($formDescriptor, 'opt_wysiwyg',
+            		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_wysiwyg',
             		'1',$this->GetOption('wysiwyg','0'))),
 			array($mod->Lang('title_textarea_rows'),
-            		$mod->CreateInputText($formDescriptor, 'opt_rows',
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_rows',
             		$this->GetOption('rows','15'),5,5)),
 			array($mod->Lang('title_textarea_cols'),
-            		$mod->CreateInputText($formDescriptor, 'opt_cols',
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_cols',
             		$this->GetOption('cols','80'),5,5))
                )
          );
