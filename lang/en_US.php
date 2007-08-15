@@ -35,7 +35,7 @@ $lang['field_type_StaticTextField']='-Static Text';
 $lang['field_type_SystemLinkField']='-Static Link';
 $lang['field_type_LinkField']='Link (User-entered)';
 $lang['field_type_HiddenField'] = '-Hidden Field';
-
+$lang['field_type_ComputedField'] = '-Computed Field';
 
 // validation types
 $lang['validation_none']='No Validation';
@@ -274,6 +274,8 @@ $lang['title_textarea_cols'] = 'Columns (note: this may be overridden by CSS)';
 $lang['title_form_main']= 'Main Form Details';
 $lang['help_leaveempty'] = 'This field may be left empty';
 $lang['help_variables_for_template']='Variables For Template';
+$lang['help_variables_for_computation']='Variables Available';
+$lang['help_php_variable_name'] = 'PHP variable';
 $lang['help_submission_date']='Date of Submission';
 $lang['help_server_name']='Your server';
 $lang['help_sub_source_ip']='IP address of person using form';
@@ -315,6 +317,12 @@ $lang['title_reorder_form'] = 'Reorder Fields';
 $lang['title_load_template'] = 'Load template';
 $lang['title_add_button_text'] = 'Add Button text';
 $lang['title_del_button_text'] = 'Delete Button text';
+$lang['title_string_or_number_eval'] = 'Interpret variables as being numbers or strings';
+$lang['title_order']='Interpretation Order';
+$lang['title_order_help']='If more than one Computed Field exists, they will be computed from lowest order number to highest order number';
+$lang['title_compute_value'] = 'Value to compute';
+$lang['title_string'] = 'String';
+$lang['title_numeric'] = 'Numeric';
 
 $lang['default_template'] = 'Default Template';
 $lang['table_left_template'] = 'Table Template, Titles on left';
@@ -328,6 +336,8 @@ $lang['validation_response_error']='Validation Repsonse Error. Please make sure 
 $lang['validation_no_field_error']='Validation Repsonse Error. No email validation field in this form!';
 
 $lang['admindesc']='Add, edit and manage interactive Forms';
+
+$lang['operators_help'] = 'If you use String evaluation, the only operation available is concatenation (+), while if you use Number evaluation you have basic, very simple math (+, -, *, /)'; 
 
 $lang['date_january']='January';
 $lang['date_february']='February';

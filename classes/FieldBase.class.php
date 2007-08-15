@@ -28,6 +28,7 @@ class fbFieldBase {
   var $DisplayInForm;
   var $DisplayInSubmission;
   var $DispositionPermitted;
+  var $IsComputedOnSubmission;
   var $NonRequirableField;
   var $HasAddOp;
   var $HasDeleteOp;
@@ -65,6 +66,7 @@ class fbFieldBase {
     $this->SmartyEval = false;
     $this->labelSubComponents = true;
     $this->sortable = true;
+    $this->IsComputedOnSubmission = false;
 
     if (isset($params['form_id']))
       {
@@ -136,6 +138,18 @@ class fbFieldBase {
   function LabelSubComponents()
   {
     return $this->labelSubComponents;
+  }
+
+  function ComputeOnSubmission()
+  {
+    return $this->IsComputedOnSubmission;
+  }
+
+
+  // override me 
+  function ComputeOrder()
+  {
+  	return 0;
   }
 
   function HasMultipleValues()
