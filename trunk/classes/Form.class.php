@@ -465,13 +465,24 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
   function Dispose($returnid)
   {
     // first, we run all field methods that will modify other fields
+    $computes = array();
     for($i=0;$i<count($this->Fields);$i++)
       {
-	if ($this->Fields[$i]->ModifiesOtherFields())
-	  {
-	    $this->Fields[$i]->ModifyOtherFields();
-	  }
+		if ($this->Fields[$i]->ModifiesOtherFields())
+	  	{
+	    	$this->Fields[$i]->ModifyOtherFields();
+	  	}
+	  if ($this->Fields[$i]->ComputeOnSubmission())
+	  	{
+	  		$computes[$i] = $this->Fields[$i]->ComputeOrder();
+	  	}
       }
+      
+    asort($computes);
+    foreach($computes as $cKey=>$cVal)
+    	{
+    	$thisFields[$cKey]->Compute();
+    	}
 
     $resArray = array();
     $retCode = true;
