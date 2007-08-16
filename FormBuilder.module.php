@@ -159,7 +159,6 @@ class FormBuilder extends CMSModule
 
 		$this->CreateParameter('response_id','null',$this->Lang('formbuilder_params_response_id'));
     	$this->SetParameterType('response_id',CLEAN_INT);
-
   	}
 
     function DoAction($name,$id,$params,$returnid='')

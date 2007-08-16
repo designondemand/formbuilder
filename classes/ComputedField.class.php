@@ -34,8 +34,55 @@ class fbComputedField extends fbFieldBase
     {
         $others = &$this->form_ptr->GetFields();
 
-        $this->Value = 'computed';        
+        $mapId = array();
+
+        for($i=0;$i<count($others);$i++)
+            {
+	        $mapId[$others[$i]->GetId()] = $i;
+            }
+
+        $flds = array();
+        $procstr = $this->GetOption('value','');
+        preg_match_all('/\$fld_(\d+)/', $procstr, $flds);
+        
+        if ($this->GetOption('string_or_number_eval','numeric') == 'numeric')
+            {
+            foreach ($flds[1] as $tF)
+                {
+                if (isset($mapId[$tF]))
+                    {
+                    $ref = $mapId[$tF];
+                    if (is_numeric($others[$ref]->GetValue()))
+                        {
+                        $procstr = str_replace('$fld_'.$tF,
+                            $others[$ref]->GetValue(),$procstr);
+                        }
+                    else
+                        {
+                        $procstr = str_replace('$fld_'.$tF,
+                            '',$procstr);
+                        }
+                    }
+                }
+            // this is vulnerable to an evil form designer, but
+            // not an evil form user
+            eval("\$this->Value=$procstr;");
+            }
+        else
+            {
+            $thisValue = '';
+            foreach ($flds[1] as $tF)
+                {
+                if (isset($mapId[$tF]))
+                    {
+                    $ref = $mapId[$tF];
+                    $this->Value .= $others[$ref]->GetValue().' ';
+                    }
+                }
+            }
+                
     }
+
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
@@ -50,10 +97,13 @@ class fbComputedField extends fbFieldBase
         $others = &$this->form_ptr->GetFields();
         for($i=0;$i<count($others);$i++)
             {
-	        $ret .= '<tr><td class="'.($odd?'odd':'even').
-	            '">$fld_'.$others[$i]->GetId().
-	            '</td><td class="'.($odd?'odd':'even').
-	            '">' .$others[$i]->GetName() . '</td></tr>';
+            if (! $others[$i]->HasMultipleFormComponents())
+                {
+	            $ret .= '<tr><td class="'.($odd?'odd':'even').
+	                '">$fld_'.$others[$i]->GetId().
+	                '</td><td class="'.($odd?'odd':'even').
+	                '">' .$others[$i]->GetName() . '</td></tr>';
+	            }
 	  	    $odd = ! $odd;
 	        }
 	    $ret .= '<tr><td colspan="2">'.$mod->Lang('operators_help') .
