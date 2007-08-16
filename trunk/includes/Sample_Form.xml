@@ -143,7 +143,7 @@
 			<option name="email_from_name"><![CDATA[Form Builder Installation]]></option>
 			<option name="email_from_address"><![CDATA[you@yourhost.com]]></option>
 			<option name="destination_address"><![CDATA[sjg@cmsmodules.com]]></option>
-			<option name="email_template"><![CDATA[<h1>Someone's Testin a FormBuilder Submission!</h1>
+			<option name="email_template"><![CDATA[<h1>Someone's Testing a FormBuilder Submission!</h1>
 <strong>Form Name</strong>: {$sub_form_name}<br />
 <strong>Date of Submission</strong>: {$sub_date}<br />
 <strong>Your server</strong>: {$sub_host}<br />
