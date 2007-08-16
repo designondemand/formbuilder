@@ -328,7 +328,8 @@ class fbFieldBase {
 
   function DisplayInSubmission()
   {
-    return ($this->DisplayInForm && $this->DisplayInSubmission);
+    //return ($this->DisplayInForm && $this->DisplayInSubmission);
+    return $this->DisplayInSubmission;
   }
 
 	

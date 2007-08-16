@@ -263,12 +263,12 @@ class fbForm {
     $jsCode = "<script type=\"text/javascript\">\n
 function populate(formname)
     {
-    var fname = 'ID".$fieldName."';
+    var fname = 'IDfbrp_".$fieldName."';
     formname[fname].value=|TEMPLATE|;
     }
 function populate_html(formname)
     {
-    var fname = 'ID".$fieldName."';
+    var fname = 'IDfbrp_".$fieldName."';
     formname[fname].value=|HTMLTEMPLATE|;
 	 }
 </script>";
@@ -481,7 +481,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
     asort($computes);
     foreach($computes as $cKey=>$cVal)
     	{
-    	$thisFields[$cKey]->Compute();
+    	$this->Fields[$cKey]->Compute();
     	}
 
     $resArray = array();
@@ -1060,7 +1060,7 @@ function unmy_htmlentities($val)
 	
 	$mod->smarty->assign('template_are_you_sure',$mod->Lang('template_are_you_sure'));
 	$mod->smarty->assign('title_load_template',$mod->Lang('title_load_template'));
-	$modLink = $mod->CreateLink($id, 'fbrp_admin_get_template', $returnid, '', array(), '', true);
+	$modLink = $mod->CreateLink($id, 'admin_get_template', $returnid, '', array(), '', true);
 	list($mod_path, $mod_param) = explode('?',$modLink);
 	$mod->smarty->assign('mod_path',$mod_path);
 	$mod->smarty->assign('mod_param',$mod_param);
