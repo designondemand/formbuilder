@@ -130,7 +130,7 @@ if (! $this->CheckAccess()) exit;
    			$aeform = '';
        		if (preg_match('/.xml$/',$filespec) > 0)
        			{
-       			$params['xml_file'] = $path.'/'.$filespec;
+       			$params['fbrp_xml_file'] = $path.'/'.$filespec;
        			$aeform = new fbForm($this, $params, true);
 				$res = $aeform->ImportXML($params);
        			}
