@@ -336,12 +336,11 @@ $lang['table_top_template'] = 'Table Template, Title on top';
 $lang['form_template_name'] = 'Template from %s';
 $lang['template_are_you_sure']='Are you sure you want to overwrite your template with the selected template? (Even if you say OK, you will still need to save the change)';
 $lang['title_bad_function'] = 'Error when computing "%s".';
-
 $lang['no_referrer_info']='No HTTP_REFERER info available (probably due to use of User Email Validation)';
 $lang['validation_param_error']='Validation Parameter Error. Please make sure you copy the URL from your email correctly!';
 $lang['validation_response_error']='Validation Repsonse Error. Please make sure you copy the URL from your email correctly!';
 $lang['validation_no_field_error']='Validation Repsonse Error. No email validation field in this form!';
-
+$lang['upgrade03to04'] = 'Form Template was updated automatically as part of the version 0.3 to version 0.4 upgrade. You may need to make some fixes. If you\'re using the default form, simply replace this template with "default" using the pulldown above.';
 $lang['admindesc']='Add, edit and manage interactive Forms';
 
 $lang['operators_help'] = 'If you use String evaluation, the only operation available is concatenation (+), while if you use Number evaluation you have basic, very simple math (, +, -, *, /, ).'; 
