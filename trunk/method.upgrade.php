@@ -85,13 +85,13 @@ if (! $this->CheckAccess()) exit;
 	              "module_fb_form_attr where name='form_template'";
             $subsql = 'UPDATE '.cms_db_prefix().
 	              "module_fb_form_attr SET value=? where name='form_template' and form_id=?";
-	         $dbresult = $db->Execute($sql);
             $temp_nfh = file_get_contents ( dirname(__FILE__).'/includes/new_form_header.tpl');
             $temp_nff = file_get_contents ( dirname(__FILE__).'/includes/new_form_footer.tpl');
+	         $dbresult = $db->Execute($sql);
 
             while ($dbresult && $row = $dbresult->FetchRow())
                {
-               $fixtempl = $temp_nfh."{*".$this->Lang('upgrade03to04'}."*}\n".$row['value'].$temp_nff;
+               $fixtempl = $temp_nfh."{*".$this->Lang('upgrade03to04')."*}\n".$row['value'].$temp_nff;
 
                $res = $db->Execute($subsql,array($fixtempl,$row['form_id']));
                $this->SetTemplate('fb_'.$row['form_id'],$fixtempl);
@@ -101,6 +101,7 @@ if (! $this->CheckAccess()) exit;
 	              "module_fb_field_opt where name='rows' or name='cols'";
             $rows = array();
             $cols = array();
+	         $dbresult = $db->Execute($sql);
             while ($dbresult && $row = $dbresult->FetchRow())
                {
                if ($row['name'] == 'rows')
