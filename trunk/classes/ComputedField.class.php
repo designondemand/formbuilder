@@ -32,6 +32,7 @@ class fbComputedField extends fbFieldBase
 
     function Compute()
     {
+		$mod = &$this->form_ptr->module_ptr;
         $others = &$this->form_ptr->GetFields();
 
         $mapId = array();
@@ -60,13 +61,26 @@ class fbComputedField extends fbFieldBase
                     else
                         {
                         $procstr = str_replace('$fld_'.$tF,
-                            '',$procstr);
+                            '0',$procstr);
                         }
                     }
                 }
-            // this is vulnerable to an evil form designer, but
-            // not an evil form user
-            eval("\$this->Value=$procstr;");
+            
+            $strToEval = "\$this->Value=$procstr;";
+            // see if we can trap an error
+            // this is all vulnerable to an evil form designer, but
+            // not an evil form user. 
+            ob_start();
+			if (eval('function testcfield'.rand().
+			    '() {'.$strToEval.'}') === FALSE)
+			    {
+			    $this->Value = $mod->Lang('title_bad_function',$procstr);
+			    }
+			else
+			    {
+			    eval($strToEval);
+			    } 
+			ob_end_clean();
             }
         else
             {

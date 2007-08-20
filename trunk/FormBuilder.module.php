@@ -157,6 +157,9 @@ class FormBuilder extends CMSModule
 		$this->CreateParameter('field_id','null',$this->Lang('formbuilder_params_field_id'));
     	$this->SetParameterType('field_id',CLEAN_INT);
 
+		$this->CreateParameter('value_*','null',$this->Lang('formbuilder_params_passed_from_tag'));
+		$this->SetParameterType(CLEAN_REGEXP.'/value_.*/',CLEAN_STRING);
+
 		$this->CreateParameter('response_id','null',$this->Lang('formbuilder_params_response_id'));
     	$this->SetParameterType('response_id',CLEAN_INT);
   	}
