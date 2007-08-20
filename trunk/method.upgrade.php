@@ -78,6 +78,51 @@ if (! $this->CheckAccess()) exit;
 	                    "module_fb_form_attr where name='title_position' or name='form_displaytype'";
             $res = $db->Execute($cleanupsql);
             }
+         case "0.4":
+            {
+            // upgrade the templates so they at least work.
+	         $sql = 'SELECT form_id, value FROM ' . cms_db_prefix().
+	              "module_fb_form_attr where name='form_template'";
+            $subsql = 'UPDATE '.cms_db_prefix().
+	              "module_fb_form_attr SET value=? where name='form_template' and form_id=?";
+	         $dbresult = $db->Execute($sql);
+            $temp_nfh = file_get_contents ( dirname(__FILE__).'/includes/new_form_header.tpl');
+            $temp_nff = file_get_contents ( dirname(__FILE__).'/includes/new_form_footer.tpl');
+
+            while ($dbresult && $row = $dbresult->FetchRow())
+               {
+               $fixtempl = $temp_nfh."{*".$this->Lang('upgrade03to04'}."*}\n".$row['value'].$temp_nff;
+
+               $res = $db->Execute($subsql,array($fixtempl,$row['form_id']));
+               $this->SetTemplate('fb_'.$row['form_id'],$fixtempl);
+               }
+            // fix rows/cols problem for TextAreas
+	         $sql = 'SELECT form_id, field_id, name, value FROM ' . cms_db_prefix().
+	              "module_fb_field_opt where name='rows' or name='cols'";
+            $rows = array();
+            $cols = array();
+            while ($dbresult && $row = $dbresult->FetchRow())
+               {
+               if ($row['name'] == 'rows')
+                  {
+                  $cols[$row['form_id'].'_'.$row['field_id']] = $row['value'];
+                  }
+               else
+                  {
+                  $rows[$row['form_id'].'_'.$row['field_id']] = $row['value'];
+                  }
+               }
+            $sql = 'UPDATE '.cms_db_prefix(). 'module_fb_field_opt set value=? where form_id=? and field_id=? and name=?';
+            foreach ($rows as $key=>$val)
+               {
+               $thisRow = $val;
+               $thisCol = $cols[$key];
+               list($form_id,$field_id) = explode('_',$key);
+               $res = $db->Execute($sql,array($thisRow,$form_id,$field_id,'cols'));
+               $res = $db->Execute($sql,array($thisCol,$form_id,$field_id,'rows'));
+               }
+
+            }
 		}
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('upgraded',$this->GetVersion()));
 
