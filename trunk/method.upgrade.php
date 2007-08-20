@@ -119,8 +119,8 @@ if (! $this->CheckAccess()) exit;
                $thisRow = $val;
                $thisCol = $cols[$key];
                list($form_id,$field_id) = explode('_',$key);
-               $res = $db->Execute($sql,array($thisRow,$form_id,$field_id,'cols'));
-               $res = $db->Execute($sql,array($thisCol,$form_id,$field_id,'rows'));
+               $res = $db->Execute($sql,array($thisRow,$form_id,$field_id,'rows'));
+               $res = $db->Execute($sql,array($thisCol,$form_id,$field_id,'cols'));
                }
 
             }
