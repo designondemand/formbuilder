@@ -30,7 +30,7 @@ function send_order_var(form_desc)
 
 </ul>
 <br />
-{$fb_hidden}<input type="hidden" id="orderpass" name="{$id}order" value="" />
+{$fb_hidden}<input type="hidden" id="orderpass" name="{$id}fbrp_order" value="" />
 {$submit}
 {$end_form}
 
