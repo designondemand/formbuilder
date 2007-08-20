@@ -125,7 +125,7 @@ class fbComputedField extends fbFieldBase
 		
 		$main = array(
 				array($mod->Lang('title_compute_value'),
-            		array($mod->CreateInputText($formDescriptor, 'fbrp_opt_value',$this->GetOption('value',''),25,128),$ret)),
+            		array($mod->CreateInputText($formDescriptor, 'fbrp_opt_value',$this->GetOption('value',''),35,1024),$ret)),
 				array($mod->Lang('title_string_or_number_eval'),
 				$mod->CreateInputRadioGroup($formDescriptor, 'fbrp_opt_string_or_number_eval',
 				    $processType,
