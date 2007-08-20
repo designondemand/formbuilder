@@ -789,9 +789,9 @@ function unmy_htmlentities($val)
 		       )
 		      ) ||
 		    (isset($thisRes['field_id']) &&
-		     isset($params['fbrp_value_'.$thisRes['name']])) ||
+		     isset($params['value_'.$thisRes['name']])) ||
 		    (isset($thisRes['field_id']) &&
-		     isset($params['fbrp_value_fld'.$thisRes['field_id']])) ||
+		     isset($params['value_fld'.$thisRes['field_id']])) ||
 		    (
 		     isset($params['field_id']) && isset($thisRes['field_id']) &&
 		     $params['field_id'] == $thisRes['field_id']

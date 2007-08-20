@@ -928,18 +928,18 @@ class fbFieldBase {
 	  }
 	$this->Options = array_merge($tmpOpts,$this->Options);
 
-	if (isset($params['fbrp_value_'.$this->Name]) &&
-	    (is_array($params['fbrp_value_'.$this->Name]) ||
-	     strlen($params['fbrp_value_'.$this->Name]) > 0))
+	if (isset($params['value_'.$this->Name]) &&
+	    (is_array($params['value_'.$this->Name]) ||
+	     strlen($params['value_'.$this->Name]) > 0))
 	  {
-	    $this->SetValue($params['fbrp_value_'.$this->Name]);
+	    $this->SetValue($params['value_'.$this->Name]);
 	  }
 	
-	if (isset($params['fbrp_value_fld'.$this->Id]) &&
-	    (is_array($params['fbrp_value_fld'.$this->Id]) ||
-	     strlen($params['fbrp_value_fld'.$this->Id]) > 0))
+	if (isset($params['value_fld'.$this->Id]) &&
+	    (is_array($params['value_fld'.$this->Id]) ||
+	     strlen($params['value_fld'.$this->Id]) > 0))
 	  {
-	    $this->SetValue($params['fbrp_value_fld'.$this->Id]);
+	    $this->SetValue($params['value_fld'.$this->Id]);
 	  }
       }
 
