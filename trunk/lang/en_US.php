@@ -478,7 +478,7 @@ something like {cms_module module='FormBuilder' form='sample_form'}</p>
 In theory, you can have multiple forms on a page if you really want to. Be careful when pasting the tag
 into a page's content if you use a WYSIWYG editor such as TinyMCE, FCKEdit, or HTMLArea. These editors may stealthily
 change the quote marks (\") into HTML entities (&amp;quot;), and the forms will not show up. Try using
-single quotes (') or editing the HTML directly.
+single quotes (') or editing the HTML directly.</p>
 
 <h3>Working with Forms</h3>
 <p>By clicking on a Form's name, you enter the Form Edit page. There are several tabs, which are described below:</p>
@@ -501,6 +501,7 @@ single quotes (') or editing the HTML directly.
 <p>If, in the Form Submission tab, you selected 'Display \"Submission Template\", this is where you can create that template. There is a display of which smarty variables are available to you, and a button to generate a sample template.</p>
 <p>If you're a Smarty expert, you can do all manner of creative and powerful things here. If you're not a Smarty expert, you might just want to use the default.
 </p>
+
 <h3>Adding Fields to your Form</h3>
 <p>The types of fields that are currently supported fit into four groups: standard input fields, display control fields, email-specific fields, and form result handling fields (also called Form Dispositions in places):</p>
 <ul>
@@ -545,6 +546,7 @@ group, but is better when there are a large number of options, as you can limit 
 <li>Time Picker. This is a set of pulldowns allowing the user to select a time (using 12 or 24 hour clock).</li>
 <li>File Upload. This is a file upload field.</li>
 <li>Link (User Entered). This creates a double input field for getting a link URL and link title.</li>
+<li>Text Field (Multiple). This field creates one or more text inputs with add and delete buttons, effectively giving the end user a way of creating variable-length lists.</li>
 </ul></li>
 
 <li>Email-specific Inputs
@@ -561,6 +563,7 @@ independently validated. This is good for applications like online surveys.</li>
 <li>-Hidden Field. This allows you to embed a hidden field in your form.</li>
 <li>-Static Text. This allows you to put text or a label in the middle of your form. This is useful for giving additional help text, especially if you're not using a Custom Template to render your form.</li>
 <li>-Static Link. This allows you to put a link to a given page into your form. Optionally, you can have it autopopulate with the page where the form is embedded (useful if you\'re sending results via email).</li>
+<li>-Computed Field. This allows you to embed a computed field in your form. It is not visible to the user until after the form is submitted. It allows you to do simple arithmetic or string concatenation.</li>
 </ul></li>
 
 <li>Form Handling Inputs (Dispositions)
@@ -578,7 +581,22 @@ are they embedded in the HTML.</li>
 <li>*Write Results to Flat File. This takes the form results and writes them into a text file. You may
 select the name of the file, and set its format. These files are written to the \"output\" directory under the
 module's installation directory, assuming the web server has permission to write there.</li>
+<li>*Save Results to File Based on Pulldown. Like the Flat File disposition, except the value of a pull-down determines which file results get written to.</li>
+<li>*Save Results to File(s) Based on Multiple Selections. Like the Flat File disposition, except the value(s) of checkboxes  determines which file(s) results get written to.</li>
 </ul></li></li></ul>
+
+
+<h3>Passing Default Values to Forms</h3>
+<p>Calguy added a nice feature, which is that you can pass default field values to your form via the module tag. This allows you to have
+the same form in multiple places, but with different default values. It may not work for more exotic field types, but for fields that have
+a single value, you can specify like:</p>
+<p>{cms_module module='FormBuilder' form='my_form' value_<i>FIELDNAME</i>='default_value'}</p>
+<p>This will set the field with <i>FIELDNAME</i> to 'default_value'.</p>
+<p>This can be problematic, as sometimes field names are unweildy or contain characters that don't work well with Smarty. So there is an
+alternative like this:</p>
+<p>{cms_module module='FormBuilder' form='my_form' value_fld<i>NUMBER</i>='default_value'}</p>
+<p>That uses field <i>NUMBER</i>, where <i>NUMBER</i> is the internal FormBuilder field id. You might wonder how you know what that id is. Simply go into the FormBuilder configuration tab,
+and check \"Show Field IDs\"</p>
 
 <h3>Email and Flat File Templates</h3>
 <p>Many disposition types allow you to create a template for the email that is generated, or for the way the results are written to a file. If you opt not to create a template, the FormBuilder will use it's own best guess, which may or may not work out to your liking. You can always click on the \"Create Sample Template\" and then customize the results.</p>
@@ -596,6 +614,7 @@ module's installation directory, assuming the web server has permission to write
 <li>Use relaxed email validation. This uses a less restrictive regular expression for validating email; e.g., x@y will be allowed, where typically x@y.tld is required.</li>
 <li>Show Form Builder Version. Displays the version of FormBuilder you're using in a comment when the form is generated. Typically only useful when debugging.</li>
 <li>Enable primitive anti-spam features. When turned on, this allows any given IP address to only generate 10 emails per hour.</li>
+<li>Show Field IDs. When turned on, FormBuilder will display field ids when adding or editing a form.</li>
 </ul>
 <h3>Styling and CSS</h3>
 <p>Paul Noone graciously provides us all with a pretty good standard CSS that you can use for forms:</p>
@@ -699,11 +718,13 @@ $lang['changelog'] = "
 <li>Version 0.4
 	<ul>
 		<li>Upped minimum CMS version to 1.1</li>
-		<li>Bug fixes</li>
+		<li>Numerous Bug fixes; too many to enumerate here</li>
 		<li>Massive rejiggering of code to work with CMS MS 1.1 parameter sanitizing regime</li>
-		<li>Added field types: \"TextField (Multiple),\" \"Computed Field,\"</li>
-		<li>Added template copying for Form Templates, gave versions of old table-based templates to soothe the raging masses.</li>
-		<li></li>
+		<li>Added field types: \"TextField (Multiple)\" and \"Computed Field\"</li>
+		<li>Added dispositions: \"Save Results to File Based on Pulldown\" and \"Save Results to File(s) Based on Multiple Selections\"(Calguy)</li>
+		<li>Added neat-o AJAX-y template-copying for Form Templates, gave versions of old table-based templates to soothe the raging masses.</li>
+		<li>Added ability to pass default values to form elements from module tag using value_FIELDNAME=\"value\" syntax (Calguy)</li>
+		<li>Added option to display field ids in admin (Calguy)</li>
 	</ul>
 </li>
 <li>Version 0.3
