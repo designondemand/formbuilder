@@ -396,6 +396,13 @@ $lang['event_help_OnFormBuilderFormDisplay']='<p>Event triggered when a FormBuil
 <li><em>form_id</em> - The internal form id (int)</li>
 </ul> ';
 
+$lang['formbuilder_params_response_id'] = 'Response ID. Used by FormBrowser';
+$lang['formbuilder_params_passed_from_tag'] = 'Default field values; see module help';
+$lang['formbuilder_params_field_id'] = 'Field ID for internal operations';
+$lang['formbuilder_params_form_name'] = 'Form Name';
+$lang['formbuilder_params_form_id'] = 'Form ID for internal operations';
+$lang['formbuilder_params_general'] = 'General parameters for internal operations';
+
 $lang['template_variable_help'] = "
 <h3>Form Template Variables</h3>
 <p>You can edit it to make your form layout look any way you'd like.
