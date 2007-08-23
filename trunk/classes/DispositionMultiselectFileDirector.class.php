@@ -109,7 +109,7 @@ function populate_header(formname)
 	$ctrl->title = $displaynames[$i];
 	$ctrl->input = $mod->CreateInputCheckbox($id,
 						 'fbrp__'.$this->Id.'[]', 
-						 $i,'-1',
+						 $i+1,'-1',
 						 sprintf(' id="%s_%s_%s"',
 							 $id, $this->Id,$i));
 	$fields[] = $ctrl;
@@ -194,6 +194,8 @@ function populate_header(formname)
 	// I dunno why it's empty sometimes, but...
 	if( empty($idx) ) continue;
 
+	$idx--;
+
 	// get the filename
 	$filespec = $dir.
 	  preg_replace("/[^\w\d\.]|\.\./", "_", 
@@ -211,6 +213,7 @@ function populate_header(formname)
 	    $newline .= "\n";
 	  }	
 
+	echo "DEBUG: filespec = $filespec<br/>";
 	$f2 = fopen($filespec,"a");
 	fwrite($f2,$newline);
 	fclose($f2); 
