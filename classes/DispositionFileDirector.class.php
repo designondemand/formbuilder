@@ -34,7 +34,7 @@ class fbDispositionFileDirector extends fbFieldBase
     $this->sampleTemplateCode = "<script type=\"text/javascript\">\n
 function populate_file(formname)
     {
-    var fname = 'IDopt_file_template';
+    var fname = 'IDfbrp_opt_file_template';
     formname[fname].value=TEMPLATE;
     }
 </script>
@@ -42,7 +42,7 @@ function populate_file(formname)
     $this->sampleHeader = "<script type=\"text/javascript\">\n
 function populate_header(formname)
     {
-      var fname = 'IDopt_file_header';
+      var fname = 'IDfbrp_opt_file_header';
       formname[fname].value=TEMPLATE;
     }
 </script>
