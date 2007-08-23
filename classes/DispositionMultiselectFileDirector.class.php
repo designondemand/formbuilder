@@ -25,6 +25,7 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
     $this->Type = 'DispositionMultiselectFileDirector';
     $this->IsDisposition = true;
     $this->DisplayInForm = true;
+    $this->DisplayInSubmission = false;
     $this->HasAddOp = true;
     $this->HasDeleteOp = true;
     $this->hasMultipleFormComponents = true;
@@ -213,7 +214,6 @@ function populate_header(formname)
 	    $newline .= "\n";
 	  }	
 
-	echo "DEBUG: filespec = $filespec<br/>";
 	$f2 = fopen($filespec,"a");
 	fwrite($f2,$newline);
 	fclose($f2); 
