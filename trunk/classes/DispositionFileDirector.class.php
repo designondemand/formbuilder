@@ -24,6 +24,7 @@ class fbDispositionFileDirector extends fbFieldBase
     $mod = &$form_ptr->module_ptr;
     $this->Type = 'DispositionFileDirector';
     $this->IsDisposition = true;
+    $this->DisplayInSubmission = false;
     $this->DisplayInForm = true;
     $this->HasAddOp = true;
     $this->HasDeleteOp = true;
