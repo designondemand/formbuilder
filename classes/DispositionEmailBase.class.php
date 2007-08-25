@@ -167,7 +167,6 @@ class fbDispositionEmailBase extends fbFieldBase
 	    if( isset( $_FILES[$_id] ) && $_FILES[$_id]['size'] > 0 )
 	      {
 		$thisFile =& $_FILES[$_id];
-
 		if( $field->GetOption('sendto_uploads') )
 		  {
 		    // we have a file we can send to the uploads

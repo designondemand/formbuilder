@@ -23,15 +23,14 @@ class fbFileUploadField extends fbFieldBase {
     return $txt;
   }
 
-
   function Load($id, &$params, $loadDeep=false)
   {
     $mod = &$this->form_ptr->module_ptr;
     parent::Load($id,$params,$loadDeep);
-    if( isset( $_FILES ) && isset( $_FILES[$mod->module_id.'_'.$this->Id] ) )
+    if( isset( $_FILES ) && isset( $_FILES[$mod->module_id.'fbrp__'.$this->Id] ) )
       {
 	// Okay, a file was uploaded
-	$this->SetValue($mod->module_id.'_'.$this->Id);
+	$this->SetValue($mod->module_id.'fbrp__'.$this->Id);
       }
   }
 
