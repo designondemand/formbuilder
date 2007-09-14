@@ -7,7 +7,6 @@
   This project's homepage is: http://www.cmsmadesimple.org
 */
 if (!isset($gCms)) exit;
-if (! $this->CheckAccess()) exit;
 
 		$db =& $gCms->GetDb();
 		$dict = NewDataDictionary($db);
