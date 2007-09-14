@@ -82,7 +82,7 @@ class fbRadioGroupField extends fbFieldBase
 	$thisBox = new stdClass();
 	if (strlen($names[$i]) > 0)
 	  {
-	    $thisBox->name = '<label for="'.$id.'_'.$this->Id.'_'.$i.'">'.$names[$i].'</label>';
+	    $thisBox->name = '<label for="'.$id.'fbrp__'.$this->Id.'_'.$i.'">'.$names[$i].'</label>';
 	    $thisBox->title = $names[$i];
 	  }
 	$check_val = false;
@@ -97,12 +97,12 @@ class fbRadioGroupField extends fbFieldBase
 		$check_val = true;
 	      }				
 	  }
-	$thisBox->input = '<input type="radio" name="fbrp_'.$id.'_'.$this->Id.'" value="'.$i.'"';
+	$thisBox->input = '<input type="radio" name="'.$id.'fbrp__'.$this->Id.'" value="'.$i.'"';
 	if ($check_val)
 	  {
 	    $thisBox->input .= ' checked="checked"';
 	  }
-	$thisBox->input .= ' id="'.$id. '_'.$this->Id.'_'.$i.'" />';
+	$thisBox->input .= ' id="'.$id. 'fbrp__'.$this->Id.'_'.$i.'" />';
 	array_push($fieldDisp, $thisBox);
       }			
     return $fieldDisp;
@@ -113,11 +113,11 @@ class fbRadioGroupField extends fbFieldBase
     $mod = &$this->form_ptr->module_ptr;
     if ($this->HasValue())
       {
-	return $this->GetOptionElement('button_checked',$this->Value);
+	   return $this->GetOptionElement('button_checked',$this->Value);
       }
     else
       {
-	return $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
+	   return $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
       }	
   }
 
@@ -154,7 +154,7 @@ class fbRadioGroupField extends fbFieldBase
 	$this->optionCount += $this->optionAdd;
 	$this->optionAdd = 0;
       }
-    $boxes = '<table class="module_fb_table"><tr><th>'.$mod->Lang('title_checkbox_label').'</th><th>'.
+    $boxes = '<table class="module_fb_table"><tr><th>'.$mod->Lang('title_radio_label').'</th><th>'.
       $mod->Lang('title_checked_value').'</th><th>'.
       $mod->Lang('title_default_set').'</th><th>'.
       $mod->Lang('title_delete').
