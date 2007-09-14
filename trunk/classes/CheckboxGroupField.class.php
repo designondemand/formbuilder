@@ -89,7 +89,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 			$thisBox = new stdClass();
 			if (strlen($names[$i]) > 0)
 				{
-				$thisBox->name = '<label for="'.$id.'_'.$this->Id.'_'.$i.'">'.$names[$i].'</label>';
+				$thisBox->name = '<label for="'.$id.'fbrp__'.$this->Id.'_'.$i.'">'.$names[$i].'</label>';
 				$thisBox->title = $names[$i];
 				}
 			$check_val = false;
@@ -105,7 +105,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 					}
 				}
 			$thisBox->input = $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id.'[]', $i,
-				$check_val !== false?$i:'-1',' id="'.$id.'_'.$this->Id.'_'.$i.'"');
+				$check_val !== false?$i:'-1',' id="'.$id.'fbrp__'.$this->Id.'_'.$i.'"');
 			array_push($fieldDisp, $thisBox);
 			}			
 		return $fieldDisp;

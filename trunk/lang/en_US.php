@@ -144,7 +144,7 @@ $lang['tab_templatelayout'] = 'Form Template';
 $lang['tab_submissiontemplate'] = 'Submission Template';
 
 
-$lang['canuse_smarty'] = '<em>Smarty variables are valid in this field.<em>';
+$lang['canuse_smarty'] = '<em>Smarty variables are valid in this field.</em>';
 $lang['add_options'] = 'Add More Options';
 $lang['delete_options'] = 'Delete Marked Options';
 $lang['add_checkboxes'] = 'Add More Checkboxes';
@@ -168,6 +168,7 @@ $lang['title_sendto_uploads'] = 'Send this file to the uploads module';
 $lang['title_legend'] = 'Legend';
 $lang['title_maximum_length']='Maximum Length';
 $lang['title_checkbox_label']='Checkbox label';
+$lang['title_radio_label']='Radio Button label';
 $lang['title_checked_value']='Value when checked';
 $lang['title_unchecked_value']='Value when not checked.';
 $lang['title_checkbox_details']='Checkbox Group Details';
@@ -722,6 +723,7 @@ of the license for the full disclaimer.</p>
 
 $lang['changelog'] = "
 <ul>
+<li>Version 0.4.1. Bugfixes for File Disposition Types.</li>
 <li>Version 0.4
 	<ul>
 		<li>Upped minimum CMS version to 1.1</li>

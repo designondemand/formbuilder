@@ -106,7 +106,7 @@ class FormBuilder extends CMSModule
 
 	function GetVersion()
 	{
-		return '0.4';
+		return '0.4.1';
 	}
 
 	function GetAuthor()
