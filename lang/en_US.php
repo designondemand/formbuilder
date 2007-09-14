@@ -723,6 +723,7 @@ of the license for the full disclaimer.</p>
 
 $lang['changelog'] = "
 <ul>
+<li>Version 0.4.2. 14 Sept 07. Bugfixes for XML export, RadioButton Group submission, and HTML labels.</li>
 <li>Version 0.4.1. Bugfixes for File Disposition Types.</li>
 <li>Version 0.4
 	<ul>
