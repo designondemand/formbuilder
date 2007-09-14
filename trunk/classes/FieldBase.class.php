@@ -720,7 +720,7 @@ class fbFieldBase {
   {
 	$xmlstr = "\t<field id=\"".$this->Id."\"\n";
 	$xmlstr .= "\t\ttype=\"".$this->Type."\"\n";
-	$xmlstr .= "\t\tname=\"".$this->Name."\"\n";
+	$xmlstr .= "\t\tname=\"".htmlspecialchars($this->Name)."\"\n";
 	$xmlstr .= "\t\tvalidation_type=\"".$this->ValidationType."\"\n";
 	$xmlstr .= "\t\torder_by=\"".$this->OrderBy."\"\n";
 	$xmlstr .= "\t\trequired=\"".$this->Required."\"\n";

@@ -851,6 +851,7 @@ function unmy_htmlentities($val)
 			unset($stack[count($stack) - 1]);
 			}
 		}
+
 	if (!isset($elements[0]) || !isset($elements[0]) || !isset($elements[0]['attributes']))
 		{
 		//parsing failed, or invalid file.
@@ -1221,7 +1222,7 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 		$oneset->down = '&nbsp;';
 	      }
 	    $oneset->editlink = $mod->CreateLink($id, 'admin_add_edit_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/edit.gif',$mod->Lang('edit'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
-	    $oneset->deletelink = $mod->CreateLink($id, 'admin_delete_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif',$mod->Lang('delete'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),$mod->Lang('are_you_sure_delete_field',$thisField->GetName()));
+	    $oneset->deletelink = $mod->CreateLink($id, 'admin_delete_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif',$mod->Lang('delete'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),$mod->Lang('are_you_sure_delete_field',htmlspecialchars($thisField->GetName())));
 	    ($currow == "row1"?$currow="row2":$currow="row1");
 	    $count++;
 	    if ($thisField->GetOrder() >= $maxOrder)
@@ -1809,7 +1810,7 @@ function fast_add(field_type)
   {
 	$xmlstr = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 	$xmlstr .= "<form id=\"".$this->Id."\"\n";
-	$xmlstr .= "\tname=\"".$this->Name."\"\n";
+	$xmlstr .= "\tname=\"".htmlspecialchars($this->Name)."\"\n";
 	$xmlstr .= "\talias=\"".$this->Alias."\">\n";
    foreach ($this->Attrs as $thisAttrKey=>$thisAttrValue)
       {
