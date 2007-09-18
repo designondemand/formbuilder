@@ -346,7 +346,7 @@ $mod->smarty->assign('fld_'.$others[$i]->GetId().'_array',$replVals);
 
   function PostPopulateAdminForm(&$mainArray, &$advArray)
   {
-    $this->HiddenDispositionFields($mainArray, $advArray);
+    //$this->HiddenDispositionFields($mainArray, $advArray);
   }
 }
 

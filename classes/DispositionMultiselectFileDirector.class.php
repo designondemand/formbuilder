@@ -359,7 +359,7 @@ function populate_header(formname)
 
   function PostPopulateAdminForm(&$mainArray, &$advArray)
   {
-    $this->HiddenDispositionFields($mainArray, $advArray);
+    //$this->HiddenDispositionFields($mainArray, $advArray);
   }
 }
 
