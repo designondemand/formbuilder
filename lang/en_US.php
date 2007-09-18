@@ -330,6 +330,8 @@ $lang['title_order_help']='If more than one Computed Field exists, they will be 
 $lang['title_compute_value'] = 'Value to compute';
 $lang['title_string'] = 'String';
 $lang['title_numeric'] = 'Numeric';
+$lang['title_inline_form'] = 'Display form inline?';
+$lang['title_inline_form_help'] = 'Inline means any form followup replaces the {cms_module} tag, non-inline replaces the {content} tag.';
 
 $lang['default_template'] = 'Default Template';
 $lang['table_left_template'] = 'Table Template, Titles on left';
