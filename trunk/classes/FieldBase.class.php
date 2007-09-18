@@ -422,8 +422,7 @@ class fbFieldBase {
 	    $validInput = $mod->Lang('automatic');
 	  }
 				
-	// requirable? FIX-ME
-	if (!$this->IsDisposition() && !$this->IsNonRequirableField())
+	if (!$this->IsNonRequirableField())
 	  {
 	    array_push($main, array($mod->Lang('title_field_required'),$mod->CreateInputCheckbox($formDescriptor, 'fbrp_required', 1, $this->IsRequired()).$mod->Lang('title_field_required_long')));
 	  }
