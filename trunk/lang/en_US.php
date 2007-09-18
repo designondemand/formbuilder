@@ -725,6 +725,7 @@ of the license for the full disclaimer.</p>
 
 $lang['changelog'] = "
 <ul>
+<li>Version 0.4.3. 18 Sept 07. Bugfixes for pulldowns using numbers, option to inline form, fixes for table-layouts provided by Ap Muthu, fix for requirability of Dispositions.</li>
 <li>Version 0.4.2. 14 Sept 07. Bugfixes for XML export, RadioButton Group submission, and HTML labels.</li>
 <li>Version 0.4.1. Bugfixes for File Disposition Types.</li>
 <li>Version 0.4
