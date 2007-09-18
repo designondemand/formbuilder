@@ -58,6 +58,10 @@ function replaceTemplate(originalRequest)
 		<p class="pagetext">{$title_form_css_class}:</p>
 		<p class="pageinput">{$input_form_css_class}</p>
 	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">{$title_inline_form}:</p>
+		<p class="pageinput">{$input_inline_form}</p>
+	</div>
 </fieldset>
 {if $adding==0}
 <fieldset><legend>{$title_form_fields}</legend>

@@ -78,7 +78,7 @@ if (! $finished)
    $parms['form_id'] = $aeform->GetId();
    $this->SendEvent('OnFormBuilderFormDisplay',$parms);
 
-   $this->smarty->assign('fb_form_start',$this->CreateFormStart($id, 'default', $returnid, 'post', 'multipart/form-data', false, ''));
+   $this->smarty->assign('fb_form_start',$this->CreateFormStart($id, 'default', $returnid, 'post', 'multipart/form-data', ($aeform->GetAttr('inline','0')== '1'), ''));
 
    $this->smarty->assign('fb_form_end',$this->CreateFormEnd());
    $this->smarty->assign('fb_form_done',0);

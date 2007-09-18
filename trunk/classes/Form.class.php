@@ -1127,6 +1127,8 @@ function unmy_htmlentities($val)
     $mod->smarty->assign('title_submit_response',
 			 $mod->Lang('title_submit_response'));
 
+    $mod->smarty->assign('title_inline_form',
+			 $mod->Lang('title_inline_form'));
 
     $mod->smarty->assign('title_submit_actions',
 			 $mod->Lang('title_submit_actions'));
@@ -1266,6 +1268,11 @@ function fast_add(field_type)
       }
     $mod->smarty->assign('link_notready',"<strong>".$mod->Lang('title_not_ready1')."</strong> ".$mod->Lang('title_not_ready2')." ".$mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_not_ready_link'),array('form_id'=>$this->Id, 'fbrp_order_by'=>$maxOrder,'fbrp_dispose_only'=>1), '', false, false,'class="module_fb_link"')." ".$mod->Lang('title_not_ready3')
 			 );
+
+   
+    $mod->smarty->assign('input_inline_form',$mod->CreateInputHidden($id,'fbrp_forma_inline','0').
+			   $mod->CreateInputCheckbox($id,'fbrp_forma_inline','1',$this->GetAttr('inline','0')).
+			   $mod->Lang('title_inline_form_help'));
 
     $mod->smarty->assign('title_form_submit_button',
 			 $mod->Lang('title_form_submit_button'));
