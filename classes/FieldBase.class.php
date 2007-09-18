@@ -347,7 +347,13 @@ class fbFieldBase {
   {
     $this->Required = ($required?1:0);
   }
-	
+
+  function ToggleRequired()
+  {
+    $this->Required = ($this->Required?0:1);
+  }
+
+
   function GetValidationTypes()
   {
     return $this->ValidationTypes;
