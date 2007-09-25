@@ -417,7 +417,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
 	  {
 	    continue;
 	  }
-	if (! $this->Fields[$i]->IsDisposition() &&
+	if (! $this->Fields[$i]->IsNonRequirableField() && 
 	    $this->Fields[$i]->IsRequired() &&
 	    $this->Fields[$i]->HasValue() == false)
 	  {
@@ -1432,7 +1432,7 @@ function fast_add(field_type)
     $mod->smarty->assign('fb_hidden', $mod->CreateInputHidden($id, 'form_id', $this->Id) . $mod->CreateInputHidden($id, 'field_id', $aefield->GetId()) . $mod->CreateInputHidden($id, 'fbrp_order_by', $aefield->GetOrder()).
 			 $mod->CreateInputHidden($id,'fbrp_set_from_form','1'));
 
-    if (!$aefield->IsDisposition() && !$aefield->IsNonRequirableField())
+    if (/*!$aefield->IsDisposition() && */ !$aefield->IsNonRequirableField())
       {
 	$mod->smarty->assign('requirable',1);
       }
@@ -1565,7 +1565,7 @@ function fast_add(field_type)
     {
       return $this->Fields;
     }
-    
+
   function &GetFieldById($field_id)
     {
       $index = -1;
