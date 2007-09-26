@@ -417,7 +417,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
 	  {
 	    continue;
 	  }
-	if (! $this->Fields[$i]->IsNonRequirableField() && 
+	if (/*! $this->Fields[$i]->IsNonRequirableField() && */
 	    $this->Fields[$i]->IsRequired() &&
 	    $this->Fields[$i]->HasValue() == false)
 	  {
