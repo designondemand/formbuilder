@@ -19,7 +19,6 @@ if (! isset($params['form_id']) && isset($params['form']))
 //debug_display($params);
 $aeform = new fbForm($this,$params,true);
 
-//echo $aeform->RenderFormHeader();
 $this->smarty->assign('fb_form_header', $aeform->RenderFormHeader());
 $this->smarty->assign('fb_form_footer',$aeform->RenderFormFooter());
 
@@ -43,7 +42,6 @@ if ( !$fieldExpandOp &&
     
     if ($res[0] === false)
       {
-	  // echo $res[1]."\n";
 	  $this->smarty->assign('fb_form_validation_errors',$res[1]);
 	  $this->smarty->assign('fb_form_has_validation_errors',1);
 	  
@@ -154,7 +152,6 @@ else
       $this->smarty->assign('fb_submission_error',
 	 	$this->Lang('submission_error'));
 
-      //echo $this->Lang('submission_error');
       $show = $this->GetPreference('hide_errors',0);
       $this->smarty->assign('fb_submission_error_list',$results[1]);
       $this->smarty->assign('fb_show_submission_errors',$show);
