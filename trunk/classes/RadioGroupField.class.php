@@ -88,7 +88,7 @@ class fbRadioGroupField extends fbFieldBase
 	$check_val = false;
 	if ($this->Value !== false)
 	  {
-	    $check_val = $this->FindArrayValue($i);
+	    $check_val = $this->FindArrayValue($i+1);
 	  }
 	else
 	  {
@@ -97,14 +97,14 @@ class fbRadioGroupField extends fbFieldBase
 		$check_val = true;
 	      }				
 	  }
-	$thisBox->input = '<input type="radio" name="'.$id.'fbrp__'.$this->Id.'" value="'.$i.'"';
+	$thisBox->input = '<input type="radio" name="'.$id.'fbrp__'.$this->Id.'" value="'.($i+1).'"';
 	if ($check_val)
 	  {
 	    $thisBox->input .= ' checked="checked"';
 	  }
 	$thisBox->input .= ' id="'.$id. 'fbrp__'.$this->Id.'_'.$i.'" />';
 	array_push($fieldDisp, $thisBox);
-      }			
+      }
     return $fieldDisp;
   }
 
@@ -113,7 +113,7 @@ class fbRadioGroupField extends fbFieldBase
     $mod = &$this->form_ptr->module_ptr;
     if ($this->HasValue())
       {
-	   return $this->GetOptionElement('button_checked',$this->Value);
+	   return $this->GetOptionElement('button_checked',($this->Value - 1));
       }
     else
       {
