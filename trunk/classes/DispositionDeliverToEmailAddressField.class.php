@@ -41,7 +41,7 @@ class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
 
 	function StatusInfo()
 	{
-		return '';
+		return $this->TemplateStatus();
 	}
 
 	function PrePopulateAdminForm($formDescriptor)
@@ -64,17 +64,13 @@ class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
 		$result = true;
 		$message = '';
 		$mod = &$this->form_ptr->module_ptr;
-		switch ($this->ValidationType)
-		  {
-		  	   case 'email':
-                  if ($this->Value !== false &&
-                      ! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $this->Value))
-                    {
-                    $this->validated = false;
-                    $this->validationErrorText = $mod->Lang('please_enter_an_email',$this->Name);
-                    }
-		  	       break;
-		  }
+      if ($this->Value !== false &&
+            ! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $this->Value))
+         {
+         $this->validated = false;
+         $this->validationErrorText = $mod->Lang('please_enter_an_email',$this->Name);
+         }
+
 		return array($this->validated, $this->validationErrorText);
 	}
 }
