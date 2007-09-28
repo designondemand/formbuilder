@@ -1192,7 +1192,7 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 		$oneset->id = $mod->CreateLink($id, 'admin_add_edit_field', '', $thisField->GetId(), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
 	      }
 	    $oneset->type = $thisField->GetDisplayType();
-	    if ($thisField->IsDisposition() ||
+	    if (/*$thisField->IsDisposition() ||*/
 		!$thisField->DisplayInForm() ||
 		$thisField->IsNonRequirableField())
 	      {
