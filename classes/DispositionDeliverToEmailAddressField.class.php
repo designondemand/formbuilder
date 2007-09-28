@@ -35,7 +35,14 @@ class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
 
 	function DisposeForm()
 	{
-		return $this->SendForm($this->Value,$this->GetOption('email_subject'));
+      if ($this->HasValue() != false)
+         {
+		   return $this->SendForm($this->Value,$this->GetOption('email_subject'));
+		   }
+		else
+		   {
+         return array(true,'');
+         }
 	}
 
 
