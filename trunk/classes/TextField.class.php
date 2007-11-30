@@ -19,6 +19,7 @@ class fbTextField extends fbFieldBase {
             $mod->Lang('validation_none')=>'none',
             $mod->Lang('validation_numeric')=>'numeric',
             $mod->Lang('validation_integer')=>'integer',
+            $mod->Lang('validation_usphone')=>'usphone',
             $mod->Lang('validation_email_address')=>'email',
             $mod->Lang('validation_regex_match')=>'regex_match',
             $mod->Lang('validation_regex_nomatch')=>'regex_nomatch'
@@ -99,6 +100,15 @@ class fbTextField extends fbFieldBase {
                     {
                     $this->validated = false;
                     $this->validtionErrorText = $mod->Lang('please_enter_an_email',$this->Name);
+                    }
+		  	       break;
+		  	   case 'usphone':
+                  if ($this->Value !== false &&
+                      ! preg_match('^([0-9][\s\.-]?)?(\(?[0-9]{3}\)?|[0-9]{3})[\s\.-]?([0-9]{3}[\s\.-]?[0-9]{4}|[a-zA-Z0-9]{7})(\s?(x|ext|ext.)\s?[a-zA-Z0-9]+)?$',
+                       $this->Value))
+                    {
+                    $this->validated = false;
+                    $this->validtionErrorText = $mod->Lang('please_enter_a_phone',$this->Name);
                     }
 		  	       break;
 		  	   case 'regex_match':
