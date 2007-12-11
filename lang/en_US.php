@@ -334,6 +334,9 @@ $lang['title_string'] = 'String';
 $lang['title_numeric'] = 'Numeric';
 $lang['title_inline_form'] = 'Display form inline?';
 $lang['title_inline_form_help'] = 'Inline means any form followup replaces the {cms_module} tag, non-inline replaces the {content} tag.';
+$lang['title_field_default_value'] = 'Default value for field';
+$lang['title_clear_default'] = 'Clear default on click?';
+$lang['title_clear_default_help'] = 'Check this to clear the default value when the user clicks this field';
 
 $lang['default_template'] = 'Default Template';
 $lang['table_left_template'] = 'Table Template, Titles on left';
