@@ -32,9 +32,10 @@ class fbTextField extends fbFieldBase {
 	{
 	  $mod = &$this->form_ptr->module_ptr;
 	  return $mod->CreateInputText($id, 'fbrp__'.$this->Id,
-				       $this->Value,
+				    ($this->Value?$this->Value:$this->GetOption('default')),
             $this->GetOption('length')<25?$this->GetOption('length'):25,
-            $this->GetOption('length'));
+            $this->GetOption('length'),
+            ($this->GetOption('clear_default','0')==1?('onclick="if (this.value==\''.$this->GetOption('default').'\') {this.value=\'\';}"'):''));
 	}
 
 	function StatusInfo()
@@ -62,7 +63,15 @@ class fbTextField extends fbFieldBase {
 			array($mod->Lang('title_field_regex'),
 			      array($mod->CreateInputText($formDescriptor, 
 							  'fbrp_opt_regex',
-							  $this->GetOption('regex'),25,255),$mod->Lang('title_regex_help')))	
+							  $this->GetOption('regex'),25,255),$mod->Lang('title_regex_help'))),
+			array($mod->Lang('title_field_default_value'),
+			      $mod->CreateInputText($formDescriptor, 
+							  'fbrp_opt_default',
+							  $this->GetOption('default'),25,255)),
+      array($mod->Lang('title_clear_default'),
+		 		 	array($mod->CreateInputHidden($formDescriptor,'fbrp_opt_clear_default','0').$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_clear_default',
+            		'1',$this->GetOption('clear_default','0')),
+          $mod->Lang('title_clear_default_help')))	
 		);
 		return array('main'=>$main,'adv'=>$adv);
 	}
