@@ -32,7 +32,7 @@
 
 	{* and now the form itself *}
 	{$fb_form_start}
-	{$fb_hidden}
+	<div>{$fb_hidden}</div>
 
     <table{if $css_class != ''} class="{$css_class}"{/if}>
     {if $total_pages gt 1}<tr><td colspan="2">{$title_page_x_of_y}</td></tr>{/if}
