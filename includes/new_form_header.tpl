@@ -31,4 +31,4 @@
 
 	{* and now the form itself *}
 	{$fb_form_start}
-	{$fb_hidden}
+	<div>{$fb_hidden}</div>
