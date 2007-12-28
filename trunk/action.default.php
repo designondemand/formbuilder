@@ -55,7 +55,7 @@ if ( !$fieldExpandOp &&
          {
   	      if (! $captcha->CheckCaptcha($params['fbrp_captcha_phrase']))
   	         {
-  	         $this->smarty->assign('captcha_error',$aeform->GetAttr('wrong_captcha',$this->Lang('wrong_captcha')));
+  	         $this->smarty->assign('captcha_error',$aeform->GetAttr('captcha_wrong',$this->Lang('wrong_captcha')));
   	         
   	         $aeform->PageBack();
             $ok = false;
