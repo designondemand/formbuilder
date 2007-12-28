@@ -1297,7 +1297,7 @@ function fast_add(field_type)
 
     $mod->smarty->assign('input_title_user_captcha_error',
 			 $mod->CreateInputText($id, 'fbrp_forma_captcha_wrong',
-                      $this->GetAttr('title_user_captcha_error',$mod->Lang('wrong_captcha')),35,80));
+                      $this->GetAttr('captcha_wrong',$mod->Lang('wrong_captcha')),35,80));
     $mod->smarty->assign('title_user_captcha_error',$mod->Lang('title_user_captcha_error'));
 
     $mod->smarty->assign('title_form_next_button',
