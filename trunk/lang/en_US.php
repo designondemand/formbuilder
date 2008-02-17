@@ -28,6 +28,7 @@ $lang['field_type_DispositionFile']='*Write Results to Flat File';
 $lang['field_type_DispositionDatabase']='*Store Results in Database';
 $lang['field_type_DispositionUserTag']='*Call A User Defined Tag With the Form Results';
 $lang['field_type_DispositionDeliverToEmailAddressField']='*Email to User-Supplied Email Address';
+$lang['field_type_DispositionEmailSiteAdmin']='*Email to CMS Admin User';
 $lang['field_type_PageBreakField']='-Page Break';
 $lang['field_type_FileUploadField']='File Upload';
 $lang['field_type_FromEmailAddressField']='Email "From Address" Field';
@@ -373,6 +374,8 @@ $lang['uploads_error'] = 'Error committing file to the uploads module: %s';
 $lang['nouploads_error'] = 'Could not find the uploads module';
 $lang['upload_attach_error'] = 'Upload/Attachment error on file %s (tmp_name: %s, of type %s)';
 $lang['submission_error_file_lock'] = 'Error. Unable to obtain lock for file.';
+$lang['unchecked_by_default']='Default: unchecked';
+$lang['checked_by_default']='Default: checked';
 
 $lang['email_default_template'] = "FormBuilder Submission";
 $lang['email_template_not_set'] = '<br/>Email Template not yet set!';      

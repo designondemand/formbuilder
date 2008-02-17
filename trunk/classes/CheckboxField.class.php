@@ -75,10 +75,13 @@ class fbCheckboxField extends fbFieldBase {
 
 	function StatusInfo()
 	{
+		$mod = $this->form_ptr->module_ptr;
+		$ret =  ($this->GetOption('is_checked','0')=='1'?$mod->Lang('checked_by_default'):$mod->Lang('unchecked_by_default'));
 		if (strlen($this->ValidationType)>0)
 		  {
-		  	return array_search($this->ValidationType,$this->ValidationTypes);
+		  	$ret .= ", ".array_search($this->ValidationType,$this->ValidationTypes);
 		  }
+		return $ret;
 	}
 
 	function PrePopulateAdminForm($formDescriptor)
@@ -95,7 +98,7 @@ class fbCheckboxField extends fbFieldBase {
             		$mod->CreateInputText($formDescriptor, 'fbrp_opt_unchecked_value',
             		$this->GetOption('unchecked_value',$mod->Lang('value_unchecked')),25,255)),
 			array($mod->Lang('title_default_set'),
-				$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_is_checked', '1', $this->GetOption('is_checked','0')))
+				$mod->CreateInputHidden($formDescriptor,'fbrp_opt_is_checked','0').$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_is_checked', '1', $this->GetOption('is_checked','0')))
 				);
 		$adv = array(
 		);
