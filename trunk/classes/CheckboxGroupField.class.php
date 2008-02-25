@@ -95,7 +95,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 			$check_val = false;
 			if ($this->Value !== false)
 				{
-				$check_val = $this->FindArrayValue($i);
+				$check_val = $this->FindArrayValue($i-1);
 				}
 			else
 				{
@@ -104,8 +104,9 @@ class fbCheckboxGroupField extends fbFieldBase {
 					$check_val = true;
 					}
 				}
-			$thisBox->input = $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id.'[]', $i,
-				$check_val !== false?$i:'-1',' id="'.$id.'fbrp__'.$this->Id.'_'.$i.'"');
+			$thisBox->input = $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id.'[]', ($i+1),
+				$check_val !== false?($i+1):'-1',' id="'.$id.'fbrp__'.$this->Id.'_'.$i.'"');
+
 			array_push($fieldDisp, $thisBox);
 			}			
 		return $fieldDisp;
@@ -130,17 +131,17 @@ class fbCheckboxGroupField extends fbFieldBase {
 				$unchecked = array($unchecked);
 			}
 		$fieldRet = array();
-		for ($i=0;$i<count($names);$i++)
+		for ($i=1;$i<=count($names);$i++)
 			{
 				if ($this->FindArrayValue($i) === false)
 					{
-						if( isset($unchecked[$i]) && trim($unchecked[$i]) != '' )
-							$fieldRet[] = $unchecked[$i];
+						if( isset($unchecked[$i-1]) && trim($unchecked[$i-1]) != '' )
+							$fieldRet[] = $unchecked[$i-1];
 					}
 				else
 					{
-						if( isset($checked[$i]) && trim($checked[$i]) != '' )
-							$fieldRet[] = $checked[$i];
+						if( isset($checked[$i-1]) && trim($checked[$i-1]) != '' )
+							$fieldRet[] = $checked[$i-1];
 					}
 			}
 		return join($form->GetAttr('list_delimiter',','),$fieldRet);			
