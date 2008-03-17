@@ -43,11 +43,16 @@ if (! $this->CheckAccess()) exit;
 
 		$sqlarray = $dict->DropTableSQL(cms_db_prefix().'module_fb_ip_log');
 		$dict->ExecuteSQLArray($sqlarray);
+		
+		$sqlarray = $dict->DropTableSQL(cms_db_prefix().'module_fb_formbrowser');
+		$dict->ExecuteSQLArray($sqlarray);
+		
 
 		$db->DropSequence(cms_db_prefix().'module_fb_resp_seq');
 		$db->DropSequence(cms_db_prefix().'module_fb_resp_val_seq');
 		$db->DropSequence(cms_db_prefix().'module_fb_resp_attr_seq');
 		$db->DropSequence(cms_db_prefix().'module_fb_ip_log_seq');
+		$db->DropSequence(cms_db_prefix().'module_fb_formbrowser_seq');
 
 		$this->RemovePermission('Modify Forms');
 		

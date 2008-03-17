@@ -251,6 +251,43 @@ class fbCheckboxGroupField extends fbFieldBase {
 			}
 		$this->countBoxes();
 	}
+	
+	function OptionsAsXML()
+	{
+		$names = &$this->GetOptionRef('box_name');
+		if (! is_array($names))
+			{
+				$names = array($names);
+			}		
+		$checked = &$this->GetOptionRef('box_checked');
+		if (! is_array($checked))
+			{
+				$checked = array($checked);
+			}
+		$unchecked = &$this->GetOptionRef('box_unchecked');
+		if (! is_array($unchecked))
+			{
+				$unchecked = array($unchecked);
+			}
+		$xmlstr = "";
+		for ($i=1;$i<=count($names);$i++)
+			{
+			$xmlstr .= "\t\t\t<option>\n";
+			$xmlstr .= "\t\t\t\t<name><![CDATA[".$names[$i-1]."]]></name>\n";
+			$xmlstr .= "\t\t\t\t<checked_value><![CDATA[".$checked[$i-1]."]]></checked_value>\n";
+			$xmlstr .= "\t\t\t\t<unchecked_value><![CDATA[".$unchecked[$i-1]."]]></unchecked_value>\n";
+			$ischecked = "false";
+			if ($this->FindArrayValue($i) !== false)
+				{
+				$ischecked = "true";
+				}
+			
+			$xmlstr .= "\t\t\t\t<checked>$ischecked</checked>\n";
+			$xmlstr .= "\t\t\t</option>\n";
+			}
+
+		return $xmlstr;
+	}
 
 }
 

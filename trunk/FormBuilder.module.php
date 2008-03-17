@@ -44,6 +44,8 @@ class FormBuilder extends CMSModule
 	{
 		global $gCms;
 		$this->CMSModule();
+//error_log("Module Load: ".memory_get_usage());
+		
 		$this->module_ptr = &$this;
 		$this->dbHandle = &$gCms->GetDb();
 		$this->module_id = '';
@@ -52,11 +54,14 @@ class FormBuilder extends CMSModule
 		require_once dirname(__FILE__).'/classes/Form.class.php';
 		require_once dirname(__FILE__).'/classes/FieldBase.class.php';
 		//$this->RegisterModulePlugin();
+//error_log("leaving module instantiation with: ".memory_get_usage());
+		
 	}
 
 
 	function initialize()
 	{
+//error_log("entering initialize with ".memory_get_usage());
 		$dir=opendir(dirname(__FILE__).'/classes');
    		$this->field_types = array();
    		while($filespec=readdir($dir))
@@ -82,6 +87,8 @@ class FormBuilder extends CMSModule
         	}
 		$this->all_validation_types = array();
 		ksort($this->field_types);
+//error_log("leaving initialize with ".memory_get_usage());
+
 	}
 
 	function AllowAutoInstall()
@@ -106,7 +113,7 @@ class FormBuilder extends CMSModule
 
 	function GetVersion()
 	{
-		return '0.4.4';
+		return '0.5';
 	}
 
 	function GetAuthor()

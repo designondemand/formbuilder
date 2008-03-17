@@ -172,7 +172,6 @@ class fbMultiselectField extends fbFieldBase {
 		$mod = &$this->form_ptr->module_ptr;
 		$form = &$this->form_ptr;
 		$vals = &$this->GetOptionRef('option_value');
-		
 		if ($this->HasValue())
 			{
 			$fieldRet = array();
@@ -191,6 +190,37 @@ class fbMultiselectField extends fbFieldBase {
 			return $mod->Lang('unspecified');
 			}	
 	}
+
+	function OptionsAsXML()
+	{
+		$mod = &$this->form_ptr->module_ptr;
+		$form = &$this->form_ptr;
+		$vals = &$this->GetOptionRef('option_value');
+		$xmlstr = "";
+		if (! is_array($this->Value))
+			{
+			$test = array($this->Value);
+			}
+		else
+			{
+			$test = $this->Value;
+			}
+		for ($i=1;$i<=count($vals);$i++)
+			{
+			$xmlstr .= "\t\t\t<option>\n";
+			$xmlstr .= "\t\t\t\t<name><![CDATA[".$this->GetOptionElement('option_name',$i-1)."]]></name>\n";
+			$xmlstr .= "\t\t\t\t<selected_value><![CDATA[".$this->GetOptionElement('option_value',$i-1)."]]></selected_value>\n";
+			$isselected = "false";
+			if (in_array($i-1,$test))
+				{
+				$isselected = "true";
+				}
+			$xmlstr .= "\t\t\t\t<selected>$isselected</selected>\n";
+			$xmlstr .= "\t\t\t</option>\n";	
+			}
+		return $xmlstr;
+	}
+
 	
 }
 ?>

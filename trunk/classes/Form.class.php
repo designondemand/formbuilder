@@ -1,9 +1,9 @@
 <?php
 /* 
-   FormBuilder. Copyright (c) 2005-2007 Samuel Goldstein <sjg@cmsmodules.com>
+   FormBuilder. Copyright (c) 2005-2008 Samuel Goldstein <sjg@cmsmodules.com>
    More info at http://dev.cmsmadesimple.org/projects/formbuilder
    
-   A Module for CMS Made Simple, Copyright (c) 2007 by Ted Kulp (wishy@cmsmadesimple.org)
+   A Module for CMS Made Simple, Copyright (c) 2008 by Ted Kulp (wishy@cmsmadesimple.org)
   This project's homepage is: http://www.cmsmadesimple.org
 */
 
@@ -714,6 +714,8 @@ function unmy_htmlentities($val)
 
   function Load($formId, &$params, $loadDeep=false)
   {
+
+//error_log("entering Form Load with usage ".memory_get_usage());
     $sql = 'SELECT * FROM '.cms_db_prefix().'module_fb_form WHERE form_id=?';
     $rs = $this->module_ptr->dbHandle->Execute($sql, array($formId));
     if($rs && $rs->RecordCount() > 0)
@@ -778,6 +780,8 @@ function unmy_htmlentities($val)
 	  {
 	    foreach($result as $thisRes)
 	      {
+//error_log("Instantiating Field. usage ".memory_get_usage());
+
 		$className = $this->MakeClassName($thisRes['type'], '');
 		// create the field object
 		if (
@@ -1776,7 +1780,8 @@ function fast_add(field_type)
     foreach ($fields as $thisField)
       {
 	// set the response_id to be the attribute of the database disposition
-	if ($thisField->GetFieldType() == 'DispositionDatabase')
+	if (($thisField->GetFieldType() == 'DispositionDatabase')||
+		($thisField->GetFieldType() == 'DispositionFormBrowser'))
 	  {
 	    $thisField->SetValue($response_id);
 	  }
@@ -1808,6 +1813,60 @@ function fast_add(field_type)
     return array($response_id,$secret_code);
   }   
     
+
+  function StoreResponseXML($response_id=-1,$approver='',$sortfield1,$sortfield2,$sortfield3,$sortfield4,$sortfield5)
+  {
+    $db = &$this->module_ptr->dbHandle;
+    $secret_code = '';
+    $newrec = false;
+	$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+	$xml .= "<response form_id=\"".$this->Id."\"\n";
+	foreach($this->Fields as $thisField)
+		{
+			$xml .= $thisField->ExportXML(true);
+		}
+	$xml .= "</response>\n";
+
+    if ($response_id == -1)
+      {
+	  $newrec = true;
+      }
+
+    if ($newrec)
+      {
+		// saving a new response
+		$secret_code = substr(md5(session_id().'_'.time()),0,7);
+		$response_id = $db->GenID(cms_db_prefix(). 'module_fb_formbrowser_seq');
+		$sql = 'INSERT INTO ' . cms_db_prefix().
+	  'module_fb_formbrowser (fbr_id, form_id, submitted, secret_code, index_key_1, index_key_2, index_key_3, index_key_4, index_key_5, response) VALUES (?,?,?,?,?,?,?,?,?,?)';
+		$res = $db->Execute($sql,
+			array($response_id,
+				$this->GetId(),
+				$this->clean_datetime($db->DBTimeStamp(time())),
+				$secret_code,
+				$sortfield1,$sortfield2,$sortfield3,$sortfield4,$sortfield5,
+				$xml
+			));
+      }
+    else if ($approver != '')
+      {
+		$sql = 'UPDATE ' . cms_db_prefix().
+			'module_fb_formrowser set user_approved=? where fbr_id=?';
+		$res = $db->Execute($sql,
+			    array($this->clean_datetime($db->DBTimeStamp(time())),$response_id));
+		audit(-1, (isset($name)?$name:""), $this->module_ptr->Lang('user_approved_submission',array($response_id,$approver)));
+      }
+    if (! $newrec)
+      {
+	  $sql = 'UPDATE ' . cms_db_prefix().
+			'module_fb_formbrowser set index_key_1=?, index_key_2=?, index_key_3=?, index_key_4=?, index_key_5=?, response=? where fbr_id=?';
+	  $res = $db->Execute($sql,
+			    array($sortfield1,$sortfield2,$sortfield3,$sortfield4,$sortfield5,$xml,$response_id));
+      }
+    return array($response_id,$secret_code);
+  }   
+
+
   function clean_datetime($dt)
   {
     return substr($dt,1,strlen($dt)-2);
@@ -1831,6 +1890,58 @@ function fast_add(field_type)
 	return $xmlstr;
   }
   
+  function setFinishedFormSmarty()
+	{
+		$mod = &$this->module_ptr;
+	   
+	    $theFields = &$this->GetFields();
+	    $unspec = $this->GetAttr('unspecified',$mod->Lang('unspecified'));
+
+		$formInfo = array();
+		
+	    for($i=0;$i<count($theFields);$i++)
+	      {
+			$field =& $others[$i];
+			$replVal = '';
+			$replVals = array();
+			if ($field->DisplayInSubmission())
+		  		{
+					$thisFormResult = new stdClass();
+					$thisFormResult->name = $field->getName();
+		    		$replVal = $field->GetHumanReadableValue();
+		    		if ($htmlemail)
+		        		{
+						// allow <BR> as delimiter or in content
+						$replVal = preg_replace('/<br(\s)*(\/)*>/i','|BR|',$replVal);
+	            		$replVal = htmlspecialchars($replVal);
+						$replVal = preg_replace('/\|BR\|/','<br />',$replVal);
+	            		}
+		    		if ($replVal == '')
+		      			{
+						$replVal = $unspec;
+		      			}
+		    		if ($field->HasMultipleValues())
+		        		{
+		        		$replVals = $field->GetValue();
+						$theseReplVals = array();
+				/*		foreach($replVals as $thisReplVal)
+							{
+							$theseReplVals[$]
+							}
+				*/		$thisFormResult->options = $theseReplVals;
+		        		}
+					$thisFormResult->value = $replVal;
+					$formInfo['fld'.$field->GetId()]=$thisFormResult;
+		  		}
+		
+		 	$mod->smarty->assign($this->MakeVar($field->GetName()),$replVal);
+		 	$mod->smarty->assign('fld_'.$field->GetId(),$replVal);
+		 	$mod->smarty->assign($this->MakeVar($field->GetName()).'_array',$replVals);
+		 	$mod->smarty->assign('fld_'.$field->GetId().'_array',$replVals);
+
+	      }
+		//$mod->smarty->assign()
+	}
     
 }
 

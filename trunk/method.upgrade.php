@@ -27,7 +27,6 @@ if (! $this->CheckAccess()) exit;
 					sent_id I KEY,
 					src_ip C(16),
 					sent_time ".CMS_ADODB_DT;
-				debug_display($flds);
 				$sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_fb_ip_log', $flds, $taboptarray);
 				$dict->ExecuteSQLArray($sqlarray);
 
@@ -124,6 +123,30 @@ if (! $this->CheckAccess()) exit;
                }
 
             }
+		case "0.4.1":
+		case "0.4.2":
+		case "0.4.3":
+		case "0.4.4":
+			{
+			$flds = "
+				fbr_id I KEY,
+				form_id I,
+				index_key_1 C(80),
+				index_key_2 C(80),
+				index_key_3 C(80),
+				index_key_4 C(80),
+				index_key_5 C(80),
+				response X,
+				user_approved ".CMS_ADODB_DT.",
+				secret_code C(35),
+				admin_approved ".CMS_ADODB_DT.",
+				submitted ".CMS_ADODB_DT;
+			$sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_fb_formbrowser', $flds, $taboptarray);
+			$dict->ExecuteSQLArray($sqlarray);
+
+			$db->CreateSequence(cms_db_prefix().'module_fb_formbrowser_seq');
+				
+			}
 		}
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('upgraded',$this->GetVersion()));
 

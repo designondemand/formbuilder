@@ -117,7 +117,10 @@ else
             $replVals = array();
             if ($field->DisplayInSubmission())
                {
-               $replVal = htmlspecialchars($field->GetHumanReadableValue());
+ 					$replVal = preg_replace('/<br(\s)*(\/)*>/i','|BR|',$field->GetHumanReadableValue());
+          			$replVal = htmlspecialchars($replVal);
+					$replVal = preg_replace('/\|BR\|/','<br />',$replVal);
+             // $replVal = htmlspecialchars($field->GetHumanReadableValue());
                if ($replVal == '')
                   {
                   $replVal = $unspec;

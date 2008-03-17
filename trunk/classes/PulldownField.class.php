@@ -203,6 +203,26 @@ class fbPulldownField extends fbFieldBase {
 			return $mod->Lang('unspecified');
 			}	
 	}
+
+	function OptionsAsXML()
+	{
+		$vals = &$this->GetOptionRef('option_value');
+		$xmlstr = "";
+		for ($i=1;$i<=count($vals);$i++)
+			{
+			$xmlstr .= "\t\t\t<option>\n";
+			$xmlstr .= "\t\t\t\t<name><![CDATA[".$this->GetOptionElement('option_name',$i-1)."]]></name>\n";
+			$xmlstr .= "\t\t\t\t<selected_value><![CDATA[".$this->GetOptionElement('option_value',$i-1)."]]></selected_value>\n";
+			$isselected = "false";
+			if ($this->Value == $i)
+				{
+				$isselected = "true";
+				}
+			$xmlstr .= "\t\t\t\t<selected>$isselected</selected>\n";
+			$xmlstr .= "\t\t\t</option>\n";	
+			}
+		return $xmlstr;
+	}
 	
 }
 ?>
