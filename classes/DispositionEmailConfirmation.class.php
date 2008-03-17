@@ -55,7 +55,8 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 
 		for($i=0;$i<count($others);$i++)
 			{
-			if ($this->approvedToGo && $others[$i]->GetFieldType() == 'DispositionDatabase')
+			if (($this->approvedToGo && $others[$i]->GetFieldType() == 'DispositionDatabase') ||
+				($this->approvedToGo && $others[$i]->GetFieldType() == 'DispositionFormBrowser'))
 				{
 				$others[$i]->SetApprovalName($this->GetValue());
 				}

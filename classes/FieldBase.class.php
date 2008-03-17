@@ -540,7 +540,7 @@ class fbFieldBase {
   function Validate()
   {
   	$this->validated = true;
-  	$this->validationErrorText = '';
+  	$this->validatedErrorText = '';
     return array($this->validated, $this->validatedErrorText);
   }
 
@@ -730,41 +730,37 @@ class fbFieldBase {
 	$xmlstr .= "\t\torder_by=\"".$this->OrderBy."\"\n";
 	$xmlstr .= "\t\trequired=\"".$this->Required."\"\n";
 	$xmlstr .= "\t\thide_label=\"".$this->HideLabel."\">\n";
-	foreach($this->Options as $name=>$value)
-		{
-		if (is_array($value))
-			{
-			foreach ($value as $thisVal)
-				{
-				$xmlstr .= "\t\t\t<option name=\"$name\"><![CDATA[$thisVal]]></option>\n";
-				}
-			}
-		else
-			{
-			$xmlstr .= "\t\t\t<option name=\"$name\"><![CDATA[$value]]></option>\n";
-			}
-		}
+	$xmlstr .= $this->OptionsAsXML();
 	if ($exportValues)
 		{
-		foreach($this->Value as $name=>$value)
-			{
-			if (is_array($value))
-				{
-				foreach ($value as $thisVal)
-					{
-					$xmlstr .= "\t\t\t<value name=\"$name\"><![CDATA[$thisVal]]></value>\n";
-					}
-				}
-			else
-				{
-				$xmlstr .= "\t\t\t<value name=\"$name\"><![CDATA[$value]]></value>\n";
-				}
-			}
+			$xmlstr .= "\t\t\t<value><![CDATA[".$this->GetHumanReadableValue()."]]></value>\n";
 		}
 
 	$xmlstr .= "</field>\n";
 	return $xmlstr;
   }
+
+
+   // override as necessary
+   function OptionsAsXML()
+	{
+		$xmlstr = "";
+		foreach($this->Options as $name=>$value)
+			{
+			if (is_array($value))
+				{
+				foreach ($value as $thisVal)
+					{
+					$xmlstr .= "\t\t\t<option name=\"$name\"><![CDATA[$thisVal]]></option>\n";
+					}
+				}
+			else
+				{
+				$xmlstr .= "\t\t\t<option name=\"$name\"><![CDATA[$value]]></option>\n";
+				}
+			}
+		return  $xmlstr;
+	}
 
   function GetOptionNames()
   {

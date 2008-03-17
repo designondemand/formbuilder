@@ -216,6 +216,39 @@ class fbRadioGroupField extends fbFieldBase
       }
     $this->countBoxes();
   }
+
+	function OptionsAsXML()
+	{
+		$names = &$this->GetOptionRef('button_name');
+		if (! is_array($names))
+			{
+				$names = array($names);
+			}		
+		$checked = &$this->GetOptionRef('button_checked');
+		if (! is_array($checked))
+			{
+				$checked = array($checked);
+			}
+		$xmlstr = "";
+		for ($i=1;$i<=count($names);$i++)
+			{
+			$xmlstr .= "\t\t\t<option>\n";
+			$xmlstr .= "\t\t\t\t<name><![CDATA[".$names[$i-1]."]]></name>\n";
+			$xmlstr .= "\t\t\t\t<checked_value><![CDATA[".$checked[$i-1]."]]></checked_value>\n";
+			$ischecked = "false";
+			if ($this->FindArrayValue($i) !== false)
+				{
+				$ischecked = "true";
+				}
+			
+			$xmlstr .= "\t\t\t\t<checked>$ischecked</checked>\n";
+			$xmlstr .= "\t\t\t</option>\n";
+			}
+
+		return $xmlstr;
+	}
+
+
 }
 
 ?>

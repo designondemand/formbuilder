@@ -26,6 +26,7 @@ $lang['field_type_DispositionEmail']='*Email Results to set Address(es)';
 $lang['field_type_DispositionEmailConfirmation']='*Validate-via-Email Address';
 $lang['field_type_DispositionFile']='*Write Results to Flat File';
 $lang['field_type_DispositionDatabase']='*Store Results in Database';
+$lang['field_type_DispositionFormBrowser']='*Store Results for FormBrowser Module';
 $lang['field_type_DispositionUserTag']='*Call A User Defined Tag With the Form Results';
 $lang['field_type_DispositionDeliverToEmailAddressField']='*Email to User-Supplied Email Address';
 $lang['field_type_DispositionEmailSiteAdmin']='*Email to CMS Admin User';
@@ -126,6 +127,7 @@ $lang['delete'] = 'Delete';
 $lang['day'] = 'Day';
 $lang['mon'] = 'Month';
 $lang['year'] = 'Year';
+$lang['none'] = '(none)';
 
 $lang['uninstalled'] = 'Module uninstalled.';
 $lang['installed'] = 'Module version %s installed.';
@@ -311,6 +313,7 @@ $lang['title_date_format']='Date Format (standard <a href="http://www.php.net/ma
 $lang['title_use_wysiwyg']='Use WYSIWYG editor for text Area (Admin side only)?';
 $lang['title_submit_actions'] = 'Form Submission Behavior';
 $lang['title_submit_labels'] = 'Submission Button Labels';
+$lang['title_sortable_field'] = 'Sortable Field #%s';
 $lang['title_submit_help'] = 'This page lets you customize Form Submission. It doesn\'t determine what the Form Builder does with the submitted data. You can set that up by adding "Disposition" fields to your form.';
 $lang['title_start_year'] = 'Year range start';
 $lang['title_end_year'] = 'Year range end';
