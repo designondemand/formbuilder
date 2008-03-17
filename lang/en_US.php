@@ -162,6 +162,7 @@ $lang['suspected_spam'] = 'Too many emails generated from your IP address. Anti-
 $lang['suspected_spam_log'] = 'Suspected spam from IP %s stopped.';
 $lang['reorder'] = 'Reorder Fields';
 $lang['cancel'] = 'Cancel';
+$lang['value_set'] = 'Value set: %s';
 
 // Field Attribute Titles
 $lang['title_file_path'] = 'Destination Directory for output files';
