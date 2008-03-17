@@ -103,28 +103,26 @@ class fbDispositionFormBrowser extends fbFieldBase {
 				$fieldlist[$fields[$i]->GetName()] = $fields[$i]->GetId();
 				}
 			}
-		array_push($main,
-			array($mod->Lang('title_sortable_field',array(1)),
-				$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_sortfield1', $fieldlist, -1,
-					$this->GetOption('sortfield1',-1)),
-				),
-			array($mod->Lang('title_sortable_field',array(2)),
-				$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_sortfield2', $fieldlist, -1,
-					$this->GetOption('sortfield2',-1)),
-				),
-			array($mod->Lang('title_sortable_field',array(3)),
-				$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_sortfield3', $fieldlist, -1,
-					$this->GetOption('sortfield3',-1)),
-				),
-			array($mod->Lang('title_sortable_field',array(4)),
-				$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_sortfield4', $fieldlist, -1,
-					$this->GetOption('sortfield4',-1)),
-				),
-			array($mod->Lang('title_sortable_field',array(5)),
-				$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_sortfield5', $fieldlist, -1,
-					$this->GetOption('sortfield5',-1)),
-				)
-			);
+		for ($i=1;$i<6;$i++)
+			{
+			if ($this->GetOption('sortfield'.$i,'-1') == '-1')
+				{
+				array_push($main,
+					array($mod->Lang('title_sortable_field',array($i)),
+						$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_sortfield'.$i, $fieldlist, -1,
+					$this->GetOption('sortfield'.$i,-1))
+					));
+				}
+			else
+				{
+				$fname = array_search($this->GetOption('sortfield'.$i),$fieldlist);
+				array_push($main,
+					array($mod->Lang('title_sortable_field',array($i)),
+						$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_sortfield'.$i, $this->GetOption('sortfield'.$i)).
+						$mod->Lang('value_set',array($fname))
+					));
+				}
+			}
 		return array('main'=>$main,'adv'=>$adv);
 	}
 
