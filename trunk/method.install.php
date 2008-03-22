@@ -132,8 +132,7 @@ if (!isset($gCms)) exit;
 		$dict->ExecuteSQLArray($sqlarray);
 
 		$db->CreateSequence(cms_db_prefix().'module_fb_formbrowser_seq');
-
-
+		$db->CreateSequence(cms_db_prefix().'module_fb_uniquefield_seq');
 
 		$this->CreatePermission('Modify Forms', 'Modify Forms');
 
