@@ -23,14 +23,22 @@ class fbTextAreaField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{            
-	   $mod = &$this->form_ptr->module_ptr;
-       return $mod->CreateTextArea($this->GetOption('wysiwyg','0') == '1'?true:false,
-				   $id, $this->Value,
+	   $mod = &$this->form_ptr->module_ptr;	
+       $ret = $mod->CreateTextArea($this->GetOption('wysiwyg','0') == '1'?true:false,
+				   $id,  ($this->Value?$this->Value:$this->GetOption('default')),
 				   'fbrp__'.$this->Id,'',$id.'fbrp__'.$this->Id,
-               '','',
-               $this->GetOption('cols','80'),
-               $this->GetOption('rows','15')
-               );
+               $this->GetOption('cols','80'),$this->GetOption('rows','15'));
+		if ($this->GetOption('clear_default','0')==1)
+			{
+			$ret .= '<script type="text/javascript">';
+			$ret .= "\nvar f = document.getElementById('".$id."fbrp__".$this->Id."');\n";
+			$ret .= "if (f)\n{\nf.onclick=function(){\nif (this.value=='";
+			$ret .= preg_replace('/(\r)?\n/','\\n',$this->GetOption('default'))."') {this.value='';}\n}\n";
+			$ret .= "}\n;";
+			$ret .= "</script>\n";
+			}
+
+		return $ret;
 	//CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $width='80', $cols='15',$forcewysiwyg="",$wantedsyntax="")
 
    }
@@ -61,9 +69,8 @@ class fbTextAreaField extends fbFieldBase {
 	function PrePopulateAdminForm($formDescriptor)
 	{
 	   $mod = &$this->form_ptr->module_ptr;
-		return array(
-			'main'=>array(
-         array($mod->Lang('title_use_wysiwyg'),
+	   $main = array(
+         	array($mod->Lang('title_use_wysiwyg'),
             		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_wysiwyg',
             		'1',$this->GetOption('wysiwyg','0'))),
 			array($mod->Lang('title_textarea_rows'),
@@ -72,8 +79,21 @@ class fbTextAreaField extends fbFieldBase {
 			array($mod->Lang('title_textarea_cols'),
             		$mod->CreateInputText($formDescriptor, 'fbrp_opt_cols',
             		$this->GetOption('cols','80'),5,5))
-               )
-         );
+             );
+	   $adv = array(array($mod->Lang('title_field_default_value'),
+				  $mod->CreateTextArea(false,
+								   $formDescriptor, $this->GetOption('default'),
+								   'fbrp_opt_default'
+				               )),
+					
+					
+					
+      			  array($mod->Lang('title_clear_default'),
+		 		 	array($mod->CreateInputHidden($formDescriptor,'fbrp_opt_clear_default','0').$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_clear_default',
+            		'1',$this->GetOption('clear_default','0')).$mod->Lang('title_clear_default_help')
+					)));
+
+         return array('main'=>$main,'adv'=>$adv);
 	}
 
 }

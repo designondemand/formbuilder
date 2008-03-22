@@ -349,7 +349,7 @@ $lang['title_inline_form'] = 'Display form inline?';
 $lang['title_inline_form_help'] = 'Inline means any form followup replaces the {cms_module} tag, non-inline replaces the {content} tag.';
 $lang['title_field_default_value'] = 'Default value for field';
 $lang['title_clear_default'] = 'Clear default on click?';
-$lang['title_clear_default_help'] = 'Check this to clear the default value when the user clicks this field';
+$lang['title_clear_default_help'] = 'Check this to clear the default value when the user clicks this field. Since this uses a javascript string compare, it will fail if you put single quotes in your default text. Other un-javascript-friendly characters may also cause it to fail.';
 
 $lang['default_template'] = 'Default Template';
 $lang['table_left_template'] = 'Table Template, Titles on left';
@@ -365,7 +365,6 @@ $lang['upgrade03to04'] = 'Form Template was updated automatically as part of the
 $lang['admindesc']='Add, edit and manage interactive Forms';
 
 $lang['operators_help'] = 'If you use String evaluation, the only operation available is concatenation (+), while if you use Number evaluation you have basic, very simple math (, +, -, *, /, ).'; 
-
 
 $lang['date_january']='January';
 $lang['date_february']='February';
