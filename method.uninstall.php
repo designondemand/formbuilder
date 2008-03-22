@@ -53,6 +53,7 @@ if (! $this->CheckAccess()) exit;
 		$db->DropSequence(cms_db_prefix().'module_fb_resp_attr_seq');
 		$db->DropSequence(cms_db_prefix().'module_fb_ip_log_seq');
 		$db->DropSequence(cms_db_prefix().'module_fb_formbrowser_seq');
+		$db->DropSequence(cms_db_prefix().'module_fb_uniquefield_seq');
 
 		$this->RemovePermission('Modify Forms');
 		

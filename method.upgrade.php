@@ -144,6 +144,7 @@ if (! $this->CheckAccess()) exit;
 			$sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_fb_formbrowser', $flds, $taboptarray);
 			$dict->ExecuteSQLArray($sqlarray);
 
+			$db->CreateSequence(cms_db_prefix().'module_fb_uniquefield_seq');
 			$db->CreateSequence(cms_db_prefix().'module_fb_formbrowser_seq');
 				
 			}

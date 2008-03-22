@@ -40,6 +40,8 @@ $lang['field_type_SystemLinkField']='-Static Link';
 $lang['field_type_LinkField']='Link (User-entered)';
 $lang['field_type_HiddenField'] = '-Hidden Field';
 $lang['field_type_ComputedField'] = '-Computed Field';
+$lang['field_type_UniqueIntegerField']='-Unique Integer (Serial)';
+
 
 // validation types
 $lang['validation_none']='No Validation';
@@ -290,6 +292,7 @@ $lang['title_show_userfirstname']='Display User\'s first name?';
 $lang['title_show_userlastname']='Display User\'s last name?';
 $lang['title_restrict_to_group']='Restrict user list to users in specified group';
 $lang['restricted_to_group'] = 'Only in group %s';
+$lang['title_show_to_user'] = 'Display to user?';
 $lang['help_leaveempty'] = 'This field may be left empty';
 $lang['help_variables_for_template']='Variables For Template';
 $lang['help_variables_for_computation']='Variables Available';
