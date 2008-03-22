@@ -56,12 +56,21 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
 			}
 		for($i=0;$i<count($userlist);$i++)
 			{
-			$name = $userlist[$i]->firstname.' '.$userlist[$i]->lastname;
+			$name = array();
+			if ($this->GetOption('show_userfirstname','0')=='1')
+				{
+				array_push($name,$userlist[$i]->firstname);
+				}
+			if ($this->GetOption('show_userlastname','0')=='1')
+				{
+				array_push($name,$userlist[$i]->lastname);
+				}
 			if ($this->GetOption('show_username','0')=='1')
 				{
-				$name .=' ('.$userlist[$i]->username.')';
+				array_push($name,' ('.$userlist[$i]->username.')');
 				}
-			$sorted[$name]=($i+1);
+			$sname = implode(' ',$name);
+			$sorted[$sname]=($i+1);
 			}
 		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'"');
 	}
@@ -96,6 +105,14 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
 		array_push($main,array($mod->Lang('title_select_one_message'),
 			$mod->CreateInputText($formDescriptor, 'fbrp_opt_select_one',
 			$this->GetOption('select_one',$mod->Lang('select_one')),25,128)));
+		array_push($main,array($mod->Lang('title_show_userfirstname'),
+				$mod->CreateInputHidden($formDescriptor,'fbrp_opt_show_userfirstname','0').
+				$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_show_userfirstname', '1',
+				$this->GetOption('show_userfirstname','1'))));
+			array_push($main,array($mod->Lang('title_show_userlastname'),
+					$mod->CreateInputHidden($formDescriptor,'fbrp_opt_show_userlastname','0').
+					$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_show_userlastname', '1',
+					$this->GetOption('show_userlastname','1'))));
 		array_push($main,array($mod->Lang('title_show_username'),
 				$mod->CreateInputHidden($formDescriptor,'fbrp_opt_show_username','0').
 				$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_show_username', '1',
