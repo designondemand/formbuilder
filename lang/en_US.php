@@ -182,6 +182,7 @@ $lang['title_unchecked_value']='Value when not checked.';
 $lang['title_checkbox_details']='Checkbox Group Details';
 $lang['title_delete'] = 'Delete?';
 $lang['title_select_one_message']='"Select One" Text';
+$lang['title_selection_value'] = 'Selection Value';
 $lang['title_selection_displayname'] = 'Selection Display Name';
 $lang['title_selection_subject']='Selection Subject';
 $lang['title_select_default_country']='Default Selection';

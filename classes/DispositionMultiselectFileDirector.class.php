@@ -129,7 +129,12 @@ function populate_header(formname)
 	
 	$idx--;
 	
-	$tmp[] = $this->GetOptionElement('destination_displayname',$idx);
+	$str = $this->GetOptionElement('destination_value',$idx);
+	if( empty($str) )
+	  {
+	    $str = $this->GetOptionElement('destination_displayname',$idx);
+	  }
+	$tmp[] = $str;
       }
 
     $str = join($form->GetAttr('list_delimiter',','),$tmp);
@@ -302,6 +307,7 @@ function populate_header(formname)
       }
 
     $dests = '<table class="module_fb_table"><tr><th>'.$mod->Lang('title_selection_displayname').'</th><th>'.
+      $mod->Lang('title_selection_value').'</th><th>'.
       $mod->Lang('title_destination_filename').'</th><th>'.
       $mod->Lang('title_delete').'</th></tr>';
 
@@ -310,6 +316,7 @@ function populate_header(formname)
 	$dests .=  '<tr><td>'.
 	  $mod->CreateInputText($formDescriptor, 'fbrp_opt_destination_displayname[]',$this->GetOptionElement('destination_displayname',$i),25,128).
 	  '</td><td>'.
+	  $mod->CreateInputText($formDescriptor, 'fbrp_opt_destination_value[]',$this->GetOptionElement('destination_value',$i),25,128).'</td><td>'.
 	  $mod->CreateInputText($formDescriptor, 'fbrp_opt_destination_filename[]',$this->GetOptionElement('destination_filename',$i),25,128).
 	  '</td><td>'.
 	  $mod->CreateInputCheckbox($formDescriptor, 'fbrp_del_'.$i, $i,-1).
