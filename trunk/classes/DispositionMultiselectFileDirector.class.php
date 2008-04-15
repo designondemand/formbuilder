@@ -26,6 +26,7 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
     $this->IsDisposition = true;
     $this->DisplayInForm = true;
     $this->DisplayInSubmission = false;
+    $this->DisplayInSubmission = true;
     $this->HasAddOp = true;
     $this->HasDeleteOp = true;
     $this->hasMultipleFormComponents = true;
@@ -118,6 +119,22 @@ function populate_header(formname)
     return $fields;
   }
 
+  function GetHumanReadableValue()
+  {
+    $form = &$this->form_ptr;
+    $tmp = array();
+    foreach( $this->Value as $idx )
+      {
+	if( empty($idx) ) continue;
+	
+	$idx--;
+	
+	$tmp[] = $this->GetOptionElement('destination_displayname',$idx);
+      }
+
+    $str = join($form->GetAttr('list_delimiter',','),$tmp);
+    return $str;
+  }
 
   function StatusInfo()
   {
@@ -170,6 +187,7 @@ function populate_header(formname)
 		$replVals = $others[$i]->GetValue();
 	      }
 	  }
+
 	$mod->smarty->assign($this->MakeVar($others[$i]->Getname()),$replVal);
 	$mod->smarty->assign('fld_'.$others[$i]->GetId(),$replVal);
 	$mod->smarty->assign($this->MakeVar($others[$i]->Getname()).'_array',$replVals);
@@ -188,7 +206,7 @@ function populate_header(formname)
       {
 	$template = $this->createSampleTemplate();
       }
-	
+
     // Begin output to files
     foreach( $this->Value as $idx )
       {
