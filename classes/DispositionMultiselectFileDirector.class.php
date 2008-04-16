@@ -123,19 +123,22 @@ function populate_header(formname)
   {
     $form = &$this->form_ptr;
     $tmp = array();
-    foreach( $this->Value as $idx )
+    if( is_array($this->Value) )
       {
-	if( empty($idx) ) continue;
-	
-	$idx--;
-	
-	$str = $this->GetOptionElement('destination_value',$idx);
-	if( empty($str) )
+	foreach( $this->Value as $idx )
 	  {
-	    $str = $this->GetOptionElement('destination_displayname',$idx);
-	  }
-	$tmp[] = $str;
-      }
+	    if( empty($idx) ) continue;
+	    
+	    $idx--;
+	    
+	    $str = $this->GetOptionElement('destination_value',$idx);
+	    if( empty($str) )
+	      {
+		$str = $this->GetOptionElement('destination_displayname',$idx);
+	      }
+	    $tmp[] = $str;
+	  } // foreach
+      } // if
 
     $str = join($form->GetAttr('list_delimiter',','),$tmp);
     return $str;
@@ -213,35 +216,38 @@ function populate_header(formname)
       }
 
     // Begin output to files
-    foreach( $this->Value as $idx )
+    if( is_array($this->Value) )
       {
-	// I dunno why it's empty sometimes, but...
-	if( empty($idx) ) continue;
-
-	$idx--;
-
-	// get the filename
-	$filespec = $dir.
-	  preg_replace("/[^\w\d\.]|\.\./", "_", 
-		       $this->GetOptionElement('destination_filename',$idx));
-	
-	$line = $template;
-	if (! file_exists($filespec))
+	foreach( $this->Value as $idx )
 	  {
-	    $line = $header.$template;
-	  }
-
-	$newline = $mod->ProcessTemplateFromData( $line );
-	if (substr($newline,-1,1) != "\n")
-	  {
-	    $newline .= "\n";
-	  }	
-
-	$f2 = fopen($filespec,"a");
-	fwrite($f2,$newline);
-	fclose($f2); 
-
-      } // foreach
+	    // I dunno why it's empty sometimes, but...
+	    if( empty($idx) ) continue;
+	    
+	    $idx--;
+	    
+	    // get the filename
+	    $filespec = $dir.
+	      preg_replace("/[^\w\d\.]|\.\./", "_", 
+			   $this->GetOptionElement('destination_filename',$idx));
+	    
+	    $line = $template;
+	    if (! file_exists($filespec))
+	      {
+		$line = $header.$template;
+	      }
+	    
+	    $newline = $mod->ProcessTemplateFromData( $line );
+	    if (substr($newline,-1,1) != "\n")
+	      {
+		$newline .= "\n";
+	      }	
+	    
+	    $f2 = fopen($filespec,"a");
+	    fwrite($f2,$newline);
+	    fclose($f2); 
+	    
+	  } // foreach
+      } // if
     $mod->ReturnFileLock();
     return array(true,'');        
   }
