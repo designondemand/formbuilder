@@ -331,7 +331,7 @@ class FormBuilder extends CMSModule
         	{
         	$sql .= ' and admin_approved is not null';
         	}
-        
+        $sql .= ' order by submitted';
         $dbcount = $db->Execute('SELECT COUNT(*) as num '.$sql,array($form_id));
    
         $records = 0;
