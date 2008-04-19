@@ -353,6 +353,11 @@ class FormBuilder extends CMSModule
 		    }
 		$populate_names = true;
 		$fm = -1;
+		$all_fields = false;
+		if (count($field_list) == 0)
+			{
+			$all_fields = true;
+			}
 		for($i=0;$i<count($values);$i++)
 			{
 			$paramSet = array('form_id'=>$form_id, 'response_id'=>$values[$i]->id);
@@ -365,6 +370,7 @@ class FormBuilder extends CMSModule
 				$fm->LoadResponse($values[$i]->id);
 				}
 			$fields = &$fm->GetFields();
+			$ind = 0;
 			for($j=0;$j<count($fields);$j++)
 				{
 				if ($fields[$j]->DisplayInSubmission())
@@ -378,6 +384,15 @@ class FormBuilder extends CMSModule
 							}
                 		$values[$i]->fields[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetHumanReadableValue();
                 		}
+					else if ($all_fields)
+						{
+						if ($populate_names)
+							{
+							$names[$ind] = $fields[$j]->GetName();
+							}
+						$values[$i]->fields[$ind] = $fields[$j]->GetHumanReadableValue();
+						$ind++;
+						}
                 	}
         		}
         	$populate_names = false;
