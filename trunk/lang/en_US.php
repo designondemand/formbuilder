@@ -14,6 +14,7 @@ $lang['field_type_CheckboxGroupField']='Check Box Group';
 $lang['field_type_PulldownField']='Pulldown';
 $lang['field_type_MultiselectField']='Multiselect';
 $lang['field_type_StatePickerField']='U.S. State Picker';
+$lang['field_type_ProvincePickerField']='Canadian Province Picker';
 $lang['field_type_CountryPickerField']='Country Picker';
 $lang['field_type_DatePickerField']='Date Picker';
 $lang['field_type_TimePickerField']='Time Picker';
@@ -187,6 +188,7 @@ $lang['title_selection_displayname'] = 'Selection Display Name';
 $lang['title_selection_subject']='Selection Subject';
 $lang['title_select_default_country']='Default Selection';
 $lang['title_select_default_state']='Default Selection';
+$lang['title_select_default_province']='Default Selection';
 $lang['title_option_name']="Option Name";
 $lang['title_option_value']="Value Submitted";
 $lang['title_pulldown_details']='Pulldown Options';
@@ -494,7 +496,7 @@ validation applied to these inputs. The results of these forms may be handled in
 <h3>How Do I Use it?</h3>
 <P>Install it, and poke around the menus. Play with it. Try creating forms, and adding them to your content.
 If you get stuck, chat with me on the #cms IRC channel, post to the forum, send me email, or, if you're
-really desperate, read the rest of this page.</P>
+really desperate, try reading the instructions on the rest of this page.</P>
 
 <h3>How Do I Create a Form</h3>
 <p>In the CMS Admin Menu, you should get a new menu item called FormBuilder. Click on this. On the page
@@ -571,6 +573,7 @@ group, but is better when there are a large number of options.</li>
 <li>Multiselect. This is a multi-select field. It's really conceptually the same thing as a checkbox button
 group, but is better when there are a large number of options, as you can limit the number displayed on the screen at any one time.</li>
 <li>State. This is a pulldown listing the States of the U.S.</li>
+<li>Canadian Province. This is a pulldown listing the Canadian Provinces (Contributed by Noel McGran. Thanks!)</li>
 <li>Countries. This is a pulldown listing the Countries of the world (as of July 2005).</li>
 <li>Date Picker. This is a triple pulldown allowing the user to select a date.</li>
 <li>Time Picker. This is a set of pulldowns allowing the user to select a time (using 12 or 24 hour clock).</li>
@@ -592,12 +595,13 @@ independently validated. This is good for applications like online surveys.</li>
 <li>-Fieldset End. Combined with Fieldset Start, this allows you to group various fields within your form. Use this to end a given grouping.</li>
 <li>-Hidden Field. This allows you to embed a hidden field in your form.</li>
 <li>-Static Text. This allows you to put text or a label in the middle of your form. This is useful for giving additional help text, especially if you're not using a Custom Template to render your form.</li>
-<li>-Static Link. This allows you to put a link to a given page into your form. Optionally, you can have it autopopulate with the page where the form is embedded (useful if you\'re sending results via email).</li>
+<li>-Static Link. This allows you to put a link to a given page into your form. Optionally, you can have it autopopulate with the page where the form is embedded (useful if you're sending results via email).</li>
 <li>-Computed Field. This allows you to embed a computed field in your form. It is not visible to the user until after the form is submitted. It allows you to do simple arithmetic or string concatenation.</li>
+<li>-Unique Integer (Serial). This is an integer that increases every time someone hits your form. Your results may not be sequential, but they will increase monotonically.</li>
 </ul></li>
 
 <li>Form Handling Inputs (Dispositions)
-<ul><li>*Call a User Defined Tag With the Form Results. This submits all the form results to the User-Defined Tag you specify. The UDT can handle the results however it wants.</li>
+<ul><li>*Call a User Defined Tag With the Form Results. This submits all the form results to the User-Defined Tag you specify. The UDT can handle the results however it wants. Values are passed as \$param['field_name'].</li>
 <li>*Email Results Based on Pulldown. This is useful for web sites where comments get routed based on their subject matter, e.g., bugs get sent to one person, marketing questions to another person, sales requests to someone else, etc. The pulldown is populated with the subjects, and each gets directed to a specific email address. You set up these mappings in the when you create or edit a field of this type. If you use one of these \"Director\" pulldowns, the user must make a selection in order to submit the
 form. This input is part of the form the user sees, although the email addresses are not made visible nor
 are they embedded in the HTML.</li>
@@ -613,6 +617,9 @@ select the name of the file, and set its format. These files are written to the 
 module's installation directory, assuming the web server has permission to write there.</li>
 <li>*Save Results to File Based on Pulldown. Like the Flat File disposition, except the value of a pull-down determines which file results get written to.</li>
 <li>*Save Results to File(s) Based on Multiple Selections. Like the Flat File disposition, except the value(s) of checkboxes  determines which file(s) results get written to.</li>
+<li>*Email to CMS Admin User. Provides a pull-down of CMS Admin users, and directs the results as an email to the selected admin.</li>
+<li>*Store Results for FormBrowser Module v.3. Stores the form results in an XML structure as a single database record. This will become the interface to Form Browser in the next release.</li>
+
 </ul></li></li></ul>
 
 
@@ -710,7 +717,6 @@ and check \"Show Field IDs\"</p>
 <h3>Known Issues</h3>
 <ul>
 <li>FormBuilder is not yet integrated with FrontEnd Users. It will be.</li>
-<li>FormBuilder cannot yet be inlined. That should be a simple upgrade down the line.</li>
 <li>FormBuilder does not yet support pretty urls, although that shouldn't matter since the user side is pretty simple.</li>
 </ul>
 
@@ -737,6 +743,7 @@ ate the neighbor's nasty little yap dog, for which I was inappropriately gratefu
 <li>The author can often be found in the <a href=\"irc://irc.freenode.net/#cms\">CMS IRC Channel</a>.</li>
 <li>Lastly, you may have some success emailing the author directly and grovelling for free support.</li>
 </ul>
+<p>Keep in mind that the author has put hundreds of hours into the development of this module. Please take the time to read the documentation before sending questions. Either that, or write your questions on financially negotiable instruments (i.e., cash).</p>
 <p>As per the GPL, this software is provided as-is. Please read the text
 of the license for the full disclaimer.</p>
 <h3>Copyright and License</h3>

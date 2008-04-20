@@ -130,6 +130,11 @@ else
 	        		$replVals = $field->GetValue();
 	        		}
                }
+			if( isset( $_FILES[$replVal] ) && $_FILES[$replVal]['size'] > 0 )
+				        {
+				    	$thisFile =& $_FILES[$replVal]; 
+					  $replVal = $thisFile['name'];
+					}
            $this->smarty->assign($aeform->MakeVar($field->GetName()),
                   $replVal);
            $this->smarty->assign('fld_'.$field->GetId(),$replVal);
