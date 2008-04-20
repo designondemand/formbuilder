@@ -740,11 +740,12 @@ ate the neighbor's nasty little yap dog, for which I was inappropriately gratefu
 <p>As per the GPL, this software is provided as-is. Please read the text
 of the license for the full disclaimer.</p>
 <h3>Copyright and License</h3>
-<p>Copyright &copy; 2007, Samuel Goldstein <a href=\"mailto:sjg@cmsmodules.com\">&lt;sjg@cmsmodules.com&gt;</a>. All Rights Are Reserved.</p>
+<p>Copyright &copy; 2008, Samuel Goldstein <a href=\"mailto:sjg@cmsmodules.com\">&lt;sjg@cmsmodules.com&gt;</a>. All Rights Are Reserved.</p>
 <p>This module has been released under the <a href=\"http://www.gnu.org/licenses/licenses.html#GPL\">GNU Public License</a>. You must agree to this license before using the module.</p>";
 
 $lang['changelog'] = "
 <ul>
+<li>Version 0.5. 19 April 08. Bugfixes, support for FormBrowser fixes and features, disposition type for upcoming FormBrowser version.</li>
 <li>Version 0.4.4. 26 Sept 07. Bugfixes for radio button groups, fix for validation of DispositionDeliverToEmailAddressField.</li>
 <li>Version 0.4.3. 18 Sept 07. Bugfixes for pulldowns using numbers, option to inline form, fixes for table-layouts provided by Ap Muthu, fix for requirability of Dispositions.</li>
 <li>Version 0.4.2. 14 Sept 07. Bugfixes for XML export, RadioButton Group submission, and HTML labels.</li>
