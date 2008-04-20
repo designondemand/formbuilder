@@ -79,8 +79,8 @@ class fbFileUploadField extends fbFieldBase {
 				 $mod->Lang('yes')=>1);
     if( $uploads )
       {
-	$categorylist = $uploads->getCategoryList();
-	$adv = array(
+		$categorylist = $uploads->getCategoryList();
+		$adv = array(
 		     array($mod->Lang('title_sendto_uploads').':',
 			   $mod->CreateInputDropdown($formDescriptor,
 						     'fbrp_opt_sendto_uploads',$sendto_uploads_list,
@@ -95,6 +95,10 @@ class fbFileUploadField extends fbFieldBase {
 						  
 		     );
       }
+	else
+		{
+		$adv = array();
+		}
 
     return array('main'=>$main,'adv'=>$adv);
   }
