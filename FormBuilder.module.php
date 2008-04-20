@@ -418,6 +418,17 @@ class FormBuilder extends CMSModule
         	$sql .= ' and admin_approved is not null';
         	}
         
+		if (! isset($params['fbrp_sort_field']) || $params['fbrp_sort_field']=='submitdate')
+			{
+			if (isset($params['fbrp_sort_dir']) && $params['fbrp_sort_dir'] == 'd')
+				{
+				$sql .= ' order by submitted desc';	
+				}
+			else
+				{
+				$sql .= ' order by submitted asc';
+				}
+			}
         $dbcount = $db->Execute('SELECT COUNT(*) as num '.$sql,array($form_id));
    
         $records = 0;
@@ -469,35 +480,43 @@ class FormBuilder extends CMSModule
         	$populate_names = false;
 			}
 			
-		if (isset($params['fbrp_sort_field']))
+		if (isset($params['fbrp_sort_field']) || isset($params['fbrp_sort_field_id']))
 			{
 			$sf = -1;
-			for($j=0;$j<count($fields);$j++)
+			if (isset($params['fbrp_sort_field_id']))
 				{
-				if (!strcasecmp($fields[$j]->GetName(),$params['fbrp_sort_field']))
-					{
-					$sf = $field_list[$fields[$j]->GetId()];
-					}
-				}
-			// kludge, because sort instantiation breaks under PHP 4, and I can't pass extra params to the sort
-			for($j=0;$j<count($values);$j++)
-				{
-				$values[$j]->sf = $sf;
-				}
-
-			if (isset($params['fbrp_sort_dir']) && $params['fbrp_sort_dir'] == 'a')
-				{
-				usort($values, array("FormBuilder","field_sorter_asc"));
+				$sf = $field_list[$params['fbrp_sort_field_id']];
 				}
 			else
 				{
-				usort($values, array("FormBuilder","field_sorter_desc"));
+				for($j=0;$j<count($fields);$j++)
+					{
+					if (!strcasecmp($fields[$j]->GetName(),$params['fbrp_sort_field']))
+						{
+						$sf = $field_list[$fields[$j]->GetId()];
+						}
+					}
+				}
+			if ($sf != -1)
+				{
+				// kludge, because sort instantiation breaks under PHP 4, and I can't pass extra params to the sort
+				for($j=0;$j<count($values);$j++)
+					{
+					$values[$j]->sf = $sf;
+					}
+				if (isset($params['fbrp_sort_dir']) && $params['fbrp_sort_dir'] == 'a')
+					{
+					usort($values, array("FormBuilder","field_sorter_asc"));
+					}
+				else
+					{
+					usort($values, array("FormBuilder","field_sorter_desc"));
+					}
 				}
 			}
 		if ($records > $number)
 			{
 			$values = array_slice( $values, $start_point, $number);
-			//$records = $number;
 			}
 		return array($records, $names, $values);
 	}
@@ -505,12 +524,12 @@ class FormBuilder extends CMSModule
 
 	function field_sorter_asc($a, $b)
 	{
-    	return strcasecmp($a->fields[$a->sf], $b->fields[$a->sf]);
+    	return strcasecmp($a->fields[$a->sf], $b->fields[$b->sf]);
 	}
 
 	function field_sorter_desc($a, $b)
 	{
-    	return strcasecmp($b->fields[$this->sortField], $a->fields[$this->sortField]);
+    	return strcasecmp($b->fields[$b->sf], $a->fields[$a->sf]);
 	}
 
 	
