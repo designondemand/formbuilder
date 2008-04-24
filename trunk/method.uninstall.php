@@ -68,6 +68,8 @@ if (! $this->CheckAccess()) exit;
 		$this->RemovePreference('enable_antispam');
 		$this->RemovePreference('require_fieldnames');
 		$this->RemovePreference('unique_fieldnames');
+		$this->RemovePreference('show_fieldids');
+		$this->RemovePreference('show_fieldaliases');
 
 
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('uninstalled'));

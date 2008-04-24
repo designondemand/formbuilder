@@ -337,14 +337,22 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
       {
 	if ($others[$i]->DisplayInSubmission())
 	  {
+	  if ($others[$i]->GetAlias() != '')
+		{
+		$fldref = '{$'. $others[$i]->GetAlias(). '}';
+		}
+	  else
+		{
+		$fldref = '{$fld_'. $others[$i]->GetId(). '}';
+		}
 	  if ($htmlish)
      	  {
-  			$ret .= '<strong>'.$others[$i]->GetName() . '</strong>: {$fld_' .   			$others[$i]->GetId(). "}<br />\n";
+  		  $ret .= '<strong>'.$others[$i]->GetName() . '</strong>: ' . $fldref. "<br />\n";
   		  }
   	  else
   	  	  {
-	     $ret .= $others[$i]->GetName() . ': {$fld_' .$others[$i]->GetId() 	     . "}\n";
-	     }
+	      $ret .= $others[$i]->GetName() . ': ' .$fldref. "\n";
+	      }
 	  }
       }
     return $ret;
@@ -374,8 +382,12 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
 	    $ret .= '<tr><td class="'.($odd?'odd':'even').
 	    '">{$'.$this->MakeVar($others[$i]->GetName()).
 	    '} / {$fld_'.
-	    $others[$i]->GetId().
-	    '}</td><td class="'.($odd?'odd':'even').
+	    $others[$i]->GetId().'}';
+		if ($others[$i]->GetAlias() != '')
+			{
+			$ret .= ' / {$'.$others[$i]->GetAlias().'}';	
+			}
+	    $ret .= '</td><td class="'.($odd?'odd':'even').
 	    '">' .$others[$i]->GetName() . '</td></tr>';
 	  	$odd = ! $odd;
 	  }
@@ -1110,9 +1122,16 @@ function unmy_htmlentities($val)
 			 $mod->Lang('title_form_main'));
     if( $mod->GetPreference('show_fieldids',0) != 0 )
       {
-	$mod->smarty->assign('title_field_id',
+	  $mod->smarty->assign('title_field_id',
 			     $mod->Lang('title_field_id'));
       }
+    if( $mod->GetPreference('show_fieldaliases',0) != 0 )
+      {
+	  $mod->smarty->assign('title_field_alias',
+			     $mod->Lang('title_field_alias'));
+      }
+
+
     $mod->smarty->assign('title_field_name',
 			 $mod->Lang('title_field_name'));
     $mod->smarty->assign('title_field_type',
@@ -1196,6 +1215,7 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 		$oneset->id = $mod->CreateLink($id, 'admin_add_edit_field', '', $thisField->GetId(), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
 	      }
 	    $oneset->type = $thisField->GetDisplayType();
+	    $oneset->alias = $thisField->GetAlias();
 	    if (/*$thisField->IsDisposition() ||*/
 		!$thisField->DisplayInForm() ||
 		$thisField->IsNonRequirableField())
@@ -1936,6 +1956,7 @@ function fast_add(field_type)
 		
 		 	$mod->smarty->assign($this->MakeVar($field->GetName()),$replVal);
 		 	$mod->smarty->assign('fld_'.$field->GetId(),$replVal);
+		    $mod->smarty->assign($field->GetAlias(),$replVal);
 		 	$mod->smarty->assign($this->MakeVar($field->GetName()).'_array',$replVals);
 		 	$mod->smarty->assign('fld_'.$field->GetId().'_array',$replVals);
 

@@ -77,13 +77,15 @@ function replaceTemplate(originalRequest)
 		<p class="pagetext">{$title_form_fields}</p>
 		<div class="pageinput">
 			<table class="module_fb_table">
+				<thead><tr>
 	       	{if isset($title_field_id)}
-                <thead><tr><th>{$title_field_id}</th>
-                	<th>{$title_field_name}</th>
-		{else}
-                <thead><tr><th>{$title_field_name}</th>
+                <th>{$title_field_id}</th>
 		{/if}
+    				<th>{$title_field_name}</th>
                 	<th>{$title_field_type}</th>
+        {if isset($title_field_alias)}
+    				<th>{$title_field_alias}</th>
+		{/if}
                 	<th>{$title_field_required_abbrev}</th>
                 	<th>{$title_information}</th>
                     <th colspan="2">{$title_order}</th>
@@ -97,6 +99,9 @@ function replaceTemplate(originalRequest)
 				{/if}
 					<td>{$entry->name}</td>
 					<td>{$entry->type}</td>
+					{if isset($title_field_alias)}
+						<td>{$entry->alias}</td>
+					{/if}
 					<td>{$entry->disposition}</td>
 					<td>{$entry->field_status}</td>
 					<td>{$entry->up}</td>

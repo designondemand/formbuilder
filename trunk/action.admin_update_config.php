@@ -20,7 +20,8 @@ if (! $this->CheckAccess()) exit;
 		$this->SetPreference('enable_fastadd',isset($params['fbrp_enable_fastadd'])?$params['fbrp_enable_fastadd']:0);
 		$this->SetPreference('enable_antispam',isset($params['fbrp_enable_antispam'])?$params['fbrp_enable_antispam']:0);
 
-                $this->SetPreference('show_fieldids',isset($params['fbrp_show_fieldids'])?$params['fbrp_show_fieldids']:0);
+        $this->SetPreference('show_fieldids',isset($params['fbrp_show_fieldids'])?$params['fbrp_show_fieldids']:0);
+        $this->SetPreference('show_fieldaliases',isset($params['fbrp_show_fieldaliases'])?$params['fbrp_show_fieldaliases']:0);
 
 		$params['fbrp_message'] = $this->Lang('configuration_updated');
         $this->DoAction('defaultadmin', $id, $params);
