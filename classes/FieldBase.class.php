@@ -264,6 +264,11 @@ class fbFieldBase {
     return $this->Name;
   }
 
+  function GetAlias()
+  {
+    return $this->GetOption('field_alias','');
+  }
+
   function SetSmartyEval($bool)
   {
   	$this->SmartyEval = $bool;
@@ -444,7 +449,13 @@ class fbFieldBase {
 	  {
 	    array_push($adv,array($mod->Lang('title_field_css_class'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_css_class', $this->GetOption('css_class'), 50)));
 	  }
-			
+	
+	$alias = $this->GetOption('field_alias','');
+	if ($alias == '')
+		{
+		$alias = 'fld'.$this->GetId();
+		}
+	array_push($adv, array($mod->Lang('title_field_alias'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_field_alias', $this->GetOption('field_alias'), 50)));			
       }
     else
       {
