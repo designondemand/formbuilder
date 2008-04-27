@@ -45,10 +45,18 @@ class fbFieldsetStart extends fbFieldBase {
     return '';
   }
 
-  function GetHumanReadableValue()
+  function GetHumanReadableValue($as_string=true)
   {
     // there's nothing human readable about a fieldset.
-    return '[Begin Fieldset: '.$this->Value.']';
+    $ret = '[Begin Fieldset: '.$this->Value.']';
+	if ($as_string)
+		{
+		return $ret;
+		}
+	else
+		{
+		return array($ret);
+		}
   }
 	
   function PrePopulateAdminForm($formDescriptor)

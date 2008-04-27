@@ -39,19 +39,26 @@ class fbCheckboxField extends fbFieldBase {
 		return $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id, 't',$this->Value,' id="'.$id.'_'.$this->Id.'"').$label;
 	}
 
-	function GetHumanReadableValue()
+	function GetHumanReadableValue($as_string=true)
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		if ($this->Value === false)
 			{
-			return $this->GetOption('unchecked_value',$mod->Lang('value_unchecked'));
+			$ret = $this->GetOption('unchecked_value',$mod->Lang('value_unchecked'));
 			}
 		else
 			{
-			return $this->GetOption('checked_value',$mod->Lang('value_checked'));
-			}	
+			$ret = $this->GetOption('checked_value',$mod->Lang('value_checked'));
+			}
+		if ($as_string)
+			{
+			return $ret;
+			}
+		else
+			{
+			return array($ret);
+			}
 	}
-
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{

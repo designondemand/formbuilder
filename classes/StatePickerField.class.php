@@ -43,9 +43,17 @@ class fbStatePickerField extends fbFieldBase {
 		return '';
 	}
 
-	function GetHumanReadableValue()
+	function GetHumanReadableValue($as_string=true)
 	{
-		return array_search($this->Value,$this->States);
+		$ret = array_search($this->Value,$this->States);
+		if ($as_string)
+			{
+			return $ret;
+			}
+		else
+			{
+			return array($ret);
+			}		
 	}
 
 

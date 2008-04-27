@@ -103,14 +103,21 @@ class fbTextFieldExpandable extends fbFieldBase {
 		 return $ret;
 	}
 
-	function GetHumanReadableValue()
+	function GetHumanReadableValue($as_string = true)
 	{
 		$form = &$this->form_ptr;
       if (! is_array($this->Value))
 	      {
 	      $this->Value = array($this->Value);
 	      }
+	if ($as_string)
+		{
 		return join($form->GetAttr('list_delimiter',','),$this->Value);
+		}
+	else
+		{
+		return array($ret);
+		}
 	}
 
 

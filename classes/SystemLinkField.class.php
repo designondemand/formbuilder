@@ -46,19 +46,27 @@ class fbSystemLinkField extends fbFieldBase {
 		return array($thisLink);
 	}
 
-	function GetHumanReadableValue()
+	function GetHumanReadableValue($as_string=true)
 	{
 		global $gCms;
 		if ($this->GetOption('auto_link','0') == '1')
 			{
 			$pageinfo = $gCms->variables['pageinfo'];
-			return $this->form_ptr->module_ptr->CreateContentLink($pageinfo->content_id, $pageinfo->content_title);
+			$ret = $this->form_ptr->module_ptr->CreateContentLink($pageinfo->content_id, $pageinfo->content_title);
 			}
 		else
 			{
 			$contentops =& $gCms->GetContentOperations();
     		$cobj = $contentops->LoadContentFromId($this->GetOption('target_page','0'));
-			return $this->form_ptr->module_ptr->CreateContentLink($cobj->Id(), $cobj->Name());
+			$ret = $this->form_ptr->module_ptr->CreateContentLink($cobj->Id(), $cobj->Name());
+			}
+		if ($as_string)
+			{
+			return $ret;
+			}
+		else
+			{
+			return array($ret);
 			}
 	}
 

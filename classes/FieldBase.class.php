@@ -556,17 +556,26 @@ class fbFieldBase {
   }
 
 
-  function GetHumanReadableValue()
+  // override me!
+  function GetHumanReadableValue($as_string=true)
   {
     $mod = &$this->form_ptr->module_ptr;
     if ($this->Value !== false)
       {
-	return $this->Value;
+		$ret = $this->Value;
       }
     else
       {
-	return $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
-      }
+	  $ret = $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
+	  }
+	if ($as_string)
+		{
+		return $ret;
+		}
+	else
+		{
+		return array($ret);
+		}
   }
 
 
@@ -772,6 +781,19 @@ class fbFieldBase {
 			}
 		return  $xmlstr;
 	}
+
+
+  function ExportObject()
+  {
+	$obj = new stdClass();
+	$obj->name = $this->Name;
+	$obj->type = $this->Type;
+	$obj->id = $this->Id;
+	$obj->value = $this->GetHumanReadableValue(true);
+	$obj->valueArray = $this->GetHumanReadableValue(false);
+	return $obj;
+  }
+
 
   function GetOptionNames()
   {

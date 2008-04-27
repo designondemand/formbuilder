@@ -112,7 +112,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 		return $fieldDisp;
 	}
 
-	function GetHumanReadableValue()
+	function GetHumanReadableValue($as_string=true)
 	{
 		$form = &$this->form_ptr;
 		$names = &$this->GetOptionRef('box_name');
@@ -144,9 +144,15 @@ class fbCheckboxGroupField extends fbFieldBase {
 							$fieldRet[] = $checked[$i-1];
 					}
 			}
-		return join($form->GetAttr('list_delimiter',','),$fieldRet);			
+		if ($as_string)
+			{
+			return join($form->GetAttr('list_delimiter',','),$fieldRet);
+			}
+		else
+			{
+			return $fieldRet;
+			}
 	}
-
 
 	function DoOptionAdd(&$params)
 	{

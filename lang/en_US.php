@@ -307,8 +307,15 @@ $lang['help_submission_date']='Date of Submission';
 $lang['help_server_name']='Your server';
 $lang['help_sub_source_ip']='IP address of person using form';
 $lang['help_sub_url']='URL of page containing form';
+$lang['help_fb_version']='FormBuilder version';
+$lang['help_tab']='Tab Character';
 $lang['help_other_fields']='Alternate field names can be used interchangeably (especially useful if Smarty is choking on characters outside of ASCII 32-126). <br />Other fields will be available as you add them to the form.';
-$lang['help_array_fields']='Fields that have multiple values may also be accessed via the smarty value of $fieldname_array or $fld_#_array.';
+$lang['help_array_fields']='Yet another way of accessing field values is via $fieldname_obj, $alias_obj, or $fld_#_obj, where each field is an object containging:<br /><table>
+<tr><td class="odd">name</td><td class="odd">Field Name</td></tr>
+<tr><td>type</td><td>Field Type</td></tr>
+<tr><td class="odd">id</td><td class="odd">Internal Field ID</td></tr>
+<tr><td>value</td><td>Human-readable Value</td></tr>
+<tr><td class="odd">valueArray</td><td class="odd">Array of field value(s)</td></tr></table><em>e.g.</em>, you could use "{$fld_1_obj->name} = {$fld_1_obj->value}';
 $lang['help_date_format']='See <a href="http://www.php.net/manual/en/function.date.php" target=_NEW>the PHP Manual</a> for formatting help.';
 $lang['help_variable_name']='Variable';
 $lang['help_form_field']='Field Represented';

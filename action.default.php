@@ -95,7 +95,7 @@ else
       if ($act == 'text')
          {
          $message = $aeform->GetAttr('submit_response','');
-         $this->smarty->assign('sub_form_name',$aeform->GetName());
+/*         $this->smarty->assign('sub_form_name',$aeform->GetName());
          $this->smarty->assign('sub_date',date('r'));
          $this->smarty->assign('sub_host',$_SERVER['SERVER_NAME']);
          $this->smarty->assign('sub_source_ip',$_SERVER['REMOTE_ADDR']);
@@ -142,6 +142,8 @@ else
                   $replVals);
            $this->smarty->assign('fld_'.$field->GetId().'_array',$replVals);
             }
+*/
+		 $aeform->setFinishedFormSmarty();
          echo $this->ProcessTemplateFromData( $message );
          }
       else if ($act == 'redir')

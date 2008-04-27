@@ -110,9 +110,17 @@ class fbCountryPickerField extends fbFieldBase {
 		return '';
 	}
 
-	function GetHumanReadableValue()
+	function GetHumanReadableValue($as_string=true)
 	{
-		return array_search($this->Value,$this->Countries);
+		$ret = array_search($this->Value,$this->Countries);
+		if ($as_string)
+			{
+			return $ret;
+			}
+		else
+			{
+			return array($ret);
+			}
 	}
 
 	function GetFieldInput($id, &$params, $returnid)

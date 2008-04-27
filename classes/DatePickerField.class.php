@@ -116,18 +116,26 @@ class fbDatePickerField extends fbFieldBase {
 
 
 
-	function GetHumanReadableValue()
+	function GetHumanReadableValue($as_string=true)
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
 			$theDate = mktime ( 1, 1, 1, $this->GetArrayValue(1),  $this->GetArrayValue(0), $this->GetArrayValue(2) );
-			return date($this->GetOption('dateformat','j F Y'), $theDate);
+			$ret = date($this->GetOption('dateformat','j F Y'), $theDate);
 			}
 		else
 			{
-			return $mod->Lang('unspecified');
-			}	
+			$ret = $mod->Lang('unspecified');
+			}
+		if ($as_string)
+			{
+			return $ret;
+			}
+		else
+			{
+			return array($ret);
+			}
 	}
 
 	function PrePopulateAdminForm($formDescriptor)

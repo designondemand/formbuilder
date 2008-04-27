@@ -149,27 +149,35 @@ class fbTimePickerField extends fbFieldBase {
       return ($tt < $ot) ? -1 : 1;
    }
 
-	function GetHumanReadableValue()
+	function GetHumanReadableValue($as_string=true)
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
 			if ($this->GetOption('24_hour','0') == '0')
 				{
-				return $this->GetArrayValue(0).':'.
+				$ret = $this->GetArrayValue(0).':'.
 					$this->GetArrayValue(1).' '.
 					$this->GetArrayValue(2);
 				}
 			else
 				{
-				return $this->GetArrayValue(0).':'.
+				$ret = $this->GetArrayValue(0).':'.
 					$this->GetArrayValue(1);
 				}
 			}
 		else
 			{
-			return $mod->Lang('unspecified');
-			}	
+			$ret = $mod->Lang('unspecified');
+			}
+		if ($as_string)
+			{
+			return $ret;
+			}
+		else
+			{
+			return array($ret);
+			}
 	}
 
 	function PrePopulateAdminForm($formDescriptor)
