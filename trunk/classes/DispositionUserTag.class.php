@@ -10,9 +10,10 @@
 class fbDispositionUserTag extends  fbFieldBase 
 {
 
+/*
   var $sampleTemplateCode;
   var $sampleHeader;
-
+*/
   function fbDispositionUserTag(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
@@ -74,7 +75,7 @@ class fbDispositionUserTag extends  fbFieldBase
     return $string;
   }
 
-
+/*
   function createSampleHeader()
   {
     $mod = &$this->form_ptr->module_ptr;
@@ -89,7 +90,7 @@ class fbDispositionUserTag extends  fbFieldBase
       }
     return implode('{$TAB}',$fields);
   }
-
+*/
 
   function PrePopulateAdminForm($formDescriptor)
   {

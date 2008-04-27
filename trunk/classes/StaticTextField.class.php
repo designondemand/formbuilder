@@ -35,9 +35,17 @@ class fbStaticTextField extends fbFieldBase {
 		 return $this->form_ptr->module_ptr->Lang('text_length',strlen($this->GetOption('text','')));
 	}
 
-	function GetHumanReadableValue()
+	function GetHumanReadableValue($as_string=true)
 	{
-		return '[static text field]';
+		$ret = '[static text field]';
+		if ($as_string)
+			{
+			return $ret;
+			}
+		else
+			{
+			return array($ret);
+			}		
 	}
 	
 	function PrePopulateAdminForm($formDescriptor)

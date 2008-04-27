@@ -115,7 +115,9 @@ class fbForm {
 		'{$sub_date}'=>$this->module_ptr->Lang('help_submission_date'),
 		'{$sub_host}'=>$this->module_ptr->Lang('help_server_name'),
 		'{$sub_source_ip}'=>$this->module_ptr->Lang('help_sub_source_ip'),
-		'{$sub_url}'=>$this->module_ptr->Lang('help_sub_url')
+		'{$sub_url}'=>$this->module_ptr->Lang('help_sub_url'),
+		'{$fb_version}'=>$this->module_ptr->Lang('help_fb_version'),
+		'{$TAB}'=>$this->module_ptr->Lang('help_tab'),
 	);
   }
 
@@ -1921,14 +1923,11 @@ function fast_add(field_type)
 		
 	    for($i=0;$i<count($theFields);$i++)
 	      {
-			$field =& $others[$i];
-			$replVal = '';
+			$replVal = $unspec;
 			$replVals = array();
-			if ($field->DisplayInSubmission())
+			if ($theFields[$i]->DisplayInSubmission())
 		  		{
-					$thisFormResult = new stdClass();
-					$thisFormResult->name = $field->getName();
-		    		$replVal = $field->GetHumanReadableValue();
+		    		$replVal = $theFields[$i]->GetHumanReadableValue();
 		    		if ($htmlemail)
 		        		{
 						// allow <BR> as delimiter or in content
@@ -1940,28 +1939,27 @@ function fast_add(field_type)
 		      			{
 						$replVal = $unspec;
 		      			}
-		    		if ($field->HasMultipleValues())
-		        		{
-		        		$replVals = $field->GetValue();
-						$theseReplVals = array();
-				/*		foreach($replVals as $thisReplVal)
-							{
-							$theseReplVals[$]
-							}
-				*/		$thisFormResult->options = $theseReplVals;
-		        		}
-					$thisFormResult->value = $replVal;
-					$formInfo['fld'.$field->GetId()]=$thisFormResult;
 		  		}
 		
-		 	$mod->smarty->assign($this->MakeVar($field->GetName()),$replVal);
-		 	$mod->smarty->assign('fld_'.$field->GetId(),$replVal);
-		    $mod->smarty->assign($field->GetAlias(),$replVal);
-		 	$mod->smarty->assign($this->MakeVar($field->GetName()).'_array',$replVals);
-		 	$mod->smarty->assign('fld_'.$field->GetId().'_array',$replVals);
-
+		 	$mod->smarty->assign($this->MakeVar($theFields[$i]->GetName()),$replVal);
+		 	$mod->smarty->assign('fld_'.$theFields[$i]->GetId(),$replVal);
+			$fldobj = $theFields[$i]->ExportObject();
+		 	$mod->smarty->assign($this->MakeVar($theFields[$i]->GetName()).'_obj',$fldobj);
+		 	$mod->smarty->assign('fld_'.$theFields[$i]->GetId().'_obj',$fldobj);
+			if ($theFields[$i]->GetAlias() != '')
+				{
+		    	$mod->smarty->assign($theFields[$i]->GetAlias(),$replVal);
+		    	$mod->smarty->assign($theFields[$i]->GetAlias().'_obj',$fldobj);
+				}
 	      }
-		//$mod->smarty->assign()
+		// general form details
+		$mod->smarty->assign('sub_form_name',$this->GetName());
+	    $mod->smarty->assign('sub_date',date('r'));
+	    $mod->smarty->assign('sub_host',$_SERVER['SERVER_NAME']);
+	    $mod->smarty->assign('sub_source_ip',$_SERVER['REMOTE_ADDR']);
+	  	$mod->smarty->assign('sub_url',(empty($_SERVER['HTTP_REFERER'])?$mod->Lang('no_referrer_info'):$_SERVER['HTTP_REFERER']));
+	    $mod->smarty->assign('fb_version',$mod->GetVersion());
+	    $mod->smarty->assign('TAB',"\t");
 	}
     
 }

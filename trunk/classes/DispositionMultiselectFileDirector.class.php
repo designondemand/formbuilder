@@ -119,7 +119,7 @@ function populate_header(formname)
     return $fields;
   }
 
-  function GetHumanReadableValue()
+  function GetHumanReadableValue($as_string)
   {
     $form = &$this->form_ptr;
     $tmp = array();
@@ -140,8 +140,14 @@ function populate_header(formname)
 	  } // foreach
       } // if
 
-    $str = join($form->GetAttr('list_delimiter',','),$tmp);
-    return $str;
+	if ($as_string)
+		{
+		return join($form->GetAttr('list_delimiter',','),$tmp);
+		}
+	else
+		{
+    	return $tmp;
+		}
   }
 
   function StatusInfo()
@@ -169,7 +175,7 @@ function populate_header(formname)
 
 
     $dir = $this->GetOption('file_path',$this->dflt_filepath).'/';
-
+/*
     // setup some smarty
     $mod->smarty->assign('sub_form_name',$this->form_ptr->GetName());
     $mod->smarty->assign('sub_date',date('r'));
@@ -201,7 +207,8 @@ function populate_header(formname)
 	$mod->smarty->assign($this->MakeVar($others[$i]->Getname()).'_array',$replVals);
 	$mod->smarty->assign('fld_'.$others[$i]->GetId().'_array',$replVals);
       }
-
+*/
+	$this->form_ptr->setFinishedFormSmarty();
     $header = $this->GetOption('file_header','');
     if ($header == '')
       {

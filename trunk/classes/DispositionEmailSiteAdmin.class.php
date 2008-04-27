@@ -158,7 +158,7 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
 			}
 	}
 
-	function GetHumanReadableValue()
+	function GetHumanReadableValue($as_string=true)
 	{
 	    global $gCms;
 	    $userops =& $gCms->GetUserOperations();
@@ -174,12 +174,21 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
 			}
 		if (isset($userlist[$this->Value - 1]))
 			{
-			return $userlist[$this->Value - 1]->firstname . ' '. $userlist[$this->Value - 1]->lastname;
+			$ret = $userlist[$this->Value - 1]->firstname . ' '. $userlist[$this->Value - 1]->lastname;
 			}
 		else
 			{
-			return $mod->Lang('unspecified');
+			$ret = $mod->Lang('unspecified');
 			}
+		if ($as_string)
+			{
+			return $ret;
+			}
+		else
+			{
+			return array($ret);
+			}
+		
 	}
 	
 	function DisposeForm($returnid)

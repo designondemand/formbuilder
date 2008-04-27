@@ -166,36 +166,8 @@ function populate_header(formname)
 	$template = $this->createSampleTemplate();
       }
     $line = $header.$template;
-    $mod->smarty->assign('sub_form_name',$this->form_ptr->GetName());
-    $mod->smarty->assign('sub_date',date('r'));
-    $mod->smarty->assign('sub_host',$_SERVER['SERVER_NAME']);
-    $mod->smarty->assign('sub_source_ip',$_SERVER['REMOTE_ADDR']);
-    $mod->smarty->assign('sub_url',$_SERVER['HTTP_REFERER']);
-    $mod->smarty->assign('TAB',"\t");
-    $others = &$this->form_ptr->GetFields();
-    $unspec = $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
-		
-    for($i=0;$i<count($others);$i++)
-      {
-	$replVal = '';
-	$replVals = array();
-	if ($others[$i]->DisplayInSubmission())
-	  {
-	    $replVal = $others[$i]->GetHumanReadableValue();
-	    if ($replVal == '')
-	      {
-		  $replVal = $unspec;
-	      }
-	    if ($others[$i]->HasMultipleValues())
-	        {
-	        $replVals = $others[$i]->GetValue();
-	        }
-	  }
-	  $mod->smarty->assign($this->MakeVar($others[$i]->Getname()),$replVal);
-	  $mod->smarty->assign('fld_'.$others[$i]->GetId(),$replVal);
-$mod->smarty->assign($this->MakeVar($others[$i]->Getname()).'_array',$replVals);
-$mod->smarty->assign('fld_'.$others[$i]->GetId().'_array',$replVals);
-      }
+
+	$this->form_ptr->setFinishedFormSmarty();
 
     $newline = $mod->ProcessTemplateFromData( $line );
     if (substr($newline,-1,1) != "\n")

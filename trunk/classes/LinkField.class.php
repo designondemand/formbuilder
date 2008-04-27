@@ -49,18 +49,27 @@ class fbLinkField extends fbFieldBase {
 		
 	}
 
-	function GetHumanReadableValue()
+	function GetHumanReadableValue($as_string=true)
 	{
 		$mod = &$this->form_ptr->module_ptr;
 
 		if ($this->Value === false || ! is_array($this->Value))
 			{
-			return '';
+			$ret = '';
 			}
 		else
 			{
-			return '<a href="'.$this->Value[0].'">'.$this->Value[1].'</a>';
-			}	
+			$ret = '<a href="'.$this->Value[0].'">'.$this->Value[1].'</a>';
+			}
+		if ($as_string)
+			{
+			return $ret;
+			}
+		else
+			{
+			return array($ret);
+			}
+
 	}
 
 

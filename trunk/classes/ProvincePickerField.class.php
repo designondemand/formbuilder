@@ -29,9 +29,17 @@ class fbProvincePickerField extends fbFieldBase {
 		return '';
 	}
 
-	function GetHumanReadableValue()
+	function GetHumanReadableValue($as_string=true)
 	{
-		return array_search($this->Value,$this->Provinces);
+		$ret = array_search($this->Value,$this->Provinces);
+		if ($as_string)
+			{
+			return $ret;
+			}
+		else
+			{
+			return array($ret);
+			}
 	}
 
 

@@ -167,7 +167,7 @@ class fbMultiselectField extends fbFieldBase {
 		return array('main'=>$main,'adv'=>$adv);
 	}
 
-	function GetHumanReadableValue()
+	function GetHumanReadableValue($as_string=true)
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		$form = &$this->form_ptr;
@@ -183,12 +183,27 @@ class fbMultiselectField extends fbFieldBase {
 				{
 				array_push($fieldRet,$vals[$thisOne - 1]);
 				}
-			return join($form->GetAttr('list_delimiter',','),$fieldRet);			
+			if ($as_string)
+				{
+				return join($form->GetAttr('list_delimiter',','),$fieldRet);
+				}
+			else
+				{
+				return array($fieldRet);
+				}			
 			}
 		else
 			{
-			return $mod->Lang('unspecified');
-			}	
+			if ($as_string)
+				{
+				return $mod->Lang('unspecified');
+				}
+			else
+				{
+				return array($mod->Lang('unspecified'));
+				}
+			}
+	
 	}
 
 	function OptionsAsXML()

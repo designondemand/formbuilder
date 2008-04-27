@@ -222,17 +222,26 @@ class fbDispositionPageRedirector extends fbFieldBase {
 			}
 	}
 
-	function GetHumanReadableValue()
+	function GetHumanReadableValue($as_string)
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
-			return $this->GetOptionElement('destination_page',($this->Value - 1));
+			$ret = $this->GetOptionElement('destination_page',($this->Value - 1));
 			}
 		else
 			{
-			return $mod->Lang('unspecified');
-			}	
+			$ret = $mod->Lang('unspecified');
+			}
+		if ($as_string)
+			{
+			return $ret;
+			}
+		else
+			{
+			return array($ret);
+			}
+
 	}
 	
 	function DisposeForm($returnid)
