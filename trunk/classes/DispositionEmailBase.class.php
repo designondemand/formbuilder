@@ -117,47 +117,11 @@ class fbDispositionEmailBase extends fbFieldBase
       {
     $message2 = $message;
     }
-/*
-    $mod->smarty->assign('sub_form_name',$form->GetName());
-    $mod->smarty->assign('sub_date',date('r'));
-    $mod->smarty->assign('sub_host',$_SERVER['SERVER_NAME']);
-    $mod->smarty->assign('sub_source_ip',$_SERVER['REMOTE_ADDR']);
-    if (empty($_SERVER['HTTP_REFERER']))
-      {
-  $mod->smarty->assign('sub_url',$mod->Lang('no_referrer_info'));
-      }
-    else
-      {
-  $mod->smarty->assign('sub_url',$_SERVER['HTTP_REFERER']);
-      }
-*/
     $form->setFinishedFormSmarty();
     $others = &$form->GetFields();
-//    $unspec = $form->GetAttr('unspecified',$mod->Lang('unspecified'));
 
     for($i=0;$i<count($others);$i++)
       {
-  
-/*$field =& $others[$i];
-  $replVal = '';
-  $replVals = array();
-  if ($field->DisplayInSubmission())
-    {
-      $replVal = $field->GetHumanReadableValue();
-      if ($htmlemail)
-          {
-            $replVal = htmlspecialchars($replVal);
-            }
-      if ($replVal == '')
-        {
-    $replVal = $unspec;
-        }
-      if ($field->HasMultipleValues())
-          {
-          $replVals = $field->GetValue();
-          }
-    }
-*/
   if (strtolower(get_class($others[$i])) == 'fbfileuploadfield' )
     {
       //
@@ -219,11 +183,6 @@ class fbDispositionEmailBase extends fbFieldBase
         }
     }
 
-/*   $mod->smarty->assign($form->MakeVar($field->GetName()),$replVal);
-   $mod->smarty->assign('fld_'.$field->GetId(),$replVal);
-   $mod->smarty->assign($form->MakeVar($field->GetName()).'_array',$replVals);
-   $mod->smarty->assign('fld_'.$field->GetId().'_array',$replVals);
-*/
       }
 
     $message = $mod->ProcessTemplateFromData( $message );

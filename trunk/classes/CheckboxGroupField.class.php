@@ -135,8 +135,10 @@ class fbCheckboxGroupField extends fbFieldBase {
 			{
 				if ($this->FindArrayValue($i) === false)
 					{
-						if( isset($unchecked[$i-1]) && trim($unchecked[$i-1]) != '' )
+						if ($this->GetOption('no_empty','0') != '1' && isset($unchecked[$i-1]) && trim($unchecked[$i-1]) != '' )
+							{
 							$fieldRet[] = $unchecked[$i-1];
+							}
 					}
 				else
 					{
@@ -213,6 +215,11 @@ class fbCheckboxGroupField extends fbFieldBase {
 			}
 		$boxes .= '</table>';
 		$main = array(
+			array($mod->Lang('title_dont_submit_unchecked'),
+				$mod->CreateInputHidden($formDescriptor,'fbrp_opt_no_empty','0').
+					$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_no_empty','1',$this->GetOption('no_empty','0')).
+					$mod->Lang('title_dont_submit_unchecked_help'),
+	           ),
 			array($mod->Lang('title_checkbox_details'),$boxes)
 		);
 		$adv = array();

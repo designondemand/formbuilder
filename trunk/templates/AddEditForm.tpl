@@ -165,6 +165,7 @@ function replaceTemplate(originalRequest)
 		<p class="pagetext">{$title_list_delimiter}:</p>
 		<p class="pageinput">{$input_list_delimiter}</p>
 	</div>
+	
 {$tab_end}{$captchatab_start}
 {if $captcha_installed}
 	<div class="pageoverflow">
