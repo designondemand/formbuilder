@@ -1678,7 +1678,7 @@ function fast_add(field_type)
 	while ($dbresult && $row = $dbresult->FetchRow())
 	  {
 	    $index = $this->GetFieldIndexFromId($row['field_id']);
-            if( is_object($this->Fields[$index]) )
+            if($index != -1 &&  is_object($this->Fields[$index]) )
              {
 	       $this->Fields[$index]->SetValue($row['value']);
              }
