@@ -29,10 +29,22 @@ class fbFileUploadField extends fbFieldBase {
     parent::Load($id,$params,$loadDeep);
     if( isset( $_FILES ) && isset( $_FILES[$mod->module_id.'fbrp__'.$this->Id] ) )
       {
-	// Okay, a file was uploaded
-	$this->SetValue($mod->module_id.'fbrp__'.$this->Id);
+		// Okay, a file was uploaded
+		$this->SetValue($mod->module_id.'fbrp__'.$this->Id);
       }
   }
+
+  function GetHumanReadableValue($as_string=true)
+	{
+		if ($as_string && is_array($this->Value) && isset($this->Value[1]))
+			{
+			return $this->Value[1];
+			}
+		else
+			{
+			return $this->Value;
+			}
+	}
 
   function StatusInfo()
   {
@@ -121,9 +133,9 @@ class fbFileUploadField extends fbFieldBase {
  	$this->validated = false;
  	$this->validationErrorText = $mod->Lang('required_field_missing');
       }
-    else if ($ms != '' && $_FILES[$fullAlias]['size'] > ($ms * 1000))
+    else if ($ms != '' && $_FILES[$fullAlias]['size'] > ($ms * 1024))
       {
-	$this->validationErrorText = $mod->Lang('file_too_large'). ' '.($ms * 1000).'kb';
+	$this->validationErrorText = $mod->Lang('file_too_large'). ' '.($ms * 1024).'kb';
 	$this->validated = false;
       }
     else if ($exts)

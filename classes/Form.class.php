@@ -1960,8 +1960,84 @@ function fast_add(field_type)
 	  	$mod->smarty->assign('sub_url',(empty($_SERVER['HTTP_REFERER'])?$mod->Lang('no_referrer_info'):$_SERVER['HTTP_REFERER']));
 	    $mod->smarty->assign('fb_version',$mod->GetVersion());
 	    $mod->smarty->assign('TAB',"\t");
+	} 
+
+	function manageFileUploads()
+	{
+		global $gCms;
+		$theFields = &$this->GetFields();
+		$mod = &$this->module_ptr;
+
+	    for($i=0;$i<count($theFields);$i++)
+	      {
+	  		if (strtolower(get_class($theFields[$i])) == 'fbfileuploadfield' )
+	    		{
+	 		      // Handle file uploads
+			      // if the uploads module is found, and the option is checked in
+			      // the field, then the file is added to the uploads module
+			      // and a link is added to the results
+			      // if the option is not checked, then the file is merely uploaded to
+				  // the "uploads" directory
+			      //
+	      		$_id = $theFields[$i]->GetValue();
+	      		if( isset( $_FILES[$_id] ) && $_FILES[$_id]['size'] > 0 )
+	        		{
+	    			$thisFile =& $_FILES[$_id];
+	    			if( $theFields[$i]->GetOption('sendto_uploads') )
+	      				{
+	        			// we have a file we can send to the uploads
+	        			$uploads = $mod->GetModuleInstance('Uploads');
+	        			if( !$uploads )
+	          				{
+	      					// no uploads module
+	      					audit(-1, $mod->GetName(), $mod->Lang('submit_error'),$mail->GetErrorInfo());
+	            			return array($res, $mod->Lang('nouploads_error'));
+	          				}
+
+	        			$parms = array();
+	        			$parms['input_author'] = $mod->Lang('anonymous');
+	        			$parms['input_summary'] = $mod->Lang('title_uploadmodule_summary');
+	        			$parms['category_id'] = $field->GetOption('uploads_category');
+	        			$parms['field_name'] = $_id;
+	        			$res = $uploads->AttemptUpload(-1,$parms,-1);
+	        			if( $res[0] == false )
+	          				{
+	      					// failed upload kills the send.
+	      					audit(-1, $mod->GetName(), $mod->Lang('submit_error',$mail->GetErrorInfo()));
+	      					return array($res[0], $mod->Lang('uploads_error',$res[1]));
+	          				}
+
+	        			$uploads_destpage = $field->GetOption('uploads_destpage');
+	        			$url = $uploads->CreateLink (-1, 'getfile', $uploads_destpage, '',
+	             				array ('upload_id' => $row['upload_id']), '', true);
+						$theFields[$i]->ResetValue();
+	        			$theFields[$i]->SetValue($url);
+	      				}
+	    			else
+	      				{
+	        			// Handle the upload ourselves
+						$src = $thisFile['tmp_name'];
+						// this is safe[?] since we validated in FileUploadField's validate method.
+						$dest = $gCms->config['uploads_path'].'/'.$thisFile['name'];
+						if (! move_uploaded_file($src,$dest))
+							{
+							audit(-1, $mod->GetName(), $mod->Lang('submit_error',''));
+		      				return array(false, $mod->Lang('uploads_error',''));
+							}
+						else
+							{
+							$url = $gCms->config['uploads_url'].'/'.$thisFile['name'];
+							$theFields[$i]->ResetValue();
+							$theFields[$i]->SetValue(array($dest,$url));
+							}
+	      				}
+	        		}
+	    		}
+	      	}
+		return array(true,'');
 	}
-    
+
+
 }
 
 ?>

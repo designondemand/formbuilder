@@ -118,72 +118,47 @@ class fbDispositionEmailBase extends fbFieldBase
     $message2 = $message;
     }
     $form->setFinishedFormSmarty();
-    $others = &$form->GetFields();
 
-    for($i=0;$i<count($others);$i++)
-      {
-  if (strtolower(get_class($others[$i])) == 'fbfileuploadfield' )
-    {
-      //
-      // Handle file uploads
-      // if the uploads module is found, and the option is checked in
-      // the field, then the file is added to the uploads module
-      // and a link is added to the results
-      // if the option is not checked, then the file is added as
-      // an attachment
-      //
-      $_id = $field->GetValue();
-      if( isset( $_FILES[$_id] ) && $_FILES[$_id]['size'] > 0 )
-        {
-    $thisFile =& $_FILES[$_id];
-    if( $field->GetOption('sendto_uploads') )
-      {
-        // we have a file we can send to the uploads
-        $uploads = $mod->GetModuleInstance('Uploads');
-        if( !$uploads )
-          {
-      // no uploads module
-      audit(-1, $mod->GetName(), $mod->Lang('submit_error'),$mail->GetErrorInfo());
-      echo "DEBUG: could not get uploads module<br/>";
-            return array($res, $mod->Lang('nouploads_error'));
+    $theFields = &$form->GetFields();
 
-          }
+    for($i=0;$i<count($theFields);$i++)
+		{
+ 		if (strtolower(get_class($theFields[$i])) == 'fbfileuploadfield' )
+    		{
+    		if(! $theFields[$i]->GetOption('sendto_uploads') )
+      			{
+        		// we have a file we wish to attach
+				$thisAtt = $theFields[$i]->GetHumanReadableValue(false);
+			
+				if (is_array($thisAtt))
+					{
+					if (function_exists('finfo_open'))
+						{
+						$finfo = finfo_open(FILEINFO_MIME); // return mime type ala mimetype extension
+						$thisType = finfo_file($finfo, $thisAtt[0]);
+						finfo_close($finfo);
+						}
+					else if (function_exists('mime_content_type'))
+						{
+						$thisType = mime_content_type($thisType);
+						}
+					else
+						{
+						$thisType = 'application/octet-stream';
+						}
 
-        $parms = array();
-        $parms['input_author'] = $mod->Lang('anonymous');
-        $parms['input_summary'] = $mod->Lang('title_uploadmodule_summary');
-        $parms['category_id'] = $field->GetOption('uploads_category');
-        $parms['field_name'] = $_id;
-        $res = $uploads->AttemptUpload(-1,$parms,-1);
-        if( $res[0] == false )
-          {
-      // failed upload kills the send.
-      audit(-1, $mod->GetName(), $mod->Lang('submit_error',$mail->GetErrorInfo()));
-      return array($res[0], $mod->Lang('uploads_error',$res[1]));
-          }
+    				if (! $mail->AddAttachment($thisAtt[0], $thisAtt[0], "base64", $thisType))
+          				{
+      					// failed upload kills the send.
+      					audit(-1, (isset($name)?$name:""), $mod->Lang('submit_error',$mail->GetErrorInfo()));
+      					return array($res, $mod->Lang('upload_attach_error',
+                  				array($thisAtt[0],$thisAtt[0] ,$thisType)));
+          				}
+					}
+      			}
+     		}
+    	}
 
-        $uploads_destpage = $field->GetOption('uploads_destpage');
-        $url = $uploads->CreateLink (-1, 'getfile', $uploads_destpage, '',
-             array ('upload_id' => $row['upload_id']), '', true);
-        $replVal = $url;
-      }
-    else
-      {
-        // we have a file we can attach
-        if (! $mail->AddAttachment($thisFile['tmp_name'], $thisFile['name'], "base64", $thisFile['type']))
-          {
-      // failed upload kills the send.
-      audit(-1, (isset($name)?$name:""), $mod->Lang('submit_error',$mail->GetErrorInfo()));
-      return array($res, $mod->Lang('upload_attach_error',
-                  array($thisFile['name'],$thisFile['tmp_name'] ,$thisFile['type'])));
-          }
-
-        $replVal = $thisFile['name'];
-      }
-        }
-    }
-
-      }
 
     $message = $mod->ProcessTemplateFromData( $message );
     $subject = $mod->ProcessTemplateFromData( $subject );

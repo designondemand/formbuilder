@@ -730,6 +730,7 @@ and check \"Show Field IDs\"</p>
 <ul>
 <li>FormBuilder is not yet integrated with FrontEnd Users. It will be.</li>
 <li>FormBuilder does not yet support pretty urls, although that shouldn't matter since the user side is pretty simple.</li>
+<li>FileUpload Fields may not work correctly with multipage forms.</li>
 </ul>
 
 <h3>Troubleshooting</h3>

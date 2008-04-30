@@ -40,8 +40,15 @@ if ( !$fieldExpandOp &&
     {
     $res = $aeform->Validate();
     
-    if ($res[0] === false)
+	// handle uploads
+    $res2 = $aeform->manageFileUploads();
+
+    if ($res[0] === false || $res2[0] === false)
       {
+	  if (isset($res2[1]) &&  empty($res2[1]))
+		{
+		array_push($res[1],$res2[1]);
+		}
 	  $this->smarty->assign('fb_form_validation_errors',$res[1]);
 	  $this->smarty->assign('fb_form_has_validation_errors',1);
 	  
@@ -95,54 +102,7 @@ else
       if ($act == 'text')
          {
          $message = $aeform->GetAttr('submit_response','');
-/*         $this->smarty->assign('sub_form_name',$aeform->GetName());
-         $this->smarty->assign('sub_date',date('r'));
-         $this->smarty->assign('sub_host',$_SERVER['SERVER_NAME']);
-         $this->smarty->assign('sub_source_ip',$_SERVER['REMOTE_ADDR']);
-         if (empty($_SERVER['HTTP_REFERER']))
-            {
-            $this->smarty->assign('sub_url',$this->Lang('no_referrer_info'));
-            }
-         else
-            {
-            $this->smarty->assign('sub_url',$_SERVER['HTTP_REFERER']);
-            }
-         $others = &$aeform->GetFields();
-         $unspec = $aeform->GetAttr('unspecified',$this->Lang('unspecified'));
 
-         for($i=0;$i<count($others);$i++)
-            {
-            $field =& $others[$i];
-            $replVal = '';
-            $replVals = array();
-            if ($field->DisplayInSubmission())
-               {
- 					$replVal = preg_replace('/<br(\s)*(\/)*>/i','|BR|',$field->GetHumanReadableValue());
-          			$replVal = htmlspecialchars($replVal);
-					$replVal = preg_replace('/\|BR\|/','<br />',$replVal);
-             // $replVal = htmlspecialchars($field->GetHumanReadableValue());
-               if ($replVal == '')
-                  {
-                  $replVal = $unspec;
-	      			}
-	    		if ($field->HasMultipleValues())
-	        		{
-	        		$replVals = $field->GetValue();
-	        		}
-               }
-			if( isset( $_FILES[$replVal] ) && $_FILES[$replVal]['size'] > 0 )
-				        {
-				    	$thisFile =& $_FILES[$replVal]; 
-					  $replVal = $thisFile['name'];
-					}
-           $this->smarty->assign($aeform->MakeVar($field->GetName()),
-                  $replVal);
-           $this->smarty->assign('fld_'.$field->GetId(),$replVal);
-           $this->smarty->assign($aeform->MakeVar($field->GetName()).'_array',
-                  $replVals);
-           $this->smarty->assign('fld_'.$field->GetId().'_array',$replVals);
-            }
-*/
 		 $aeform->setFinishedFormSmarty();
          echo $this->ProcessTemplateFromData( $message );
          }
