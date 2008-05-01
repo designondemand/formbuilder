@@ -765,6 +765,7 @@ of the license for the full disclaimer.</p>
 
 $lang['changelog'] = "
 <ul>
+<li>Version 0.5.1. 30 April 08. Bugfixes, rewrote some of the File Upload code to prevent white screen of annoyance.</li>
 <li>Version 0.5. 19 April 08. Bugfixes, support for FormBrowser fixes and features, disposition type for upcoming FormBrowser version.</li>
 <li>Version 0.4.4. 26 Sept 07. Bugfixes for radio button groups, fix for validation of DispositionDeliverToEmailAddressField.</li>
 <li>Version 0.4.3. 18 Sept 07. Bugfixes for pulldowns using numbers, option to inline form, fixes for table-layouts provided by Ap Muthu, fix for requirability of Dispositions.</li>
