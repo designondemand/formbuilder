@@ -148,6 +148,8 @@ if (! $this->CheckAccess()) exit;
 			$db->CreateSequence(cms_db_prefix().'module_fb_formbrowser_seq');
 				
 			}
+		case "0.5":
+		case "0.5.1":
 		}
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('upgraded',$this->GetVersion()));
 
