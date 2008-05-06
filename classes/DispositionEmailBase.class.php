@@ -76,7 +76,7 @@ class fbDispositionEmailBase extends fbFieldBase
       }
     }
 
-    $mail = $mod->GetModuleInstance('CMSMailer');
+    $mail =& $mod->GetModuleInstance('CMSMailer');
     if ($mail == FALSE)
       {
   $msg = '';

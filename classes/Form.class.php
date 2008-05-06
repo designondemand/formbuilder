@@ -1986,7 +1986,7 @@ function fast_add(field_type)
 	    			if( $theFields[$i]->GetOption('sendto_uploads') )
 	      				{
 	        			// we have a file we can send to the uploads
-	        			$uploads = $mod->GetModuleInstance('Uploads');
+	        			$uploads =& $mod->GetModuleInstance('Uploads');
 	        			if( !$uploads )
 	          				{
 	      					// no uploads module

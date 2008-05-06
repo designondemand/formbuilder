@@ -86,7 +86,7 @@ class fbFileUploadField extends fbFieldBase {
 			' '.$mod->Lang('title_show_limitations_long'))
 		 );
 
-    $uploads = $mod->GetModuleInstance('Uploads');
+    $uploads =& $mod->GetModuleInstance('Uploads');
     $sendto_uploads_list = array($mod->Lang('no')=>0,
 				 $mod->Lang('yes')=>1);
     if( $uploads )
