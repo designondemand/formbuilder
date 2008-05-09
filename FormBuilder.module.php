@@ -325,7 +325,7 @@ class FormBuilder extends CMSModule
         			'module_fb_resp WHERE form_id=?';
         if ($user_approved)
         	{
-        	 $sql .= 'and user_approved is not null';
+        	 $sql .= ' and user_approved is not null';
         	 }
         if ($admin_approved)
         	{

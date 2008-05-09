@@ -45,7 +45,7 @@ if ( !$fieldExpandOp &&
 
     if ($res[0] === false || $res2[0] === false)
       {
-	  if (isset($res2[1]) &&  empty($res2[1]))
+	  if (isset($res2[1]) && !empty($res2[1]))
 		{
 		array_push($res[1],$res2[1]);
 		}
