@@ -78,6 +78,7 @@ class fbMultiselectField extends fbFieldBase {
 	function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = &$this->form_ptr->module_ptr;
+		$js = $this->GetOption('javascript','');
 
 		// why all this? Associative arrays are not guaranteed to preserve
 		// order, except in "chronological" creation order.
@@ -108,7 +109,7 @@ class fbMultiselectField extends fbFieldBase {
 			$val = $this->Value;
 			}
 		return $mod->CreateInputSelectList($id, 'fbrp__'.$this->Id.'[]', $sorted,$val, $this->GetOption('lines','3'),
-         'id="'.$id. '_'.$this->Id.'"');
+         'id="'.$id. '_'.$this->Id.'" '.$js);
 	}
 
 

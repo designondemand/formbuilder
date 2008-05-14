@@ -140,6 +140,10 @@ function replaceTemplate(originalRequest)
 		<p class="pageinput">{$input_submit_button_safety}</p>
 	</div>
 	<div class="pageoverflow">
+		<p class="pagetext">{$title_submit_javascript}:</p>
+		<p class="pageinput">{$input_submit_javascript}</p>
+	</div>
+	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_submit_button}:</p>
 		<p class="pageinput">{$input_form_submit_button}</p>
 	</div>

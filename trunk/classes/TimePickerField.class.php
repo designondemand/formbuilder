@@ -38,6 +38,8 @@ class fbTimePickerField extends fbFieldBase {
 	function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = &$this->form_ptr->module_ptr;
+		$js = $this->GetOption('javascript','');
+		
        $now = localtime(time(),true);
        $Mins = array();
        $Hours = array();
@@ -76,21 +78,21 @@ class fbTimePickerField extends fbFieldBase {
 
             $hr = new stdClass();
             $hr->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]',
-       			$Hours, -1, $now['tm_hour'],'id="'.$id.'_'.$this->Id.'_1"');
+       			$Hours, -1, $now['tm_hour'],'id="'.$id.'_'.$this->Id.'_1" '.$js);
        		$hr->title = $mod->Lang('hour');
        		$hr->name = '<label for="'.$id.'_'.$this->Id.'_1">'.$mod->Lang('hour').'</label>';
        		array_push($ret, $hr);
        		
             $min = new stdClass();
             $min->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]',
-       			$Mins, -1, $now['tm_min'],'id="'.$id.'_'.$this->Id.'_2"');
+       			$Mins, -1, $now['tm_min'],'id="'.$id.'_'.$this->Id.'_2" '.$js);
        		$min->title = $mod->Lang('min');
        		$min->name = '<label for="'.$id.'_'.$this->Id.'_2">'.$mod->Lang('min').'</label>';
        		array_push($ret, $min);
 
             $mer = new stdClass();
             $mer->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]',
-       			$this->flag12hour, -1, $now['merid'], 'id="'.$id.'_'.$this->Id.'_3"');
+       			$this->flag12hour, -1, $now['merid'], 'id="'.$id.'_'.$this->Id.'_3" '.$js);
             $mer->name = '<label for="'.$id.'_'.$this->Id.'_3">'.$mod->Lang('merid').'</label>';
             $mer->title = $mod->Lang('merid');
             array_push($ret,$mer);
@@ -111,14 +113,14 @@ class fbTimePickerField extends fbFieldBase {
 				}
             $hr = new stdClass();
             $hr->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]',
-       			$Hours, -1, $now['tm_hour'],'id="'.$id.'_'.$this->Id.'_1"');
+       			$Hours, -1, $now['tm_hour'],'id="'.$id.'_'.$this->Id.'_1" '.$js);
        		$hr->title = $mod->Lang('hour');
        		$hr->name = '<label for="'.$id.'_'.$this->Id.'_1">'.$mod->Lang('hour').'</label>';
        		array_push($ret, $hr);
        		
             $min = new stdClass();
             $min->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]',
-       			$Mins, -1, $now['tm_min'],'id="'.$id.'_'.$this->Id.'_2"');
+       			$Mins, -1, $now['tm_min'],'id="'.$id.'_'.$this->Id.'_2" '.$js);
        		$min->title = $mod->Lang('min');
        		$min->name = '<label for="'.$id.'_'.$this->Id.'_2">'.$mod->Lang('min').'</label>';
        		array_push($ret, $min);

@@ -28,9 +28,10 @@ class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
 	function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = &$this->form_ptr->module_ptr;
+		$js = $this->GetOption('javascript','');
 		return $mod->CreateInputText($id, 'fbrp__'.$this->Id,
 			htmlspecialchars($this->Value, ENT_QUOTES),
-           25,128);
+           25,128,$js);
 	}
 
 	function DisposeForm()

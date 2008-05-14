@@ -91,6 +91,7 @@ class fbPulldownField extends fbFieldBase {
 	function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = &$this->form_ptr->module_ptr;
+		$js = $this->GetOption('javascript','');
 
 		// why all this? Associative arrays are not guaranteed to preserve
 		// order, except in "chronological" creation order.
@@ -116,7 +117,7 @@ class fbPulldownField extends fbFieldBase {
 			//$sorted = array_merge(array(' '.$mod->Lang('select_one')=>''),$sorted);
 			$sorted = array(' '.$mod->Lang('select_one')=>'') + $sorted;
 		}
-		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'"');
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'" '.$js);
 	}
 
 

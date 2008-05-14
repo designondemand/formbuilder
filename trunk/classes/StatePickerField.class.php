@@ -60,6 +60,7 @@ class fbStatePickerField extends fbFieldBase {
 	function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = &$this->form_ptr->module_ptr;
+		$js = $this->GetOption('javascript','');
 
 		unset($this->States[$mod->Lang('no_default')]);
 		if ($this->GetOption('select_one','') != '')
@@ -77,7 +78,7 @@ class fbStatePickerField extends fbFieldBase {
 		  $this->SetValue($this->GetOption('default',''));
 		  }
 
-		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $this->States, -1, $this->Value,'id="'.$id. '_'.$this->Id.'"');
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $this->States, -1, $this->Value,'id="'.$id. '_'.$this->Id.'" '.$js);
 	}
 
 	function PrePopulateAdminForm($formDescriptor)

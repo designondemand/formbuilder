@@ -31,11 +31,13 @@ class fbTextField extends fbFieldBase {
 	function GetFieldInput($id, &$params, $returnid)
 	{
 	  $mod = &$this->form_ptr->module_ptr;
+	  $js = $this->GetOption('javascript','');
+	
 	  return $mod->CreateInputText($id, 'fbrp__'.$this->Id,
 				    ($this->Value?$this->Value:$this->GetOption('default')),
             $this->GetOption('length')<25?$this->GetOption('length'):25,
             $this->GetOption('length'),
-            ($this->GetOption('clear_default','0')==1?('onclick="if (this.value==\''.$this->GetOption('default').'\') {this.value=\'\';}"'):''));
+            ($this->GetOption('clear_default','0')==1?('onclick="if (this.value==\''.$this->GetOption('default').'\') {this.value=\'\';}" '):' ').$js);
 	}
 
 	function StatusInfo()

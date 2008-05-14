@@ -513,6 +513,12 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
 	      }
 	  }
       }
+
+	// handle any last cleanup functions
+    for($i=0;$i<count($this->Fields);$i++)
+      {
+		$this->Fields[$i]->PostDispositionAction();
+	  }
     return array($retCode,$resArray);
   }
 
@@ -658,11 +664,13 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
       $jsTrigger = " onclick='return LockButton()'";
       }
 
+    $js = $this->GetAttr('submit_javascript');
+
     if ($this->Page > 1)
       {
 	$mod->smarty->assign('prev',$mod->CreateInputSubmit($id, 'fbrp_prev',
 							    $this->GetAttr('prev_button_text'),
-							    'class="fbsubmit_prev"'));
+							    'class="fbsubmit_prev" '.$js));
       }
     else
       {
@@ -673,7 +681,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
       {
 	$mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'fbrp_submit',
 							      $this->GetAttr('next_button_text'),
-							      'class="fbsubmit_next"'));
+							      'class="fbsubmit_next" '.$js));
       }
     else
       {
@@ -691,7 +699,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
          }
 	   $mod->smarty->assign('submit',$jsStr . $mod->CreateInputSubmit($id, 'fbrp_submit',
 				$this->GetAttr('submit_button_text'),
-				'class="fbsubmit" id="fbsubmit"'.$jsTrigger));
+				'class="fbsubmit" id="fbsubmit"'.$jsTrigger.' '.$js));
       }
 	  return $mod->ProcessTemplateFromDatabase('fb_'.$this->Id);
   }
@@ -1159,6 +1167,8 @@ function unmy_htmlentities($val)
 			 $mod->Lang('title_submit_actions'));
     $mod->smarty->assign('title_submit_labels',
 			 $mod->Lang('title_submit_labels'));
+	    $mod->smarty->assign('title_submit_javascript',
+				 $mod->Lang('title_submit_javascript'));
     $mod->smarty->assign('title_submit_help',
 $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true','','','systemicon').
 			 $mod->Lang('title_submit_help'));
@@ -1346,6 +1356,12 @@ function fast_add(field_type)
     $mod->smarty->assign('input_form_template',
 			 $mod->CreateTextArea(false, $id,
 					      $this->GetAttr('form_template',$this->DefaultTemplate()), 'fbrp_forma_form_template','','fb_form_template'));
+
+	$mod->smarty->assign('input_submit_javascript',
+		$mod->CreateTextArea(false, $id,
+				$this->GetAttr('submit_javascript',''), 'fbrp_forma_submit_javascript','module_fb_area_short','fb_submit_javascript').
+				'<br />'.$mod->Lang('title_submit_javascript_long'));
+
 					      
     $mod->smarty->assign('input_submit_response',
 			 $mod->CreateTextArea(false, $id,

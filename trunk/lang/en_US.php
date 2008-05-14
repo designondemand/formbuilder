@@ -365,6 +365,11 @@ $lang['title_inline_form_help'] = 'Inline means any form followup replaces the {
 $lang['title_field_default_value'] = 'Default value for field';
 $lang['title_clear_default'] = 'Clear default on click?';
 $lang['title_clear_default_help'] = 'Check this to clear the default value when the user clicks this field. Since this uses a javascript string compare, it will fail if you put single quotes in your default text. Other un-javascript-friendly characters may also cause it to fail.';
+$lang['title_remove_file_from_server'] = 'Delete uploaded file from server after processing (email dispositions)';
+$lang['title_field_javascript'] = 'Javascript for field';
+$lang['title_field_javascript_long'] = 'Make this the complete Javascript call, including the event you want to trap, e.g., onclick="yourfn()"';
+$lang['title_submit_javascript'] = 'Form Submission Javascript';
+$lang['title_submit_javascript_long'] = 'Make this the complete Javascript call, including the event you want to trap, e.g., onclick="yourfn()".<br />This will probably not work well if you use the "safety script" option above.';
 
 $lang['default_template'] = 'Default Template';
 $lang['table_left_template'] = 'Table Template, Titles on left';

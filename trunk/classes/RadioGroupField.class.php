@@ -75,6 +75,8 @@ class fbRadioGroupField extends fbFieldBase
     $mod = &$this->form_ptr->module_ptr;
     $names = &$this->GetOptionRef('button_name');
     $is_set = &$this->GetOptionRef('button_is_set');
+	$js = $this->GetOption('javascript','');
+
     $fieldDisp = array();
     for ($i=0;$i<count($names);$i++)
       {
@@ -102,7 +104,7 @@ class fbRadioGroupField extends fbFieldBase
 	  {
 	    $thisBox->input .= ' checked="checked"';
 	  }
-	$thisBox->input .= ' id="'.$id. 'fbrp__'.$this->Id.'_'.$i.'" />';
+	$thisBox->input .= ' id="'.$id. 'fbrp__'.$this->Id.'_'.$i.' '.$js.'" />';
 	array_push($fieldDisp, $thisBox);
       }
     return $fieldDisp;

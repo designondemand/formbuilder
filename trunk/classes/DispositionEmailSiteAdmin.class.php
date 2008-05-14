@@ -33,6 +33,7 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
 	    global $gCms;
 	    $userops =& $gCms->GetUserOperations();
 		$mod = &$this->form_ptr->module_ptr;
+		$js = $this->GetOption('javascript','');
 
 		// why all this? Associative arrays are not guaranteed to preserve
 		// order, except in "chronological" creation order.
@@ -72,7 +73,7 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
 			$sname = implode(' ',$name);
 			$sorted[$sname]=($i+1);
 			}
-		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'"');
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'" '.$js);
 	}
 
 

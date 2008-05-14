@@ -36,7 +36,8 @@ class fbCheckboxField extends fbFieldBase {
 			{
 			$this->Value = 't';
 			}
-		return $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id, 't',$this->Value,' id="'.$id.'_'.$this->Id.'"').$label;
+		$js = $this->GetOption('javascript','');
+		return $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id, 't',$this->Value,' id="'.$id.'_'.$this->Id.'" '.$js).$label;
 	}
 
 	function GetHumanReadableValue($as_string=true)

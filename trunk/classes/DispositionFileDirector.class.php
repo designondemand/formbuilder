@@ -93,7 +93,8 @@ function populate_header(formname)
   function GetFieldInput($id, &$params, $returnid)
   {
     $mod = &$this->form_ptr->module_ptr;
-    
+    $js = $this->GetOption('javascript','');
+	
     // why all this? Associative arrays are not guaranteed to preserve
     // order, except in "chronological" creation order.
     $sorted =array();
@@ -118,7 +119,7 @@ function populate_header(formname)
       {
 	$sorted[$displaynames] = '1';
       }
-    return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'"');
+    return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'" '.$js);
   }
 
   function StatusInfo()

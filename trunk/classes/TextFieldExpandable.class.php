@@ -34,6 +34,8 @@ class fbTextFieldExpandable extends fbFieldBase {
 	{
 	  $mod = &$this->form_ptr->module_ptr;
 	 //debug_display($this->Value);
+	  $js = $this->GetOption('javascript','');
+	
 
      if (! is_array($this->Value))
 	      {
@@ -79,7 +81,7 @@ class fbTextFieldExpandable extends fbFieldBase {
 	    $thisRow->input = $mod->CreateInputText($id, 'fbrp__'.$this->Id.'[]',
 				       $this->Value[$i],
             $this->GetOption('length')<25?$this->GetOption('length'):25,
-            $this->GetOption('length'));
+            $this->GetOption('length'),$js);
         $thisRow->op = $mod->CreateInputSubmit($id, 'fbrp_FeD_'.$this->Id.'_'.$i, $this->GetOption('del_button','X'));
         array_push($ret, $thisRow);
         }
