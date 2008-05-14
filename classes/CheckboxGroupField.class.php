@@ -74,6 +74,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 		$mod = &$this->form_ptr->module_ptr;
 		$names = &$this->GetOptionRef('box_name');
 		$is_set = &$this->GetOptionRef('box_is_set');
+		$js = $this->GetOption('javascript','');
 		if (! is_array($names))
 			{
 			$names = array($names);
@@ -105,7 +106,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 					}
 				}
 			$thisBox->input = $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id.'[]', ($i+1),
-				$check_val !== false?($i+1):'-1',' id="'.$id.'fbrp__'.$this->Id.'_'.$i.'"');
+				$check_val !== false?($i+1):'-1',' id="'.$id.'fbrp__'.$this->Id.'_'.$i.'" '.$js);
 
 			array_push($fieldDisp, $thisBox);
 			}			

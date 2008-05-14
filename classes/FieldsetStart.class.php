@@ -25,6 +25,7 @@ class fbFieldsetStart extends fbFieldBase {
 
   function GetFieldInput($id, &$params, $returnid)
   {
+	$js = $this->GetOption('javascript','');
     $str = '<fieldset';
     $class = $this->GetOption('css_class');
     $legend = $this->GetOption('legend');
@@ -32,6 +33,10 @@ class fbFieldsetStart extends fbFieldBase {
       {
 	$str .= " class=\"$class\"";
       }
+    if ($js != '')
+		{
+		$str .= ' '.$js;
+		}
     $str .= '>';
     if( $legend != '' )
       {

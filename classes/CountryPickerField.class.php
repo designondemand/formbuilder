@@ -128,6 +128,7 @@ class fbCountryPickerField extends fbFieldBase {
 		$mod = &$this->form_ptr->module_ptr;
 
 		unset($this->Countries[$mod->Lang('no_default')]);
+		$js = $this->GetOption('javascript','');
 		if ($this->GetOption('select_one','') != '')
 			{
 			$this->Countries = array_merge(array($this->GetOption('select_one','')=>''),$this->Countries);
@@ -142,7 +143,7 @@ class fbCountryPickerField extends fbFieldBase {
 		  $this->SetValue($this->GetOption('default',''));
 		  }
 
-		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $this->Countries, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'"');
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $this->Countries, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'" '.$js);
 	}
 
 	function PrePopulateAdminForm($formDescriptor)

@@ -19,7 +19,21 @@ class fbFileUploadField extends fbFieldBase {
   function GetFieldInput($id, &$params, $returnid)
   {
     $mod = &$this->form_ptr->module_ptr;
-    $txt = $mod->CreateFileUploadInput($id,'fbrp__'.$this->Id);
+	$js = $this->GetOption('javascript','');
+    $txt = $mod->CreateFileUploadInput($id,'fbrp__'.$this->Id,$js);
+	if ($this->GetOption('show_details','0') == '1')
+		{
+		 $ms = $this->GetOption('max_size');
+		 if ($ms != '')
+			{
+			$txt .= ' '.$mod->Lang('maximum_size').': '.$ms.'kb';	
+			}
+		 $exts = $this->GetOption('permitted_extensions');
+		 if ($exts != '')
+			{
+	    	$txt .= ' '.$mod->Lang('permitted_extensions') . ': '.$exts;
+			}
+		}
     return $txt;
   }
 
@@ -64,25 +78,25 @@ class fbFileUploadField extends fbFieldBase {
     $mod = &$this->form_ptr->module_ptr;
     $ms = $this->GetOption('max_size');
     $exts = $this->GetOption('permitted_extensions');
-    $show = $this->GetOption('show_details');
+    $show = $this->GetOption('show_details','0');
     $sendto_uploads = $this->GetOption('sendto_uploads','false');
     $uploads_category = $this->GetOption('uploads_category');
     $uploads_destpage = $this->GetOption('uploads_destpage');
 
     $main = array(
-		  array($mod->Lang('title_maximum_size').':',
+		  array($mod->Lang('title_maximum_size'),
 			$mod->CreateInputText($formDescriptor, 
 					      'fbrp_opt_max_size', $ms, 5, 5).
 			' '.$mod->Lang('title_maximum_size_long')),
-		  array($mod->Lang('title_permitted_extensions').':',
+		  array($mod->Lang('title_permitted_extensions'),
 			$mod->CreateInputText($formDescriptor, 
 					      'fbrp_opt_permitted_extensions',
 					      $exts,25,80).'<br/>'.
 			$mod->Lang('title_permitted_extensions_long')),
-		  array($mod->Lang('title_show_limitations').':',
+		  array($mod->Lang('title_show_limitations'),
+			$mod->CreateInputHidden($formDescriptor,'fbrp_opt_show_details','0').
 			$mod->CreateInputCheckbox($formDescriptor, 
-						  'fbrp_opt_show_details', 'true', 
-						  $show).
+						  'fbrp_opt_show_details', '1', $show).
 			' '.$mod->Lang('title_show_limitations_long'))
 		 );
 
@@ -93,15 +107,15 @@ class fbFileUploadField extends fbFieldBase {
       {
 		$categorylist = $uploads->getCategoryList();
 		$adv = array(
-		     array($mod->Lang('title_sendto_uploads').':',
+		     array($mod->Lang('title_sendto_uploads'),
 			   $mod->CreateInputDropdown($formDescriptor,
 						     'fbrp_opt_sendto_uploads',$sendto_uploads_list,
 						     $sendto_uploads)),
-		     array($mod->Lang('title_uploads_category').':',
+		     array($mod->Lang('title_uploads_category'),
 			   $mod->CreateInputDropdown($formDescriptor,
 						     'fbrp_opt_uploads_category',$categorylist,
 						     $uploads_category)),
-		     array($mod->Lang('title_uploads_destpage').':',
+		     array($mod->Lang('title_uploads_destpage'),
 			   $mod->CreatePageDropdown($formDescriptor,
 						    'fbrp_opt_uploads_destpage',$uploads_destpage))
 						  
@@ -110,11 +124,31 @@ class fbFileUploadField extends fbFieldBase {
 	else
 		{
 		$adv = array();
+		array_push($main, array($mod->Lang('title_remove_file_from_server'),
+			$mod->CreateInputHidden($formDescriptor,'fbrp_opt_remove_file','0').
+			$mod->CreateInputCheckbox($formDescriptor, 
+					  'fbrp_opt_remove_file', '1', 
+					  $this->GetOption('remove_file','0'))));
 		}
 
     return array('main'=>$main,'adv'=>$adv);
   }
 
+
+  function PostDispositionAction()
+  {
+	if ($this->GetOption('remove_file','0') == '1')
+		{
+		if (is_array($this->Value))
+			{
+			$dest = $this->Value[0];	
+			if (file_exists($dest))
+				{
+				unlink($dest);
+				}
+			}
+		}
+  }
 
   function Validate()
   {

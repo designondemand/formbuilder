@@ -75,19 +75,21 @@ class fbDatePickerField extends fbFieldBase {
 
       $ret = array();
       $day = new stdClass();
-      $day->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]', $Days, -1, $today['mday'], 'id="'.$id. '_'.$this->Id.'_1"');
+	  $js = $this->GetOption('javascript','');
+
+      $day->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]', $Days, -1, $today['mday'], 'id="'.$id. '_'.$this->Id.'_1" '.$js);
  		$day->title = $mod->Lang('day');
  		$day->name = '<label for="'.$id.'_'.$this->Id.'_1">'.$mod->Lang('day').'</label>';
  		array_push($ret, $day);
 
       $mon = new stdClass();
-      $mon->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]', $this->Months, -1, $today['mon'], 'id="'.$id. '_'.$this->Id.'_2"');
+      $mon->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]', $this->Months, -1, $today['mon'], 'id="'.$id. '_'.$this->Id.'_2" '.$js);
  		$mon->title = $mod->Lang('mon');
  		$mon->name = '<label for="'.$id.'_'.$this->Id.'_2">'.$mod->Lang('mon').'</label>';
  		array_push($ret, $mon);
 
       $yr = new stdClass();
-      $yr->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]', $Year, -1, $today['year'],'id="'.$id. '_'.$this->Id.'_3"');
+      $yr->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]', $Year, -1, $today['year'],'id="'.$id. '_'.$this->Id.'_3" '.$js);
       $yr->name = '<label for="'.$id.'_'.$this->Id.'_3">'.$mod->Lang('year').'</label>';
       $yr->title = $mod->Lang('year');
       array_push($ret,$yr);

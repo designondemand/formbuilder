@@ -187,6 +187,12 @@ class fbFieldBase {
   }
 
 
+  // override me if you need to do something after the form has been disposed
+  function PostDispositionAction()
+  {
+	return;
+  }
+
   // override me if you're just tweaking other fields before disposition
   function ModifyOtherFields()
   {
@@ -445,17 +451,22 @@ class fbFieldBase {
 	    array_push($adv, array($mod->Lang('title_hide_label'),$mod->CreateInputCheckbox($formDescriptor, 'fbrp_hide_label', 1, $this->HideLabel()).$mod->Lang('title_hide_label_long')));
 	  }
 
-	if ($this->DisplayInForm())
-	  {
-	    array_push($adv,array($mod->Lang('title_field_css_class'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_css_class', $this->GetOption('css_class'), 50)));
-	  }
-	
 	$alias = $this->GetOption('field_alias','');
 	if ($alias == '')
 		{
 		$alias = 'fld'.$this->GetId();
 		}
 	array_push($adv, array($mod->Lang('title_field_alias'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_field_alias', $this->GetOption('field_alias'), 50)));			
+
+	if ($this->DisplayInForm())
+	  {
+	    array_push($adv,array($mod->Lang('title_field_css_class'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_css_class', $this->GetOption('css_class'), 50)));
+		array_push($adv,array($mod->Lang('title_field_javascript'),
+			$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('javascript',''),
+						   'fbrp_opt_javascript','module_fb_area_short').'<br />'.
+			$mod->Lang('title_field_javascript_long')));
+	  }
+	
       }
     else
       {

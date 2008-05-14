@@ -26,6 +26,8 @@ class fbLinkField extends fbFieldBase {
 	function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = &$this->form_ptr->module_ptr;
+		$js = $this->GetOption('javascript','');
+		
 		if ($this->Value !== false && is_array($this->Value))
 			{
 			$val = &$this->Value;
@@ -38,12 +40,12 @@ class fbLinkField extends fbFieldBase {
 		$thisBox = new stdClass();
 		$thisBox->name = '<label for="'.$id.'_'.$this->Id.'_1">'.$mod->Lang('link_destination').'</label>';
 		$thisBox->title = $mod->Lang('link_destination');
-		$thisBox->input = $this->TextField($id, '_'.$this->Id.'[]', $val[0],'','','id="'.$id.'_'.$this->Id.'_1"');
+		$thisBox->input = $this->TextField($id, '_'.$this->Id.'[]', $val[0],'','','id="'.$id.'_'.$this->Id.'_1" '.$js);
 		array_push($fieldDisp, $thisBox);
 		$thisBox = new stdClass();
 		$thisBox->name = '<label for="'.$id.'_'.$this->Id.'_2">'.$mod->Lang('link_label').'</label>';
 		$thisBox->title = $mod->Lang('link_label');
-		$thisBox->input = $this->TextField($id, '_'.$this->Id.'[]', $val[1],'','','id="'.$id.'_'.$this->Id.'_2"');
+		$thisBox->input = $this->TextField($id, '_'.$this->Id.'[]', $val[1],'','','id="'.$id.'_'.$this->Id.'_2" '.$js);
 		array_push($fieldDisp, $thisBox);			
 		return $fieldDisp;
 		

@@ -96,7 +96,8 @@ function populate_header(formname)
   function GetFieldInput($id, &$params, $returnid)
   {
     $mod = &$this->form_ptr->module_ptr;
-    
+    $js = $this->GetOption('javascript','');
+	
     // why all this? Associative arrays are not guaranteed to preserve
     // order, except in "chronological" creation order.
     $displaynames = &$this->GetOptionRef('destination_displayname');
@@ -112,8 +113,8 @@ function populate_header(formname)
 	$ctrl->input = $mod->CreateInputCheckbox($id,
 						 'fbrp__'.$this->Id.'[]', 
 						 $i+1,'-1',
-						 sprintf(' id="%s_%s_%s"',
-							 $id, $this->Id,$i));
+						 sprintf(' id="%s_%s_%s" ',
+							 $id, $this->Id,$i).$js);
 	$fields[] = $ctrl;
       }
     return $fields;
