@@ -140,7 +140,7 @@ class fbDispositionEmailBase extends fbFieldBase
 						}
 					else if (function_exists('mime_content_type'))
 						{
-						$thisType = mime_content_type($thisType);
+						$thisType = mime_content_type($thisAtt[0]);
 						}
 					else
 						{
