@@ -116,8 +116,8 @@ class fbCheckboxField extends fbFieldBase {
 	function Validate()
 	{
 		$mod = &$this->form_ptr->module_ptr;
-		$result = true;
-		$message = '';
+		$this->validated = true;
+		$this->validationErrorText = '';
 
 		switch ($this->ValidationType)
 		  {
@@ -126,12 +126,12 @@ class fbCheckboxField extends fbFieldBase {
 		  	   case 'checked':
 		  	       if ($this->Value === false)
 		  	           {
-		  	           $result = false;
-		  	           $message = $mod->Lang('you_must_check',$this->GetOption('label',''));
+		  	           $this->validated = false;
+		  	           $this->validationErrorText = $mod->Lang('you_must_check',$this->GetOption('label',''));
 		  	           }
 		  	       break;
 		  }
-		return array($result, $message);
+		return array($this->validated, $this->validationErrorText);
 	}
 
 }
