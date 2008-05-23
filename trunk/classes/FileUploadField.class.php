@@ -51,6 +51,7 @@ class fbFileUploadField extends fbFieldBase {
 
   function GetHumanReadableValue($as_string=true)
 	{
+	    $mod = &$this->form_ptr->module_ptr;
 		if ($as_string && is_array($this->Value) && isset($this->Value[1]))
 			{
 			return $this->Value[1];

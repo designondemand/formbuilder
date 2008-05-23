@@ -36,16 +36,17 @@ class fbFromEmailAddressField extends fbFieldBase {
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		$others = &$this->form_ptr->GetFields();
-		
-		for($i=0;$i<count($others);$i++)
+		if ($this->Value !== false)
 			{
-			$replVal = '';
-			if ($others[$i]->IsDisposition() && is_subclass_of($others[$i],'fbDispositionEmailBase'))
+			for($i=0;$i<count($others);$i++)
 				{
-				$others[$i]->SetOption('email_from_address',$this->Value);
+				$replVal = '';
+				if ($others[$i]->IsDisposition() && is_subclass_of($others[$i],'fbDispositionEmailBase'))
+					{
+					$others[$i]->SetOption('email_from_address',$this->Value);
+					}
 				}
 			}
-		
 	}
 
 	function StatusInfo()
