@@ -263,6 +263,7 @@ class fbForm {
   function createSampleTemplateJavascript($fieldName='opt_email_template', $includeHTML=true, $includeText=true)
   {
     $jsCode = "<script type=\"text/javascript\">\n
+/* <![CDATA[ */
 function populate(formname)
     {
     var fname = 'IDfbrp_".$fieldName."';
@@ -273,6 +274,7 @@ function populate_html(formname)
     var fname = 'IDfbrp_".$fieldName."';
     formname[fname].value=|HTMLTEMPLATE|;
 	 }
+/* ]]> */
 </script>";
 	if ($includeText)
 		{
@@ -644,6 +646,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
     if ($this->GetAttr('input_button_safety','0') == '1')
       {
 	$jsStr = '<script type="text/javascript">
+	/* <![CDATA[ */
     var submitted = 0;
     function LockButton ()
        {
@@ -660,6 +663,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
           }
         return ret;
         }
+/* ]]> */
 </script>';
       $jsTrigger = " onclick='return LockButton()'";
       }
@@ -1280,6 +1284,7 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	    $mod->smarty->assign('fastadd',1);
 	    $mod->smarty->assign('title_fastadd',$mod->Lang('title_fastadd'));
 	    $typeInput = "<script type=\"text/javascript\">
+/* <![CDATA[ */
 function fast_add(field_type)
 {
 	var type=field_type.options[field_type.selectedIndex].value;
@@ -1287,6 +1292,7 @@ function fast_add(field_type)
 	this.location=link;
 	return true;
 }
+/* ]]> */
 </script>";
 	    $typeInput = str_replace('&amp;','&',$typeInput); 
 	    $mod->initialize();
@@ -1577,8 +1583,6 @@ function fast_add(field_type)
   function MakeAlias($string, $isForm=false)
   {
     $string = trim(htmlspecialchars($string));
-    //$string = preg_replace("/[_-\W]+/", "_", $string);
-    //$string = trim($string, '_');
     if ($isForm)
       {
 	return strtolower($string);

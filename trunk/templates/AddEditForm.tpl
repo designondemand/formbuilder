@@ -1,5 +1,6 @@
 <script type="text/javascript">
 {literal}
+/* <![CDATA[ */
 function getTemplate()
 	{		
 	var selector = document.getElementById('fb_template_load');
@@ -33,7 +34,7 @@ function replaceTemplate(originalRequest)
 		//put returned template in the textarea
 		$('fb_form_template').value = originalRequest.responseText;
 	}
-
+/* ]]> */
 {/literal}
 </script>
 {if $message != ''}<h4>{$message}</h4>{/if}
