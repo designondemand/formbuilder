@@ -21,7 +21,7 @@ class fbRadioGroupField extends fbFieldBase
     $this->DisplayInForm = true;
     $this->HasAddOp = true;
     $this->HasDeleteOp = true;
-    $this->NonRequirableField = true;
+    $this->NonRequirableField = false;
     $this->ValidationTypes = array(
             );
     $this->optionAdd = 0;
@@ -193,7 +193,7 @@ class fbRadioGroupField extends fbFieldBase
 
   function PostPopulateAdminForm(&$mainArray, &$advArray)
   {
-    $mod = &$this->form_ptr->module_ptr;
+/*    $mod = &$this->form_ptr->module_ptr;
     // remove the "required" field, since this can only be done via validation
     $reqIndex = -1;
     for ($i=0;$i<count($mainArray);$i++)
@@ -207,6 +207,7 @@ class fbRadioGroupField extends fbFieldBase
       {
 	array_splice($mainArray, $reqIndex,1);
       }
+*/
   }
 
 

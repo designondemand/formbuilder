@@ -146,8 +146,9 @@ class fbDispositionEmailBase extends fbFieldBase
 						{
 						$thisType = 'application/octet-stream';
 						}
-
-    				if (! $mail->AddAttachment($thisAtt[0], $thisAtt[0], "base64", $thisType))
+					$thisNames = split('[/:\\]',$thisAtt[0]);
+					$thisName = array_pop($thisNames);
+    				if (! $mail->AddAttachment($thisAtt[0], $thisName, "base64", $thisType))
           				{
       					// failed upload kills the send.
       					audit(-1, (isset($name)?$name:""), $mod->Lang('submit_error',$mail->GetErrorInfo()));
