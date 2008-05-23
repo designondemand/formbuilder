@@ -82,7 +82,7 @@ class fbTextField extends fbFieldBase {
 	function Validate()
 	{
 		$this->validated = true;
-		$this->validtionErrorText = '';
+		$this->validationErrorText = '';
 		$mod = &$this->form_ptr->module_ptr;
 		switch ($this->ValidationType)
 		  {
@@ -93,7 +93,7 @@ class fbTextField extends fbFieldBase {
                       ! preg_match("/^([\d\.\,])+$/i", $this->Value))
                       {
                       $this->validated = false;
-                      $this->validtionErrorText = $mod->Lang('please_enter_a_number',$this->Name);
+                      $this->validationErrorText = $mod->Lang('please_enter_a_number',$this->Name);
                       }
 		  	       break;
 		  	   case 'integer':
@@ -102,7 +102,7 @@ class fbTextField extends fbFieldBase {
                       intval($this->Value) != $this->Value)
                     {
                     $this->validated = false;
-                    $this->validtionErrorText = $mod->Lang('please_enter_an_integer',$this->Name);
+                    $this->validationErrorText = $mod->Lang('please_enter_an_integer',$this->Name);
                     }
 		  	       break;
 		  	   case 'email':
@@ -110,7 +110,7 @@ class fbTextField extends fbFieldBase {
                       ! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $this->Value))
                     {
                     $this->validated = false;
-                    $this->validtionErrorText = $mod->Lang('please_enter_an_email',$this->Name);
+                    $this->validationErrorText = $mod->Lang('please_enter_an_email',$this->Name);
                     }
 		  	       break;
 		  	   case 'usphone':
@@ -119,7 +119,7 @@ class fbTextField extends fbFieldBase {
                        $this->Value))
                     {
                     $this->validated = false;
-                    $this->validtionErrorText = $mod->Lang('please_enter_a_phone',$this->Name);
+                    $this->validationErrorText = $mod->Lang('please_enter_a_phone',$this->Name);
                     }
 		  	       break;
 		  	   case 'regex_match':
@@ -127,7 +127,7 @@ class fbTextField extends fbFieldBase {
                       ! preg_match($this->GetOption('regex','/.*/'), $this->Value))
                     {
                     $this->validated = false;
-                    $this->validtionErrorText = $mod->Lang('please_enter_valid',$this->Name);
+                    $this->validationErrorText = $mod->Lang('please_enter_valid',$this->Name);
                     }
 		  	   	   break;
 		  	   case 'regex_nomatch':
@@ -135,16 +135,16 @@ class fbTextField extends fbFieldBase {
                        preg_match($this->GetOption('regex','/.*/'), $this->Value))
                     {
                     $this->validated = false;
-                    $this->validtionErrorText = $mod->Lang('please_enter_valid',$this->Name);
+                    $this->validationErrorText = $mod->Lang('please_enter_valid',$this->Name);
                     }
 		  	   	   break;
 		  }
 		if ($this->GetOption('length',0) > 0 && strlen($this->Value) > $this->GetOption('length',0))
 			{
 			$this->validated = false;
-			$this->validtionErrorText = $mod->Lang('please_enter_no_longer',$this->GetOption('length',0));
+			$this->validationErrorText = $mod->Lang('please_enter_no_longer',$this->GetOption('length',0));
 			}
-		return array($this->validated, $this->validtionErrorText);
+		return array($this->validated, $this->validationErrorText);
 	}
 }
 

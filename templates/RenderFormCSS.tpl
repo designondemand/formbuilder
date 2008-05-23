@@ -5,7 +5,7 @@
         	{strip}
          	{if $entry->needs_div == 1}
             	<div
-            	{if $entry->required == 1 || $entry->css_class != ''} class="
+            	{if $entry->required == 1 || $entry->css_class != '' || $entry->valid == 0} class="
               		{if $entry->required == 1}
                 		required
               		{/if}
@@ -13,6 +13,9 @@
               		{if $entry->css_class != ''}
                 		{$entry->css_class}
               		{/if}
+					{if $entry->valid == 0}
+					 	fb_invalid
+					{/if}
               		"
             	{/if}
             	>

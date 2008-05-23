@@ -50,10 +50,6 @@ class fbCheckboxGroupField extends fbFieldBase {
         $mod = &$this->form_ptr->module_ptr;
 		$this->countBoxes();
 		$ret = $mod->Lang('boxes',$this->boxCount);
-		if (strlen($this->ValidationType)>0)
-		  {
-		  	$ret .= ", ".array_search($this->ValidationType,$this->ValidationTypes);
-		  }
 		 return $ret;
 	}
 

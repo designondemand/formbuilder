@@ -90,7 +90,7 @@ class fbTextAreaField extends fbFieldBase {
 					
       			  array($mod->Lang('title_clear_default'),
 		 		 	array($mod->CreateInputHidden($formDescriptor,'fbrp_opt_clear_default','0').$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_clear_default',
-            		'1',$this->GetOption('clear_default','0')).$mod->Lang('title_clear_default_help')
+            		'1',$this->GetOption('clear_default','0')),$mod->Lang('title_clear_default_help')
 					)));
 
          return array('main'=>$main,'adv'=>$adv);
