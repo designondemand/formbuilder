@@ -565,6 +565,10 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
     $mod->smarty->assign('form_id',$this->Id);
 
     $hidden = $mod->CreateInputHidden($id, 'form_id', $this->Id);
+	if (isset($params['lang']))
+		{
+		$hidden .= $mod->CreateInputHidden($id, 'lang', $params['lang']);
+		}
     $hidden .= $mod->CreateInputHidden($id, 'fbrp_continue', ($this->Page + 1));
     if (isset($params['fbrp_browser_id']))
       {
