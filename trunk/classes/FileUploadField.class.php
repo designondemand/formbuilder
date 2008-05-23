@@ -41,7 +41,8 @@ class fbFileUploadField extends fbFieldBase {
   {
     $mod = &$this->form_ptr->module_ptr;
     parent::Load($id,$params,$loadDeep);
-    if( isset( $_FILES ) && isset( $_FILES[$mod->module_id.'fbrp__'.$this->Id] ) )
+    if( isset( $_FILES ) && isset( $_FILES[$mod->module_id.'fbrp__'.$this->Id] ) &&
+      $_FILES[$mod->module_id.'fbrp__'.$this->Id]['size'] > 0 )
       {
 		// Okay, a file was uploaded
 		$this->SetValue($mod->module_id.'fbrp__'.$this->Id);
