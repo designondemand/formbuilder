@@ -24,10 +24,16 @@ class fbTextAreaField extends fbFieldBase {
 	function GetFieldInput($id, &$params, $returnid)
 	{            
 	   $mod = &$this->form_ptr->module_ptr;	
-       $ret = $mod->CreateTextArea($this->GetOption('wysiwyg','0') == '1'?true:false,
-				   $id,  ($this->Value?$this->Value:$this->GetOption('default')),
-				   'fbrp__'.$this->Id,'',$id.'fbrp__'.$this->Id,
-               $this->GetOption('cols','80'),$this->GetOption('rows','15'));
+       $ret = $mod->CreateTextArea(
+				  ($this->GetOption('wysiwyg','0') == '1'?true:false),
+				   $id,
+				  ($this->Value?$this->Value:$this->GetOption('default')),
+				   'fbrp__'.$this->Id,
+				  '',
+				  $id.'fbrp__'.$this->Id,
+				  '',
+               	  $this->GetOption('cols','80'),
+				  $this->GetOption('rows','15'));
 		if ($this->GetOption('clear_default','0')=='1')
 			{
 			$ret .= '<script type="text/javascript">';
