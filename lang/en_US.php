@@ -770,6 +770,7 @@ of the license for the full disclaimer.</p>
 
 $lang['changelog'] = "
 <ul>
+<li>Version 0.5.2. 25 May 08. Bugfixes. Release in preparation for substantial reworking for 0.6</li>
 <li>Version 0.5.1. 30 April 08. Bugfixes, rewrote some of the File Upload code to prevent white screen of annoyance.</li>
 <li>Version 0.5. 19 April 08. Bugfixes, support for FormBrowser fixes and features, disposition type for upcoming FormBrowser version.</li>
 <li>Version 0.4.4. 26 Sept 07. Bugfixes for radio button groups, fix for validation of DispositionDeliverToEmailAddressField.</li>
