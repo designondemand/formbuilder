@@ -657,7 +657,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
        var ret = false;
        if ( ! submitted )
           {
-           var item = document.getElementById("fbsubmit");
+           var item = document.getElementById("fbsubmit'.$this->Id.'");
            if (item != null)
              {
              setTimeout(function() {item.disabled = true}, 0);
@@ -707,7 +707,7 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javas
          }
 	   $mod->smarty->assign('submit',$jsStr . $mod->CreateInputSubmit($id, 'fbrp_submit',
 				$this->GetAttr('submit_button_text'),
-				'class="fbsubmit" id="fbsubmit"'.$jsTrigger.' '.$js));
+				'class="fbsubmit" id="fbsubmit'.$this->Id.'"'.$jsTrigger.' '.$js));
       }
 	  return $mod->ProcessTemplateFromDatabase('fb_'.$this->Id);
   }
@@ -873,7 +873,8 @@ function unmy_htmlentities($val)
 			$elements[$index]['attributes'] = empty($tag['attributes']) ? "" : $tag['attributes'];
 			$elements[$index]['content']    = empty($tag['value']) ? "" : $tag['value'];
 			if ( $tag['type'] == "open" )
-				{    # push
+				{
+				# push
 				$elements[$index]['children'] = array();
 				$stack[count($stack)] = &$elements;
 				$elements = &$elements[$index]['children'];
