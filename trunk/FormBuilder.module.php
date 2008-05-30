@@ -313,8 +313,9 @@ class FormBuilder extends CMSModule
         	
 		return $oneset;
 	}
-
-	function GetResponses($form_id, $start_point, $number, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y')
+// Start ALBY
+function GetResponses($form_id, $start_point, $number, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y', &$params)
+// End ALBY
 	{
 		global $gCms;
 		$db =& $gCms->GetDb();
@@ -330,6 +331,10 @@ class FormBuilder extends CMSModule
         	{
         	$sql .= ' and admin_approved is not null';
         	}
+// Start ALBY
+if( (! empty($params['fbrp_response_search'])) && (is_array($params['fbrp_response_search'])) )
+ $sql .= ' AND resp_id IN ('. implode(',', $params['fbrp_response_search']) .')';
+// End ALBY
         $sql .= ' order by submitted';
         $dbcount = $db->Execute('SELECT COUNT(*) as num '.$sql,array($form_id));
    
@@ -416,6 +421,10 @@ class FormBuilder extends CMSModule
         	{
         	$sql .= ' and admin_approved is not null';
         	}
+// Start ALBY
+if( (! empty($params['fbrp_response_search'])) && (is_array($params['fbrp_response_search'])) )
+ $sql .= ' AND resp_id IN ('. implode(',', $params['fbrp_response_search']) .')';
+// End ALBY
         
 		if (! isset($params['fbrp_sort_field']) || $params['fbrp_sort_field']=='submitdate')
 			{
