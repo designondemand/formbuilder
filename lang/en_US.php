@@ -4,6 +4,7 @@ $lang['friendlyname'] = 'Form Builder';
 
 // field types
 $lang['field_type_']='Field Type Not Set';
+$lang['field_type_CatalogerItemsField'] = 'Select one (or more) cataloger items';
 $lang['field_type_FieldsetEnd'] = '-Fieldset End';
 $lang['field_type_FieldsetStart']='-Fieldset Start';
 $lang['field_type_TextField']='Text Input';
@@ -168,6 +169,23 @@ $lang['cancel'] = 'Cancel';
 $lang['value_set'] = 'Value set: %s';
 
 // Field Attribute Titles
+$lang['help_cataloger_attribute_fields'] = <<<EOT
+Below is a list of the attributes available from the Cataloger module.<br/>You can optionally specify valid ranges, values, or numerous values to be used in filtering the list of items that is displayed to the user.<br/>
+<br/>
+<strong>Ranges:</strong><br/>
+Ranges can be specified by signifying a minimum and maximum value using this syntax: &quot;range: minvalue to maxvalue&quot;<br/>
+<br/>
+<strong>Multiple Values:</strong><br/>
+To specify multiple values for an attribute use the syntax &quot;multi: value1|value2|value3&quot;<br/>
+<br/>
+<strong>Values from hidden fields</strong><br/>
+To specify a value from a hidden field use the syntax {\$fld_id}<br/>
+<br/>
+EOT;
+$lang['help_name_regex'] = 'A regular expression to allow filtering cataloger items by name';
+$lang['help_field_height'] = 'The height of the multiselect field';
+$lang['title_name_regex'] = 'Cataloger Item Name Regular Expression';
+$lang['title_field_height'] = 'Field Height';
 $lang['title_file_path'] = 'Destination Directory for output files';
 $lang['title_udt_name'] = 'User Defined Tag';
 $lang['title_uploads_destpage'] = 'Page to return to with uploads link';
