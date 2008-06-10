@@ -863,6 +863,7 @@ function unmy_htmlentities($val)
 	xml_parser_free($parser);
 	$elements = array();
 	$stack = array();
+	$fieldMap = array();
 	foreach ( $vals as $tag )
 		{
 		$index = count( $elements );
@@ -894,11 +895,7 @@ function unmy_htmlentities($val)
 		}
 	$params['form_id'] = -1; // override any form_id values that may be around
 	$formAttrs = &$elements[0]['attributes'];
-/*	if ($this->inXML($formAttrs['name']))
-		{
-		$this->SetName($formAttrs['name']);
-		}
-*/	if ($this->inXML($formAttrs['alias']))
+	if ($this->inXML($formAttrs['alias']))
 		{
 		$this->SetAlias($formAttrs['alias']);
 		}
@@ -933,10 +930,15 @@ function unmy_htmlentities($val)
 			$fieldAttrs = &$thisChild['attributes'];
 			$className = $this->MakeClassName($fieldAttrs['type'], '');
 		    $newField = new $className($this, $params);
+			$oldId = $fieldAttrs['id'];
 			
-			if ($this->inXML($fieldAttrs['name']))
+/*			if ($this->inXML($fieldAttrs['name']))
 				{
 				$newField->SetName($fieldAttrs['name']);
+				}
+*/			if ($this->inXML($fieldAttrs['alias']))
+				{
+				$newField->SetAlias($fieldAttrs['alias']);
 				}
 			$newField->SetValidationType($fieldAttrs['validation_type']);
 			if ($this->inXML($fieldAttrs['order_by']))
@@ -953,12 +955,20 @@ function unmy_htmlentities($val)
 				}
 			foreach ($thisChild['children'] as $thisOpt)
 				{	
-				//debug_display($thisOpt);
-				$newField->OptionFromXML($thisOpt);
+				if ($thisOpt['name'] == 'field_name')
+					{
+					$newField->SetName($thisOpt['content']);
+					}
+				else
+					{
+					$newField->OptionFromXML($thisOpt);
+					}
 				}
 			$newField->Store(true);
+			$fieldMap[$newField->GetId()] = $oldId;
 			}
 		}
+	debug_display($fieldMap);
 	return true;	
   }
 

@@ -275,6 +275,12 @@ class fbFieldBase {
     return $this->GetOption('field_alias','');
   }
 
+  function SetAlias($alias)
+  {
+    $this->SetOption('field_alias',$alias);
+  }
+
+
   function SetSmartyEval($bool)
   {
   	$this->SmartyEval = $bool;
@@ -756,11 +762,13 @@ class fbFieldBase {
   {
 	$xmlstr = "\t<field id=\"".$this->Id."\"\n";
 	$xmlstr .= "\t\ttype=\"".$this->Type."\"\n";
-	$xmlstr .= "\t\tname=\"".htmlspecialchars($this->Name)."\"\n";
+	//$xmlstr .= "\t\tname=\"".htmlspecialchars($this->Name)."\"\n";
 	$xmlstr .= "\t\tvalidation_type=\"".$this->ValidationType."\"\n";
 	$xmlstr .= "\t\torder_by=\"".$this->OrderBy."\"\n";
 	$xmlstr .= "\t\trequired=\"".$this->Required."\"\n";
-	$xmlstr .= "\t\thide_label=\"".$this->HideLabel."\">\n";
+	$xmlstr .= "\t\thide_label=\"".$this->HideLabel."\"\n";
+	$xmlstr .= "\t\talias=\"".$this->GetOption('field_alias','')."\">\n";
+	$xmlstr .= "\t\t<field_name><![CDATA[".$this->Name."]]></field_name>\n";
 	$xmlstr .= $this->OptionsAsXML();
 	if ($exportValues)
 		{
