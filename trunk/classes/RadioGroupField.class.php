@@ -191,25 +191,6 @@ class fbRadioGroupField extends fbFieldBase
     return array('main'=>$main,'adv'=>$adv);
   }
 
-  function PostPopulateAdminForm(&$mainArray, &$advArray)
-  {
-/*    $mod = &$this->form_ptr->module_ptr;
-    // remove the "required" field, since this can only be done via validation
-    $reqIndex = -1;
-    for ($i=0;$i<count($mainArray);$i++)
-      {
-	if ($mainArray[$i]->title == $mod->Lang('title_field_required'))
-	  {
-	    $reqIndex = $i;
-	  }
-      }
-    if ($reqIndex != -1)
-      {
-	array_splice($mainArray, $reqIndex,1);
-      }
-*/
-  }
-
 
   function PostAdminSubmitCleanup()
   {
@@ -228,6 +209,34 @@ class fbRadioGroupField extends fbFieldBase
     $this->countBoxes();
   }
 
+  function OptionFromXML($theArray)
+	{
+		foreach ($theArray['children'] as $thisChildKey=>$thisChildVal)
+			{
+			if ($thisChildVal['name']=='name')
+				{
+				$this->PushOptionElement('button_name',$thisChildVal['content']);
+				}
+			elseif ($thisChildVal['name']=='checked_value')
+				{
+				$this->PushOptionElement('button_checked',$thisChildVal['content']);	
+				}
+			elseif ($thisChildVal['name']=='checked_by_default')
+				{
+				$this->PushOptionElement('button_is_set',$thisChildVal['content']);	
+				}
+			elseif ($thisChildVal['name']=='checked' && $thisChildVal['content'] == 'true')
+				{
+				if (! is_array($this->Value))
+					{
+					$this->Value = array();
+					}
+				array_push($this->Value,count($this->Options['button_name']));
+				}
+			}
+	}
+
+
 	function OptionsAsXML()
 	{
 		$names = &$this->GetOptionRef('button_name');
@@ -240,12 +249,19 @@ class fbRadioGroupField extends fbFieldBase
 			{
 				$checked = array($checked);
 			}
+		$is_checked = &$this->GetOptionRef('button_is_set');
+		if (! is_array($is_checked))
+			{
+				$is_checked = array($is_checked);
+			}
+
 		$xmlstr = "";
 		for ($i=1;$i<=count($names);$i++)
 			{
 			$xmlstr .= "\t\t\t<option>\n";
 			$xmlstr .= "\t\t\t\t<name><![CDATA[".$names[$i-1]."]]></name>\n";
 			$xmlstr .= "\t\t\t\t<checked_value><![CDATA[".$checked[$i-1]."]]></checked_value>\n";
+			$xmlstr .= "\t\t\t\t<checked_by_default><![CDATA[".$is_checked[$i-1]."]]></checked_by_default>\n";
 			$ischecked = "false";
 			if ($this->FindArrayValue($i) !== false)
 				{

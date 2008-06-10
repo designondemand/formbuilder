@@ -207,6 +207,30 @@ class fbMultiselectField extends fbFieldBase {
 	
 	}
 
+   function OptionFromXML($theArray)
+	{
+		foreach ($theArray['children'] as $thisChildKey=>$thisChildVal)
+			{
+			if ($thisChildVal['name']=='name')
+				{
+				$this->PushOptionElement('option_name',$thisChildVal['content']);
+				}
+			elseif ($thisChildVal['name']=='selected_value')
+				{
+				$this->PushOptionElement('option_value',$thisChildVal['content']);	
+				}
+			elseif ($thisChildVal['name']=='selected' && $thisChildVal['content'] == 'true')
+				{
+				if (! is_array($this->Value))
+					{
+					$this->Value = array();
+					}
+				array_push($this->Value,count($this->Options['option_name']));
+				}
+			}
+	}
+
+
 	function OptionsAsXML()
 	{
 		$mod = &$this->form_ptr->module_ptr;

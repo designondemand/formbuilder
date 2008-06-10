@@ -261,6 +261,37 @@ class fbCheckboxGroupField extends fbFieldBase {
 			}
 		$this->countBoxes();
 	}
+
+   function OptionFromXML($theArray)
+	{
+		foreach ($theArray['children'] as $thisChildKey=>$thisChildVal)
+			{
+			if ($thisChildVal['name']=='name')
+				{
+				$this->PushOptionElement('box_name',$thisChildVal['content']);
+				}
+			elseif ($thisChildVal['name']=='checked_value')
+				{
+				$this->PushOptionElement('box_checked',$thisChildVal['content']);	
+				}
+			elseif ($thisChildVal['name']=='unchecked_value')
+				{
+				$this->PushOptionElement('box_unchecked',$thisChildVal['content']);	
+				}
+			elseif ($thisChildVal['name']=='checked_by_default')
+				{
+				$this->PushOptionElement('box_is_set',$thisChildVal['content']);	
+				}
+			elseif ($thisChildVal['name']=='checked' && $thisChildVal['content'] == 'true')
+				{
+				if (! is_array($this->Value))
+					{
+					$this->Value = array();
+					}
+				array_push($this->Value,count($this->Options['box_name']));
+				}
+			}
+	}
 	
 	function OptionsAsXML()
 	{
@@ -279,6 +310,11 @@ class fbCheckboxGroupField extends fbFieldBase {
 			{
 				$unchecked = array($unchecked);
 			}
+		$isdef = &$this->GetOptionRef('box_is_set');
+		if (! is_array($isdef))
+			{
+			$isdef = array($isdef);
+			}
 		$xmlstr = "";
 		for ($i=1;$i<=count($names);$i++)
 			{
@@ -286,6 +322,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 			$xmlstr .= "\t\t\t\t<name><![CDATA[".$names[$i-1]."]]></name>\n";
 			$xmlstr .= "\t\t\t\t<checked_value><![CDATA[".$checked[$i-1]."]]></checked_value>\n";
 			$xmlstr .= "\t\t\t\t<unchecked_value><![CDATA[".$unchecked[$i-1]."]]></unchecked_value>\n";
+			$xmlstr .= "\t\t\t\t<checked_by_default><![CDATA[".$isdef[$i-1]."]]></checked_by_default>\n";
 			$ischecked = "false";
 			if ($this->FindArrayValue($i) !== false)
 				{
