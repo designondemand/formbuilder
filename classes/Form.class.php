@@ -894,17 +894,21 @@ function unmy_htmlentities($val)
 		}
 	$params['form_id'] = -1; // override any form_id values that may be around
 	$formAttrs = &$elements[0]['attributes'];
-	if ($this->inXML($formAttrs['name']))
+/*	if ($this->inXML($formAttrs['name']))
 		{
 		$this->SetName($formAttrs['name']);
 		}
-	if ($this->inXML($formAttrs['alias']))
+*/	if ($this->inXML($formAttrs['alias']))
 		{
 		$this->SetAlias($formAttrs['alias']);
 		}
 	// populate the attributes first, so we can save the form and then start adding fields to it.
 	foreach ($elements[0]['children'] as $thisChild)
 		{
+		if ($thisChild['name'] == 'form_name')
+			{
+			$this->SetName($thisChild['content']);
+			}
 		if ($thisChild['name'] == 'attribute')
 			{
 			$this->SetAttr($thisChild['attributes']['key'], $thisChild['content']);
@@ -926,15 +930,13 @@ function unmy_htmlentities($val)
 		{
 		if ($thisChild['name'] == 'field')
 			{
-			$newField = new fbFieldBase($this, $params);
 			$fieldAttrs = &$thisChild['attributes'];
+			$className = $this->MakeClassName($fieldAttrs['type'], '');
+		    $newField = new $className($this, $params);
+			
 			if ($this->inXML($fieldAttrs['name']))
 				{
 				$newField->SetName($fieldAttrs['name']);
-				}
-			if ($this->inXML($fieldAttrs['type']))
-				{
-				$newField->SetFieldType($fieldAttrs['type']);
 				}
 			$newField->SetValidationType($fieldAttrs['validation_type']);
 			if ($this->inXML($fieldAttrs['order_by']))
@@ -950,9 +952,9 @@ function unmy_htmlentities($val)
 				$newField->SetHideLabel($fieldAttrs['hide_label']);
 				}
 			foreach ($thisChild['children'] as $thisOpt)
-				{
-				$newField->PushOptionElement($thisOpt['attributes']['name'],
-					$thisOpt['content']);
+				{	
+				//debug_display($thisOpt);
+				$newField->OptionFromXML($thisOpt);
 				}
 			$newField->Store(true);
 			}
@@ -1923,8 +1925,8 @@ function fast_add(field_type)
   {
 	$xmlstr = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 	$xmlstr .= "<form id=\"".$this->Id."\"\n";
-	$xmlstr .= "\tname=\"".htmlspecialchars($this->Name)."\"\n";
 	$xmlstr .= "\talias=\"".$this->Alias."\">\n";
+	$xmlstr .= "\t\t<form_name><![CDATA[".$this->Name."]]></form_name>\n";
    foreach ($this->Attrs as $thisAttrKey=>$thisAttrValue)
       {
 		$xmlstr .= "\t\t<attribute key=\"$thisAttrKey\"><![CDATA[$thisAttrValue]]></attribute>\n";

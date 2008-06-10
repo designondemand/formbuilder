@@ -32,6 +32,7 @@ class fbTextAreaField extends fbFieldBase {
 				  '',
 				  $id.'fbrp__'.$this->Id,
 				  '',
+				  '',
                	  $this->GetOption('cols','80'),
 				  $this->GetOption('rows','15'));
 		if ($this->GetOption('clear_default','0')=='1')

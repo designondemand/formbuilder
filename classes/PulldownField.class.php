@@ -213,6 +213,26 @@ class fbPulldownField extends fbFieldBase {
 			}
 	}
 
+
+   function OptionFromXML($theArray)
+	{
+		foreach ($theArray['children'] as $thisChildKey=>$thisChildVal)
+			{
+			if ($thisChildVal['name']=='name')
+				{
+				$this->PushOptionElement('option_name',$thisChildVal['content']);
+				}
+			elseif ($thisChildVal['name']=='selected_value')
+				{
+				$this->PushOptionElement('option_value',$thisChildVal['content']);	
+				}
+			elseif ($thisChildVal['name']=='selected' && $thisChildVal['content'] == 'true')
+				{
+				$this->Value = count($this->Options['option_name']);
+				}
+			}
+	}
+
 	function OptionsAsXML()
 	{
 		$vals = &$this->GetOptionRef('option_value');

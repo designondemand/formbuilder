@@ -772,6 +772,16 @@ class fbFieldBase {
   }
 
 
+	// override as necessary
+   function OptionFromXML($theArray)
+	{
+		if (! isset($this->Options))
+			{
+			$this->Options = array();	
+			}
+		$this->Options[$theArray['name']] = $theArray['attributes']['name'];
+	}
+
    // override as necessary
    function OptionsAsXML()
 	{
