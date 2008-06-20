@@ -20,7 +20,8 @@
 	</tr>
 {/foreach}
 
-<tr class="row2"><td colspan="5">&nbsp;</td></tr>
+<tr><td colspan="5">&nbsp;</td>
+</tr>
 <tr class="row1"><td colspan="5">
 
 {if $addlink != ''}{$addlink}{$addform}{/if}
@@ -43,7 +44,7 @@
 </div>
 <div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>
-  <p class="pageinput">{$submitxml}
+  <p class="pageinput">{$submitxml}</p>
 </div>
 {$end_xmlform}
 </fieldset>

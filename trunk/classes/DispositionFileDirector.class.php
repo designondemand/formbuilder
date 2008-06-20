@@ -40,7 +40,7 @@ function populate_file(formname)
     }
 /* ]]> */
 </script>
-<input type=\"button\" value=\"".$mod->Lang('title_create_sample_template')."\" onClick=\"javascript:populate_file(this.form)\" />";
+<input type=\"button\" value=\"".$mod->Lang('title_create_sample_template')."\" onclick=\"javascript:populate_file(this.form)\" />";
     $this->sampleHeader = "<script type=\"text/javascript\">\n
 /* <![CDATA[ */
 function populate_header(formname)
@@ -50,7 +50,7 @@ function populate_header(formname)
     }
 /* ]]> */
 </script>
-<input type=\"button\" value=\"".$mod->Lang('title_create_sample_header')."\" onClick=\"javascript:populate_header(this.form)\" />";
+<input type=\"button\" value=\"".$mod->Lang('title_create_sample_header')."\" onclick=\"javascript:populate_header(this.form)\" />";
 
     global $gCms;
     $config =& $gCms->getConfig();

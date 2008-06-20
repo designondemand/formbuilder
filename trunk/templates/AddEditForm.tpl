@@ -201,7 +201,7 @@ function replaceTemplate(originalRequest)
 		<p class="pageinput">{$input_form_template}</p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pageinput">{$help_template_variables}</p>
+		<div class="pageinput">{$help_template_variables}</div>
 	</div>
 {$tab_end}
 {$submittemplatetab_start}
