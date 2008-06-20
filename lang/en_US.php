@@ -487,7 +487,7 @@ $lang['template_variable_help'] = "
 <tr><td>field->name</td><td>the field's name</td></tr>
 <tr><td>field->input</td><td>the field's input control (e.g., the input field itself)</td></tr>
 <tr><td>field->op</td><td>a control button associated with the field if applicable (e.g., the delete button for expandable text input)</td></tr>
-<tr><td>field->input_id</td><td>the ID of the field's input (useful for <label for=\"\">)</td></tr>
+<tr><td>field->input_id</td><td>the ID of the field's input (useful for label for=\"foo\")</td></tr>
 <tr><td>field->type</td><td>the field's data type</td></tr>
                                 
 <tr><td>field->multiple_parts</td><td>1 if the field->input is actually a collection of controls</td></tr>
@@ -513,14 +513,14 @@ $lang['template_variable_help'] = "
 
 // post-install message
 $lang['post_install']="
-<p>Make sure to set the \"Modify Forms\" permissions
+<br />Make sure to set the \"Modify Forms\" permissions
 on users who will be administering feedback forms. Also, if you'll be emailing form
-results, be sure to update the Configuration appropriately.</p>
-<p>Please be aware that a feedback form should not be active (e.g., usable by the public) while
+results, be sure to update the Configuration appropriately.<br />
+Please be aware that a feedback form should not be active (e.g., usable by the public) while
 you are still editing the form. You should create the form, and place the tag into an active
-content page only when you have finished editing. Otherwise, erroneous results could be returned.</p>
-<p>Additionally, this version does not support parallel editing of forms. Please take care that
-only one admin is editing a given form at a given time.</p>";
+content page only when you have finished editing. Otherwise, erroneous results could be returned.<br />
+Additionally, this version does not support parallel editing of forms. Please take care that
+only one admin is editing a given form at a given time.";
 
 $lang['help'] = "<h3>What Does This Do?</h3>
 <p>The Form Builder Module allows you to create feedback forms (in fact, it's a replacement of the original Feedback Form module), with the added power of database storage. With its companion module Form Browser, you can use it to create simple database applications.</p>

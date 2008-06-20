@@ -279,12 +279,12 @@ function populate_html(formname)
 	if ($includeText)
 		{
 		$jsCode .= "<input type=\"button\" value=\"".
-$this->module_ptr->Lang('title_create_sample_template')."\" onClick=\"javascript:populate(this.form)\" />";
+$this->module_ptr->Lang('title_create_sample_template')."\" onclick=\"javascript:populate(this.form)\" />";
 		}
 	if ($includeHTML)
 		{
 		$jsCode .= "<input type=\"button\" value=\"".
-$this->module_ptr->Lang('title_create_sample_html_template')."\" onClick=\"javascript:populate_html(this.form)\" />";
+$this->module_ptr->Lang('title_create_sample_html_template')."\" onclick=\"javascript:populate_html(this.form)\" />";
 		}
   return $jsCode;
   }
