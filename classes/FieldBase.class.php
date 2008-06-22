@@ -787,7 +787,8 @@ class fbFieldBase {
 			{
 			$this->Options = array();	
 			}
-		$this->Options[$theArray['name']] = $theArray['attributes']['name'];
+	//	$this->Options[$theArray['name']] = $theArray['attributes']['name'];
+	$this->Options[$theArray['attributes']['name']] = $theArray['content'];
 	}
 
    // override as necessary

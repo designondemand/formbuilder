@@ -853,13 +853,29 @@ function unmy_htmlentities($val)
     return true;
   }
 
+/* notable params:
+  fbrp_xml_file -- source file for the XML
+  xml_string -- source string for the XML
+*/
+
   function ImportXML(&$params)
   {
   	// xml_parser_create, xml_parse_into_struct
   	$parser = xml_parser_create('');
    xml_parser_set_option( $parser, XML_OPTION_CASE_FOLDING, 0 );
    xml_parser_set_option( $parser, XML_OPTION_SKIP_WHITE, 0 ); // was 1
-	xml_parse_into_struct($parser, file_get_contents($params['fbrp_xml_file']), $vals);
+    if (isset($params['fbrp_xml_file']) && ! empty($params['fbrp_xml_file']))
+		{
+		xml_parse_into_struct($parser, file_get_contents($params['fbrp_xml_file']), $vals);
+		}
+	elseif (isset($params['xml_string']) && ! empty($params['xml_string']))
+		{
+		xml_parse_into_struct($parser, $params['xml_string'], $vals);
+		}
+	else
+		{
+		return false;
+		}
 	xml_parser_free($parser);
 	$elements = array();
 	$stack = array();
@@ -899,44 +915,44 @@ function unmy_htmlentities($val)
 		{
 		$this->SetAlias($formAttrs['alias']);
 		}
-	// populate the attributes first, so we can save the form and then start adding fields to it.
+	$foundfields = false;
+	// populate the attributes and field name first. When we see a field, we save the form and then start adding the fields to it.
 	foreach ($elements[0]['children'] as $thisChild)
 		{
 		if ($thisChild['name'] == 'form_name')
 			{
 			$this->SetName($thisChild['content']);
 			}
-		if ($thisChild['name'] == 'attribute')
+		elseif ($thisChild['name'] == 'attribute')
 			{
 			$this->SetAttr($thisChild['attributes']['key'], $thisChild['content']);
 			}
-		}
-	if( isset($params['fbrp_import_formname']) && 
-	    trim($params['fbrp_import_formname']) != '')
-	  {
-	    $this->SetName(trim($params['fbrp_import_formname']));
-	  }
-	if( isset($params['fbrp_import_formalias']) &&
-	    trim($params['fbrp_import_formname']) != '')
-	  {
-	    $this->SetAlias(trim($params['fbrp_import_formalias']));
-	  }
-	$this->Store();
-	$params['form_id'] = $this->GetId();
-	foreach ($elements[0]['children'] as $thisChild)
-		{
-		if ($thisChild['name'] == 'field')
+		else
 			{
+			// we got us a field
+			if (! $foundfields)
+				{
+				// first field
+				$foundfields = true;
+				if( isset($params['fbrp_import_formname']) && 
+				    trim($params['fbrp_import_formname']) != '')
+				  {
+				    $this->SetName(trim($params['fbrp_import_formname']));
+				  }
+				if( isset($params['fbrp_import_formalias']) &&
+				    trim($params['fbrp_import_formname']) != '')
+				  {
+				    $this->SetAlias(trim($params['fbrp_import_formalias']));
+				  }
+				$this->Store();
+				$params['form_id'] = $this->GetId();
+				}
 			$fieldAttrs = &$thisChild['attributes'];
 			$className = $this->MakeClassName($fieldAttrs['type'], '');
 		    $newField = new $className($this, $params);
 			$oldId = $fieldAttrs['id'];
-			
-/*			if ($this->inXML($fieldAttrs['name']))
-				{
-				$newField->SetName($fieldAttrs['name']);
-				}
-*/			if ($this->inXML($fieldAttrs['alias']))
+
+			if ($this->inXML($fieldAttrs['alias']))
 				{
 				$newField->SetAlias($fieldAttrs['alias']);
 				}
@@ -966,9 +982,22 @@ function unmy_htmlentities($val)
 				}
 			$newField->Store(true);
 			$fieldMap[$newField->GetId()] = $oldId;
+				
 			}
 		}
-	debug_display($fieldMap);
+/*	foreach ($elements[0]['children'] as $thisChild)
+		{
+		if ($thisChild['name'] == 'field')
+			{
+			}
+		}
+*/	
+	if (isset($params['fbrp_xml_file']) && ! empty($params['fbrp_xml_file']))
+		{
+		// need to update mappings in templates.
+		
+		}
+	
 	return true;	
   }
 
