@@ -11,7 +11,7 @@ if (! $this->CheckAccess()) exit;
 
 $order_list = explode(',',$params['fbrp_order']);
 $count = 1;
-
+//debug_display($params['fbrp_order']);
 if (! is_array($order_list))
 	{
 	$order_list = array($order_list);
@@ -23,7 +23,8 @@ $sql = 'update '.cms_db_prefix().
 	
 foreach ($order_list as $thisField)
 	{
-	$rs = $db->Execute($sql, array($count, $thisField));
+	$fldid = substr($thisField,strpos($thisField,'_')+1);
+	$rs = $db->Execute($sql, array($count, $fldid));
 	$count++;
 	}
 
