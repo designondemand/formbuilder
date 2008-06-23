@@ -90,7 +90,7 @@ class fbDispositionEmailBase extends fbFieldBase
     $mail->reset();
     if ($this->SetFromAddress())
       {
-  $mail->SetFrom($this->GetOption('email_from_address'));
+  	  //$mail->SetFrom($this->GetOption('email_from_address'));
       $mail->AddReplyTo($this->GetOption('email_from_address'),$this->SetFromName()?$this->GetOption('email_from_name'):'');
       }
     if ($this->SetFromName())
