@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form id="2"
-	name="Sample Form"
 	alias="sample_form">
+	<form_name><![CDATA[Sample Form]]></form_name>
 		<attribute key="prev_button_text"><![CDATA[Back...]]></attribute>
 		<attribute key="required_field_symbol"><![CDATA[*]]></attribute>
 		<attribute key="unspecified"><![CDATA[[unspecified]]]></attribute>
@@ -97,7 +97,7 @@
 {$fb_form_footer}]]></attribute>
 		<attribute key="submit_action"><![CDATA[text]]></attribute>
 		<attribute key="input_button_safety"><![CDATA[0]]></attribute>
-		<attribute key="use_cpatcha"><![CDATA[0]]></attribute>
+		<attribute key="use_catcha"><![CDATA[0]]></attribute>
 		<attribute key="title_user_captcha"><![CDATA[Please confirm that you are not a script by entering the letters from the image.]]></attribute>
 		<attribute key="next_button_text"><![CDATA[Continue...]]></attribute>
 		<attribute key="submit_button_text"><![CDATA[Send Feedback]]></attribute>
@@ -110,11 +110,12 @@
 <p>Your feedback helps me make this a better module.</p>]]></attribute>
 	<field id="9"
 		type="StaticTextField"
-		name="css"
 		validation_type=""
 		order_by="1"
 		required="0"
 		hide_label="0">
+		<field_name><![CDATA[css]]></field_name>
+		
 			<option name="text"><![CDATA[<style type="text/css">
 .formbuilderform fieldset {padding: 1em; background-color: #eee;}
 .formbuilderform fieldset legend {font-weight: bold;}
@@ -124,21 +125,23 @@
 </field>
 	<field id="10"
 		type="FieldsetStart"
-		name="Fieldset Start"
 		validation_type=""
 		order_by="2"
 		required="0"
 		hide_label="0">
+		<field_name><![CDATA[Fieldset Start]]></field_name>
+		
 			<option name="legend"><![CDATA[Help Improve Form Builder]]></option>
 			<option name="css_class"><![CDATA[]]></option>
 </field>
 	<field id="11"
 		type="DispositionEmail"
-		name="Send It"
 		validation_type=""
 		order_by="3"
 		required="0"
 		hide_label="0">
+		<field_name><![CDATA[Send It]]></field_name>
+		
 			<option name="email_subject"><![CDATA[FormBuilder Sample Form Submission]]></option>
 			<option name="email_from_name"><![CDATA[Form Builder Installation]]></option>
 			<option name="email_from_address"><![CDATA[you@yourhost.com]]></option>
@@ -161,112 +164,115 @@
 </field>
 	<field id="12"
 		type="StaticTextField"
-		name="Welcome!"
 		validation_type=""
 		order_by="4"
 		required="0"
 		hide_label="0">
+		<field_name><![CDATA[Welcome!]]></field_name>
+		
 			<option name="text"><![CDATA[Thanks for trying out FormBuilder. You can use this form to provide me with feedback about how you will be using Form Builder, so I can best allocate resources for future development. Thanks, ___Samuel___]]></option>
 			<option name="css_class"><![CDATA[]]></option>
 </field>
 	<field id="13"
 		type="CheckboxGroupField"
-		name="Modules you'll be using together"
 		validation_type=""
 		order_by="5"
 		required="0"
 		hide_label="0">
-			<option name="box_name"><![CDATA[Form Builder]]></option>
-			<option name="box_name"><![CDATA[Form Browser]]></option>
-			<option name="box_name"><![CDATA[Front-end Users]]></option>
-			<option name="box_name"><![CDATA[Newsletter Made Simple (NMS)]]></option>
-			<option name="box_name"><![CDATA[Protected Pages]]></option>
-			<option name="box_name"><![CDATA[Others]]></option>
-			<option name="box_checked"><![CDATA[formbuilder]]></option>
-			<option name="box_checked"><![CDATA[formbrowser]]></option>
-			<option name="box_checked"><![CDATA[feusers]]></option>
-			<option name="box_checked"><![CDATA[nms]]></option>
-			<option name="box_checked"><![CDATA[protected pages]]></option>
-			<option name="box_checked"><![CDATA[others]]></option>
-			<option name="box_unchecked"><![CDATA[not formbuilder]]></option>
-			<option name="box_unchecked"><![CDATA[not formbrowser]]></option>
-			<option name="box_unchecked"><![CDATA[not feusers]]></option>
-			<option name="box_unchecked"><![CDATA[not nms]]></option>
-			<option name="box_unchecked"><![CDATA[not protected pages]]></option>
-			<option name="box_unchecked"><![CDATA[not others]]></option>
-			<option name="css_class"><![CDATA[]]></option>
-			<option name="box_is_set"><![CDATA[y]]></option>
-			<option name="box_is_set"><![CDATA[n]]></option>
-			<option name="box_is_set"><![CDATA[n]]></option>
-			<option name="box_is_set"><![CDATA[n]]></option>
-			<option name="box_is_set"><![CDATA[n]]></option>
-			<option name="box_is_set"><![CDATA[n]]></option>
+		<field_name><![CDATA[Modules you'll be using together]]></field_name>
+		<option name="no_empty"><![CDATA[0]]></option>
+		<option name="box_name"><![CDATA[FormBuilder]]></option>
+		<option name="box_name"><![CDATA[FormBrowser]]></option>
+		<option name="box_name"><![CDATA[Front End Users]]></option>
+		<option name="box_name"><![CDATA[Newsletter Made Simple (NMS)]]></option>
+		<option name="box_name"><![CDATA[Cataloger]]></option>
+		<option name="box_name"><![CDATA[Other(s)]]></option>
+		<option name="box_checked"><![CDATA[FormBuilder]]></option>
+		<option name="box_checked"><![CDATA[FormBrowser]]></option>
+		<option name="box_checked"><![CDATA[FEU]]></option>
+		<option name="box_checked"><![CDATA[NMS]]></option>
+		<option name="box_checked"><![CDATA[Cataloger]]></option>
+		<option name="box_checked"><![CDATA[Other(s)]]></option>
+		<option name="box_unchecked"><![CDATA[(not FormBuilder)]]></option>
+		<option name="box_unchecked"><![CDATA[(not FormBrowser)]]></option>
+		<option name="box_unchecked"><![CDATA[(not FEU)]]></option>
+		<option name="box_unchecked"><![CDATA[(not NMS)]]></option>
+		<option name="box_unchecked"><![CDATA[(not Cataloger)]]></option>
+		<option name="box_unchecked"><![CDATA[(no Others)]]></option>
+		<option name="box_is_set"><![CDATA[y]]></option>
+		<option name="box_is_set"><![CDATA[n]]></option>
+		<option name="box_is_set"><![CDATA[n]]></option>
+		<option name="box_is_set"><![CDATA[n]]></option>
+		<option name="box_is_set"><![CDATA[n]]></option>
+		<option name="box_is_set"><![CDATA[n]]></option>
 </field>
 	<field id="14"
 		type="CheckboxGroupField"
-		name="What will you personally be doing on your CMS MS site?"
 		validation_type=""
 		order_by="6"
 		required="0"
 		hide_label="0">
-			<option name="box_name"><![CDATA[Design HTML/CSS]]></option>
-			<option name="box_name"><![CDATA[Populate/Maintain Content]]></option>
-			<option name="box_name"><![CDATA[Graphical Design]]></option>
-			<option name="box_name"><![CDATA[Install/Configure modules]]></option>
-			<option name="box_name"><![CDATA[Edit Smarty Templates]]></option>
-			<option name="box_name"><![CDATA[Create Modules or Code User Tags]]></option>
-			<option name="box_name"><![CDATA[Create Event Workflows]]></option>
-			<option name="box_name"><![CDATA[Hack the Core, Extend CMS]]></option>
-			<option name="box_name"><![CDATA[Port CMS MS to Ruby on Rails]]></option>
-			<option name="box_checked"><![CDATA[html]]></option>
-			<option name="box_checked"><![CDATA[content]]></option>
-			<option name="box_checked"><![CDATA[graphics]]></option>
-			<option name="box_checked"><![CDATA[modules]]></option>
-			<option name="box_checked"><![CDATA[smarty]]></option>
-			<option name="box_checked"><![CDATA[php]]></option>
-			<option name="box_checked"><![CDATA[events]]></option>
-			<option name="box_checked"><![CDATA[hack core]]></option>
-			<option name="box_checked"><![CDATA[rails]]></option>
-			<option name="box_unchecked"><![CDATA[not html]]></option>
-			<option name="box_unchecked"><![CDATA[not content]]></option>
-			<option name="box_unchecked"><![CDATA[not graphics]]></option>
-			<option name="box_unchecked"><![CDATA[not modules]]></option>
-			<option name="box_unchecked"><![CDATA[not smarty]]></option>
-			<option name="box_unchecked"><![CDATA[not php]]></option>
-			<option name="box_unchecked"><![CDATA[not events]]></option>
-			<option name="box_unchecked"><![CDATA[not hack core]]></option>
-			<option name="box_unchecked"><![CDATA[not rails]]></option>
-			<option name="css_class"><![CDATA[]]></option>
+		<field_name><![CDATA[What will you personally be doing on your CMS MS site?]]></field_name>		
+		<option name="no_empty"><![CDATA[1]]></option>
+		<option name="box_name"><![CDATA[Graphical Design]]></option>
+		<option name="box_name"><![CDATA[HTML and CSS]]></option>
+		<option name="box_name"><![CDATA[Write / Maintain Content]]></option>
+		<option name="box_name"><![CDATA[Edit Smarty Templates]]></option>
+		<option name="box_name"><![CDATA[Write Modules]]></option>
+		<option name="box_name"><![CDATA[Write Core CMS code]]></option>
+		<option name="box_name"><![CDATA[Donate to Core/Module Developes]]></option>
+		<option name="box_checked"><![CDATA[Graphical Design]]></option>
+		<option name="box_checked"><![CDATA[HTML/CSS]]></option>
+		<option name="box_checked"><![CDATA[Content]]></option>
+		<option name="box_checked"><![CDATA[Smarty]]></option>
+		<option name="box_checked"><![CDATA[Modules]]></option>
+		<option name="box_checked"><![CDATA[Core]]></option>
+		<option name="box_checked"><![CDATA[donate!]]></option>
+		<option name="box_unchecked"><![CDATA[]]></option>
+		<option name="box_unchecked"><![CDATA[]]></option>
+		<option name="box_unchecked"><![CDATA[]]></option>
+		<option name="box_unchecked"><![CDATA[]]></option>
+		<option name="box_unchecked"><![CDATA[]]></option>
+		<option name="box_unchecked"><![CDATA[]]></option>
+		<option name="box_unchecked"><![CDATA[]]></option>
+		<option name="box_is_set"><![CDATA[n]]></option>
+		<option name="box_is_set"><![CDATA[n]]></option>
+		<option name="box_is_set"><![CDATA[n]]></option>
+		<option name="box_is_set"><![CDATA[n]]></option>
+		<option name="box_is_set"><![CDATA[n]]></option>
+		<option name="box_is_set"><![CDATA[n]]></option>
+		<option name="box_is_set"><![CDATA[n]]></option>
+		<option name="css_class"><![CDATA[]]></option>
 </field>
 	<field id="15"
 		type="CountryPickerField"
-		name="Where are you from?"
 		validation_type=""
 		order_by="7"
 		required="0"
 		hide_label="0">
+		<field_name><![CDATA[Where are you from?]]></field_name>
 			<option name="default"><![CDATA[]]></option>
 			<option name="select_one"><![CDATA[Select One]]></option>
 			<option name="css_class"><![CDATA[]]></option>
 </field>
 	<field id="16"
 		type="TextAreaField"
-		name="Do you have any comments / feedback for me?"
 		validation_type=""
 		order_by="8"
 		required="0"
 		hide_label="0">
+		<field_name><![CDATA[Do you have any comments / feedback for me?]]></field_name>
 			<option name="css_class"><![CDATA[]]></option>
 			<option name="rows"><![CDATA[10]]></option>
 			<option name="cols"><![CDATA[60]]></option>
 </field>
 	<field id="17"
 		type="FieldsetEnd"
-		name="Fieldset End"
 		validation_type=""
 		order_by="9"
 		required="0"
 		hide_label="0">
+		<field_name><![CDATA[Fieldset End]]></field_name>		
 			<option name="css_class"><![CDATA[]]></option>
 </field>
 </form>

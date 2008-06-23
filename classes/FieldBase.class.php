@@ -768,11 +768,11 @@ class fbFieldBase {
 	$xmlstr .= "\t\trequired=\"".$this->Required."\"\n";
 	$xmlstr .= "\t\thide_label=\"".$this->HideLabel."\"\n";
 	$xmlstr .= "\t\talias=\"".$this->GetOption('field_alias','')."\">\n";
-	$xmlstr .= "\t\t<field_name><![CDATA[".$this->Name."]]></field_name>\n";
+	$xmlstr .= "\t\t\t<field_name><![CDATA[".$this->Name."]]></field_name>\n";
 	$xmlstr .= $this->OptionsAsXML();
 	if ($exportValues)
 		{
-			$xmlstr .= "\t\t\t<value><![CDATA[".$this->GetHumanReadableValue()."]]></value>\n";
+			$xmlstr .= "\t\t\t<human_readble_value><![CDATA[".$this->GetHumanReadableValue()."]]></human_readble_value>\n";
 		}
 
 	$xmlstr .= "</field>\n";
@@ -783,12 +783,27 @@ class fbFieldBase {
 	// override as necessary
    function OptionFromXML($theArray)
 	{
+		if ($theArray['name'] != 'option')
+			{
+			return;
+			}
 		if (! isset($this->Options))
 			{
 			$this->Options = array();	
 			}
+		if (isset($this->Options[$theArray['attributes']['name']]))
+			{
+			if (! is_array($this->Options[$theArray['attributes']['name']]))
+				{
+				$this->Options[$theArray['attributes']['name']] = array($this->Options[$theArray['attributes']['name']]);
+				}
+			array_push($this->Options[$theArray['attributes']['name']], $theArray['content']);
+			}
+		else
+			{
 	//	$this->Options[$theArray['name']] = $theArray['attributes']['name'];
-	$this->Options[$theArray['attributes']['name']] = $theArray['content'];
+			$this->Options[$theArray['attributes']['name']] = $theArray['content'];
+			}
 	}
 
    // override as necessary
@@ -797,16 +812,28 @@ class fbFieldBase {
 		$xmlstr = "";
 		foreach($this->Options as $name=>$value)
 			{
-			if (is_array($value))
+			if (! is_array($value))
 				{
-				foreach ($value as $thisVal)
-					{
-					$xmlstr .= "\t\t\t<option name=\"$name\"><![CDATA[$thisVal]]></option>\n";
-					}
+				$value = array($value);
+				}
+			foreach ($value as $thisVal)
+				{
+				$xmlstr .= "\t\t\t<option name=\"$name\"><![CDATA[$thisVal]]></option>\n";
+				}
+			}
+		if (isset($this->Value))
+			{
+			if (! is_array($this->Value))
+				{
+				$thisVal = array($this->Value);	
 				}
 			else
 				{
-				$xmlstr .= "\t\t\t<option name=\"$name\"><![CDATA[$value]]></option>\n";
+				$thisVal = &$this->Value;
+				}
+			foreach ($thisVal as $thisValOut)
+				{
+				$xmlstr .= "\t\t\t<value>$thisValOut</value>\n";
 				}
 			}
 		return  $xmlstr;
