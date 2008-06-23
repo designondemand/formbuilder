@@ -16,7 +16,7 @@ $fields = array();
 foreach ($aeform->GetFields() as $thisField)
    {
    $fld = new StdClass();
-   $fld->id = $thisField->GetId();
+   $fld->id = 'fbrp_'.$thisField->GetId();
    $fld->name = $thisField->GetName();
    $fld->type = $thisField->GetFieldType();
    array_push($fields, $fld);
