@@ -212,7 +212,8 @@ class fbDispositionEmailBase extends fbFieldBase
      array(
            array($mod->Lang('title_email_subject'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_subject',$this->GetOption('email_subject',''),50).'<br/>'.$mod->Lang('canuse_smarty')),
            array($mod->Lang('title_email_from_name'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_from_name',$this->GetOption('email_from_name',$mod->Lang('friendlyname')),25,128)),
-           array($mod->Lang('title_email_from_address'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_from_address',$this->GetOption('email_from_address',''),25,128)),
+           array($mod->Lang('title_email_from_address'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_from_address',$this->GetOption('email_from_address',''),25,128).'<br>'.
+		$mod->Lang('email_from_addr_help',array($_SERVER['SERVER_NAME']))),
            ),
      array(
           array($mod->Lang('title_html_email'),
