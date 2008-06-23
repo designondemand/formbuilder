@@ -205,62 +205,6 @@ class fbMultiselectField extends fbFieldBase {
 				}
 			}
 	
-	}
-
-   function OptionFromXML($theArray)
-	{
-		foreach ($theArray['children'] as $thisChildKey=>$thisChildVal)
-			{
-			if ($thisChildVal['name']=='name')
-				{
-				$this->PushOptionElement('option_name',$thisChildVal['content']);
-				}
-			elseif ($thisChildVal['name']=='selected_value')
-				{
-				$this->PushOptionElement('option_value',$thisChildVal['content']);	
-				}
-			elseif ($thisChildVal['name']=='selected' && $thisChildVal['content'] == 'true')
-				{
-				if (! is_array($this->Value))
-					{
-					$this->Value = array();
-					}
-				array_push($this->Value,count($this->Options['option_name']));
-				}
-			}
-	}
-
-
-	function OptionsAsXML()
-	{
-		$mod = &$this->form_ptr->module_ptr;
-		$form = &$this->form_ptr;
-		$vals = &$this->GetOptionRef('option_value');
-		$xmlstr = "";
-		if (! is_array($this->Value))
-			{
-			$test = array($this->Value);
-			}
-		else
-			{
-			$test = $this->Value;
-			}
-		for ($i=1;$i<=count($vals);$i++)
-			{
-			$xmlstr .= "\t\t\t<option>\n";
-			$xmlstr .= "\t\t\t\t<name><![CDATA[".$this->GetOptionElement('option_name',$i-1)."]]></name>\n";
-			$xmlstr .= "\t\t\t\t<selected_value><![CDATA[".$this->GetOptionElement('option_value',$i-1)."]]></selected_value>\n";
-			$isselected = "false";
-			if (in_array($i-1,$test))
-				{
-				$isselected = "true";
-				}
-			$xmlstr .= "\t\t\t\t<selected>$isselected</selected>\n";
-			$xmlstr .= "\t\t\t</option>\n";	
-			}
-		return $xmlstr;
-	}
-
-	
+	}	
 }
 ?>

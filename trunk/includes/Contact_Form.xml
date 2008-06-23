@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form id="1"
-	name="Contact Form"
 	alias="contact">
+	<form_name><![CDATA[Contact Us]]></form_name>
 		<attribute key="css_class"><![CDATA[contactform]]></attribute>
 		<attribute key="captcha_wrong"><![CDATA[Captcha was not correct.]]></attribute>
 		<attribute key="form_template"><![CDATA[{* DEFAULT FORM LAYOUT / pure CSS *}
@@ -124,14 +124,14 @@
 <strong>Your IP address</strong>: {$sub_source_ip}
 </p> ]]></attribute>
 		<attribute key="list_delimiter"><![CDATA[,]]></attribute>
-		<attribute key="use_cpatcha"><![CDATA[]]></attribute>
+		<attribute key="use_captcha"><![CDATA[]]></attribute>
 	<field id="1"
 		type="DispositionEmail"
-		name="UPDATE THIS FIELD"
 		validation_type=""
 		order_by="1"
 		required="0"
 		hide_label="0">
+			<field_name><![CDATA[**UPDATE THIS FIELD**]]></field_name>
 			<option name="email_subject"><![CDATA[No Subject Set]]></option>
 			<option name="email_from_name"><![CDATA[No Name Given]]></option>
 			<option name="email_from_address"><![CDATA[nobody@sample.com]]></option>
@@ -199,11 +199,11 @@ hr { border:0; border-top:1px solid #F60; height:1px;  font-size:1px; background
 </field>
 	<field id="2"
 		type="StaticTextField"
-		name="CSS"
 		validation_type=""
 		order_by="2"
 		required="0"
 		hide_label="0">
+		<field_name><![CDATA[CSS]]></field_name>
 			<option name="text"><![CDATA[<style type="text/css">
 .contactform fieldset {padding: 1em; background-color: #eee;}
 .contactform fieldset legend {font-weight: bold;}
@@ -215,59 +215,59 @@ hr { border:0; border-top:1px solid #F60; height:1px;  font-size:1px; background
 </field>
 	<field id="3"
 		type="FieldsetStart"
-		name="Contact Fieldset"
 		validation_type=""
 		order_by="3"
 		required="0"
 		hide_label="0">
+		<field_name><![CDATA[Contact Fieldset]]></field_name>
 			<option name="legend"><![CDATA[Contact]]></option>
 			<option name="css_class"><![CDATA[]]></option>
 </field>
 	<field id="4"
 		type="FromEmailNameField"
-		name="Your Name"
 		validation_type=""
 		order_by="4"
 		required="0"
 		hide_label="0">
+			<field_name><![CDATA[Your Name]]></field_name>
 			<option name="css_class"><![CDATA[]]></option>
 </field>
 	<field id="5"
 		type="FromEmailAddressField"
-		name="Your Email Address"
 		validation_type="email"
 		order_by="5"
 		required="0"
 		hide_label="0">
+			<field_name><![CDATA[Your Email Address]]></field_name>
 			<option name="css_class"><![CDATA[]]></option>
 </field>
 	<field id="6"
 		type="FromEmailSubjectField"
-		name="Subject"
 		validation_type=""
 		order_by="6"
 		required="0"
 		hide_label="0">
+			<field_name><![CDATA[Subject]]></field_name>
 			<option name="css_class"><![CDATA[]]></option>
 </field>
 	<field id="7"
 		type="TextAreaField"
-		name="Message"
 		validation_type=""
 		order_by="7"
 		required="1"
 		hide_label="0">
+			<field_name><![CDATA[Message]]></field_name>
 			<option name="rows"><![CDATA[5]]></option>
 			<option name="cols"><![CDATA[60]]></option>
 			<option name="css_class"><![CDATA[]]></option>
 </field>
 	<field id="8"
 		type="FieldsetEnd"
-		name="Contact Fieldset End"
 		validation_type=""
 		order_by="8"
 		required="0"
 		hide_label="0">
+			<field_name><![CDATA[Contact Fieldset End]]></field_name>
 			<option name="css_class"><![CDATA[]]></option>
 </field>
 </form>

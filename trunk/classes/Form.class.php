@@ -947,6 +947,7 @@ function unmy_htmlentities($val)
 				$this->Store();
 				$params['form_id'] = $this->GetId();
 				}
+				//debug_display($thisChild);
 			$fieldAttrs = &$thisChild['attributes'];
 			$className = $this->MakeClassName($fieldAttrs['type'], '');
 		    $newField = new $className($this, $params);
