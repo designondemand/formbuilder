@@ -9,6 +9,10 @@
 if (!isset($gCms)) exit;
 if (! $this->CheckAccess()) exit;
 
+		if (isset($params['fbrp_set_field_level']))
+			{
+			$this->SetPreference('show_field_level',$params['fbrp_set_field_level']);
+			}
 		$aeform = new fbForm($this, $params, true);
 		echo $aeform->AddEditForm($id, $returnid, isset($params['fbrp_message'])?$this->ShowMessage($params['fbrp_message']):'');
 

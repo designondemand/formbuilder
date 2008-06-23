@@ -33,6 +33,7 @@ class FormBuilder extends CMSModule
 
 	var $field_types;
 	var $disp_field_types;
+	var $std_field_types;
 	var $all_validation_types;
 	var $module_ptr;
 	var $module_id;
@@ -87,6 +88,20 @@ class FormBuilder extends CMSModule
         	}
 		$this->all_validation_types = array();
 		ksort($this->field_types);
+		$this->std_field_types = array(
+			$this->Lang('field_type_TextField')=>'field_type_TextField',
+			$this->Lang('field_type_TextAreaField')=>'field_type_TextAreaField',
+			$this->Lang('field_type_CheckboxField')=>'field_type_CheckboxField',
+			$this->Lang('field_type_CheckboxGroupField')=>'field_type_CheckboxGroupField',
+			$this->Lang('field_type_PulldownField')=>'field_type_PulldownField',
+			$this->Lang('field_type_RadioGroupField')=>'field_type_RadioGroupField',
+			$this->Lang('field_type_DispositionEmail')=>'field_type_DispositionEmail',
+			$this->Lang('field_type_DispositionFile')=>'field_type_DispositionFile',
+			$this->Lang('field_type_PageBreakField')=>'field_type_PageBreakField',
+			$this->Lang('field_type_StaticTextField')=>'field_type_StaticTextField');
+		ksort($this->std_field_types);		
+		
+		
 //error_log("leaving initialize with ".memory_get_usage());
 
 	}
