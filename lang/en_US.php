@@ -44,7 +44,6 @@ $lang['field_type_HiddenField'] = '-Hidden Field';
 $lang['field_type_ComputedField'] = '-Computed Field';
 $lang['field_type_UniqueIntegerField']='-Unique Integer (Serial)';
 
-
 // validation types
 $lang['validation_none']='No Validation';
 $lang['validation_numeric']='Numeric';
@@ -389,6 +388,10 @@ $lang['title_field_javascript_long'] = 'Make this the complete Javascript call, 
 $lang['title_submit_javascript'] = 'Form Submission Javascript';
 $lang['title_submit_javascript_long'] = 'Make this the complete Javascript call, including the event you want to trap, e.g., onclick="yourfn()".<br />This will probably not work well if you use the "safety script" option above.';
 $lang['email_from_addr_help']='Do not just pick a random address here -- many ISPs will<br />not deliver the mail if you are using a different domain name than your actual<br />host name (i.e., use something like name@%s)';
+$lang['title_switch_advanced']='Need more field types? ';
+$lang['title_switch_basic']='Too many confusing field types? ';
+$lang['title_switch_advanced_link']='Switch to Advanced Mode';
+$lang['title_switch_basic_link']='Switch to Simple Mode';
 
 $lang['default_template'] = 'Default Template';
 $lang['table_left_template'] = 'Table Template, Titles on left';

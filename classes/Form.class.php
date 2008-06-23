@@ -1343,7 +1343,18 @@ function fast_add(field_type)
 </script>";
 	    $typeInput = str_replace('&amp;','&',$typeInput); 
 	    $mod->initialize();
-	    $mod->smarty->assign('input_fastadd',$typeInput.$mod->CreateInputDropdown($id, 'fbrp_field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->field_types), -1,'', 'onchange="fast_add(this)"'));
+	    if ($mod->GetPreference('show_field_level','basic') == 'basic')
+			{
+			$mod->smarty->assign('input_fastadd',$typeInput.$mod->CreateInputDropdown($id, 'fbrp_field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->std_field_types), -1,'', 'onchange="fast_add(this)"').
+				$mod->Lang('title_switch_advanced').
+				$mod->CreateLink($id, 'admin_add_edit_form', $returnid,$mod->Lang('title_switch_advanced_link'),array('form_id'=>$this->Id, 'fbrp_set_field_level'=>'advanced')));
+			}
+		else
+			{
+			$mod->smarty->assign('input_fastadd',$typeInput.$mod->CreateInputDropdown($id, 'fbrp_field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->field_types), -1,'', 'onchange="fast_add(this)"').
+			$mod->Lang('title_switch_basic').
+			$mod->CreateLink($id, 'admin_add_edit_form', $returnid,$mod->Lang('title_switch_basic_link'),array('form_id'=>$this->Id, 'fbrp_set_field_level'=>'basic')));
+			}
 	  }							
       }
     else
