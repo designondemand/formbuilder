@@ -124,7 +124,7 @@ function populate_header(formname)
     return $fields;
   }
 
-  function GetHumanReadableValue($as_string)
+  function GetHumanReadableValue($as_string=true)
   {
     $form = &$this->form_ptr;
     $tmp = array();
