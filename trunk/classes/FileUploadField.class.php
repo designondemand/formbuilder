@@ -20,7 +20,7 @@ class fbFileUploadField extends fbFieldBase {
   {
     $mod = &$this->form_ptr->module_ptr;
 	$js = $this->GetOption('javascript','');
-    $txt = $mod->CreateFileUploadInput($id,'fbrp__'.$this->Id,$js);
+    $txt = $mod->CreateFileUploadInput($id,'fbrp__'.$this->Id,' id="'.$id.'fbrp__'.$this->Id.'" '.$js);
 	if ($this->GetOption('show_details','0') == '1')
 		{
 		 $ms = $this->GetOption('max_size');
