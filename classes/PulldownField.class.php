@@ -117,7 +117,7 @@ class fbPulldownField extends fbFieldBase {
 			//$sorted = array_merge(array(' '.$mod->Lang('select_one')=>''),$sorted);
 			$sorted = array(' '.$mod->Lang('select_one')=>'') + $sorted;
 		}
-		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'" '.$js);
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. 'fbrp__'.$this->Id.'" '.$js);
 	}
 
 
