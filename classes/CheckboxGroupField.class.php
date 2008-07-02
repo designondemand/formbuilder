@@ -92,7 +92,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 			$check_val = false;
 			if ($this->Value !== false)
 				{
-				$check_val = $this->FindArrayValue($i-1);
+				$check_val = $this->FindArrayValue($i+1);
 				}
 			else
 				{
