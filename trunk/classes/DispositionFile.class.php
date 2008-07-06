@@ -52,7 +52,10 @@ function populate_header(formname)
 
   function DisposeForm($returnid)
   {
+	global $gCms;
+	$options = $gCms->GetConfig();
     $mod=&$this->form_ptr->module_ptr;
+    $form=&$this->form_ptr;
     $count = 0;
     while (! $mod->GetFileLock() && $count<200)
       {
@@ -64,7 +67,7 @@ function populate_header(formname)
 	return array(false, $mod->Lang('submission_error_file_lock'));
       }
 
-    $filespec = $mod->config['root_path'].'/modules/FormBuilder/output/'.
+    $filespec = $this->GetOption('fileroot',$options['uploads_root']).'/'.
       preg_replace("/[^\w\d\.]|\.\./", "_", $this->GetOption('filespec','form_submissions.txt'));
 
     $line = '';
@@ -73,18 +76,18 @@ function populate_header(formname)
 	$header = $this->GetOption('file_header','');
 	if ($header == '')
 	  {
-	    $header = $this->createSampleHeader();
+	    $header = $form->createSampleHeader();
 	  } 
 	$header .= "\n";
       }
     $template = $this->GetOption('file_template','');
     if ($template == '')
       {
-	$template = $this->createSampleTemplate();
+	$template = $form->createSampleTemplate();
       }
     $line = $header.$template;
 
-    $this->form_ptr->setFinishedFormSmarty();
+    $form->setFinishedFormSmarty();
     $newline = $mod->ProcessTemplateFromData( $line );
     if (substr($newline,-1,1) != "\n")
       {
@@ -115,77 +118,11 @@ function populate_header(formname)
   }
 
 
-  function createSampleHeader()
-  {
-    $mod = &$this->form_ptr->module_ptr;
-    $others = &$this->form_ptr->GetFields();
-    $fields = array();
-    for($i=0;$i<count($others);$i++)
-      {
-	if ($others[$i]->DisplayInSubmission())
-	  {
-	    array_push($fields,$others[$i]->GetName());
-	  }
-      }
-    return implode('{$TAB}',$fields);
-  }
-
-
-  function createSampleTemplate()
-  {
-    $mod = &$this->form_ptr->module_ptr;
-    $others = &$this->form_ptr->GetFields();
-    $fields = array();
-    for($i=0;$i<count($others);$i++)
-      {
-	if ($others[$i]->DisplayInSubmission())
-	  {
-	    array_push($fields,'{$' . $this->MakeVar($others[$i]->GetName()) . '}');
-	  }
-      }
-    return implode('{$TAB}',$fields);
-  }
-
-
   function PrePopulateAdminForm($formDescriptor)
   {
 	global $gCms;
     $mod = &$this->form_ptr->module_ptr;
 	$config = $gCms->GetConfig();
-    $ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_template').'</th></tr>';
-    $ret .= '<tr><th>'.$mod->Lang('help_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';
-    $ret .= '<tr><td>{$sub_form_name}</td><td>'.$mod->Lang('title_form_name').'</td></tr>';
-    $ret .= '<tr><td>{$sub_date}</td><td>'.$mod->Lang('help_submission_date').'</td></tr>';
-    $ret .= '<tr><td>{$sub_host}</td><td>'.$mod->Lang('help_server_name').'</td></tr>';
-    $ret .= '<tr><td>{$sub_source_ip}</td><td>'.$mod->Lang('help_sub_source_ip').'</td></tr>';
-    $ret .= '<tr><td>{$source_url}</td><td>'.$mod->Lang('help_sub_url').'</td></tr>';
-    $others = &$this->form_ptr->GetFields();
-    for($i=0;$i<count($others);$i++)
-      {
-	if ($others[$i]->DisplayInSubmission())
-	  {                
-	    $ret .= '<tr><td>${'.$this->MakeVar($others[$i]->GetName()) .'}</td><td>' .$others[$i]->GetName() . '</td></tr>';
-	  }
-      }
-
-    $ret .= '<tr><td>{$TAB}</td><td>'.$mod->Lang('help_tab_symbol').'</td></tr>';       	
-    $ret .= '<tr><td colspan="2">'.$mod->Lang('help_other_fields').'</td></tr>';
-        
-    $escapedSample = preg_replace('/\'/',"\\'",$this->createSampleTemplate());
-    $escapedSample = preg_replace('/\n/',"\\n'+\n'", $escapedSample);
-    $this->sampleTemplateCode = preg_replace('/TEMPLATE/',"'".$escapedSample."'",$this->sampleTemplateCode);
-    $this->sampleTemplateCode = preg_replace('/ID/',$formDescriptor, $this->sampleTemplateCode);
-	   
-    $escapedHeader = preg_replace('/\'/',"\\'",$this->createSampleHeader());
-    $escapedHeader = preg_replace('/\n/',"\\n'+\n'", $escapedHeader);
-    $this->sampleHeader = preg_replace('/TEMPLATE/',"'".$escapedHeader."'",$this->sampleHeader);
-    $this->sampleHeader = preg_replace('/ID/',$formDescriptor, $this->sampleHeader);
-	   
-    $ret .= '<tr><td colspan="2">'.$this->sampleHeader.'</td></tr>';
-    $ret .= '<tr><td colspan="2">'.$this->sampleTemplateCode.'</td></tr>';
-
-    $ret .= '</table>';
-
 
     $main = array();
     $adv = array();
