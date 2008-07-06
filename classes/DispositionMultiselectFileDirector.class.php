@@ -33,28 +33,6 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
     $this->sortable = false;
     $this->fileAdd = 0;
 
-
-    $this->sampleTemplateCode = "<script type=\"text/javascript\">\n
-<![CDATA[ */
-function populate_file(formname)
-    {
-    var fname = 'IDfbrp_opt_file_template';
-    formname[fname].value=TEMPLATE;
-    }
-/* ]]> */
-</script>
-<input type=\"button\" value=\"".$mod->Lang('title_create_sample_template')."\" onclick=\"javascript:populate_file(this.form)\" />";
-    $this->sampleHeader = "<script type=\"text/javascript\">\n
-<![CDATA[ */
-function populate_header(formname)
-    {
-      var fname = 'IDfbrp_opt_file_header';
-      formname[fname].value=TEMPLATE;
-    }
-/* ]]> */
-</script>
-<input type=\"button\" value=\"".$mod->Lang('title_create_sample_header')."\" onclick=\"javascript:populate_header(this.form)\" />";
-
     global $gCms;
     $config =& $gCms->getConfig();
     $this->dflt_filepath = $config['uploads_path'];
@@ -249,38 +227,6 @@ function populate_header(formname)
     return $string;
   }
 
-  function createSampleHeader()
-  {
-    $mod = &$this->form_ptr->module_ptr;
-    $others = &$this->form_ptr->GetFields();
-    $fields = array();
-    for($i=0;$i<count($others);$i++)
-      {
-	if ($others[$i]->DisplayInSubmission())
-	  {
-	    array_push($fields,$others[$i]->GetName());
-	  }
-      }
-    return implode('{$TAB}',$fields);
-  }
-
-
-  function createSampleTemplate()
-  {
-    $mod = &$this->form_ptr->module_ptr;
-    $others = &$this->form_ptr->GetFields();
-    $fields = array();
-    for($i=0;$i<count($others);$i++)
-      {
-	if ($others[$i]->DisplayInSubmission())
-	  {
-	    array_push($fields,'{$' . $this->MakeVar($others[$i]->GetName()) . '}');
-	  }
-      }
-    return implode('{$TAB}',$fields);
-  }
-
-
   function PrePopulateAdminForm($formDescriptor)
   {
     $mod = &$this->form_ptr->module_ptr;
@@ -311,43 +257,12 @@ function populate_header(formname)
     $dests .= '</table>';
 
 
-    $ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_template').'</th></tr>';
-    $ret .= '<tr><th>'.$mod->Lang('help_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';
-    $ret .= '<tr><td>{$sub_form_name}</td><td>'.$mod->Lang('title_form_name').'</td></tr>';
-    $ret .= '<tr><td>{$sub_date}</td><td>'.$mod->Lang('help_submission_date').'</td></tr>';
-    $ret .= '<tr><td>{$sub_host}</td><td>'.$mod->Lang('help_server_name').'</td></tr>';
-    $ret .= '<tr><td>{$sub_source_ip}</td><td>'.$mod->Lang('help_sub_source_ip').'</td></tr>';
-    $ret .= '<tr><td>{$source_url}</td><td>'.$mod->Lang('help_sub_url').'</td></tr>';
-    $others = &$this->form_ptr->GetFields();
-    for($i=0;$i<count($others);$i++)
-      {
-	if ($others[$i]->DisplayInSubmission())
-	  {                
-	    $ret .= '<tr><td>${'.$this->MakeVar($others[$i]->GetName()) .'}</td><td>' .$others[$i]->GetName() . '</td></tr>';
-	  }
-      }
-
-    $ret .= '<tr><td>{$TAB}</td><td>'.$mod->Lang('help_tab_symbol').'</td></tr>';       	
-    $ret .= '<tr><td colspan="2">'.$mod->Lang('help_other_fields').'</td></tr>';
-        
-    $escapedSample = preg_replace('/\'/',"\\'",$this->createSampleTemplate());
-    $escapedSample = preg_replace('/\n/',"\\n'+\n'", $escapedSample);
-    $this->sampleTemplateCode = preg_replace('/TEMPLATE/',"'".$escapedSample."'",$this->sampleTemplateCode);
-    $this->sampleTemplateCode = preg_replace('/ID/',$formDescriptor, $this->sampleTemplateCode);
-	   
-    $escapedHeader = preg_replace('/\'/',"\\'",$this->createSampleHeader());
-    $escapedHeader = preg_replace('/\n/',"\\n'+\n'", $escapedHeader);
-    $this->sampleHeader = preg_replace('/TEMPLATE/',"'".$escapedHeader."'",$this->sampleHeader);
-    $this->sampleHeader = preg_replace('/ID/',$formDescriptor, $this->sampleHeader);
-	   
-    $ret .= '<tr><td colspan="2">'.$this->sampleHeader.'</td></tr>';
-    $ret .= '<tr><td colspan="2">'.$this->sampleTemplateCode.'</td></tr>';
-
-    $ret .= '</table>';
-
-
     $main = array();
     $adv = array();
+    $parmMain = array();
+    $parmMain['opt_file_template']['is_oneline']=true;
+    $parmMain['opt_file_header']['is_oneline']=true;
+    $parmMain['opt_file_header']['is_header']=true;
     array_push($main,array($mod->Lang('title_select_one_message'),
 			   $mod->CreateInputText($formDescriptor, 
 						 'fbrp_opt_select_one',
@@ -360,7 +275,7 @@ function populate_header(formname)
 						$this->GetOption('file_path',$this->dflt_filepath),40,128)));
     array_push($adv,array($mod->Lang('title_file_template'),
 			  array($mod->CreateTextArea(false, $formDescriptor,
-						     htmlspecialchars($this->GetOption('file_template','')),'fbrp_opt_file_template', 'module_fb_area_short', '','',0,0),$ret)));
+						     htmlspecialchars($this->GetOption('file_template','')),'fbrp_opt_file_template', 'module_fb_area_short', '','',0,0),$this->form_ptr->AdminTemplateHelp($formDescriptor,$parmMain))));
     array_push($adv,array($mod->Lang('title_file_header'),
 			  $mod->CreateTextArea(false, $formDescriptor,
 					       htmlspecialchars($this->GetOption('file_header','')),'fbrp_opt_file_header', 'module_fb_area_short', '','',0,0)));
