@@ -149,7 +149,9 @@ function populate_header(formname)
 
   function PrePopulateAdminForm($formDescriptor)
   {
+	global $gCms;
     $mod = &$this->form_ptr->module_ptr;
+	$config = $gCms->GetConfig();
     $ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_template').'</th></tr>';
     $ret .= '<tr><th>'.$mod->Lang('help_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';
     $ret .= '<tr><td>{$sub_form_name}</td><td>'.$mod->Lang('title_form_name').'</td></tr>';
@@ -187,12 +189,21 @@ function populate_header(formname)
 
     $main = array();
     $adv = array();
+    $parmMain = array();
+    $parmMain['opt_file_template']['is_oneline']=true;
+    $parmMain['opt_file_header']['is_oneline']=true;
+    $parmMain['opt_file_header']['is_header']=true;
+    array_push($main,array($mod->Lang('title_file_root'),
+			   $mod->CreateInputText($formDescriptor, 'fbrp_opt_fileroot',
+						 $this->GetOption('fileroot',$config['uploads_path']),45,255).'<br />'.
+				$mod->Lang('title_file_root_help')));
     array_push($main,array($mod->Lang('title_file_name'),
 			   $mod->CreateInputText($formDescriptor, 'fbrp_opt_filespec',
 						 $this->GetOption('filespec','form_submissions.txt'),25,128)));
     array_push($adv,array($mod->Lang('title_file_template'),
 			  array($mod->CreateTextArea(false, $formDescriptor,
-						     htmlspecialchars($this->GetOption('file_template','')),'fbrp_opt_file_template', 'module_fb_area_short', '','',0,0),$ret)));
+						     htmlspecialchars($this->GetOption('file_template','')),'fbrp_opt_file_template', 'module_fb_area_short', '','',0,0),$this->form_ptr->AdminTemplateHelp($formDescriptor,$parmMain))));
+												
     array_push($adv,array($mod->Lang('title_file_header'),
 			  $mod->CreateTextArea(false, $formDescriptor,
 					       htmlspecialchars($this->GetOption('file_header','')),'fbrp_opt_file_header', 'module_fb_area_short', '','',0,0)));

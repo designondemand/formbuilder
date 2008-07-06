@@ -208,11 +208,15 @@ class fbDispositionEmailBase extends fbFieldBase
     $mod = &$this->form_ptr->module_ptr;
     $message = $this->GetOption('email_template','');
 
+	$parm = array();
+	$parm['opt_email_template']['html_button'] = true;
+	$parm['opt_email_template']['text_button'] = true;
+	$parm['opt_email_template']['is_email'] = true;
     return array(
      array(
            array($mod->Lang('title_email_subject'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_subject',$this->GetOption('email_subject',''),50).'<br/>'.$mod->Lang('canuse_smarty')),
            array($mod->Lang('title_email_from_name'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_from_name',$this->GetOption('email_from_name',$mod->Lang('friendlyname')),25,128)),
-           array($mod->Lang('title_email_from_address'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_from_address',$this->GetOption('email_from_address',''),25,128).'<br>'.
+           array($mod->Lang('title_email_from_address'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_from_address',$this->GetOption('email_from_address',''),25,128).'<br />'.
 		$mod->Lang('email_from_addr_help',array($_SERVER['SERVER_NAME']))),
            ),
      array(
@@ -222,7 +226,7 @@ class fbDispositionEmailBase extends fbFieldBase
            array($mod->Lang('title_email_template'),
            array($mod->CreateTextArea(false, $formDescriptor,
               ($this->GetOption('html_email','0')=='1'?$message:htmlspecialchars($message)),'fbrp_opt_email_template', 'module_fb_area_wide', '','',0,0),
-              $this->form_ptr->AdminTemplateHelp($formDescriptor))),
+              $this->form_ptr->AdminTemplateHelp($formDescriptor,$parm))),
            array($mod->Lang('title_email_encoding'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_encoding',$this->GetOption('email_encoding','utf-8'),25,128))
            )
      );
