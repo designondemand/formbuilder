@@ -341,6 +341,7 @@ $lang['help_form_field']='Field Represented';
 $lang['link_back_to_form']='&#171; Back to Form';
 $lang['title_create_sample_template']='Create Sample Template';
 $lang['title_create_sample_html_template']='Create Sample HTML Template';
+$lang['title_create_sample_header_template']='Create Sample Header Template';
 $lang['title_create_sample_header']='Create Sample Header';
 $lang['help_tab_symbol']='a tab character';
 $lang['title_file_template']='Template for one line of output file';
@@ -392,6 +393,8 @@ $lang['title_switch_advanced']='Need more field types? ';
 $lang['title_switch_basic']='Too many confusing field types? ';
 $lang['title_switch_advanced_link']='Switch to Advanced Mode';
 $lang['title_switch_basic_link']='Switch to Simple Mode';
+$lang['title_file_root']='Directory to save file in';
+$lang['title_file_root_help'] = 'This needs to be a directory that your web server has permissions to write in.<br />Chmod it 777 if you have problems/doubts.<br />Also, check to see that you do not have PHP directory restrictions.';
 
 $lang['default_template'] = 'Default Template';
 $lang['table_left_template'] = 'Table Template, Titles on left';

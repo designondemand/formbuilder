@@ -260,37 +260,25 @@ class fbForm {
     return $string;
   }
 
-  function createSampleTemplateJavascript($fieldName='opt_email_template', $includeHTML=true, $includeText=true)
+  function createSampleTemplateJavascript($fieldName='opt_email_template', $button_text='', $suffix='')
   {
+	$fldAlias = preg_replace('/[^\w\d]/','_',$fieldName).$suffix;
     $jsCode = "<script type=\"text/javascript\">\n
 /* <![CDATA[ */
-function populate(formname)
+function populate".$fldAlias."(formname)
     {
     var fname = 'IDfbrp_".$fieldName."';
     formname[fname].value=|TEMPLATE|;
     }
-function populate_html(formname)
-    {
-    var fname = 'IDfbrp_".$fieldName."';
-    formname[fname].value=|HTMLTEMPLATE|;
-	 }
 /* ]]> */
 </script>";
-	if ($includeText)
-		{
-		$jsCode .= "<input type=\"button\" value=\"".
-$this->module_ptr->Lang('title_create_sample_template')."\" onclick=\"javascript:populate(this.form)\" />";
-		}
-	if ($includeHTML)
-		{
-		$jsCode .= "<input type=\"button\" value=\"".
-$this->module_ptr->Lang('title_create_sample_html_template')."\" onclick=\"javascript:populate_html(this.form)\" />";
-		}
+	$jsCode .= "<input type=\"button\" value=\"".
+$button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
   return $jsCode;
   }
 
 
-  function createSampleTemplate($htmlish=false,$email=true)
+  function createSampleTemplate($htmlish=false,$email=true, $oneline=false,$header=false)
   {
     $mod = &$this->module_ptr;
     $ret = "";
@@ -323,8 +311,8 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onclick=\"javas
 	  	  	{
     	  	$ret .= "\n-------------------------------------------------\n";
     	  	}
-    	  }
-	else
+    	}
+	elseif (! $oneline)
 		{
 		if ($htmlish)
 			{
@@ -353,18 +341,31 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onclick=\"javas
      	  {
   		  $ret .= '<strong>'.$others[$i]->GetName() . '</strong>: ' . $fldref. "<br />\n";
   		  }
-  	  else
+  	  elseif ($oneline && !$header)
+		  {
+		  $ret .= $fldref. '{$TAB}';
+		  }
+	  elseif ($oneline && $header)
+		 {
+		 $ret .= $others[$i]->GetName().'{$TAB}';
+		 }
+	  else
   	  	  {
 	      $ret .= $others[$i]->GetName() . ': ' .$fldref. "\n";
 	      }
 	  }
       }
+    if ($oneline)
+		{
+		$ret = substr($ret,0,strlen($ret) - 6). "\n";
+		}
     return $ret;
   }
 
 
-  function AdminTemplateHelp($formDescriptor,$fieldName='opt_email_template',
-  	$includeHTML=true, $includeText=true)
+//  function AdminTemplateHelp($formDescriptor,$fields='opt_email_template',
+//  	$includeHTML=true, $includeText=true, $oneline = false, $headerName='')
+  function AdminTemplateHelp($formDescriptor,$fieldStruct)
   {
     $mod = &$this->module_ptr;
     $ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_template').'</th></tr>';
@@ -399,16 +400,52 @@ $this->module_ptr->Lang('title_create_sample_html_template')."\" onclick=\"javas
        	
     $ret .= '<tr><td colspan="2">'.$mod->Lang('help_array_fields').'</td></tr>';
     $ret .= '<tr><td colspan="2">'.$mod->Lang('help_other_fields').'</td></tr>';
-        
-    $escapedSample = preg_replace('/\'/',"\\'",$this->createSampleTemplate(false));
-    $escapedSampleHTML = preg_replace('/\'/',"\\'",$this->createSampleTemplate(true));
+
+    $sampleTemplateCode = '';
+    foreach ($fieldStruct as $key=>$val)
+		{
+		$html_button = (isset($val['html_button']) && $val['html_button']);
+		$text_button = (isset($val['text_button']) && $val['text_button']);
+		$is_oneline = (isset($val['is_oneline']) && $val['is_oneline']);
+		$is_email = (isset($val['is_email']) && $val['is_email']);
+		$is_header = (isset($val['is_header']) && $val['is_header']);
+		if ($html_button)
+			{
+			$button_text = $mod->Lang('title_create_sample_html_template');
+			}
+		elseif ($is_header)
+			{
+			$button_text = $mod->Lang('title_create_sample_header_template');
+			}
+		else
+			{
+			$button_text = $mod->Lang('title_create_sample_template');
+			}
+
+		if ($html_button && $text_button)
+			{
+			$sample = $this->createSampleTemplate(false, $is_email, $is_oneline, $is_header);
+			$sample = preg_replace('/\'/',"\\'",$sample);
+			$sample = preg_replace('/\n/',"\\n'+\n'", $sample);
+			$sampleTemplateCode .= preg_replace('/\|TEMPLATE\|/',"'".$sample."'",
+			    	$this->createSampleTemplateJavascript($key, $mod->Lang('title_create_sample_template'),'text'));
+			}
+		
+		$sample = $this->createSampleTemplate($html_button,$is_email, $is_oneline,$is_header);
+		$sample = preg_replace('/\'/',"\\'",$sample);
+		$sample = preg_replace('/\n/',"\\n'+\n'", $sample);
+		$sampleTemplateCode .= preg_replace('/\|TEMPLATE\|/',"'".$sample."'",
+	    	$this->createSampleTemplateJavascript($key, $button_text));
+		}
+/*    $escapedSample = preg_replace('/\'/',"\\'",$this->createSampleTemplate(false,true,$oneline));
+    $escapedSampleHTML = preg_replace('/\'/',"\\'",$this->createSampleTemplate(true,true,$oneline));
     $escapedSample = preg_replace('/\n/',"\\n'+\n'", $escapedSample);
     $escapedSampleHTML = preg_replace('/\n/',"\\n'+\n'", $escapedSampleHTML);
     
     $sampleTemplateCode = preg_replace('/\|TEMPLATE\|/',"'".$escapedSample."'",
     	$this->createSampleTemplateJavascript($fieldName, $includeHTML, $includeText));
     $sampleTemplateCode = preg_replace('/\|HTMLTEMPLATE\|/',"'".$escapedSampleHTML."'",
-    	$sampleTemplateCode);
+    	$sampleTemplateCode); */
     $sampleTemplateCode = preg_replace('/ID/',$formDescriptor,
     	$sampleTemplateCode);
     $ret .= '<tr><td colspan="2">'.$sampleTemplateCode.'</td></tr>';
@@ -1430,8 +1467,14 @@ function fast_add(field_type)
     $mod->smarty->assign('input_submit_response',
 			 $mod->CreateTextArea(false, $id,
 					      $this->GetAttr('submit_response',''), 'fbrp_forma_submit_response','module_fb_area_wide'));
+
+	$parms = array();
+	$parms['forma_submit_response']['html_button'] = true;
+	$parms['forma_submit_response']['txt_button'] = false;
+	$parms['forma_submit_response']['is_one_line'] = false;
+	$parms['forma_submit_response']['is_email'] = false;
 	$mod->smarty->assign('help_submit_response',
-		$this->AdminTemplateHelp($id,'forma_submit_response',true,false));
+		$this->AdminTemplateHelp($id,$parms));
     return $mod->ProcessTemplate('AddEditForm.tpl');
   }
 
