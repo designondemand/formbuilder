@@ -211,7 +211,7 @@ class fbCatalogerItemsField extends fbFieldBase {
     $cataloger =& $mod->GetModuleInstance('Cataloger');
     if( !$cataloger )
       {
-	$tmp = array($mod->Lang('error_cataloger_module_not_available','test'));
+	$tmp = array($mod->Lang('warning'),$mod->Lang('error_cataloger_module_not_available'));
 	$main[] = $tmp;
       }
     else

@@ -396,6 +396,8 @@ $lang['title_switch_basic_link']='Switch to Simple Mode';
 $lang['title_file_root']='Directory to save file in';
 $lang['title_file_root_help'] = 'This needs to be a directory that your web server has permissions to write in.<br />Chmod it 777 if you have problems/doubts.<br />Also, check to see that you do not have PHP directory restrictions.';
 
+$lang['error_cataloger_module_not_available']='<strong>Cataloger module does not seem to be installed/active.</strong>';
+$lang['warning'] = 'WARNING!';
 $lang['default_template'] = 'Default Template';
 $lang['table_left_template'] = 'Table Template, Titles on left';
 $lang['table_top_template'] = 'Table Template, Title on top';
