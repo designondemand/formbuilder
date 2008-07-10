@@ -53,10 +53,10 @@ class fbComputedField extends fbFieldBase
                 if (isset($mapId[$tF]))
                     {
                     $ref = $mapId[$tF];
-                    if (is_numeric($others[$ref]->GetValue()))
+                    if (is_numeric($others[$ref]->GetHumanReadableValue()))
                         {
                         $procstr = str_replace('$fld_'.$tF,
-                            $others[$ref]->GetValue(),$procstr);
+                            $others[$ref]->GetHumanReadableValue(),$procstr);
                         }
                     else
                         {
