@@ -2124,7 +2124,7 @@ function fast_add(field_type)
 	        			if( $res[0] == false )
 	          				{
 	      					// failed upload kills the send.
-	      					audit(-1, $mod->GetName(), $mod->Lang('submit_error',$mail->GetErrorInfo()));
+	      					audit(-1, $mod->GetName(), $mod->Lang('submit_error',$res[1]));
 	      					return array($res[0], $mod->Lang('uploads_error',$res[1]));
 	          				}
 
