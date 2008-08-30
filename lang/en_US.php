@@ -398,6 +398,9 @@ $lang['title_switch_advanced_link']='Switch to Advanced Mode';
 $lang['title_switch_basic_link']='Switch to Simple Mode';
 $lang['title_file_root']='Directory to save file in';
 $lang['title_file_root_help'] = 'This needs to be a directory that your web server has permissions to write in.<br />Chmod it 777 if you have problems/doubts.<br />Also, check to see that you do not have PHP directory restrictions.';
+$lang['title_newline_replacement']='Newline/Carriage Return replacement character';
+$lang['title_newline_replacement_help']='Leave blank to allow newlines and carriage returns in output';
+
 
 $lang['error_cataloger_module_not_available']='<strong>Cataloger module does not seem to be installed/active.</strong>';
 $lang['warning'] = 'WARNING!';

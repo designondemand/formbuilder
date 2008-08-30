@@ -85,16 +85,22 @@ function populate_header(formname)
       {
 	$template = $form->createSampleTemplate();
       }
-    $line = $header.$template;
+    $line = $template;
 
     $form->setFinishedFormSmarty();
     $newline = $mod->ProcessTemplateFromData( $line );
+	$replchar = $this->GetOption('newlinechar','');
+	if ($replchar != '')
+		{
+		$newline = rtrim($newline,"\r\n");
+    	$newline = preg_replace('/[\n\r]/',$replchar,$newline);
+		}
     if (substr($newline,-1,1) != "\n")
       {
-	$newline .= "\n";
+	  $newline .= "\n";
       }
     $f2 = fopen($filespec,"a");
-    fwrite($f2,$newline);
+    fwrite($f2,$header.$newline);
     fclose($f2); 
     $mod->ReturnFileLock();
     return array(true,'');        
@@ -144,6 +150,10 @@ function populate_header(formname)
     array_push($adv,array($mod->Lang('title_file_header'),
 			  $mod->CreateTextArea(false, $formDescriptor,
 					       htmlspecialchars($this->GetOption('file_header','')),'fbrp_opt_file_header', 'module_fb_area_short', '','',0,0)));
+    array_push($main,array($mod->Lang('title_newline_replacement'),
+			   $mod->CreateInputText($formDescriptor, 'fbrp_opt_newlinechar',
+						 $this->GetOption('newlinechar',''),5,15).'<br />'.
+						$mod->Lang('title_newline_replacement_help')));
 
     return array('main'=>$main,'adv'=>$adv);
   }
