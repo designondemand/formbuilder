@@ -20,7 +20,7 @@ if (!isset($gCms)) exit;
 		$dict->ExecuteSQLArray($sqlarray);
 
 		$db->CreateSequence(cms_db_prefix().'module_fb_form_seq');
-//		$db->CreateIndexSQL(cms_db_prefix().'module_fb_form_idx', cms_db_prefix().'module_fb_form', 'alias');
+		$db->Execute('create index '.cms_db_prefix().'module_fb_form_idx on '.cms_db_prefix().'module_fb_form (alias)');
 		
 		$flds = "
 			form_attr_id I KEY,
@@ -32,7 +32,7 @@ if (!isset($gCms)) exit;
 		$dict->ExecuteSQLArray($sqlarray);
 
 		$db->CreateSequence(cms_db_prefix().'module_fb_form_attr_seq');
-//		$db->CreateIndexSQL(cms_db_prefix().'module_fb_form_attr_idx', cms_db_prefix().'module_fb_form_attr', 'form_id');
+		$db->Execute('create index '.cms_db_prefix().'module_fb_form_attr_idx on '.cms_db_prefix().'module_fb_form_attr (form_id)');
 
 		$flds = "
 			field_id I KEY,
@@ -48,6 +48,8 @@ if (!isset($gCms)) exit;
 		$dict->ExecuteSQLArray($sqlarray);
 
 		$db->CreateSequence(cms_db_prefix().'module_fb_field_seq');
+		$db->Execute('create index '.cms_db_prefix().'module_fb_field_idx on '.cms_db_prefix().'module_fb_field (form_id)');
+
 
 		$flds = "
 			option_id I KEY,
@@ -60,6 +62,7 @@ if (!isset($gCms)) exit;
 		$dict->ExecuteSQLArray($sqlarray);
 
 		$db->CreateSequence(cms_db_prefix().'module_fb_field_opt_seq');
+		$db->Execute('create index '.cms_db_prefix().'module_fb_field_opt_idx on '.cms_db_prefix().'module_fb_field_opt (field_id,form_id)');
 
 		$flds = "
 			flock_id I KEY,
@@ -133,6 +136,8 @@ if (!isset($gCms)) exit;
 
 		$db->CreateSequence(cms_db_prefix().'module_fb_formbrowser_seq');
 		$db->CreateSequence(cms_db_prefix().'module_fb_uniquefield_seq');
+		$db->Execute('create index '.cms_db_prefix().'module_fb_formbrowser_idx on '.cms_db_prefix().'module_fb_formbrowser (form_id,index_key_1,index_key_2,index_key_3,index_key_4,index_key_5)');
+
 
 		$this->CreatePermission('Modify Forms', 'Modify Forms');
 
