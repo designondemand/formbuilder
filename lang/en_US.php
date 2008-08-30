@@ -803,6 +803,7 @@ of the license for the full disclaimer.</p>
 
 $lang['changelog'] = "
 <ul>
+<li>Version 0.5.4. 29 Aug 08. Scrapping plans for 0.6. Bug fixes. Ted's new \"Email \"From Address\" Again Field\". Added database indices.</li>
 <li>Version 0.5.3. 26 May 08. Bugfixes to previous set of bugfixes. Now ready for major upgrades for 0.6.</li>
 <li>Version 0.5.2. 25 May 08. Bugfixes. Release in preparation for substantial reworking for 0.6</li>
 <li>Version 0.5.1. 30 April 08. Bugfixes, rewrote some of the File Upload code to prevent white screen of annoyance.</li>
