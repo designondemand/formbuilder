@@ -150,6 +150,25 @@ if (! $this->CheckAccess()) exit;
 			}
 		case "0.5":
 		case "0.5.1":
+		case "0.5.2":
+		case "0.5.3":
+			{
+			$db->Execute('create index '.cms_db_prefix().
+				'module_fb_form_idx on '.cms_db_prefix().
+				'module_fb_form (alias)');
+			$db->Execute('create index '.cms_db_prefix().
+				'module_fb_form_attr_idx on '.cms_db_prefix().
+				'module_fb_form_attr (form_id)');
+			$db->Execute('create index '.cms_db_prefix().
+				'module_fb_field_opt_idx on '.cms_db_prefix().
+				'module_fb_field_opt (field_id,form_id)');
+			$db->Execute('create index '.cms_db_prefix().
+				'module_fb_field_idx on '.cms_db_prefix().
+				'module_fb_field (form_id)');
+			$db->Execute('create index '.cms_db_prefix().
+				'module_fb_formbrowser_idx on '.cms_db_prefix().
+					'module_fb_formbrowser (form_id,index_key_1,index_key_2,index_key_3,index_key_4, index_key_5)');
+			}
 		}
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('upgraded',$this->GetVersion()));
 
