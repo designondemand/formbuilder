@@ -40,14 +40,16 @@ class fbFromEmailAddressAgainField extends fbFieldBase {
 	function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = &$this->form_ptr->module_ptr;
+		$flds = &$this->form_ptr->GetFields();
+		$opts = array();
+		foreach ($flds as $tf)
+			{
+			$opts[$tf->GetName()]=$tf->GetName();
+			}
 		$main = array(
 			array(
 				$mod->Lang('title_field_to_validate'),
-				$mod->CreateInputText(
-					$formDescriptor, 'fbrp_opt_field_to_validate', $this->GetOption(
-						'field_to_validate',''
-					), 30, 255
-				)
+			$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_field_to_validate', $opts, -1, $this->GetOption('field_to_validate'))
 			)
 		);
 
@@ -84,13 +86,14 @@ class fbFromEmailAddressAgainField extends fbFieldBase {
 		$mod = &$this->form_ptr->module_ptr;
 
 		$field_to_validate = $this->GetOption('field_to_validate','');
+
 		if ($field_to_validate != '')
 		{
 			foreach ($this->form_ptr->Fields as $one_field)
 			{
 				if ($one_field->Name == $field_to_validate)
 				{
-					$value = $one_field->Value;
+					$value = $one_field->GetValue();
 					if ($value != $this->Value)
 					{
 						$this->validated = false;

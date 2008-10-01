@@ -26,6 +26,7 @@ $lang['field_type_DispositionMultiselectFileDirector'] = '*Save Results to File(
 $lang['field_type_DispositionPageRedirector']='*Redirect to Page Based on Pulldown';
 $lang['field_type_DispositionEmail']='*Email Results to set Address(es)';
 $lang['field_type_DispositionEmailConfirmation']='*Validate-via-Email Address';
+$lang['field_type_DispositionFromEmailAddressField']='*Email "From Address" Field, and send copy';
 $lang['field_type_DispositionFile']='*Write Results to Flat File';
 $lang['field_type_DispositionDatabase']='*Store Results in Database';
 $lang['field_type_DispositionFormBrowser']='*Store Results for FormBrowser Module v.3';
@@ -400,6 +401,12 @@ $lang['title_file_root']='Directory to save file in';
 $lang['title_file_root_help'] = 'This needs to be a directory that your web server has permissions to write in.<br />Chmod it 777 if you have problems/doubts.<br />Also, check to see that you do not have PHP directory restrictions.';
 $lang['title_newline_replacement']='Newline/Carriage Return replacement character';
 $lang['title_newline_replacement_help']='Leave blank to allow newlines and carriage returns in output';
+$lang['title_send_usercopy'] = 'Send User a Copy of Submission?';
+$lang['title_send_usercopy_label'] = 'Label for Checkbox (if user choice)';
+$lang['title_send_me_a_copy'] = 'Send me a copy of form';
+$lang['option_never'] = 'Never';
+$lang['option_user_choice'] = 'Give user a choice (checkbox)';
+$lang['option_always'] = 'Always';
 
 
 $lang['error_cataloger_module_not_available']='<strong>Cataloger module does not seem to be installed/active.</strong>';
