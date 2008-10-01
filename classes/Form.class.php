@@ -676,6 +676,10 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	$oneset->label_parts = $thisField->LabelSubComponents()?1:0;
 	$oneset->type = $thisField->GetDisplayType();
 	$mod->smarty->assign($thisField->GetName(),$oneset);
+	if ($thisField->GetAlias() != '')
+		{
+		$mod->smarty->assign($thisField->GetAlias(),$oneset);
+		}
 	array_push($fields,$oneset);
       }
 
