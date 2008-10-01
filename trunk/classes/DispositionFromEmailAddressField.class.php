@@ -21,7 +21,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
             $mod->Lang('validation_email_address')=>'email',
             );
       $this->ValidationType = 'email';
-	   $this->modifiesOtherFields = false;
+	   $this->modifiesOtherFields = true;
 	   $this->Required = 1;
 	}
 
@@ -32,7 +32,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		$retstr = $mod->CreateInputText($id, 'fbrp__'.$this->Id.'[]',
 			htmlspecialchars($this->Value[0], ENT_QUOTES),
            25,128,$js);
- 		if ($this->GetOption('send_user_copy','c'))
+ 		if ($this->GetOption('send_user_copy','n') == 'c')
 			{
 			$retstr .= $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id.'[]', 1,
 					0,' id="'.$this->Id.'_2"');
@@ -58,7 +58,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 			(
 				$this->GetOption('send_user_copy','n') == 'a'
 				||
-				($this->GetOption('send_user_copy','n') == 'c' && isset($this->Value[1]))
+				($this->GetOption('send_user_copy','n') == 'c' && isset($this->Value[1]) && $this->Value[1] == 1)
 			)
 		 )
 			{
