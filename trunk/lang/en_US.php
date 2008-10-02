@@ -404,6 +404,9 @@ $lang['title_newline_replacement_help']='Leave blank to allow newlines and carri
 $lang['title_send_usercopy'] = 'Send User a Copy of Submission?';
 $lang['title_send_usercopy_label'] = 'Label for Checkbox (if user choice)';
 $lang['title_send_me_a_copy'] = 'Send me a copy of form';
+$lang['title_allow_subject_override'] = 'Allow subject to be overridden?';
+$lang['title_allow_subject_override_long'] = 'Allow \'Email "Subject" Fields\' to override the subject specified in the pulldown.';
+
 $lang['option_never'] = 'Never';
 $lang['option_user_choice'] = 'Give user a choice (checkbox)';
 $lang['option_always'] = 'Always';
