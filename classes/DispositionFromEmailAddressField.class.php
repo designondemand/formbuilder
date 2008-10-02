@@ -21,8 +21,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 			$mod->Lang('validation_none')=>'none',
             $mod->Lang('validation_email_address')=>'email',
             );
-      $this->ValidationType = 'email';
-	   $this->modifiesOtherFields = true;
+	$this->modifiesOtherFields = true;
 	$this->NonRequirableField = false;
 	
 	}

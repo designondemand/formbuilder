@@ -162,6 +162,11 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 		array_push($main,array($mod->Lang('title_select_one_message'),
 			$mod->CreateInputText($formDescriptor, 'fbrp_opt_select_one',
 			$this->GetOption('select_one',$mod->Lang('select_one')),25,128)));
+		array_push($main,array($mod->Lang('title_allow_subject_override'),
+			$mod->CreateInputHidden($formDescriptor,'fbrp_opt_subject_override','0').
+			$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_subject_override',
+                '1',$this->GetOption('subject_override','0')).
+				$mod->Lang('title_allow_subject_override_long')));		
 		array_push($main,array($mod->Lang('title_director_details'),$dests));
 		return array('main'=>$main,'adv'=>$adv);
 	}
@@ -207,7 +212,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 		$mod = &$this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
-			$ret = $this->GetOptionElement('destination_address',($this->Value - 1));
+			$ret = $this->GetOptionElement('destination_subject',($this->Value - 1));
 			}
 		else
 			{
@@ -225,8 +230,16 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 	
 	function DisposeForm($returnid)
 	{
+		if ($this->GetOption('subject_override','0') == '1' && $this->GetOption('email_subject','') != '')
+			{
+			$subject = $this->GetOption('email_subject');
+			}
+		else
+			{
+			$subject = $this->GetOptionElement('destination_subject',($this->Value - 1));
+			}
 		return $this->SendForm($this->GetOptionElement('destination_address',($this->Value - 1)),
-			$this->GetOptionElement('destination_subject',($this->Value - 1)));
+			$subject);
 	}
 
 
