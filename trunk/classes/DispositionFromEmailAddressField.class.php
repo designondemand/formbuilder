@@ -18,11 +18,13 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
       $this->IsDisposition = true;
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
+			$mod->Lang('validation_none')=>'none',
             $mod->Lang('validation_email_address')=>'email',
             );
       $this->ValidationType = 'email';
 	   $this->modifiesOtherFields = true;
-	   $this->Required = 1;
+	$this->NonRequirableField = false;
+	
 	}
 
 	function GetFieldInput($id, &$params, $returnid)
@@ -150,13 +152,15 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		$result = true;
 		$message = '';
 		$mod = &$this->form_ptr->module_ptr;
-      if ($this->Value !== false &&
-            ! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $this->Value[0]))
-         {
-         $this->validated = false;
-         $this->validationErrorText = $mod->Lang('please_enter_an_email',$this->Name);
-         }
-
+		if ($this->ValidationType != 'none')
+			{
+		      if ($this->Value !== false &&
+		            ! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $this->Value[0]))
+		         {
+		         $this->validated = false;
+		         $this->validationErrorText = $mod->Lang('please_enter_an_email',$this->Name);
+		         }
+			}
 		return array($this->validated, $this->validationErrorText);
 	}
 }
