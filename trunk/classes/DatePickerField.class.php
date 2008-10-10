@@ -124,7 +124,7 @@ class fbDatePickerField extends fbFieldBase {
 		if ($this->HasValue())
 			{
 			$theDate = mktime ( 1, 1, 1, $this->GetArrayValue(1),  $this->GetArrayValue(0), $this->GetArrayValue(2) );
-			$ret = date($this->GetOption('dateformat','j F Y'), $theDate);
+			$ret = date($this->GetOption('date_format','j F Y'), $theDate);
 			}
 		else
 			{
