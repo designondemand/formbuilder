@@ -260,7 +260,6 @@ class fbCatalogerItemsField extends fbFieldBase {
   {
     $mod = &$this->form_ptr->module_ptr;
     $form = &$this->form_ptr;
-    $vals = &$this->GetOptionRef('option_value');
     if ($this->HasValue())
       {
 	$fieldRet = array();
@@ -268,17 +267,13 @@ class fbCatalogerItemsField extends fbFieldBase {
 	  {
 	    $this->Value = array($this->Value);
 	  }
-	foreach ($this->Value as $thisOne)
-	  {
-	    array_push($fieldRet,$vals[$thisOne - 1]);
-	  }
 	if ($as_string)
 	  {
-	    return join($form->GetAttr('list_delimiter',','),$fieldRet);
+	    return join($form->GetAttr('list_delimiter',','),$this->Value);
 	  }
 	else
 	  {
-	    return array($fieldRet);
+	    return array($this->Value);
 	  }			
       }
     else
