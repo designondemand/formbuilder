@@ -10,7 +10,7 @@ require_once(dirname(__FILE__).'/DispositionEmailBase.class.php');
 
 class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
 
-	function fbDispositionDeliverToAddressField(&$form_ptr, &$params)
+	function fbDispositionDeliverToEmailAddressField(&$form_ptr, &$params)
 	{
       $this->fbDispositionEmailBase($form_ptr, $params);
       $mod = &$form_ptr->module_ptr;
