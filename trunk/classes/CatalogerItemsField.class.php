@@ -17,7 +17,7 @@ class fbCatalogerItemsField extends fbFieldBase {
   var $optionCount;
   var $optionAdd;
 
-  function fbMultiselectField(&$form_ptr, &$params)
+  function fbCatalogerItemsField(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
     $mod = &$form_ptr->module_ptr;
