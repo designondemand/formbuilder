@@ -76,7 +76,7 @@ function populate_header(formname)
 	$header = $this->GetOption('file_header','');
 	if ($header == '')
 	  {
-	    $header = $form->createSampleHeader();
+	    $header = $form->createSampleTemplate(false,false,false,true);
 	  } 
 	$header .= "\n";
       }

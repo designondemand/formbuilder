@@ -163,14 +163,14 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
     $header = $this->GetOption('file_header','');
     if ($header == '')
       {
-	$header = $this->createSampleHeader();
+	$header = $this->form_ptr->createSampleTemplate(false,false,false,true);
       } 
     $header .= "\n";
 
     $template = $this->GetOption('file_template','');
     if ($template == '')
       {
-	$template = $this->createSampleTemplate();
+	$template = $this->form_ptr->createSampleTemplate();
       }
 
     // Begin output to files
