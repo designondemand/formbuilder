@@ -27,20 +27,21 @@ class fbHiddenField extends fbFieldBase
   function GetFieldInput($id, &$params, $returnid)
   {
     $mod = &$this->form_ptr->module_ptr;
-    if ($this->GetOption('smarty_eval','0') == '1')
-      {
-      $this->SetSmartyEval(true);
-      }
+
    if ($this->Value !== false)
       {
-      return $mod->CreateInputHidden($id, 'fbrp__'.$this->Id,
-				   $this->Value);
-		}
+	  $v = $this->Value;
+  	  }
 	else
-	   {
-      return $mod->CreateInputHidden($id, 'fbrp__'.$this->Id,
-				   $this->GetOption('value',''));
+		{
+		$v = $this->GetOption('value','');
+		}
+
+    if ($this->GetOption('smarty_eval','0') == '1')
+      {
+      $v =  $mod->ProcessTemplateFromData($v);
       }
+    return '<input type="hidden" name="'.$id.'fbrp__'.$this->Id.'" value="'.$v.'" />';
   }
 
 	function PrePopulateAdminForm($formDescriptor)

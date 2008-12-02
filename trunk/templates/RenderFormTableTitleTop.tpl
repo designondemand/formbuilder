@@ -83,7 +83,7 @@
 	    		{/section}
 	    		</table>
 	    	{else}
-	    		{$entry->input}
+    			{if $entry->smarty_eval == '1'}{eval var=$entry->input}{else}{$entry->input}{/if}
 	    	{/if}
 	    	{if $entry->valid == 0} &lt;--- {$entry->error}{/if}
 	    	</td></tr>
