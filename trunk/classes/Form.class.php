@@ -478,7 +478,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	    	$this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName()));
 	    $validated = false;
 	    $this->Fields[$i]->SetOption('is_valid',false);
-	    $this->Fields[$i]->validationErrorText = 	$this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName());
+	    $this->Fields[$i]->validationErrorText = $this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName());
 	    $this->Fields[$i]->validated = false;
 	  }
 	else if ($this->Fields[$i]->GetValue() != $this->module_ptr->Lang('unspecified'))
@@ -958,6 +958,7 @@ function unmy_htmlentities($val)
 		}
 	$foundfields = false;
 	// populate the attributes and field name first. When we see a field, we save the form and then start adding the fields to it.
+//debug_display($elements[0]);
 	foreach ($elements[0]['children'] as $thisChild)
 		{
 		if ($thisChild['name'] == 'form_name')
@@ -991,6 +992,7 @@ function unmy_htmlentities($val)
 				//debug_display($thisChild);
 			$fieldAttrs = &$thisChild['attributes'];
 			$className = $this->MakeClassName($fieldAttrs['type'], '');
+			//debug_display($className);
 		    $newField = new $className($this, $params);
 			$oldId = $fieldAttrs['id'];
 
@@ -1017,9 +1019,12 @@ function unmy_htmlentities($val)
 					{
 					$newField->SetName($thisOpt['content']);
 					}
-				else
+				if ($thisOpt['name'] == 'options')
 					{
-					$newField->OptionFromXML($thisOpt);
+					foreach ($thisOpt['children'] as $thisOption)
+							{
+							$newField->OptionFromXML($thisOption);
+							}
 					}
 				}
 			$newField->Store(true);
@@ -1139,7 +1144,7 @@ function unmy_htmlentities($val)
       {
 	$classFile = $type.'.class.php';
       }
-    require_once dirname(__FILE__).'/'.$classFile;
+    require_once cms_join_path(dirname(__FILE__), $classFile);
     // class names are prepended with "fb" to prevent namespace clash.
     return ( 'fb'.$type );
   }

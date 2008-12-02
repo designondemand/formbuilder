@@ -328,9 +328,8 @@ class FormBuilder extends CMSModule
         	
 		return $oneset;
 	}
-// Start ALBY
+/*
 function GetResponses($form_id, $start_point, $number, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y', &$params)
-// End ALBY
 	{
 		global $gCms;
 		$db =& $gCms->GetDb();
@@ -419,15 +418,57 @@ if( (! empty($params['fbrp_response_search'])) && (is_array($params['fbrp_respon
 		return array($records, $names, $values);
 	}
 
+*/
 
-	function GetSortedResponses($form_id, $start_point, $number, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y', &$params)
+
+	/* return an array of name/value */
+	function ParseResponseXML($xmlstr)
+	{
+		// xml_parser_create, xml_parse_into_struct
+		$vals = array();  	
+		$parser = xml_parser_create('');
+		xml_parser_set_option( $parser, XML_OPTION_CASE_FOLDING, 0 );
+		xml_parser_set_option( $parser, XML_OPTION_SKIP_WHITE, 1 ); // was 1
+		xml_parse_into_struct($parser, $xmlstr, $vals);
+		xml_parser_free($parser);
+		$elements = array();
+		$stack = array();
+		$fieldMap = array();
+		error_log($xmlstr);
+		foreach ( $vals as $tag )
+			{
+			$index = count( $elements );
+			if ( $tag['type'] == "complete" || $tag['type'] == "open" )
+				{
+				$elements[$index] = array();
+				$elements[$index]['name'] = $tag['tag'];
+				$elements[$index]['attributes'] = empty($tag['attributes']) ? "" : $tag['attributes'];
+				$elements[$index]['content']    = empty($tag['value']) ? "" : $tag['value'];
+				if ( $tag['type'] == "open" )
+					{
+					# push
+					$elements[$index]['children'] = array();
+					$stack[count($stack)] = &$elements;
+					$elements = &$elements[$index]['children'];
+					}
+	        }
+			if ( $tag['type'] == "close" )
+				{    # pop
+				$elements = &$stack[count($stack) - 1];
+				unset($stack[count($stack) - 1]);
+				}
+			}
+		debug_display($elements);
+	}
+
+	function GetSortedResponses($form_id, $start_point, $number=100, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y', &$params)
 	{
 		global $gCms;
 		$db =& $gCms->GetDb();
 		$names = array();
 		$values = array();
 		$sql = 'FROM '.cms_db_prefix().
-        			'module_fb_resp WHERE form_id=?';
+        			'module_fb_formbrowser WHERE form_id=?';
         if ($user_approved)
         	{
         	 $sql .= ' and user_approved is not null';
@@ -436,10 +477,8 @@ if( (! empty($params['fbrp_response_search'])) && (is_array($params['fbrp_respon
         	{
         	$sql .= ' and admin_approved is not null';
         	}
-// Start ALBY
-if( (! empty($params['fbrp_response_search'])) && (is_array($params['fbrp_response_search'])) )
- $sql .= ' AND resp_id IN ('. implode(',', $params['fbrp_response_search']) .')';
-// End ALBY
+		if( (! empty($params['fbrp_response_search'])) && (is_array($params['fbrp_response_search'])) )
+ 			$sql .= ' AND resp_id IN ('. implode(',', $params['fbrp_response_search']) .')';
         
 		if (! isset($params['fbrp_sort_field']) || $params['fbrp_sort_field']=='submitdate')
 			{
@@ -459,7 +498,7 @@ if( (! empty($params['fbrp_response_search'])) && (is_array($params['fbrp_respon
         	{   
         	$records = $row['num'];
         	}
-       	$dbresult = $db->Execute('SELECT * '.$sql, array($form_id));
+       	$dbresult = $db->SelectLimit('SELECT * '.$sql, $number, $start_point,array($form_id));
 
 		while ($dbresult && $row = $dbresult->FetchRow())
 			{
@@ -468,10 +507,16 @@ if( (! empty($params['fbrp_response_search'])) && (is_array($params['fbrp_respon
 			$oneset->user_approved = (empty($row['user_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['user_approved']))); 
  			$oneset->admin_approved = (empty($row['admin_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['admin_approved']))); 
 			$oneset->submitted = date($dateFmt,$db->UnixTimeStamp($row['submitted']));
+			$oneset->xml = $row['response'];
 			$oneset->fields = array();
 		    array_push($values,$oneset);
 		    }
-		$populate_names = true;
+		for ($i=0;$i<count($values);$i++)
+			{
+			$this->ParseResponseXML($values[$i]->xml);
+			}
+		
+/*		$populate_names = true;
 		$fm = -1;
 		for($i=0;$i<count($values);$i++)
 			{
@@ -541,6 +586,7 @@ if( (! empty($params['fbrp_response_search'])) && (is_array($params['fbrp_respon
 			{
 			$values = array_slice( $values, $start_point, $number);
 			}
+		*/
 		return array($records, $names, $values);
 	}
 
