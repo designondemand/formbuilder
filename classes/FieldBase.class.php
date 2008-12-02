@@ -769,10 +769,10 @@ class fbFieldBase {
 	$xmlstr .= "\t\thide_label=\"".$this->HideLabel."\"\n";
 	$xmlstr .= "\t\talias=\"".$this->GetOption('field_alias','')."\">\n";
 	$xmlstr .= "\t\t\t<field_name><![CDATA[".$this->Name."]]></field_name>\n";
-	$xmlstr .= $this->OptionsAsXML();
+	$xmlstr .= "\t\t\t<options>\n".$this->OptionsAsXML()."\t\t\t</options>\n";
 	if ($exportValues)
 		{
-			$xmlstr .= "\t\t\t<human_readble_value><![CDATA[".$this->GetHumanReadableValue()."]]></human_readble_value>\n";
+			$xmlstr .= "\t\t\t<human_readable_value><![CDATA[".$this->GetHumanReadableValue()."]]></human_readable_value>\n";
 		}
 
 	$xmlstr .= "</field>\n";

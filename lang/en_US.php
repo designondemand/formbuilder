@@ -814,7 +814,7 @@ of the license for the full disclaimer.</p>
 
 $lang['changelog'] = "
 <ul>
-<li>Version 0.5.5. 1 Oct 08. Bug fixes. Added .</li>
+<li>Version 0.5.5. 1 Oct 08. Bug fixes. Added new DispositionFromEmailAddressField to replace deficiencies with Email Address 'From' Field type.</li>
 <li>Version 0.5.4. 29 Aug 08. Scrapping plans for 0.6. Bug fixes. Ted's new \"Email \"From Address\" Again Field\". Added database indices.</li>
 <li>Version 0.5.3. 26 May 08. Bugfixes to previous set of bugfixes. Now ready for major upgrades for 0.6.</li>
 <li>Version 0.5.2. 25 May 08. Bugfixes. Release in preparation for substantial reworking for 0.6</li>
