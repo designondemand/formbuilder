@@ -104,7 +104,7 @@ class fbRadioGroupField extends fbFieldBase
 	  {
 	    $thisBox->input .= ' checked="checked"';
 	  }
-	$thisBox->input .= ' id="'.$id. 'fbrp__'.$this->Id.'_'.$i.' '.$js.'" />';
+	$thisBox->input .= ' id="'.$id. 'fbrp__'.$this->Id.'_'.$i.'" '.$js.' />';
 	array_push($fieldDisp, $thisBox);
       }
     return $fieldDisp;
