@@ -698,7 +698,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
        var ret = false;
        if ( ! submitted )
           {
-           var item = document.getElementById("fbsubmit'.$this->Id.'");
+           var item = document.getElementById("'.$id.'fbrp_submit");
            if (item != null)
              {
              setTimeout(function() {item.disabled = true}, 0);
@@ -748,7 +748,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
          }
 	   $mod->smarty->assign('submit',$jsStr . $mod->CreateInputSubmit($id, 'fbrp_submit',
 				$this->GetAttr('submit_button_text'),
-				'class="fbsubmit" id="fbsubmit'.$this->Id.'"'.$jsTrigger.' '.$js));
+				'class="fbsubmit" '.$jsTrigger.' '.$js));
       }
 	  return $mod->ProcessTemplateFromDatabase('fb_'.$this->Id);
   }
