@@ -169,6 +169,16 @@ if (! $this->CheckAccess()) exit;
 				'module_fb_formbrowser_idx on '.cms_db_prefix().
 					'module_fb_formbrowser (form_id,index_key_1,index_key_2,index_key_3,index_key_4, index_key_5)');
 			}
+		case "0.5.4":
+		case "0.5.5":
+		case "0.5.6":
+			{
+			$css = file_get_contents(cms_join_path(dirname(__FILE__), 'includes','default.css'));
+			$css_id = $db->GenID(cms_db_prefix().'css_seq');
+			$db->Execute('insert into '.cms_db_prefix().'css (css_id, css_name, css_text, media_type, create_date) values (?,?,?,?,?)',
+					array($css_id,'FormBuilder Default Style',$css,'screen',date('Y-m-d')));
+			
+			}
 		}
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('upgraded',$this->GetVersion()));
 

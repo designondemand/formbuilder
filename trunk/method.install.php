@@ -136,17 +136,20 @@ if (!isset($gCms)) exit;
 
 		$db->CreateSequence(cms_db_prefix().'module_fb_formbrowser_seq');
 		$db->CreateSequence(cms_db_prefix().'module_fb_uniquefield_seq');
-		$db->Execute('create index '.cms_db_prefix().'module_fb_formbrowser_idx on '.cms_db_prefix().'module_fb_formbrowser (form_id,index_key_1,index_key_2,index_key_3,index_key_4,index_key_5)');
-
 
 		$this->CreatePermission('Modify Forms', 'Modify Forms');
 
 		$this->CreateEvent( 'OnFormBuilderFormSubmit' );
 		$this->CreateEvent( 'OnFormBuilderFormDisplay' );
 		$this->CreateEvent( 'OnFormBuilderFormSubmitError' );
-		
+
+		$css = file_get_contents(cms_join_path(dirname(__FILE__), 'includes','default.css'));
+		$css_id = $db->GenID(cms_db_prefix().'css_seq');
+		$db->Execute('insert into '.cms_db_prefix().'css (css_id, css_name, css_text, media_type, create_date) values (?,?,?,?,?)',
+			array($css_id,'FormBuilder Default Style',$css,'screen',date('Y-m-d')));
+
 		//include 'includes/FormBuilderSampleData.inc';	
-		$path = dirname(__FILE__).'/includes';
+		$path = cms_join_path(dirname(__FILE__),'includes');
 		$dir=opendir($path);
    		while ($filespec=readdir($dir))
    			{
@@ -154,7 +157,7 @@ if (!isset($gCms)) exit;
    			$aeform = '';
        		if (preg_match('/.xml$/',$filespec) > 0)
        			{
-       			$params['fbrp_xml_file'] = $path.'/'.$filespec;
+       			$params['fbrp_xml_file'] = cms_join_path($path,$filespec);
        			$aeform = new fbForm($this, $params, true);
 				$res = $aeform->ImportXML($params);
        			}

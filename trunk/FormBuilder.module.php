@@ -128,7 +128,7 @@ class FormBuilder extends CMSModule
 
 	function GetVersion()
 	{
-		return '0.5.5';
+		return '0.5.6';
 	}
 
 	function GetAuthor()
@@ -287,7 +287,6 @@ class FormBuilder extends CMSModule
 	{
 		return $this->Lang('help');
 	}
-
 
 	function GetResponse($form_id,$response_id,$field_list=array(), $dateFmt='d F y')
 	{
