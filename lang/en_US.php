@@ -134,6 +134,7 @@ $lang['day'] = 'Day';
 $lang['mon'] = 'Month';
 $lang['year'] = 'Year';
 $lang['none'] = '(none)';
+$lang['css'] = 'CSS';
 
 $lang['uninstalled'] = 'Module uninstalled.';
 $lang['installed'] = 'Module version %s installed.';
@@ -714,62 +715,10 @@ and check \"Show Field IDs\"</p>
 <li>Show Field IDs. When turned on, FormBuilder will display field ids when adding or editing a form.</li>
 </ul>
 <h3>Styling and CSS</h3>
-<p>Paul Noone graciously provides us all with a pretty good standard CSS that you can use for forms:</p>
-<pre>
-	/* Sample FormBuilder CSS base */
-	form {margin-top:0}
-	form, td, th, li { font-size: 100%}
-	form div {margin-bottom:0}
-	fieldset div {
-		margin-bottom:0.5em;
-		margin-left:1em;
-	}
-	fieldset div div {
-		margin-top:0.5em;
-		margin-left:1em
-	}
-	fieldset {
-		margin-bottom:1em;
-		border:1px solid #F60;
-		padding:0.5em
-	}
-	fieldset label {
-		width:auto;
-	}
-	legend {
-		color:#FFF;
-		background:#F60;
-		font-style:italic;
-		font-size:1.2em;
-		margin-bottom:0.5em;
-		padding:0.2em;
-		width:auto;
-		border:1px solid #CCC
-	}
-	textarea {
-		margin: 0.5em 0;
-		width:98%;
-		height: 6em
-	}
-
-	/* Apply this class to text/select input fields with shorter labels
-		to help alignment */
-	.short-label label {float:left; width:10em}
-	.short-label fieldset div input,
-	.short-label fieldset div select {width:16em}
-
-	/* Pretty up your Captcha image output */
-	.captcha {
-		margin:0.5em 0;
-		width:200px;
-		text-align:center
-	}
-	.captcha img {border:1px solid #F60; margin-bottom:0.5em}
-	.captcha input {width:196px; margin-top:0.5em}
-
-	/* Just a bit more room for the Submit button */
-	.submit {margin-top:0.5em}
-</pre>
+<p>After a bit of nagging on the part of people who actually respect standards, FormBuilder no longer encourages tricks like embedding CSS in 
+static text fields. Instead, it creates a stylesheet called \"FormBuilder Default\" that you are encouraged to attach to the page template
+that you use for pages that contain your form.</p>  
+<p>This default CSS was graciously provided by Paul Noone.</p>
 
 <h3>Form Template Variables</h3>
 ".$lang['template_variable_help']."
