@@ -644,8 +644,8 @@ group, but is better when there are a large number of options, as you can limit 
 </ul></li>
 
 <li>Email-specific Inputs
-<ul><li>Email From Address Field. This allows users to provide their email address. The email generated when the form gets handled will use this address in the \"From\" field.</li>
-<li>Email From Name Field. This allows users to provide their name. The email generated when the form gets handled will use this name in the \"From\" field.</li>
+<ul><li>Email \"From Address\" Field. This allows users to provide their email address. The email generated when the form gets handled will use this address in the \"From\" field.</li>
+<li>Email \"From Name\" Field. This allows users to provide their name. The email generated when the form gets handled will use this name in the \"From\" field.</li>
 <li>Email Subject Field. This allows users to provide a subject for their email. The email generated when the form gets handled will use this in the \"Subject\" field. This may cause trouble with certain dispositions that want to control the Email Subject, so use it with caution.</li>
 </ul></li>
 
@@ -666,6 +666,7 @@ independently validated. This is good for applications like online surveys.</li>
 <li>*Email Results Based on Pulldown. This is useful for web sites where comments get routed based on their subject matter, e.g., bugs get sent to one person, marketing questions to another person, sales requests to someone else, etc. The pulldown is populated with the subjects, and each gets directed to a specific email address. You set up these mappings in the when you create or edit a field of this type. If you use one of these \"Director\" pulldowns, the user must make a selection in order to submit the
 form. This input is part of the form the user sees, although the email addresses are not made visible nor
 are they embedded in the HTML.</li>
+<li>*Email \"From Address\" Field, and send copy. This works like the Email \"From Address\" Field described above, but it provides options for sending a copy of the results to the user.</li>
 <li>*Email Results to set Address(es). This simply sends the form results to one or more email addresses that you enter when you create or edit this type of field. This field and its name are not visible in the
 form that the user sees. The email addresses are not made visible nor
 are they embedded in the HTML.</li>
@@ -720,7 +721,6 @@ static text fields. Instead, it creates a stylesheet called \"FormBuilder Defaul
 that you use for pages that contain your form.</p>  
 <p>This default CSS was graciously provided by Paul Noone.</p>
 
-<h3>Form Template Variables</h3>
 ".$lang['template_variable_help']."
 
 <h3>Known Issues</h3>
@@ -737,6 +737,7 @@ section <em>Adding a Form to a Page</em>.</li>
 <li> If you're missing fields in an email that gets generated, check the disposition field's template, and make sure you're specifying the missing fields. Seems obvious, but it's an easy mistake to make.</li>
 <li>Uncheck the \"Hide Errors\" checkbox in the global options, and see what message gets displayed when you submit your form.</li>
 <li> Just mess around and try clicking on links and icons and stuff. See what happens.</li>
+<li> Make sure you can successfully send email via the test in the CMSMailer Module. It's simply amazing how many problems boil down to a misconfigured CMSMailer.</li>
 <li> Last resport is to email me or catch me on IRC and we can go from there.</li>
 </ol> 
 <p>This is no longer a particularly early version, but it is probably still buggy. While I've done all I can
