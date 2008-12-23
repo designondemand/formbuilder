@@ -1186,8 +1186,9 @@ function unmy_htmlentities($val)
 	$mod->smarty->assign('title_load_template',$mod->Lang('title_load_template'));
 	$modLink = $mod->CreateLink($id, 'admin_get_template', $returnid, '', array(), '', true);
 	list($mod_path, $mod_param) = explode('?',$modLink);
+	$mod->smarty->assign('security_key',CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY]);
 	$mod->smarty->assign('mod_path',$mod_path);
-	$mod->smarty->assign('mod_param',$mod_param);
+	$mod->smarty->assign('mod_param',html_entity_decode($mod_param));
 	
 	$templateList = array(''=>'',$mod->Lang('default_template')=>'RenderFormDefault.tpl',
 		$mod->Lang('table_left_template')=>'RenderFormTableTitleLeft.tpl',
