@@ -36,8 +36,8 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
  		if ($this->GetOption('send_user_copy','n') == 'c')
 			{
 			$retstr .= $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id.'[]', 1,
-					0,' id="'.$this->Id.'_2"');
-			$retstr .= '<label for="'.$this->Id.'_2">'.$this->GetOption('send_user_label',
+					0,' id="'.$this->Id.'_2" class="checkbox"');
+			$retstr .= '<label for="'.$this->Id.'_2" class="label">'.$this->GetOption('send_user_label',
 				$mod->Lang('title_send_me_a_copy')).'</label>';
 			}
 		return $retstr;
@@ -104,19 +104,6 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		if ($hideIndex != -1)
 			{
 			array_splice($mainArray, $hideIndex,1);
-			}
-		// remove the "hide css" field
-		$hideIndex = -1;
-		for ($i=0;$i<count($advArray);$i++)
-			{
-			if ($advArray[$i]->title == $mod->Lang('title_field_css_class'))
-				{
-				$hideIndex = $i;
-				}
-			}
-		if ($hideIndex != -1)
-			{
-			array_splice($advArray, $hideIndex,1);
 			}
 		if (count($advArray) == 0)
 			{
