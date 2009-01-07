@@ -84,6 +84,7 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
     // order, except in "chronological" creation order.
     $displaynames = &$this->GetOptionRef('destination_displayname');
     $displayfiles = &$this->GetOptionRef('destination_filename');
+    $displayvalues = &$this->GetOptionRef('destination_value');
 
     $fields = array();
     for( $i = 0; $i < count($displaynames); $i++ )
@@ -94,7 +95,8 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
 	$ctrl->title = $displaynames[$i];
 	$ctrl->input = $mod->CreateInputCheckbox($id,
 						 'fbrp__'.$this->Id.'[]', 
-						 $i+1,'-1',
+						 $displayvalues[$i],
+                                                 (is_array($this->Value) && in_array($displayvalues[$i],$this->Value))?$displayvalues[$i]:'-1',
 						 sprintf(' id="%s_%s_%s" ',
 							 $id, $this->Id,$i).$js);
 	$fields[] = $ctrl;
