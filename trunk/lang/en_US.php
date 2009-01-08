@@ -764,6 +764,7 @@ of the license for the full disclaimer.</p>
 
 $lang['changelog'] = "
 <ul>
+<li>Version 0.5.8. Jan 09 (calguy1000) - Minor change to the DispositionMultiselectFileDirector class.</li>
 <li>Version 0.5.7. Jan 09 (calguy1000) - Minor change to the DispositionMultiselectFileDirector class.</li>
 <li>Version 0.5.6. 23 Dec 08. Bug fixes.</li>
 <li>Version 0.5.5. 1 Oct 08. Bug fixes. Added new DispositionFromEmailAddressField to replace deficiencies with Email Address 'From' Field type.</li>
