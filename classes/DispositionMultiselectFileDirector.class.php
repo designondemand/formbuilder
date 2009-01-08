@@ -110,29 +110,19 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
     $tmp = array();
     if( is_array($this->Value) )
       {
-	foreach( $this->Value as $idx )
+	foreach( $this->Value as $onevalue )
 	  {
-	    if( empty($idx) ) continue;
+	    if( empty($onevalue) ) continue;
 	    
-	    $idx--;
-	    
-	    $str = $this->GetOptionElement('destination_value',$idx);
-	    if( empty($str) )
-	      {
-		$str = $this->GetOptionElement('destination_displayname',$idx);
-	      }
-	    $tmp[] = $str;
+	    $tmp[] = $onevalue;
 	  } // foreach
       } // if
 
-	if ($as_string)
-		{
-		return join($form->GetAttr('list_delimiter',','),$tmp);
-		}
-	else
-		{
-    	return $tmp;
-		}
+    if ($as_string)
+      {
+	$tmp = join($form->GetAttr('list_delimiter',','),$tmp);
+      }
+    return $tmp;
   }
 
   function StatusInfo()
@@ -178,17 +168,20 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
     // Begin output to files
     if( is_array($this->Value) )
       {
-	foreach( $this->Value as $idx )
+	$displayfiles = &$this->GetOptionRef('destination_filename');
+	$displayvalues = &$this->GetOptionRef('destination_value');
+
+	foreach( $this->Value as $onevalue )
 	  {
 	    // I dunno why it's empty sometimes, but...
-	    if( empty($idx) ) continue;
+	    if( empty($onevalue) ) continue;
 	    
-	    $idx--;
+	    $idx = array_search($onevalue,$displayvalues);
 	    
+	    $tmp = $displayfiles[$idx];
 	    // get the filename
 	    $filespec = $dir.
-	      preg_replace("/[^\w\d\.]|\.\./", "_", 
-			   $this->GetOptionElement('destination_filename',$idx));
+	      preg_replace("/[^\w\d\.]|\.\./", "_", $tmp);
 	    
 	    $line = $template;
 	    if (! file_exists($filespec))
