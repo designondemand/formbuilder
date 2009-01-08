@@ -80,7 +80,7 @@ function populate_header(formname)
 	  {
 	    $header = $form->createSampleTemplate(false,false,false,true);
 	  } 
-	$header = $this->ProcessTemplateFromData( $header );
+	$header = $mod->ProcessTemplateFromData( $header );
 	$header .= "\n";
       }
     $template = $this->GetOption('file_template','');
