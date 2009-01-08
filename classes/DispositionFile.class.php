@@ -70,6 +70,8 @@ function populate_header(formname)
     $filespec = $this->GetOption('fileroot',$options['uploads_root']).'/'.
       preg_replace("/[^\w\d\.]|\.\./", "_", $this->GetOption('filespec','form_submissions.txt'));
 
+    $form->setFinishedFormSmarty();
+
     $line = '';
     if (! file_exists($filespec))
       {
@@ -78,6 +80,7 @@ function populate_header(formname)
 	  {
 	    $header = $form->createSampleTemplate(false,false,false,true);
 	  } 
+	$header = $this->ProcessTemplateFromData( $header );
 	$header .= "\n";
       }
     $template = $this->GetOption('file_template','');
@@ -87,7 +90,6 @@ function populate_header(formname)
       }
     $line = $template;
 
-    $form->setFinishedFormSmarty();
     $newline = $mod->ProcessTemplateFromData( $line );
 	$replchar = $this->GetOption('newlinechar','');
 	if ($replchar != '')
