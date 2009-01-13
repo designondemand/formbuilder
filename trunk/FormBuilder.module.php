@@ -128,7 +128,7 @@ class FormBuilder extends CMSModule
 
 	function GetVersion()
 	{
-		return '0.5.9';
+		return '0.5.10';
 	}
 
 	function GetAuthor()
@@ -327,7 +327,7 @@ class FormBuilder extends CMSModule
         	
 		return $oneset;
 	}
-/*
+
 function GetResponses($form_id, $start_point, $number, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y', &$params)
 	{
 		global $gCms;
@@ -417,9 +417,6 @@ if( (! empty($params['fbrp_response_search'])) && (is_array($params['fbrp_respon
 		return array($records, $names, $values);
 	}
 
-*/
-
-
 	/* return an array of name/value */
 	function ParseResponseXML($xmlstr)
 	{
@@ -467,7 +464,7 @@ if( (! empty($params['fbrp_response_search'])) && (is_array($params['fbrp_respon
 		$names = array();
 		$values = array();
 		$sql = 'FROM '.cms_db_prefix().
-        			'module_fb_formbrowser WHERE form_id=?';
+        			'module_fb_resp WHERE form_id=?';
         if ($user_approved)
         	{
         	 $sql .= ' and user_approved is not null';
@@ -497,7 +494,7 @@ if( (! empty($params['fbrp_response_search'])) && (is_array($params['fbrp_respon
         	{   
         	$records = $row['num'];
         	}
-       	$dbresult = $db->SelectLimit('SELECT * '.$sql, $number, $start_point,array($form_id));
+       	$dbresult = $db->Execute('SELECT * '.$sql,array($form_id));
 
 		while ($dbresult && $row = $dbresult->FetchRow())
 			{
@@ -506,16 +503,16 @@ if( (! empty($params['fbrp_response_search'])) && (is_array($params['fbrp_respon
 			$oneset->user_approved = (empty($row['user_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['user_approved']))); 
  			$oneset->admin_approved = (empty($row['admin_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['admin_approved']))); 
 			$oneset->submitted = date($dateFmt,$db->UnixTimeStamp($row['submitted']));
-			$oneset->xml = $row['response'];
+			//$oneset->xml = $row['response'];
 			$oneset->fields = array();
 		    array_push($values,$oneset);
 		    }
-		for ($i=0;$i<count($values);$i++)
+/*		for ($i=0;$i<count($values);$i++)
 			{
 			$this->ParseResponseXML($values[$i]->xml);
 			}
-		
-/*		$populate_names = true;
+*/		
+		$populate_names = true;
 		$fm = -1;
 		for($i=0;$i<count($values);$i++)
 			{
@@ -585,7 +582,6 @@ if( (! empty($params['fbrp_response_search'])) && (is_array($params['fbrp_respon
 			{
 			$values = array_slice( $values, $start_point, $number);
 			}
-		*/
 		return array($records, $names, $values);
 	}
 
