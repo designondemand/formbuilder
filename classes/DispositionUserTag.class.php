@@ -37,6 +37,7 @@ class fbDispositionUserTag extends  fbFieldBase
     $others = &$this->form_ptr->GetFields();
     $unspec = $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
     $params = array();
+    $params['FORM'] = $this->form_ptr;
     for($i=0;$i<count($others);$i++)
       {
 	$replVal = '';
