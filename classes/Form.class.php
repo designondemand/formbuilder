@@ -1452,6 +1452,22 @@ function fast_add(field_type)
     $mod->smarty->assign('input_form_next_button',
 			 $mod->CreateInputText($id, 'fbrp_forma_next_button_text',
 					       $this->GetAttr('next_button_text',$mod->Lang('button_continue')), 35, 35));
+    $mod->smarty->assign('title_form_predisplay_udt',
+                         $mod->Lang('title_form_predisplay_udt'));
+    {
+      $usertagops =& $gCms->GetUserTagOperations();
+      $usertags = $usertagops->ListUserTags();
+      $usertaglist = array();
+      $usertaglist[$mod->lang('none')] = -1;
+      foreach( $usertags as $key => $value )
+        {
+  	  $usertaglist[$value] = $key;
+        }
+      $mod->smarty->assign('input_form_predisplay_udt',
+            $mod->CreateInputDropdown($id,'fbrp_forma_predisplay_udt',$usertaglist,-1,
+                                      $this->GetAttr('predisplay_udt',-1)));
+    }
+
     $mod->smarty->assign('title_form_required_symbol',
 			 $mod->Lang('title_form_required_symbol'));
     $mod->smarty->assign('input_form_required_symbol',

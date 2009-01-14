@@ -17,6 +17,7 @@ if (! isset($params['form_id']) && isset($params['form']))
   }
 
 //debug_display($params);
+$fbrp_callcount = 0;
 $aeform = new fbForm($this,$params,true);
 
 $this->smarty->assign('fb_form_header', $aeform->RenderFormHeader());
@@ -24,6 +25,11 @@ $this->smarty->assign('fb_form_footer',$aeform->RenderFormFooter());
 
 $finished = false;
 $fieldExpandOp = false;
+
+if( isset($params['fbrp_callcount']) )
+  {
+    $fbrp_callcount = (int)$params['fbrp_callcount'];
+  }
 
 foreach($params as $pKey=>$pVal)
    {
@@ -78,15 +84,19 @@ if ( !$fieldExpandOp &&
 
 if (! $finished)
    {
-   $parms = array();
-   $parms['form_name'] = $aeform->GetName();
-   $parms['form_id'] = $aeform->GetId();
-   $this->SendEvent('OnFormBuilderFormDisplay',$parms);
+     $parms = array();
+     $parms['form_name'] = $aeform->GetName();
+     $parms['form_id'] = $aeform->GetId();
+     $this->SendEvent('OnFormBuilderFormDisplay',$parms);
 
-   $this->smarty->assign('fb_form_start',$this->CreateFormStart($id, 'default', $returnid, 'post', 'multipart/form-data', ($aeform->GetAttr('inline','0')== '1'), ''));
+     $this->smarty->assign('fb_form_start',
+			   $this->CreateFormStart($id, 'default', $returnid, 'post', 
+						  'multipart/form-data', 
+						  ($aeform->GetAttr('inline','0')== '1'), '',
+						  array('fbrp_callcount'=>$fbrp_callcount+1)));
 
-   $this->smarty->assign('fb_form_end',$this->CreateFormEnd());
-   $this->smarty->assign('fb_form_done',0);
+			   $this->smarty->assign('fb_form_end',$this->CreateFormEnd());
+			   $this->smarty->assign('fb_form_done',0);
    }
 else
    {
@@ -132,5 +142,16 @@ else
       }
    }
 
+if( isset($fbrp_callcount) && $fbrp_callcount == 0 )
+  {
+    $usertagops =& $gCms->GetUserTagOperations();
+    $udt = $aeform->GetAttr('predisplay_udt','');
+    if( !empty($udt) )
+      {
+	$parms = $params;
+	$parms['FORM'] =& $aeform;
+	$tmp = $usertagops->CallUserTag($udt,$parms);
+      }
+  }
 echo $aeform->RenderForm($id, $params, $returnid);
 ?>
