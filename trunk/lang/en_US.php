@@ -255,6 +255,7 @@ $lang['title_field_validation']='Field Validation';
 $lang['title_field_to_validate'] = 'Field to Validate';
 $lang['title_form_css_class']='CSS Class for this form';
 $lang['title_field_css_class']='CSS Class for this field';
+$lang['title_form_predisplay_udt'] = 'User defined tag to call before form is displayed';
 $lang['title_form_required_symbol']='Symbol to mark required Fields';
 $lang['title_field_required']='Required';
 $lang['title_field_required_long']='Require a response for this Field';
@@ -413,6 +414,7 @@ $lang['option_user_choice'] = 'Give user a choice (checkbox)';
 $lang['option_always'] = 'Always';
 
 
+$lang['error_usertag_disposition'] = 'User defined tag returned an error';
 $lang['error_cataloger_module_not_available']='<strong>Cataloger module does not seem to be installed/active.</strong>';
 $lang['warning'] = 'WARNING!';
 $lang['default_template'] = 'Default Template';

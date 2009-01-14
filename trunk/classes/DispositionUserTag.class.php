@@ -37,7 +37,7 @@ class fbDispositionUserTag extends  fbFieldBase
     $others = &$this->form_ptr->GetFields();
     $unspec = $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
     $params = array();
-    $params['FORM'] = $this->form_ptr;
+    $params['FORM'] =& $this->form_ptr;
     for($i=0;$i<count($others);$i++)
       {
 	$replVal = '';
@@ -54,8 +54,12 @@ class fbDispositionUserTag extends  fbFieldBase
 
     global $gCms;
     $usertagops =& $gCms->GetUserTagOperations();
-    $usertagops->CallUserTag( $this->GetOption('udtname'), $params);
+    $res = $usertagops->CallUserTag( $this->GetOption('udtname'), $params);
 
+    if( $res === FALSE )
+      {
+	return array(false,$mod->Lang('error_usertag_disposition'));
+      }
     return array(true,'');        
   }
 

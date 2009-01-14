@@ -159,6 +159,10 @@ function replaceTemplate(originalRequest)
 </fieldset>
 {$tab_end}{$symboltab_start}
 	<div class="pageoverflow">
+		<p class="pagetext">{$title_form_predisplay_udt}:</p>
+		<p class="pageinput">{$input_form_predisplay_udt}</p>
+	</div>
+	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_required_symbol}:</p>
 		<p class="pageinput">{$input_form_required_symbol}</p>
 	</div>
