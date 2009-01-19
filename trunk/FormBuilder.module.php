@@ -128,7 +128,7 @@ class FormBuilder extends CMSModule
 
 	function GetVersion()
 	{
-		return '0.5.10';
+		return '0.5.11';
 	}
 
 	function GetAuthor()
@@ -148,7 +148,8 @@ class FormBuilder extends CMSModule
 
 	function GetChangeLog()
 	{
-		return $this->Lang('changelog');
+	  $fn = dirname(__FILE__).'/changelog.inc';
+	  return @file_get_contents($fn);
 	}
 
 	function IsPluginModule()
