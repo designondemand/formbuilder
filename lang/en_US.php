@@ -253,6 +253,7 @@ $lang['title_form_next_button']='Form "Next" Button Text (used for multipage for
 $lang['title_form_prev_button'] = 'Form "Previous" Button Text (used for multipage forms)';
 $lang['title_field_validation']='Field Validation';
 $lang['title_field_to_validate'] = 'Field to Validate';
+$lang['title_field_css_id']='CSS id for this field';
 $lang['title_form_css_class']='CSS Class for this form';
 $lang['title_field_css_class']='CSS Class for this field';
 $lang['title_form_predisplay_udt'] = 'User defined tag to call before form is displayed';
