@@ -5,11 +5,11 @@
 
 class fbFileUploadField extends fbFieldBase {
 
-  function fbFileUpload(&$form_ptr, &$params)
+  function fbFileUploadField(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
     $mod = &$form_ptr->module_ptr;
-    $this->Type = 'FileUpload';
+    $this->Type = 'FileUploadFiel';
     //    $this->DisplayType = $mod->Lang('field_type_file_upload');
     $this->ValidationTypes = array(
 				   $mod->Lang('validation_none')=>'none');
