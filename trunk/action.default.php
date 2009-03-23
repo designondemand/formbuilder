@@ -146,12 +146,12 @@ if( isset($fbrp_callcount) && $fbrp_callcount == 0 )
   {
     $usertagops =& $gCms->GetUserTagOperations();
     $udt = $aeform->GetAttr('predisplay_udt','');
-    if( !empty($udt) )
-      {
-	$parms = $params;
-	$parms['FORM'] =& $aeform;
-	$tmp = $usertagops->CallUserTag($udt,$parms);
-      }
+    if( !empty($udt) && "-1" != $udt )
+    {
+      $parms = $params;
+	  $parms['FORM'] =& $aeform;
+	  $tmp = $usertagops->CallUserTag($udt,$parms);
+    }
   }
 echo $aeform->RenderForm($id, $params, $returnid);
 ?>
