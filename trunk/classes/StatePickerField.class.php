@@ -78,7 +78,7 @@ class fbStatePickerField extends fbFieldBase {
 		  $this->SetValue($this->GetOption('default',''));
 		  }
 
-		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $this->States, -1, $this->Value,'id="'.$id. '_'.$this->Id.'" '.$js);
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $this->States, -1, $this->Value, 'id="'.$id. 'fbrp__'.$this->Id.'" '.$js);
 	}
 
 	function PrePopulateAdminForm($formDescriptor)
