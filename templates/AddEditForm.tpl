@@ -37,14 +37,13 @@ function replaceTemplate(originalRequest)
 /* ]]> */
 {/literal}
 </script>
-{if $message != ''}<h4>{$message}</h4>{/if}
+{if $message != ''}<div class="pagemcontainer"><p class="pagemessage">{$message}</p></div>{/if}
 {$formstart}{$formid}{$fb_hidden}{$tab_start}{$maintab_start}
 <fieldset class="module_fb_fieldset"><legend>{$title_form_main}</legend>
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_name}:</p>
 		<p class="pageinput">{$input_form_name}</p>
 	</div>
-
 {if $adding == 0}
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_status}:</p>
