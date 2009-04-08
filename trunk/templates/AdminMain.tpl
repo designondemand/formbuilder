@@ -1,4 +1,4 @@
-{if $message != ''} <h4>{$message}</h4> {/if}
+{if $message != ''}<div class="pagemcontainer"><p class="pagemessage">{$message}</p></div>{/if}
 
 {$tabheaders}
 {$start_formtab}
