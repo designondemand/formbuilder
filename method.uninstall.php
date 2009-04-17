@@ -70,6 +70,8 @@ if (! $this->CheckAccess()) exit;
 		$this->RemovePreference('unique_fieldnames');
 		$this->RemovePreference('show_fieldids');
 		$this->RemovePreference('show_fieldaliases');
+		
+		$db->Execute('DELETE FROM '.cms_db_prefix().'css WHERE css_name = ?', array('FormBuilder Default Style'));
 
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('uninstalled'));
 
