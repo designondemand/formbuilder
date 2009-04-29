@@ -907,11 +907,11 @@ function unmy_htmlentities($val)
    xml_parser_set_option( $parser, XML_OPTION_SKIP_WHITE, 0 ); // was 1
     if (isset($params['fbrp_xml_file']) && ! empty($params['fbrp_xml_file']))
 		{
-		xml_parse_into_struct($parser, file_get_contents($params['fbrp_xml_file']), $vals);
+		xml_parse_into_struct($parser, file_get_contents($params['fbrp_xml_file']), $params);
 		}
 	elseif (isset($params['xml_string']) && ! empty($params['xml_string']))
 		{
-		xml_parse_into_struct($parser, $params['xml_string'], $vals);
+		xml_parse_into_struct($parser, $params['xml_string'], $params);
 		}
 	else
 		{
@@ -921,7 +921,7 @@ function unmy_htmlentities($val)
 	$elements = array();
 	$stack = array();
 	$fieldMap = array();
-	foreach ( $vals as $tag )
+	foreach ( $params as $tag )
 		{
 		$index = count( $elements );
 		if ( $tag['type'] == "complete" || $tag['type'] == "open" )
