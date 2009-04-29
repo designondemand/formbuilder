@@ -115,7 +115,7 @@ class fbTextField extends fbFieldBase {
 		  	       break;
 		  	   case 'usphone':
                   if ($this->Value !== false &&
-                      ! preg_match('^([0-9][\s\.-]?)?(\(?[0-9]{3}\)?|[0-9]{3})[\s\.-]?([0-9]{3}[\s\.-]?[0-9]{4}|[a-zA-Z0-9]{7})(\s?(x|ext|ext.)\s?[a-zA-Z0-9]+)?$',
+                      ! preg_match('/^([0-9][\s\.-]?)?(\(?[0-9]{3}\)?|[0-9]{3})[\s\.-]?([0-9]{3}[\s\.-]?[0-9]{4}|[a-zA-Z0-9]{7})(\s?(x|ext|ext.)\s?[a-zA-Z0-9]+)?$/',
                        $this->Value))
                     {
                     $this->validated = false;
