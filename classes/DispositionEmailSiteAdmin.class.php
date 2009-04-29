@@ -130,7 +130,7 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
 				$mod->CreateInputHidden($formDescriptor,'fbrp_opt_restrict_to_group','0').
 				$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_restrict_to_group', '1',
 				$this->GetOption('restrict_to_group','0')).
-				$mod-> CreateInputDropdown($formDescriptor, 'fbrp_opt_group', $items, -1, $this->GetOption('group',''))
+				$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_group', $items, -1, $this->GetOption('group',''))
 				));
 				
 		return array('main'=>$main,'adv'=>$adv);
