@@ -17,9 +17,14 @@ $params['fbrp_user_form_validate']=true;
 $aeform = new fbForm($this, $params, true);
 
 if (!$aeform->CheckResponse($params['fbrp_f'], $params['fbrp_r'], $params['fbrp_c']))
-	{
+{
 	echo $this->Lang('validation_response_error');
-	}
+}
+else
+{
+	//[#2792] DeleteResponse is never called on validation;
+	$aeform->DeleteResponse($params['fbrp_r']);
+}
 
 $fields = $aeform->GetFields();
 $confirmationField = -1;
