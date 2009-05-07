@@ -665,7 +665,7 @@ independently validated. This is good for applications like online surveys.</li>
 </ul></li>
 
 <li>Form Handling Inputs (Dispositions)
-<ul><li>*Call a User Defined Tag With the Form Results. This submits all the form results to the User-Defined Tag you specify. The UDT can handle the results however it wants. Values are passed as \$param['field_name'].</li>
+<ul><li>*Call a User Defined Tag With the Form Results. This submits all the form results to the User-Defined Tag you specify. The UDT can handle the results however it wants. Values are passed as \$params['field_name'].</li>
 <li>*Email Results Based on Pulldown. This is useful for web sites where comments get routed based on their subject matter, e.g., bugs get sent to one person, marketing questions to another person, sales requests to someone else, etc. The pulldown is populated with the subjects, and each gets directed to a specific email address. You set up these mappings in the when you create or edit a field of this type. If you use one of these \"Director\" pulldowns, the user must make a selection in order to submit the
 form. This input is part of the form the user sees, although the email addresses are not made visible nor
 are they embedded in the HTML.</li>
@@ -729,7 +729,7 @@ that you use for pages that contain your form.</p>
 <h3>Known Issues</h3>
 <ul>
 <li>FormBuilder is not yet integrated with FrontEnd Users. It will be.</li>
-<li>FormBuilder does not yet support pretty urls, although that shouldn't matter since the user side is pretty simple.</li>
+<li>FormBuilder does not yet support pretty URLs, although that shouldn't matter since the user side is pretty simple.</li>
 <li>FileUpload Fields may not work correctly with multipage forms.</li>
 </ul>
 
