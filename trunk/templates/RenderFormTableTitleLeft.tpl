@@ -91,10 +91,10 @@
 		{/if}
 	{/foreach}
 	{if $has_captcha == 1}
-	<tr><td>{$graphic_captcha}</td><td>{$input_captcha}<br />{$title_captcha}</td></tr>
+		<tr><td>{$graphic_captcha}</td><td>{$input_captcha}<br />{$title_captcha}</td></tr>
 	{/if}
-	<tr><td>{$prev}</td><td>{$submit}</td></tr>
-</table>
-{$fb_form_end}
+		<tr><td>{$prev}</td><td>{$submit}</td></tr>
+	</table>
+	{$fb_form_end}
 {/if}
 {$fb_form_footer}
