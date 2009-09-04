@@ -219,7 +219,7 @@ Message: {$foo}
 		order_by="6"
 		required="1"
 		hide_label="0"
-		alias="message">
+		alias="">
 			<field_name><![CDATA[Message]]></field_name>
 			<options>
 			<option name="rows"><![CDATA[5]]></option>
