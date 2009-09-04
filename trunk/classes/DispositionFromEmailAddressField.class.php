@@ -22,22 +22,21 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
             $mod->Lang('validation_email_address')=>'email',
             );
 	$this->modifiesOtherFields = true;
-	$this->NonRequirableField = false;
-	
+	$this->NonRequirableField = false;	
 	}
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
-		$retstr = $mod->CreateInputText($id, 'fbrp__'.$this->Id.'[]',
-			htmlspecialchars($this->Value[0], ENT_QUOTES),
-           25,128,$js);
+		$retstr = '<input type="text" name="'.$id.'fbrp__'.$this->Id.'[]" id="'.$id.'fbrp__'.
+			$this->Id.'" value="'.htmlspecialchars($this->Value[0], ENT_QUOTES).
+			'" size="25" maxlength="128" '.$js.'/>';
  		if ($this->GetOption('send_user_copy','n') == 'c')
 			{
 			$retstr .= $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id.'[]', 1,
-					0,' id="'.$this->Id.'_2" class="checkbox"');
-			$retstr .= '<label for="'.$this->Id.'_2" class="label">'.$this->GetOption('send_user_label',
+					0,' id="fbrp__'.$this->Id.'_2" class="checkbox"');
+			$retstr .= '<label for="fbrp__'.$this->Id.'_2" class="label">'.$this->GetOption('send_user_label',
 				$mod->Lang('title_send_me_a_copy')).'</label>';
 			}
 		return $retstr;

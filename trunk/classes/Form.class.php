@@ -944,7 +944,7 @@ function unmy_htmlentities($val)
 			unset($stack[count($stack) - 1]);
 			}
 		}
-
+//debug_display($elements);
 	if (!isset($elements[0]) || !isset($elements[0]) || !isset($elements[0]['attributes']))
 		{
 		//parsing failed, or invalid file.
@@ -958,7 +958,7 @@ function unmy_htmlentities($val)
 		}
 	$foundfields = false;
 	// populate the attributes and field name first. When we see a field, we save the form and then start adding the fields to it.
-//debug_display($elements[0]);
+
 	foreach ($elements[0]['children'] as $thisChild)
 		{
 		if ($thisChild['name'] == 'form_name')

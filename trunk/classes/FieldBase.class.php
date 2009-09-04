@@ -767,7 +767,8 @@ class fbFieldBase {
 	$xmlstr .= "\t\torder_by=\"".$this->OrderBy."\"\n";
 	$xmlstr .= "\t\trequired=\"".$this->Required."\"\n";
 	$xmlstr .= "\t\thide_label=\"".$this->HideLabel."\"\n";
-	$xmlstr .= "\t\talias=\"".$this->GetOption('field_alias','')."\">\n";
+/*	$xmlstr .= "\t\talias=\"".$this->GetOption('field_alias','')."\"\n";*/
+	$xmlstr .= ">\n";
 	$xmlstr .= "\t\t\t<field_name><![CDATA[".$this->Name."]]></field_name>\n";
 	$xmlstr .= "\t\t\t<options>\n".$this->OptionsAsXML()."\t\t\t</options>\n";
 	if ($exportValues)

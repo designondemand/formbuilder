@@ -1,4 +1,5 @@
 <ul>
+<li>Version 0.5.12. 3 Sept 09. Numerous user-submitted fixes. Thanks to Calguy and Simon Schaufi.</li>
 <li>Version 0.5.11. 19 Jan 09. (calguy1000)
   <ul>
     <li>Adds the capability to call a UDT before the form is displayed.</li>
