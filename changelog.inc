@@ -1,4 +1,9 @@
 <ul>
+<li>Version 0.6.
+	<ul>
+		<li>Updated database code to be CMSMS 1.7-compatible</li>
+	</ul>
+</li>
 <li>Version 0.5.12. 3 Sept 09. Numerous user-submitted fixes. Thanks to Calguy and Simon Schaufi.</li>
 <li>Version 0.5.11. 19 Jan 09. (calguy1000)
   <ul>

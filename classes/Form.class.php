@@ -296,12 +296,13 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
       		{
 			if ($htmlish)
 				{
-				$ret .= '<strong>'.$thisVal.'</strong>: '.$thisKey."<br />\n";
+				$ret .= '<strong>'.$thisVal.'</strong>: '.$thisKey."<br />";
 				}
 			else
 				{
-				$ret .= $thisVal.': '.$thisKey."\n";
+				$ret .= $thisVal.': '.$thisKey;
 				}
+			$ret .= "\n";
       		}
      	if ($htmlish)
      	  	{
@@ -331,15 +332,17 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	  {
 	  if ($others[$i]->GetAlias() != '')
 		{
-		$fldref = '{$'. $others[$i]->GetAlias(). '}';
+		$fldref = $others[$i]->GetAlias();
 		}
 	  else
 		{
-		$fldref = '{$fld_'. $others[$i]->GetId(). '}';
+		$fldref = 'fld_'. $others[$i]->GetId();
 		}
+	  $ret .= '{if $'.$fldref.' != "" && $'.$fldref.' != "'.$this->GetAttr('unspecified',$mod->Lang('unspecified')).'" }';
+	  $fldref = '{$'.$fldref.'}';
 	  if ($htmlish)
      	  {
-  		  $ret .= '<strong>'.$others[$i]->GetName() . '</strong>: ' . $fldref. "<br />\n";
+  		  $ret .= '<strong>'.$others[$i]->GetName() . '</strong>: ' . $fldref. "<br />";
   		  }
   	  elseif ($oneline && !$header)
 		  {
@@ -351,9 +354,10 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		 }
 	  else
   	  	  {
-	      $ret .= $others[$i]->GetName() . ': ' .$fldref. "\n";
+	      $ret .= $others[$i]->GetName() . ': ' .$fldref;
 	      }
-	  }
+	  	$ret .= "{/if}\n";
+		}
       }
     if ($oneline)
 		{
@@ -657,6 +661,8 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	$oneset->required = $thisField->IsRequired()?1:0;
 	$oneset->required_symbol = $thisField->IsRequired()?$reqSymbol:'';
 	$oneset->css_class = $thisField->GetOption('css_class');
+	$oneset->helptext = $thisField->GetOption('helptext');
+	$oneset->field_helptext_id = 'fbrp_ht_'.$thisField->GetID();
 //	$oneset->valid = $thisField->GetOption('is_valid',true)?1:0;
 	$oneset->valid = $thisField->validated?1:0;
 	$oneset->error = $thisField->GetOption('is_valid',true)?'':$thisField->validationErrorText;
@@ -1211,7 +1217,7 @@ function unmy_htmlentities($val)
     $mod->smarty->assign('input_form_unspecified',
 			 $mod->CreateInputText($id, 'fbrp_forma_unspecified',
 					       $this->GetAttr('unspecified',$mod->Lang('unspecified')), 50));
-    $mod->smarty->assign('title_form_status',
+   $mod->smarty->assign('title_form_status',
 			 $mod->Lang('title_form_status'));
     $mod->smarty->assign('text_ready',
 			 $mod->Lang('title_ready_for_deployment'));
@@ -2059,7 +2065,7 @@ function fast_add(field_type)
 	return $xmlstr;
   }
   
-  function setFinishedFormSmarty()
+  function setFinishedFormSmarty($htmlemail=false)
 	{
 		$mod = &$this->module_ptr;
 	   
@@ -2079,6 +2085,7 @@ function fast_add(field_type)
 		        		{
 						// allow <BR> as delimiter or in content
 						$replVal = preg_replace('/<br(\s)*(\/)*>/i','|BR|',$replVal);
+						$replVal = preg_replace('/[\n\r]+/','|BR|',$replVal);
 	            		$replVal = htmlspecialchars($replVal);
 						$replVal = preg_replace('/\|BR\|/','<br />',$replVal);
 	            		}

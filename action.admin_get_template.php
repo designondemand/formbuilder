@@ -7,7 +7,7 @@ if (preg_match('/\.tpl$/',$params['fbrp_tid']))
     }
 else
     {
-    $db = &$gCms->GetDb();
+    $db =& $this->GetDb();
     $query = "SELECT value FROM ".cms_db_prefix().
 		"module_fb_form_attr WHERE form_id=? and name='form_template'";
 	$dbresult = $db->Execute($query,array($params['fbrp_tid']));

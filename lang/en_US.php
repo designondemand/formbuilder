@@ -379,6 +379,7 @@ $lang['title_reorder_form'] = 'Reorder Fields';
 $lang['title_load_template'] = 'Load template';
 $lang['title_add_button_text'] = 'Add Button text';
 $lang['title_del_button_text'] = 'Delete Button text';
+$lang['title_field_helptext'] = 'Help-text to display with this field';
 $lang['title_string_or_number_eval'] = 'Interpret variables as being numbers or strings';
 $lang['title_order']='Interpretation Order';
 $lang['title_order_help']='If more than one Computed Field exists, they will be computed from lowest order number to highest order number';
@@ -386,7 +387,7 @@ $lang['title_compute_value'] = 'Value to compute';
 $lang['title_string'] = 'String';
 $lang['title_numeric'] = 'Numeric';
 $lang['title_inline_form'] = 'Display form inline?';
-$lang['title_inline_form_help'] = 'Inline means any form followup replaces the {cms_module} tag, non-inline replaces the {content} tag.';
+$lang['title_inline_form_help'] = 'Inline means any form followup replaces the {FormBuilder} tag, non-inline replaces the {content} tag.';
 $lang['title_field_default_value'] = 'Default value for field';
 $lang['title_clear_default'] = 'Clear default on click?';
 $lang['title_clear_default_help'] = 'Check this to clear the default value when the user clicks this field. Since this uses a javascript string compare, it will fail if you put single quotes in your default text. Other un-javascript-friendly characters may also cause it to fail.';
@@ -514,6 +515,7 @@ $lang['template_variable_help'] = "
 <tr><td>field->has_label</td><td>1 if the field type has a label</td></tr>
 <tr><td>field->needs_div</td><td>1 if the field needs to be wrapped in a DIV (or table row, if that's the way you swing)</td></tr>
 <tr><td>field->name</td><td>the field's name</td></tr>
+<tr><td>field->helptext</td><td>the field's help text</td></tr>
 <tr><td>field->input</td><td>the field's input control (e.g., the input field itself)</td></tr>
 <tr><td>field->op</td><td>a control button associated with the field if applicable (e.g., the delete button for expandable text input)</td></tr>
 <tr><td>field->input_id</td><td>the ID of the field's input (useful for label for=\"foo\")</td></tr>
@@ -541,18 +543,11 @@ $lang['template_variable_help'] = "
 ";
 
 // post-install message
-$lang['post_install']="
-<br />Make sure to set the \"Modify Forms\" permissions
-on users who will be administering feedback forms. Also, if you'll be emailing form
-results, be sure to update the Configuration appropriately.<br />
-Please be aware that a feedback form should not be active (e.g., usable by the public) while
-you are still editing the form. You should create the form, and place the tag into an active
-content page only when you have finished editing. Otherwise, erroneous results could be returned.<br />
-Additionally, this version does not support parallel editing of forms. Please take care that
-only one admin is editing a given form at a given time.";
+$lang['post_install']="FormBuilder installed. Please consult the module's Help page for documentation.";
 
 $lang['help'] = "<h3>What Does This Do?</h3>
-<p>The Form Builder Module allows you to create feedback forms (in fact, it's a replacement of the original Feedback Form module), with the added power of database storage. With its companion module Form Browser, you can use it to create simple database applications.</p>
+<p>The Form Builder Module allows you to create forms (in fact, it's a replacement of the original Feedback Form module), with
+the added power of database storage. With its companion module Form Browser, you can use it to create simple database applications.</p>
 <p>The forms created using the Form Builder may be inserted
 into templates and/or content pages. Forms may contain many kinds of inputs, and may have
 validation applied to these inputs. The results of these forms may be handled in a variety of ways.</p>
@@ -569,7 +564,7 @@ Configuration.</p>
 
 <h3>Adding a Form to a Page</h3>
 <p>In the main FormBuilder admin page, you can see an example of the tag used to display each form. It looks
-something like {cms_module module='FormBuilder' form='sample_form'}</p>
+something like {FormBuilder form='sample_form'}</p>
 <p>By copying this tag into the content of a page, or into a template, will cause that form to be displayed.
 In theory, you can have multiple forms on a page if you really want to. Be careful when pasting the tag
 into a page's content if you use a WYSIWYG editor such as TinyMCE, FCKEdit, or HTMLArea. These editors may stealthily
@@ -692,11 +687,11 @@ module's installation directory, assuming the web server has permission to write
 <p>Calguy added a nice feature, which is that you can pass default field values to your form via the module tag. This allows you to have
 the same form in multiple places, but with different default values. It may not work for more exotic field types, but for fields that have
 a single value, you can specify like:</p>
-<p>{cms_module module='FormBuilder' form='my_form' value_<i>FIELDNAME</i>='default_value'}</p>
+<p>{FormBuilder form='my_form' value_<i>FIELDNAME</i>='default_value'}</p>
 <p>This will set the field with <i>FIELDNAME</i> to 'default_value'.</p>
 <p>This can be problematic, as sometimes field names are unweildy or contain characters that don't work well with Smarty. So there is an
 alternative like this:</p>
-<p>{cms_module module='FormBuilder' form='my_form' value_fld<i>NUMBER</i>='default_value'}</p>
+<p>{FormBuilder form='my_form' value_fld<i>NUMBER</i>='default_value'}</p>
 <p>That uses field <i>NUMBER</i>, where <i>NUMBER</i> is the internal FormBuilder field id. You might wonder how you know what that id is. Simply go into the FormBuilder configuration tab,
 and check \"Show Field IDs\"</p>
 

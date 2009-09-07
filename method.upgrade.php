@@ -10,7 +10,7 @@ if (!isset($gCms)) exit;
 if (! $this->CheckAccess()) exit;
 
 		$this->initialize();
-		$db =& $gCms->GetDb();
+		$db =& $this->GetDb();
 		$current_version = $oldversion;
 		$dict = NewDataDictionary($db);
 		$taboptarray = array('mysql' => 'TYPE=MyISAM');
@@ -179,6 +179,16 @@ if (! $this->CheckAccess()) exit;
 					array($css_id,'FormBuilder Default Style',$css,'screen',date('Y-m-d')));
 			
 			}
+		case "0.5.7":
+		case "0.5.8":
+		case "0.5.9":
+		case "0.5.10":
+		case "0.5.11":
+		case "0.6":
+        	$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_fb_formbrowser", "feuid I");
+        	$dict->ExecuteSQLArray($sqlarray);
+
+		
 		}
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('upgraded',$this->GetVersion()));
 

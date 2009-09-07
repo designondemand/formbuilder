@@ -54,13 +54,12 @@ class fbDispositionEmailBase extends fbFieldBase
   // Send off those emails
   function SendForm($destination_array, $subject)
   {
-    global $gCms;
     $mod = &$this->form_ptr->module_ptr;
     $form = &$this->form_ptr;
 
    if ($mod->GetPreference('enable_antispam',1))
      {
-    $db =& $gCms->GetDb();
+    $db =& $mod->GetDb();
     $query = 'select count(src_ip) as sent from '.cms_db_prefix().
       'module_fb_ip_log where src_ip=? AND sent_time > ?';
 
@@ -117,7 +116,7 @@ class fbDispositionEmailBase extends fbFieldBase
       {
     $message2 = $message;
     }
-    $form->setFinishedFormSmarty();
+    $form->setFinishedFormSmarty($htmlemail);
 
     $theFields = &$form->GetFields();
 
@@ -160,7 +159,7 @@ class fbDispositionEmailBase extends fbFieldBase
      		}
     	}
 
-
+	
     $message = $mod->ProcessTemplateFromData( $message );
     $subject = $mod->ProcessTemplateFromData( $subject );
     $mail->SetSubject($subject);
@@ -191,7 +190,7 @@ class fbDispositionEmailBase extends fbFieldBase
       }
     else if ($mod->GetPreference('enable_antispam',1))
      {
-    $db =& $gCms->GetDb();
+    $db =& $mod->GetDb();
 
     $rec_id = $db->GenID(cms_db_prefix().'module_fb_ip_log_seq');
     $query = 'INSERT INTO '.cms_db_prefix().

@@ -9,7 +9,7 @@
 if (!isset($gCms)) exit;
 if (! $this->CheckAccess()) exit;
 
-		$db =& $gCms->GetDb();
+		$db =& $this->GetDb();
 		$dict = NewDataDictionary($db);
 		$sqlarray = $dict->DropTableSQL(cms_db_prefix().'module_fb_form');
 		$dict->ExecuteSQLArray($sqlarray);

@@ -39,7 +39,7 @@ class fbTextAreaField extends fbFieldBase {
 			{
 			$ret .= '<script type="text/javascript">';
 			$ret .= "\nvar f = document.getElementById('".$id."fbrp__".$this->Id."');\n";
-			$ret .= "if (f)\n{\nf.onclick=function(){\nif (this.value=='";
+			$ret .= "if (f)\n{\nf.onfocus=function(){\nif (this.value=='";
 			$ret .= preg_replace('/(\r)?\n/','\\n',$this->GetOption('default'))."') {this.value='';}\n}\n";
 			$ret .= "}\n;";
 			$ret .= "</script>\n";
@@ -78,6 +78,7 @@ class fbTextAreaField extends fbFieldBase {
 	   $mod = &$this->form_ptr->module_ptr;
 	   $main = array(
          	array($mod->Lang('title_use_wysiwyg'),
+			$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_wysiwyg','0').
             		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_wysiwyg',
             		'1',$this->GetOption('wysiwyg','0'))),
 			array($mod->Lang('title_textarea_rows'),
