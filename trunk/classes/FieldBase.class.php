@@ -467,6 +467,8 @@ class fbFieldBase {
 	if ($this->DisplayInForm())
 	  {
 	    array_push($adv,array($mod->Lang('title_field_css_class'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_css_class', $this->GetOption('css_class'), 50)));
+	    array_push($adv,array($mod->Lang('title_field_helptext'),$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('helptext',''),
+					   'fbrp_opt_helptext','module_fb_area_short')));
 		array_push($adv,array($mod->Lang('title_field_javascript'),
 			$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('javascript',''),
 						   'fbrp_opt_javascript','module_fb_area_short').'<br />'.

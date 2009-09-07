@@ -238,7 +238,7 @@ Message: {$foo}
 		required="0"
 		hide_label="0"
 		alias="">
-			<field_name><![CDATA[Send To:]]></field_name>
+			<field_name><![CDATA[Send To]]></field_name>
 			<options>
 			<option name="email_subject"><![CDATA[Contact Form Submission]]></option>
 			<option name="email_from_name"><![CDATA[Form Builder]]></option>

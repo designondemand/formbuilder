@@ -45,22 +45,18 @@ class FormBuilder extends CMSModule
 	{
 		global $gCms;
 		$this->CMSModule();
-//error_log("Module Load: ".memory_get_usage());
 		
 		$this->module_ptr = &$this;
-		$this->dbHandle = &$gCms->GetDb();
+		$this->dbHandle = & $this->GetDb();
 		$this->module_id = '';
 		$this->email_regex = "/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i";
 		$this->email_regex_relaxed="/^([\w\d\.\-\_])+\@([\w\d\.\-\_])+$/i";
 		require_once dirname(__FILE__).'/classes/Form.class.php';
 		require_once dirname(__FILE__).'/classes/FieldBase.class.php';
-		//$this->RegisterModulePlugin();
-//error_log("leaving module instantiation with: ".memory_get_usage());		
 	}
 
 	function initialize()
 	{
-//error_log("entering initialize with ".memory_get_usage());
 		$dir=opendir(dirname(__FILE__).'/classes');
 		$this->field_types = array();
 		while($filespec=readdir($dir))
@@ -98,9 +94,6 @@ class FormBuilder extends CMSModule
 			$this->Lang('field_type_PageBreakField')=>'PageBreakField',
 			$this->Lang('field_type_StaticTextField')=>'StaticTextField');
 		ksort($this->std_field_types);
-		
-//error_log("leaving initialize with ".memory_get_usage());
-
 	}
 
 	function AllowAutoInstall()
@@ -125,7 +118,7 @@ class FormBuilder extends CMSModule
 
 	function GetVersion()
 	{
-		return '0.5.12';
+		return '0.6';
 	}
 
 	function GetAuthor()
@@ -171,6 +164,7 @@ class FormBuilder extends CMSModule
 
 	function SetParameters()
 	{
+		$this->RegisterModulePlugin();
 		$this->RestrictUnknownParams();
 		$this->CreateParameter('fbrp_*','null',$this->Lang('formbuilder_params_general'));
 		$this->SetParameterType(CLEAN_REGEXP.'/fbrp_.*/',CLEAN_STRING);
@@ -229,8 +223,7 @@ class FormBuilder extends CMSModule
 	*/
 	function GetForms($order_by='name')
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db =& $this->GetDb();
 		$sql = "SELECT * FROM ".cms_db_prefix().'module_fb_form ORDER BY '.$order_by;
 		$result = array();
 		$rs = $db->Execute($sql);
@@ -243,8 +236,7 @@ class FormBuilder extends CMSModule
 
 	function GetFormIDFromAlias($form_alias)
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db =& $this->GetDb();
 		$sql = 'SELECT form_id from '.cms_db_prefix().'module_fb_form WHERE alias = ?';
 		$rs = $db->Execute($sql, array($form_alias));
 		if($rs && $rs->RecordCount() > 0)
@@ -256,8 +248,7 @@ class FormBuilder extends CMSModule
 
 	function GetFormNameFromID($form_id)
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db =& $this->GetDb();
 		$sql = 'SELECT name from '.cms_db_prefix().'module_fb_form WHERE form_id = ?';
 		$rs = $db->Execute($sql, array($form_id));
 		if($rs && $rs->RecordCount() > 0)
@@ -288,8 +279,7 @@ class FormBuilder extends CMSModule
 	{
 		$names = array();
 		$values = array();
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db =& $this->GetDb();
 
 		$dbresult = $db->Execute('SELECT * FROM '.cms_db_prefix().
 					'module_fb_resp WHERE resp_id=?', array($response_id));
@@ -325,8 +315,7 @@ class FormBuilder extends CMSModule
 
 	function GetResponses($form_id, $start_point, $number, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y', &$params)
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db =& $this->GetDb();
 		$names = array();
 		$values = array();
 		$sql = 'FROM '.cms_db_prefix().
@@ -454,8 +443,7 @@ class FormBuilder extends CMSModule
 
 	function GetSortedResponses($form_id, $start_point, $number=100, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y', &$params)
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db =& $this->GetDb();
 		$names = array();
 		$values = array();
 		$sql = 'FROM '.cms_db_prefix().
@@ -595,8 +583,7 @@ class FormBuilder extends CMSModule
 	// For a given form, returns an array of response objects
 	function ListResponses($form_id, $sort_order='submitted')
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db =& $this->GetDb();
 		$ret = array();
 		$sql = 'SELECT * FROM '.cms_db_prefix().
 				'module_fb_resp WHERE form_id=? ORDER BY ?';
@@ -636,16 +623,14 @@ class FormBuilder extends CMSModule
 
 	function ClearFileLock()
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db =& $this->GetDb();
 		$sql = "DELETE from ".cms_db_prefix().'module_fb_flock';
 		$rs = $db->Execute($sql);
 	}
 
 	function GetFileLock()
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db =& $this->GetDb();
 		$sql = "insert into ".cms_db_prefix()."module_fb_flock (flock_id, flock) values (1,".$db->sysTimeStamp.")";
 		$rs = $db->Execute($sql);
 		if ($rs)
@@ -684,7 +669,6 @@ class FormBuilder extends CMSModule
 		// we get here (hopefully) when the template is changed
 		// in the dropdown.
 		$db =& $this->GetDb();
-		global $gCms;
 		$defaultid = '';
 		if( $markdefault )
 		{

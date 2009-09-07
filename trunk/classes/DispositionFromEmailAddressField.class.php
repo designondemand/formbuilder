@@ -49,7 +49,14 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 
 	function GetHumanReadableValue($as_string=true)
 	{
-		return $this->Value[0];
+		if (is_array($this->Value))
+			{
+			return $this->Value[0];
+			}
+		else
+			{
+			return $this->Value;
+			}
 	}
 
 	function DisposeForm()

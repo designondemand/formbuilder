@@ -16,9 +16,18 @@ if (! isset($params['form_id']) && isset($params['form']))
     $params['form_id'] = $this->GetFormIDFromAlias($params['form']);
   }
 
+$inline = false;
+if( (isset($params['inline'])) && preg_match('/t(rue)*|y(yes)*|1/i',$params['inline']))
+	{
+	$inline = true;
+	}
+
 //debug_display($params);
 $fbrp_callcount = 0;
 $aeform = new fbForm($this,$params,true);
+
+if( !($inline || ($aeform->GetAttr('inline','0')== '1'))) $id = 'cntnt01';
+
 
 $this->smarty->assign('fb_form_header', $aeform->RenderFormHeader());
 $this->smarty->assign('fb_form_footer',$aeform->RenderFormFooter());

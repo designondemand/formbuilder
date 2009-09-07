@@ -1,6 +1,25 @@
 {* TABLE FORM LAYOUT / Field titles on Top *}
 {* next line sets number of columns for things like checkbox groups *}
 {assign var="cols" value="3"}
+{literal}
+<script type="text/javascript">
+function fbht(htid)
+	{
+		var fbhtc=document.getElementById(htid);
+		if (fbhtc)
+			{
+			if (fbhtc.style.display == 'none')
+				{
+				fbhtc.style.display = 'inline';
+				}
+			else
+				{
+				fbhtc.style.display = 'none';
+				}
+			}
+}
+</script>
+{/literal}
 {$fb_form_header}
 {if $fb_form_done == 1}
 	{* This first section is for displaying submission errors *}
@@ -86,6 +105,9 @@
 				{if $entry->smarty_eval == '1'}{eval var=$entry->input}{else}{$entry->input}{/if}
 			{/if}
 			{if $entry->valid == 0} &lt;--- {$entry->error}{/if}
+			{if $entry->helptext != ''}&nbsp;<a href="javascript:fbht('{$entry->field_helptext_id}')"><img src="modules/FormBuilder/images/info-small.gif" alt="Help" /></a>
+					<span id="{$entry->field_helptext_id}" style="display:none">{$entry->helptext}</span>{/if}
+			
 			</td></tr>
 			{/strip}
 		{/if}

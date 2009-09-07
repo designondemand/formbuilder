@@ -8,7 +8,7 @@
 */
 if (!isset($gCms)) exit;
 
-		$db =& $gCms->GetDb();
+		$db =& $this->GetDb();
 		$dict = NewDataDictionary($db);
 		$flds = "
 			form_id I KEY,
@@ -125,6 +125,7 @@ if (!isset($gCms)) exit;
 				index_key_3 C(80),
 				index_key_4 C(80),
 				index_key_5 C(80),
+				feuid I,
 				response X,
 				user_approved ".CMS_ADODB_DT.",
 				secret_code C(35),
