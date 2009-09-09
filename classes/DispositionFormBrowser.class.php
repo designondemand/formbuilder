@@ -123,6 +123,11 @@ class fbDispositionFormBrowser extends fbFieldBase {
 					));
 				}
 			}
+		array_push($adv,array($mod->Lang('encrypt_fbr_database_data'),
+			$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_crypt','0').
+            		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_crypt',
+            		'1',$this->GetOption('crypt','0'))));
+
 		return array('main'=>$main,'adv'=>$adv);
 	}
 

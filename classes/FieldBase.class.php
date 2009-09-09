@@ -869,7 +869,7 @@ class fbFieldBase {
     return $default;
   }
 
-  function &GetOptionRef($optionName)
+  function GetOptionRef($optionName)
     {
       if (isset($this->Options[$optionName]))
 	{
