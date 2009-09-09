@@ -123,10 +123,27 @@ class fbDispositionFormBrowser extends fbFieldBase {
 					));
 				}
 			}
-		array_push($adv,array($mod->Lang('encrypt_fbr_database_data'),
-			$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_crypt','0').
+			
+      if (function_exists('openssl_private_encrypt'))
+         {
+		   array_push($adv,array($mod->Lang('title_encrypt_database_data'),
+			   $mod->CreateInputHidden($formDescriptor, 'fbrp_opt_crypt','0').
             		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_crypt',
             		'1',$this->GetOption('crypt','0'))));
+		   array_push($adv,array($mod->Lang('title_encrypt_sortfields'),
+			   $mod->CreateInputHidden($formDescriptor, 'fbrp_opt_hash_sort','0').
+            		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_hash_sort',
+            		'1',$this->GetOption('hash_sort','0')).
+                  $mod->Lang('title_encrypt_sortfields_help')));
+		    array_push($adv,array($mod->Lang('title_encryption_keyfile'),
+            $mod->CreateInputText($formDescriptor, 'fbrp_opt_keyfile',
+            		$this->GetOption('keyfile',''),40,255)));
+         }
+      else
+         {
+         array_push($adv,array($mod->Lang('title_encryption_functions'),
+            $mod->Lang('title_install_openssl')));
+         }
 
 		return array('main'=>$main,'adv'=>$adv);
 	}
@@ -139,17 +156,68 @@ class fbDispositionFormBrowser extends fbFieldBase {
     // Write To the Database
 	function DisposeForm($returnid)
 	{
+		$mod = &$this->form_ptr->module_ptr;
 		$form = &$this->form_ptr;
-		$form->StoreResponseXML(($this->Value?$this->Value:-1),
-			$this->approvedBy,
-			$this->getSortFieldVal(1),
-			$this->getSortFieldVal(2),
-			$this->getSortFieldVal(3),
-			$this->getSortFieldVal(4),
-			$this->getSortFieldVal(5)
-			);
+		$xml = $form->ResponseToXML();
+		
+		if ($this->GetOption('crypt','0') != '1')
+         {
+		   $form->StoreResponseXML(($this->Value?$this->Value:-1),
+			   $this->approvedBy,
+			   $this->getSortFieldVal(1),
+			   $this->getSortFieldVal(2),
+			   $this->getSortFieldVal(3),
+			   $this->getSortFieldVal(4),
+			   $this->getSortFieldVal(5),
+			   $xml
+			   );
+         }
+      elseif ($this->GetOption('hash_sort','0') != '1')
+         {
+         list($res, $xml) = $mod->crypt($xml,$this->GetOption('keyfile'));
+         if (! $res)
+            {
+            return array(false, $xml);
+            }
+		   $form->StoreResponseXML(($this->Value?$this->Value:-1),
+			   $this->approvedBy,
+			   $this->getSortFieldVal(1),
+			   $this->getSortFieldVal(2),
+			   $this->getSortFieldVal(3),
+			   $this->getSortFieldVal(4),
+			   $this->getSortFieldVal(5),
+			   $xml
+			   );
+         }
+      else
+         {
+         list($res, $xml) = $mod->crypt($xml,$this->GetOption('keyfile'));
+         if (! $res)
+            {
+            return array(false, $xml);
+            }
+		   $form->StoreResponseXML(($this->Value?$this->Value:-1),
+			   $this->approvedBy,
+			   $this->getHashedSortFieldVal(1),
+			   $this->getHashedSortFieldVal(2),
+			   $this->getHashedSortFieldVal(3),
+			   $this->getHashedSortFieldVal(4),
+			   $this->getHashedSortFieldVal(5),
+			   $xml
+			   );
+         }
 		return array(true,'');	   
 	}
+	
+	function getHashedSortFieldVal($sortFieldNumber)
+   {
+      $v = $this->getSortFieldVal($sortFieldNumber);
+      if (strlen($v) > 4)
+         {
+         $v = substr($v,0,4). md5(substr($v,4));
+         }
+      return $v;
+   }
 	
 	function getSortFieldVal($sortFieldNumber)
 	{
