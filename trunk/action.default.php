@@ -28,7 +28,8 @@ $aeform = new fbForm($this,$params,true);
 
 if( !($inline || ($aeform->GetAttr('inline','0')== '1'))) $id = 'cntnt01';
 
-
+$this->smarty->assign('fb_form_has_validation_errors',0);
+$this->smarty->assign('fb_show_submission_errors',0);
 $this->smarty->assign('fb_form_header', $aeform->RenderFormHeader());
 $this->smarty->assign('fb_form_footer',$aeform->RenderFormFooter());
 
@@ -141,7 +142,7 @@ else
       $this->smarty->assign('fb_submission_error',
 	 	$this->Lang('submission_error'));
 
-      $show = $this->GetPreference('hide_errors',0);
+      $show = $this->GetPreference('hide_errors','1');
       $this->smarty->assign('fb_submission_error_list',$results[1]);
       $this->smarty->assign('fb_show_submission_errors',$show);
 
