@@ -1988,19 +1988,24 @@ function fast_add(field_type)
     return array($response_id,$secret_code);
   }   
     
-
-  function StoreResponseXML($response_id=-1,$approver='',$sortfield1,$sortfield2,$sortfield3,$sortfield4,$sortfield5)
+    
+  function &ResponseToXML()
   {
-    $db = &$this->module_ptr->dbHandle;
-    $secret_code = '';
-    $newrec = false;
-	$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+  	$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 	$xml .= "<response form_id=\"".$this->Id."\"\n";
 	foreach($this->Fields as $thisField)
 		{
 			$xml .= $thisField->ExportXML(true);
 		}
 	$xml .= "</response>\n";
+   return $xml;
+  }
+
+  function StoreResponseXML($response_id=-1,$approver='',$sortfield1,$sortfield2,$sortfield3,$sortfield4,$sortfield5, $xml)
+  {
+    $db = &$this->module_ptr->dbHandle;
+    $secret_code = '';
+    $newrec = false;
 
     if ($response_id == -1)
       {

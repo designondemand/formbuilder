@@ -713,6 +713,37 @@ class FormBuilder extends CMSModule
 		return false;
 	}
 
+   function crypt(&$string,$keyfile)
+   {
+// rewrite, using hints from http://www.alexpoole.name/php_stuff/classes/Openssl.php
+
+      if (! function_exists('openssl_private_encrypt'))
+         {
+         return array(false, $this->Lang('title_install_openssl'));
+         }
+
+      $fp=fopen($keyfile,"r");
+      $priv_key=fread($fp,8192);
+      fclose($fp);
+
+      $privatekey=array($priv_key,$passphrase);
+      $res = openssl_get_privatekey($privatekey);
+
+      if ($res < 5)
+         {
+         return array(false, $this->Lang('crypt_bad_key'));
+         }
+      $res = openssl_private_encrypt($string, $crypted, $res);
+      if (! $res)
+         {
+         $err = '';
+         while ($msg = openssl_error_string())
+             $err .= $msg . "<br />\n";
+         return array(false, $err);
+         }
+      return array(true,base64_encode($crypted));
+   }
+
 } // End of Class
 
 # vim:ts=4 sw=4 noet
