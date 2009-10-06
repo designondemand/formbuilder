@@ -145,10 +145,10 @@ class fbDispositionFormBrowser extends fbFieldBase {
             		'1',$this->GetOption('hash_sort','0')).
                   $mod->Lang('title_encrypt_sortfields_help')));
 		array_push($adv,array($mod->Lang('title_crypt_cert'),
-					$mod->CreateInputDropdown($formDescriptor, 'fbr_opt_crypt_cert', $certs,
+					$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_crypt_cert', $certs,
 						-1,$this->GetOption('crypt_cert'))));
 		array_push($adv,array($mod->Lang('title_private_key'),
-				$mod->CreateInputDropdown($formDescriptor, 'fbr_opt_private_key', $keys,
+				$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_private_key', $keys,
 					-1,$this->GetOption('private_key')).$mod->Lang('title_ensure_cert_key_match')));
 		array_push($adv,array($mod->Lang('title_encryption_keyfile'),
             $mod->CreateInputText($formDescriptor, 'fbrp_opt_keyfile',
