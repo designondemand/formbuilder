@@ -125,10 +125,10 @@ class fbDispositionFormBrowser extends fbFieldBase {
 			}
 			
 	  $openssl =& $mod->GetModuleInstance('OpenSSL');
-	  if ($openssl == FALSE)
+	  if ($openssl == FALSE && !function_exists('mcrypt_encrypt'))
 		{
 		array_push($adv,array($mod->Lang('title_encryption_functions'),
-            $mod->Lang('title_install_openssl')));
+            $mod->Lang('title_install_crypto')));
         
 		}
 	else
@@ -144,15 +144,34 @@ class fbDispositionFormBrowser extends fbFieldBase {
             		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_hash_sort',
             		'1',$this->GetOption('hash_sort','0')).
                   $mod->Lang('title_encrypt_sortfields_help')));
+		array_push($adv,array($mod->Lang('title_encryption_keyfile'),
+            $mod->CreateInputText($formDescriptor, 'fbrp_opt_keyfile',
+            		$this->GetOption('keyfile',''),40,255)));
+
+      $cryptlibs = array();
+      if ($openssl !== FALSE)
+         {
+         $cryptlibs[$mod->Lang('openssl')]='openssl';
+         }
+      if (function_exists('mcrypt_encrypt'))
+         {
+         $cryptlibs[$mod->Lang('mcrypt')]='mcrypt';
+         }
+
+		array_push($adv,array($mod->Lang('title_crypt_lib'),
+            $mod->CreateInputDropdown($formDescriptor,'fbrp_opt_crypt_lib',
+            $cryptlibs,-1,$this->GetOption('crypt_lib'))));
+
+
+      array_push($adv,array($mod->Lang('choose_crypt'),$mod->Lang('choose_crypt_long')));
+
+
 		array_push($adv,array($mod->Lang('title_crypt_cert'),
 					$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_crypt_cert', $certs,
 						-1,$this->GetOption('crypt_cert'))));
 		array_push($adv,array($mod->Lang('title_private_key'),
 				$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_private_key', $keys,
 					-1,$this->GetOption('private_key')).$mod->Lang('title_ensure_cert_key_match')));
-		array_push($adv,array($mod->Lang('title_encryption_keyfile'),
-            $mod->CreateInputText($formDescriptor, 'fbrp_opt_keyfile',
-            		$this->GetOption('keyfile',''),40,255)));
 		}
 
 		return array('main'=>$main,'adv'=>$adv);
