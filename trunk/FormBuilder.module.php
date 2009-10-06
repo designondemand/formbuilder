@@ -728,7 +728,10 @@ class FormBuilder extends CMSModule
 		return array(false,$this->Lang('title_install_openssl'));
 		}
 	$openssl->Reset();
-	$openssl->load_certificate($dispositionField->GetOption('private_key'));
+	if (!$openssl->load_certificate($dispositionField->GetOption('crypt_cert')))
+		{
+		return array(false,$openssl->openssl_errors());
+		}
 	$enc = $openssl->encrypt_to_payload($string);
     return array(true,$enc);
    }
