@@ -65,11 +65,11 @@ class fbTextField extends fbFieldBase {
 			array($mod->Lang('title_field_regex'),
 			      array($mod->CreateInputText($formDescriptor, 
 							  'fbrp_opt_regex',
-							  $this->GetOption('regex'),25,255),$mod->Lang('title_regex_help'))),
+							  $this->GetOption('regex'),25,1024),$mod->Lang('title_regex_help'))),
 			array($mod->Lang('title_field_default_value'),
 			      $mod->CreateInputText($formDescriptor, 
 							  'fbrp_opt_default',
-							  $this->GetOption('default'),25,255)),
+							  $this->GetOption('default'),25,1024)),
       array($mod->Lang('title_clear_default'),
 		 		 	array($mod->CreateInputHidden($formDescriptor,'fbrp_opt_clear_default','0').$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_clear_default',
             		'1',$this->GetOption('clear_default','0')),
@@ -89,6 +89,7 @@ class fbTextField extends fbFieldBase {
 		  	   case 'none':
 		  	       break;
 		  	   case 'numeric':
+				  if ($this->Value !== false) $this->Value = trim($this->Value);
                   if ($this->Value !== false &&
                       ! preg_match("/^([\d\.\,])+$/i", $this->Value))
                       {
@@ -97,6 +98,7 @@ class fbTextField extends fbFieldBase {
                       }
 		  	       break;
 		  	   case 'integer':
+				  if ($this->Value !== false) $this->Value = trim($this->Value);
                   if ($this->Value !== false &&
                   	! preg_match("/^([\d])+$/i", $this->Value) ||
                       intval($this->Value) != $this->Value)
@@ -106,6 +108,7 @@ class fbTextField extends fbFieldBase {
                     }
 		  	       break;
 		  	   case 'email':
+				  if ($this->Value !== false) $this->Value = trim($this->Value);
                   if ($this->Value !== false &&
                       ! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $this->Value))
                     {
@@ -114,6 +117,7 @@ class fbTextField extends fbFieldBase {
                     }
 		  	       break;
 		  	   case 'usphone':
+				  if ($this->Value !== false) $this->Value = trim($this->Value);
                   if ($this->Value !== false &&
                       ! preg_match('/^([0-9][\s\.-]?)?(\(?[0-9]{3}\)?|[0-9]{3})[\s\.-]?([0-9]{3}[\s\.-]?[0-9]{4}|[a-zA-Z0-9]{7})(\s?(x|ext|ext.)\s?[a-zA-Z0-9]+)?$/',
                        $this->Value))

@@ -78,6 +78,10 @@ if (!isset($gCms)) exit;
 			$this->Lang('lackpermission'));
 	}
 	
+
+	$this->smarty->assign('title_mle_version',$this->Lang('title_mle_version'));		
+	$this->smarty->assign('input_mle_version',$this->CreateInputCheckbox($id, 'fbrp_mle_version', 1, $this->GetPreference('mle_version','0')). $this->Lang('title_mle_version_long'));
+
 	$this->smarty->assign('title_hide_errors',$this->Lang('title_hide_errors'));		
 	$this->smarty->assign('input_hide_errors',$this->CreateInputCheckbox($id, 'fbrp_hide_errors', 1, $this->GetPreference('hide_errors','0')). $this->Lang('title_hide_errors_long'));
 	
