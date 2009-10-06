@@ -722,19 +722,61 @@ class FormBuilder extends CMSModule
 
    function crypt($string, &$dispositionField)
    {
-	$openssl = $this->GetModuleInstance('OpenSSL');
-	if ($openssl === FALSE)
-		{
-		return array(false,$this->Lang('title_install_openssl'));
-		}
-	$openssl->Reset();
-	if (!$openssl->load_certificate($dispositionField->GetOption('crypt_cert')))
-		{
-		return array(false,$openssl->openssl_errors());
-		}
-	$enc = $openssl->encrypt_to_payload($string);
+   if ($dispositionField->GetOption('crypt_lib') == 'openssl')
+      {
+	   $openssl = $this->GetModuleInstance('OpenSSL');
+	   if ($openssl === FALSE)
+		    {
+		    return array(false,$this->Lang('title_install_openssl'));
+		    }
+	   $openssl->Reset();
+	   if (! $openssl->load_certificate($dispositionField->GetOption('crypt_cert')))
+		   {
+		   return array(false,$openssl->openssl_errors());
+		   }
+	   $enc = $openssl->encrypt_to_payload($string);
+	   }
+    else
+      {
+      $kf = $dispositionField->GetOption($keyfile);
+      if (file_exists($kf))
+         {
+         $key = file_get_contents($kf);
+         }
+      else
+         {
+         $key = $kf;
+         }
+      $enc = $this->fbencrypt($string,$key);
+      }
     return array(true,$enc);
    }
+   
+   
+   function fbencrypt($string,$key)
+      {
+      $key = substr(md5($key),0,24);
+      $td = mcrypt_module_open ('tripledes', '', 'ecb', '');
+      $iv = mcrypt_create_iv (mcrypt_enc_get_iv_size ($td), MCRYPT_RAND);
+      mcrypt_generic_init ($td, $key, $iv);
+      $enc = base64_encode(mcrypt_generic ($td, $string));
+      mcrypt_generic_deinit ($td);
+      mcrypt_module_close ($td);
+      return $enc;
+      }
+
+   function fbdecrypt($crypt,$key)
+      {
+      $crypt = base64_decode($crypt);
+      $td = mcrypt_module_open ('tripledes', '', 'ecb', '');
+      $key = substr(md5($key),0,24);
+      $iv = mcrypt_create_iv (mcrypt_enc_get_iv_size ($td), MCRYPT_RAND);
+      mcrypt_generic_init ($td, $key, $iv);
+      $plain = mdecrypt_generic ($td, $crypt);
+      mcrypt_generic_deinit ($td);
+      mcrypt_module_close ($td);
+      return $plain;
+      }
 
 } // End of Class
 
