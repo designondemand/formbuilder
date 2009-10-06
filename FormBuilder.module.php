@@ -678,12 +678,19 @@ class FormBuilder extends CMSModule
 		
 		// get a list of the pages used by this template
 		$mypages = array();
-		$parms = array('content');
-		$q = "SELECT content_id,content_name 
-			FROM ".cms_db_prefix()."content
-			WHERE type = ?
-			AND active = 1";
-		$dbresult = $db->Execute( $q, $parms );
+
+		if ($this->GetPreference('mle_version','0') == '1')
+			{
+			global $mleblock;
+			$q = "SELECT content_id,content_name$mleblock as content_name FROM ".
+				cms_db_prefix()."content WHERE type = ? AND active = 1";	
+			}
+		else
+			{
+			$q = "SELECT content_id,content_name FROM ".cms_db_prefix().
+				"content WHERE type = ? AND active = 1";
+			}
+		$dbresult = $db->Execute( $q, array('content') );
 		while( $row = $dbresult->FetchRow() )
 		{
 			if( $defaultid != '' && $row['content_id'] == $defaultid )
@@ -713,35 +720,17 @@ class FormBuilder extends CMSModule
 		return false;
 	}
 
-   function crypt(&$string,$keyfile)
+   function crypt($string, &$dispositionField)
    {
-// rewrite, using hints from http://www.alexpoole.name/php_stuff/classes/Openssl.php
-
-      if (! function_exists('openssl_private_encrypt'))
-         {
-         return array(false, $this->Lang('title_install_openssl'));
-         }
-
-      $fp=fopen($keyfile,"r");
-      $priv_key=fread($fp,8192);
-      fclose($fp);
-
-      $privatekey=array($priv_key,$passphrase);
-      $res = openssl_get_privatekey($privatekey);
-
-      if ($res < 5)
-         {
-         return array(false, $this->Lang('crypt_bad_key'));
-         }
-      $res = openssl_private_encrypt($string, $crypted, $res);
-      if (! $res)
-         {
-         $err = '';
-         while ($msg = openssl_error_string())
-             $err .= $msg . "<br />\n";
-         return array(false, $err);
-         }
-      return array(true,base64_encode($crypted));
+	$openssl = $this->GetModuleInstance('OpenSSL');
+	if ($openssl === FALSE)
+		{
+		return array(false,$this->Lang('title_install_openssl'));
+		}
+	$openssl->Reset();
+	$openssl->load_certificate($dispositionField->GetOption('private_key'));
+	$enc = $openssl->encrypt_to_payload($string);
+    return array(true,$enc);
    }
 
 } // End of Class

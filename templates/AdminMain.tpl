@@ -61,6 +61,10 @@
 	<p class="pageinput">{$input_enable_fastadd}</p>
 </div>
 <div class="pageoverflow">
+	<p class="pagetext">{$title_mle_version}:</p>
+	<p class="pageinput">{$input_mle_version}</p>
+</div>
+<div class="pageoverflow">
 	<p class="pagetext">{$title_hide_errors}:</p>
 	<p class="pageinput">{$input_hide_errors}</p>
 </div>

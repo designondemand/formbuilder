@@ -21,6 +21,7 @@ class fbDatePickerField extends fbFieldBase {
             $mod->Lang('validation_none')=>'none',
             );
         $this->Months = array(
+			''=>'',
             $mod->Lang('date_january')=>1,
             $mod->Lang('date_february')=>2,
             $mod->Lang('date_march')=>3,
@@ -52,12 +53,12 @@ class fbDatePickerField extends fbFieldBase {
 	{
 		$mod = &$this->form_ptr->module_ptr;
        $today = getdate();
-       $Days = array();
+       $Days = array(''=>'');
        for ($i=1;$i<32;$i++)
          {
          	$Days[$i]=$i;
          }
-       $Year = array();
+       $Year = array(''=>'');
        for ($i=$this->GetOption('start_year',($today['year']-10));$i<$this->GetOption('end_year',($today['year']+10))+1;$i++)
          {
          	$Year[$i]=$i;
@@ -67,6 +68,12 @@ class fbDatePickerField extends fbFieldBase {
 			$today['mday'] = $this->GetArrayValue(0);
 			$today['mon'] = $this->GetArrayValue(1);
 			$today['year'] = $this->GetArrayValue(2);			
+			}
+		else if ($this->GetOption('default_blank','0') == '1')
+			{
+			$today['mday']='';
+			$today['mon']='';
+			$today['year']='';
 			}
 		else if ($this->GetOption('default_year','-1') != '-1')
 		   {
@@ -149,6 +156,10 @@ class fbDatePickerField extends fbFieldBase {
             		array($mod->CreateInputText($formDescriptor, 'fbrp_opt_date_format',
             		$this->GetOption('date_format','j F Y'),25,25),$mod->Lang('help_date_format'))
 		    ),
+		   array($mod->Lang('title_default_blank'),
+            		$mod->CreateInputHidden($formDescriptor,'fbrp_opt_default_blank','0').
+					$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_default_blank',
+            		'1',$this->GetOption('default_blank','0')).$mod->Lang('title_default_blank_help')),
 		   array($mod->Lang('title_start_year'),
             		$mod->CreateInputText($formDescriptor, 'fbrp_opt_start_year',
             		    $this->GetOption('start_year',($today['year']-10)),10,10)),
@@ -162,6 +173,26 @@ class fbDatePickerField extends fbFieldBase {
       );
 		return array('main'=>$main,array());
 	}
+
+  function HasValue()
+  {
+    if ($this->Value === false)
+		{
+		return false;
+		}
+	if (!is_array($this->Value))
+		{
+		return false;
+		}
+	if ($this->GetArrayValue(1) == '' ||
+	  	$this->GetArrayValue(0) == '' ||
+	    $this->GetArrayValue(2) == '')
+		{
+		return false;
+		}
+	return true;
+  }
+
 
 }
 

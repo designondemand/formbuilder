@@ -12,6 +12,7 @@ if (! $this->CheckAccess()) exit;
 		$this->SetPreference('hide_errors',isset($params['fbrp_hide_errors'])?$params['fbrp_hide_errors']:0);
 		$this->SetPreference('show_version',isset($params['fbrp_show_version'])?$params['fbrp_show_version']:0);
 		$this->SetPreference('relaxed_email_regex',isset($params['fbrp_relaxed_email_regex'])?$params['fbrp_relaxed_email_regex']:0);
+		$this->SetPreference('mle_version',isset($params['mle_version'])?$params['mle_version']:0);
 
 		$this->SetPreference('require_fieldnames',isset($params['fbrp_require_fieldnames'])?$params['fbrp_require_fieldnames']:0);
 
