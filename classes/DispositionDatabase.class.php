@@ -95,6 +95,7 @@ class fbDispositionDatabase extends fbFieldBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
+		$mod = &$this->form_ptr->module_ptr;
 		$this->HiddenDispositionFields($mainArray, $advArray);
 	}
 

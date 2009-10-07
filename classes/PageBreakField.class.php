@@ -42,28 +42,8 @@ class fbPageBreakField extends fbFieldBase {
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		// remove the "required" field
-		$reqIndex = -1;
-		for ($i=0;$i<count($mainArray);$i++)
-			{
-			if ($mainArray[$i]->title == $mod->Lang('title_field_required'))
-				{
-				$reqIndex = $i;
-				}
-			}
-		if ($reqIndex != -1)
-			{
-			array_splice($mainArray, $reqIndex,1);
-			}
-		// remove the "hide name" field
-		$hideIndex = -1;
-		for ($i=0;$i<count($advArray);$i++)
-			{
-			if ($advArray[$i]->title == $mod->Lang('title_hide_label'))
-				{
-				$advArray[$i]->title = $mod->Lang('tab_advanced');
-				$advArray[$i]->input = $mod->Lang('title_no_advanced_options');
-				}
-			}
+      $this->RemoveAdminField($mainArray, $mod->Lang('title_field_required'));
+      $this->HiddenDispositionFields($mainArray, $advArray);
 	}
 
 

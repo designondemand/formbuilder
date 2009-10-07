@@ -70,26 +70,6 @@ class fbSystemLinkField extends fbFieldBase {
 			}
 	}
 
-
-	function PostPopulateAdminForm(&$mainArray, &$advArray)
-	{
-		$mod = $this->form_ptr->module_ptr;
-		// remove the "required" field, since this can only be done via validation
-		$reqIndex = -1;
-		for ($i=0;$i<count($mainArray);$i++)
-			{
-			if ($mainArray[$i]->title == $mod->Lang('title_field_required'))
-				{
-				$reqIndex = $i;
-				}
-			}
-		if ($reqIndex != -1)
-			{
-			array_splice($mainArray, $reqIndex,1);
-			}
-	}
-
-
 	function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = &$this->form_ptr->module_ptr;

@@ -58,24 +58,8 @@ class fbFieldsetEnd extends fbFieldBase {
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
 		$mod = &$this->form_ptr->module_ptr;
-		// remove the "javascript" field
-		$hideIndex = -1;
-		for ($i=0;$i<count($advArray);$i++)
-			{
-			if ($advArray[$i]->title == $mod->Lang('title_field_javascript'))
-				{
-				$hideIndex = $i;
-				}
-			}
-		if ($hideIndex != -1)
-			{
-			array_splice($advArray, $hideIndex,1);
-			}
-		if (count($advArray) == 0)
-			{
-			$advArray[0]->title = $mod->Lang('tab_advanced');
-			$advArray[0]->input = $mod->Lang('title_no_advanced_options');
-			}
+      $this->RemoveAdminField($advArray, $mod->Lang('title_field_javascript'));
+    $this->CheckForAdvancedTab($advArray);
 	}
 
 

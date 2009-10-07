@@ -109,11 +109,6 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 	  return array('main'=>$main,'adv'=>$adv);
 	}
 
-	function PostPopulateAdminForm(&$mainArray, &$advArray)
-	{
-		//$this->HiddenDispositionFields($mainArray, $advArray);		
-	}
-
 	function Validate()
 	{
   		$this->validated = true;

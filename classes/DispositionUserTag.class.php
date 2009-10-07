@@ -10,10 +10,6 @@
 class fbDispositionUserTag extends  fbFieldBase 
 {
 
-/*
-  var $sampleTemplateCode;
-  var $sampleHeader;
-*/
   function fbDispositionUserTag(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
@@ -46,11 +42,15 @@ class fbDispositionUserTag extends  fbFieldBase
 	    $replVal = $others[$i]->GetHumanReadableValue();
 	    if ($replVal == '')
 	      {
-		$replVal = $unspec;
+		    $replVal = $unspec;
 	      }
 	  }
 	$params[$others[$i]->GetName()] = $replVal;
-      }
+	if (!empty($others[$i]->GetAlias()))
+      {
+	   $params[$others[$i]->GetAlias()] = $replVal;
+	   }
+   }
 
     global $gCms;
     $usertagops =& $gCms->GetUserTagOperations();
@@ -79,23 +79,6 @@ class fbDispositionUserTag extends  fbFieldBase
       }
     return $string;
   }
-
-/*
-  function createSampleHeader()
-  {
-    $mod = &$this->form_ptr->module_ptr;
-    $others = &$this->form_ptr->GetFields();
-    $fields = array();
-    for($i=0;$i<count($others);$i++)
-      {
-	if ($others[$i]->DisplayInSubmission())
-	  {
-	    array_push($fields,$others[$i]->GetName());
-	  }
-      }
-    return implode('{$TAB}',$fields);
-  }
-*/
 
   function PrePopulateAdminForm($formDescriptor)
   {

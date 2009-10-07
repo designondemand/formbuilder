@@ -58,12 +58,6 @@ class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
 		return array('main'=>$main,'adv'=>$adv);
 	}
 
-
-	function PostPopulateAdminForm(&$mainArray, &$advArray)
-	{
-		//$this->HiddenDispositionFields($mainArray, $advArray, false);
-	}
-
 	function Validate()
 	{
 

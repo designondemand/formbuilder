@@ -511,6 +511,32 @@ class fbFieldBase {
   {
   }
 
+  // new method as of Oct 09 that should have been here all along...
+  function RemoveAdminField(&$array, $fieldname)
+  {
+		$reqIndex = -1;
+    	for ($i=0;$i<count($array);$i++)
+      		{
+			   if ($array[$i]->title == $fieldname)
+	  			   {
+	    		   $reqIndex = $i;
+	  			   }
+      		}
+    	if ($reqIndex != -1)
+      		{
+			   array_splice($array, $reqIndex,1);
+      		}
+  }
+
+  function CheckForAdvancedTab(&$advArray)
+   {
+    if (count($advArray) == 0)
+      {
+	   $advArray[0]->title = $mod->Lang('tab_advanced');
+	   $advArray[0]->input = $mod->Lang('title_no_advanced_options');
+      }
+   }
+
   // clear fields unused by invisible dispositions
   function HiddenDispositionFields(&$mainArray, &$advArray, $hideReq=true)
   {
@@ -518,50 +544,18 @@ class fbFieldBase {
     if ($hideReq)
     	{
     	// remove the "required" field
-    	$reqIndex = -1;
-    	for ($i=0;$i<count($mainArray);$i++)
-      		{
-			if ($mainArray[$i]->title == $mod->Lang('title_field_required'))
-	  			{
-	    		$reqIndex = $i;
-	  			}
-      		}
-    	if ($reqIndex != -1)
-      		{
-			array_splice($mainArray, $reqIndex,1);
-      		}
+      $this->RemoveAdminField($mainArray, $mod->Lang('title_field_required'));
      	}
     // remove the "hide name" field
-    $hideIndex = -1;
-    for ($i=0;$i<count($advArray);$i++)
-      {
-	if ($advArray[$i]->title == $mod->Lang('title_hide_label'))
-	  {
-	    $hideIndex = $i;
-	  }
-      }
-    if ($hideIndex != -1)
-      {
-	array_splice($advArray, $hideIndex,1);
-      }
+    $this->RemoveAdminField($advArray, $mod->Lang('title_hide_label'));
     // remove the "css" field
-    $hideIndex = -1;
-    for ($i=0;$i<count($advArray);$i++)
-      {
-	if ($advArray[$i]->title == $mod->Lang('title_field_css_class'))
-	  {
-	    $hideIndex = $i;
-	  }
-      }
-    if ($hideIndex != -1)
-      {
-	array_splice($advArray, $hideIndex,1);
-      }
-    if (count($advArray) == 0)
-      {
-	$advArray[0]->title = $mod->Lang('tab_advanced');
-	$advArray[0]->input = $mod->Lang('title_no_advanced_options');
-      }
+    $this->RemoveAdminField($advArray, $mod->Lang('title_field_css_class'));
+    // hide "javascript"
+    $this->RemoveAdminField($advArray, $mod->Lang('title_field_javascript'));
+    // hide "help text"
+    $this->RemoveAdminField($advArray, $mod->Lang('title_field_helptext'));
+
+    $this->CheckForAdvancedTab($advArray);
   }
 	
 
