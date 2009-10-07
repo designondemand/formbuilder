@@ -99,23 +99,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
 		$mod = &$this->form_ptr->module_ptr;
-		$hideIndex = -1;
-		for ($i=0;$i<count($mainArray);$i++)
-			{
-			if ($mainArray[$i]->title == $mod->Lang('title_email_from_address'))
-				{
-				$hideIndex = $i;
-				}
-			}
-		if ($hideIndex != -1)
-			{
-			array_splice($mainArray, $hideIndex,1);
-			}
-		if (count($advArray) == 0)
-			{
-			$advArray[0]->title = $mod->Lang('tab_advanced');
-			$advArray[0]->input = $mod->Lang('title_no_advanced_options');
-			}
+		$this->RemoveAdminField($mainArray, $mod->Lang('title_email_from_address'));
 	}
 
 

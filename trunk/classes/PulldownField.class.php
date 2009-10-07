@@ -182,15 +182,6 @@ class fbPulldownField extends fbFieldBase {
 		return array('main'=>$main,'adv'=>$adv);
 	}
 
-	function PostPopulateAdminForm(&$mainArray, &$advArray)
-	{
-		$mod = &$this->form_ptr->module_ptr;
-		if (count($advArray) == 0)
-			{
-			$advArray[0]->title = $mod->Lang('tab_advanced');
-			$advArray[0]->input = $mod->Lang('title_no_advanced_options');
-			}
-	}
 
 	function GetHumanReadableValue($as_string=true)
 	{

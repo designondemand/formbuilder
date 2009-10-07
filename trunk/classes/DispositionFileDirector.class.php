@@ -278,10 +278,6 @@ class fbDispositionFileDirector extends fbFieldBase
     return array('main'=>$main,'adv'=>$adv);
   }
 
-  function PostPopulateAdminForm(&$mainArray, &$advArray)
-  {
-    //$this->HiddenDispositionFields($mainArray, $advArray);
-  }
 }
 
 ?>
