@@ -282,37 +282,45 @@ class FormBuilder extends CMSModule
 		$db =& $this->GetDb();
 
 		$dbresult = $db->Execute('SELECT * FROM '.cms_db_prefix().
-					'module_fb_resp WHERE resp_id=?', array($response_id));
+					'module_fb_formbrowser WHERE fbr_id=?', array($response_id));
 
 		$oneset = new stdClass();
 		if ($dbresult && $row = $dbresult->FetchRow())
 		{
-			$oneset->id = $row['resp_id'];
+			$oneset->id = $row['fbr_id'];
 			$oneset->user_approved = (empty($row['user_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['user_approved']))); 
 			$oneset->admin_approved = (empty($row['admin_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['admin_approved'])));
 			$oneset->submitted = date($dateFmt,$db->UnixTimeStamp($row['submitted']));
+			$oneset->xml = $row['response'];
 			$oneset->fields = array();
 			$oneset->names = array();
+			$oneset->fieldsbyalias = array();
 		}
-
-		$paramSet = array('form_id'=>$form_id, 'response_id'=>$response_id);
-		$fm = $this->GetFormByParams($paramSet, true);
-		$fields = &$fm->GetFields();
-		for($j=0;$j<count($fields);$j++)
-		{
-			if ($fields[$j]->DisplayInSubmission())
+		$fbField = $this->GetFormBrowserField($form_id);
+		if ($fbField == false)
 			{
-				if (isset($field_list[$fields[$j]->GetId()])
-					&& $field_list[$fields[$j]->GetId()] > -1)
-				{
-						$oneset->names[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetName();
-						$oneset->values[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetHumanReadableValue();
-				}
+			// error handling goes here.
+			debug_display("FAILED to instantiate field!");	
 			}
-		}
+		
+		$populate_names = true;
+		$this->HandleResponseFromXML($fbField, $oneset);
+		list($fnames, $aliases, $vals) = $this->ParseResponseXML($oneset->xml);
+		foreach ($fnames as $id=>$name)
+			{
+			if (isset($field_list[$id]) && $field_list[$id] > -1)
+				{
+				$oneset->values[$field_list[$id]]=$vals[$id];
+				$oneset->names[$field_list[$id]]=$fnames[$id];
+				}
+			if (isset($aliases[$id]))
+				{
+				$oneset->fieldsbyalias[$aliases[$id]] = $vals[$id];
+				}
+			}			
 		return $oneset;
 	}
-
+/*
 	function GetResponses($form_id, $start_point, $number, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y', &$params)
 	{
 		$db =& $this->GetDb();
@@ -400,45 +408,96 @@ class FormBuilder extends CMSModule
 		}
 		return array($records, $names, $values);
 	}
+*/
 
-	/* return an array of name/value */
 	function ParseResponseXML($xmlstr)
 	{
-		// xml_parser_create, xml_parse_into_struct
-		$vals = array();  	
-		$parser = xml_parser_create('');
-		xml_parser_set_option( $parser, XML_OPTION_CASE_FOLDING, 0 );
-		xml_parser_set_option( $parser, XML_OPTION_SKIP_WHITE, 1 ); // was 1
-		xml_parse_into_struct($parser, $xmlstr, $vals);
-		xml_parser_free($parser);
-		$elements = array();
-		$stack = array();
-		$fieldMap = array();
-		error_log($xmlstr);
-		foreach ( $vals as $tag )
-		{
-			$index = count( $elements );
-			if ( $tag['type'] == "complete" || $tag['type'] == "open" )
+		$names = array();
+		$aliases = array();
+		$vals = array();
+		$xml = new SimpleXMLElement($xmlstr);
+		foreach ($xml->field as $xmlfield)
 			{
-				$elements[$index] = array();
-				$elements[$index]['name'] = $tag['tag'];
-				$elements[$index]['attributes'] = empty($tag['attributes']) ? "" : $tag['attributes'];
-				$elements[$index]['content']    = empty($tag['value']) ? "" : $tag['value'];
-				if ( $tag['type'] == "open" )
+			if (isset($xmlfield['display_in_submission']) && $xmlfield['display_in_submission'] == '1')
 				{
-					# push
-					$elements[$index]['children'] = array();
-					$stack[count($stack)] = &$elements;
-					$elements = &$elements[$index]['children'];
+				$id = (int)$xmlfield['id'];
+				$names[$id] = ((string)$xmlfield->field_name);
+				$vals[$id] = ((string)$xmlfield->human_readable_value);
+				if (isset($xmlfield->options))
+					{
+					foreach ($xmlfield->options->option as $to)
+						{
+						if ($to['name'] == 'field_alias')
+							{
+							$aliases[$id]=((string)$to);
+							}
+						}
+					}
 				}
 			}
-			if ( $tag['type'] == "close" )
-			{	# pop
-				$elements = &$stack[count($stack) - 1];
-				unset($stack[count($stack) - 1]);
+		return array($names, $aliases, $vals);
+	}
+
+
+	function GetFormBrowserField($form_id)
+	{
+		$db =& $this->GetDb();
+		$sql = 'SELECT * FROM ' . cms_db_prefix().'module_fb_field WHERE form_id=? and type=?';
+		$rs = $this->module_ptr->dbHandle->Execute($sql, array($form_id,'DispositionFormBrowser'));
+		$result = array();
+		if (! $rs || $rs->RecordCount() == 0)
+			{
+			return false;
 			}
-		}
-		debug_display($elements);
+		$thisRes = $rs->GetArray();
+		$params = array();
+		$aeform = new fbForm($this,$params,false);
+
+		$className = $aeform->MakeClassName($thisRes[0]['type'], '');
+		// create the field object
+		$field = &$aeform->NewField($thisRes[0]);
+		return $field;		
+	}
+	
+	
+	function HandleResponseFromXML(&$fbField, &$responseObj)
+	{
+		$crypt = $fbField->GetOption('crypt','0');
+		if ($crypt == '1')
+			{
+			$cryptlib = $fbField->GetOption('crypt_lib');
+			$keyfile = $fbField->GetOption('keyfile');
+			if ($cryptlib == 'openssl')
+				{
+				$openssl = $this->GetModuleInstance('OpenSSL');
+				$pkey = $fbField->GetOption('private_key');
+				$openssl->Reset();
+				$openssl->load_private_keyfile($pkey,$keyfile);
+				}
+			else
+				{
+				if (file_exists($keyfile))
+			    	{
+			        $keyfile = file_get_contents($keyfile);
+			        }
+				}
+			}
+		
+		if ($crypt == '1')
+			{
+			if ($cryptlib == 'openssl')
+				{
+				$responseObj->xml = $openssl->decrypt_from_payload($responseObj->xml);
+				if ($responseObj->xml == false)
+					{
+					debug_display($openssl->openssl_errors());
+					}
+				}
+			else
+				{
+				$responseObj->xml = $this->fbdecrypt($responseObj->xml,$keyfile);
+				}
+			}		
 	}
 
 	function GetSortedResponses($form_id, $start_point, $number=100, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y', &$params)
@@ -447,7 +506,7 @@ class FormBuilder extends CMSModule
 		$names = array();
 		$values = array();
 		$sql = 'FROM '.cms_db_prefix().
-				'module_fb_resp WHERE form_id=?';
+				'module_fb_formbrowser WHERE form_id=?';
 		if ($user_approved)
 		{
 			$sql .= ' and user_approved is not null';
@@ -471,6 +530,18 @@ class FormBuilder extends CMSModule
 				$sql .= ' order by submitted asc';
 			}
 		}
+		else if (isset($params['fbrp_sort_field']))
+			{
+			if (isset($params['fbrp_sort_dir']) && $params['fbrp_sort_dir'] == 'd')
+				{
+					$sql .= ' order by index_key_'.(int)$params['fbrp_sort_field'].' desc';	
+				}
+				else
+				{
+					$sql .= ' order by index_key_'.(int)$params['fbrp_sort_field'].' asc';
+				}
+			}
+
 		$dbcount = $db->Execute('SELECT COUNT(*) as num '.$sql,array($form_id));
 
 		$records = 0;
@@ -478,96 +549,75 @@ class FormBuilder extends CMSModule
 		{
 			$records = $row['num'];
 		}
-		$dbresult = $db->Execute('SELECT * '.$sql,array($form_id));
+
+		$dbresult = $db->SelectLimit('SELECT * '.$sql, $number, $start_point, array($form_id));
 
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
 			$oneset = new stdClass();
-			$oneset->id = $row['resp_id'];
+			$oneset->id = $row['fbr_id'];
 			$oneset->user_approved = (empty($row['user_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['user_approved']))); 
 			$oneset->admin_approved = (empty($row['admin_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['admin_approved']))); 
 			$oneset->submitted = date($dateFmt,$db->UnixTimeStamp($row['submitted']));
-			//$oneset->xml = $row['response'];
+			$oneset->xml = $row['response'];
 			$oneset->fields = array();
+			$oneset->fieldsbyalias = array();
 			array_push($values,$oneset);
 		}
-/*		for ($i=0;$i<count($values);$i++)
-		{
-			$this->ParseResponseXML($values[$i]->xml);
-		}
-*/		
-		$populate_names = true;
-		$fm = -1;
-		for($i=0;$i<count($values);$i++)
-		{
-			$paramSet = array('form_id'=>$form_id, 'response_id'=>$values[$i]->id);
-			if (gettype($fm) == "integer") // fix this, for better efficiency!
+		$fbField = $this->GetFormBrowserField($form_id);
+		if ($fbField == false)
 			{
-				$fm = $this->GetFormByParams($paramSet, true);
+			// error handling goes here.
+			debug_display("FAILED to instantiate field!");	
 			}
-			else
-			{
-				$fm->LoadResponse($values[$i]->id);
-			}
-			$fields = &$fm->GetFields();
-			for($j=0;$j<count($fields);$j++)
-			{
-				if ($fields[$j]->DisplayInSubmission())
-				{
-					if (isset($field_list[$fields[$j]->GetId()])
-						&& $field_list[$fields[$j]->GetId()] > -1)
-					{
-						if ($populate_names)
-						{
-							$names[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetName();
-						}
-						$values[$i]->fields[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetHumanReadableValue();
-					}
-				}
-			}
-			$populate_names = false;
-		}
 		
-		if (isset($params['fbrp_sort_field']) || isset($params['fbrp_sort_field_id']))
+		$populate_names = true;
+		for ($i=0;$i<count($values);$i++)
 		{
-			$sf = -1;
-			if (isset($params['fbrp_sort_field_id']))
-			{
-				$sf = $field_list[$params['fbrp_sort_field_id']];
-			}
-			else
-			{
-				for($j=0;$j<count($fields);$j++)
+			$this->HandleResponseFromXML($fbField, $values[$i]);
+			list($fnames, $aliases, $vals) = $this->ParseResponseXML($values[$i]->xml);
+			foreach ($fnames as $id=>$name)
 				{
-					if (!strcasecmp($fields[$j]->GetName(),$params['fbrp_sort_field']))
+				if (isset($field_list[$id]) && $field_list[$id] > -1)
 					{
-						$sf = $field_list[$fields[$j]->GetId()];
+					if ($populate_names)
+						{
+						$names[$field_list[$id]] = $name;
+						}
+					$values[$i]->fields[$field_list[$id]]=$vals[$id];
+					}
+				if (isset($aliases[$id]))
+					{
+					$values[$i]->fieldsbyalias[$aliases[$id]] = $vals[$id];
 					}
 				}
-			}
-			if ($sf != -1)
-			{
-				// kludge, because sort instantiation breaks under PHP 4, and I can't pass extra params to the sort
-				for($j=0;$j<count($values);$j++)
-				{
-					$values[$j]->sf = $sf;
-				}
-				if (isset($params['fbrp_sort_dir']) && $params['fbrp_sort_dir'] == 'a')
-				{
-					usort($values, array("FormBuilder","field_sorter_asc"));
-				}
-				else
-				{
-					usort($values, array("FormBuilder","field_sorter_desc"));
-				}
-			}
-		}
-		if ($records > $number)
-		{
-			$values = array_slice( $values, $start_point, $number);
+			$populate_names = false;
 		}
 		return array($records, $names, $values);
 	}
+
+	function GetSortableFields($form_id)
+	{
+		$ret = array();
+		$parm = array('form_id'=>$form_id);
+		$aeform = new fbForm($this, $parm, true);
+		$fields = $aeform->GetFields();
+		$fbField = false;
+		foreach($fields as $thisField)
+			{
+			if ($thisField->GetFieldType() == 'DispositionFormBrowser')
+				{
+				$fbField = $thisField;
+				}
+			}
+		if ($fbField == false)
+			{
+			// error handling goes here.
+			return $ret;	
+			}
+		return $fbField->getSortFieldList();
+	}
+
 
 	function field_sorter_asc($a, $b)
 	{
@@ -720,7 +770,7 @@ class FormBuilder extends CMSModule
 		return false;
 	}
 
-   function crypt($string, &$dispositionField)
+   function crypt($string, $dispositionField)
    {
    if ($dispositionField->GetOption('crypt_lib') == 'openssl')
       {
@@ -738,7 +788,7 @@ class FormBuilder extends CMSModule
 	   }
     else
       {
-      $kf = $dispositionField->GetOption($keyfile);
+      $kf = $dispositionField->GetOption('keyfile');
       if (file_exists($kf))
          {
          $key = file_get_contents($kf);

@@ -1747,22 +1747,20 @@ function fast_add(field_type)
 
   function &GetFieldById($field_id)
     {
-      $index = -1;
-      for ($i=0;$i<count($this->Fields);$i++)
-	{
-	  if ($this->Fields[$i]->GetId() == $field_id)
-	    {
-	      $index = $i;
-	    }
-	}
-      if ($index != -1)
-	{
-	  return $this->Fields[$index];
-	}
-      else
-	{
-	  return false;
-	}
+	$index = -1;
+	$ret = false;
+	for ($i=0;$i<count($this->Fields);$i++)
+		{
+		if ($this->Fields[$i]->GetId() == $field_id)
+	    	{
+			$index = $i;
+			}
+		}
+	if ($index != -1)
+		{
+	  	$ret = $this->Fields[$index];
+		}
+	return $ret;
     }
 
   function &GetFieldByIndex($field_index)
@@ -1992,7 +1990,7 @@ function fast_add(field_type)
   function &ResponseToXML()
   {
   	$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
-	$xml .= "<response form_id=\"".$this->Id."\"\n";
+	$xml .= "<response form_id=\"".$this->Id."\">\n";
 	foreach($this->Fields as $thisField)
 		{
 			$xml .= $thisField->ExportXML(true);

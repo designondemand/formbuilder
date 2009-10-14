@@ -249,6 +249,21 @@ class fbDispositionFormBrowser extends fbFieldBase {
       return $v;
    }
 	
+	function getSortFieldList()
+	{
+		$form = &$this->form_ptr;
+		$ret = array();
+		for ($i=1;$i<6;$i++)
+			{
+			if ($this->GetOption('sortfield'.$i,'-1') != '-1')
+				{
+				$afield = &$form->GetFieldById($this->GetOption('sortfield'.$i));
+				$ret[$i] = $afield->GetName();
+				}
+			}
+		return $ret;
+	}
+
 	function getSortFieldVal($sortFieldNumber)
 	{
 		$form = &$this->form_ptr;
