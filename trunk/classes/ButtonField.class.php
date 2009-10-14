@@ -16,6 +16,7 @@ class fbButtonField extends fbFieldBase
     $mod = &$form_ptr->module_ptr;
     $this->Type = 'ButtonField';
     $this->DisplayInForm = true;
+    $this->DisplayInSubmission = false;
     $this->NonRequirableField = true;
     $this->ValidationTypes = array();
     $this->sortable = false;
