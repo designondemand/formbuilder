@@ -1908,7 +1908,74 @@ function fast_add(field_type)
   }
 
 
-  function StoreResponse($response_id=-1,$approver='')
+  function StoreResponse($response_id=-1,$approver='',&$formBuilderDisposition)
+  {
+	$xml = $this->ResponseToXML();
+	$mod = &$this->module_ptr;
+	
+	$crypt = false;
+	$hash_fields = false;
+	$sort_fields = array();
+	if (is_object($formBuilderDisposition) && $formBuilderDisposition->GetFieldType()=='DispositionFormBrowser')
+		{
+		$crypt = ($formBuilderDisposition->GetOption('crypt','0') == '1');
+		$hash_fields = ($formBuilderDisposition->GetOption('hash_sort','0') == '1');
+		for ($i=0;$i<5;$i++)
+			{
+			$sort_fields[$i] = $formBuilderDisposition->getSortFieldVal($i+1);
+			}
+		}
+	
+	if (! $crypt)
+		{
+		$this->StoreResponseXML(
+			$response_id,
+			$approver,
+			isset($sort_fields[0])?$sort_fields[0]:'',
+			isset($sort_fields[1])?$sort_fields[1]:'',
+			isset($sort_fields[2])?$sort_fields[2]:'',
+			isset($sort_fields[3])?$sort_fields[3]:'',
+			isset($sort_fields[4])?$sort_fields[4]:'',
+			$xml);
+		}
+	elseif (! $hash_fields)
+		{
+		list($res, $xml) = $mod->crypt($xml,$formBuilderDisposition);
+		if (! $res)
+			{
+			return array(false, $xml);
+			}
+		$this->StoreResponseXML(
+			$response_id,
+			$approver,
+			isset($sort_fields[0])?$sort_fields[0]:'',
+			isset($sort_fields[1])?$sort_fields[1]:'',
+			isset($sort_fields[2])?$sort_fields[2]:'',
+			isset($sort_fields[3])?$sort_fields[3]:'',
+			isset($sort_fields[4])?$sort_fields[4]:'',
+			$xml);
+		}
+	else
+		{
+		list($res, $xml) = $mod->crypt($xml,$formBuilderDisposition);
+		if (! $res)
+			{
+			return array(false, $xml);
+			}
+		$this->StoreResponseXML(
+			$response_id,
+			$approver,
+			isset($sort_fields[0])?$mod->getHashedSortFieldVal($sort_fields[0]):'',
+			isset($sort_fields[1])?$mod->getHashedSortFieldVal($sort_fields[1]):'',
+			isset($sort_fields[2])?$mod->getHashedSortFieldVal($sort_fields[2]):'',
+			isset($sort_fields[3])?$mod->getHashedSortFieldVal($sort_fields[3]):'',
+			isset($sort_fields[4])?$mod->getHashedSortFieldVal($sort_fields[4]):'',
+			$xml);
+		}
+	return array(true,'');
+  }
+
+  function StoreResponseOld($response_id=-1,$approver='')
   {
     $db = $this->module_ptr->dbHandle;
     $fields = &$this->GetFields();
