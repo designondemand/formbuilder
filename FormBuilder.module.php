@@ -410,7 +410,7 @@ class FormBuilder extends CMSModule
 	}
 */
 
-	function ParseResponseXML($xmlstr)
+	function ParseResponseXML($xmlstr, $human_readable_values = true)
 	{
 		$names = array();
 		$aliases = array();
@@ -418,20 +418,40 @@ class FormBuilder extends CMSModule
 		$xml = new SimpleXMLElement($xmlstr);
 		foreach ($xml->field as $xmlfield)
 			{
-			if (isset($xmlfield['display_in_submission']) && $xmlfield['display_in_submission'] == '1')
+			if ($human_readable_values)
 				{
-				$id = (int)$xmlfield['id'];
-				$names[$id] = ((string)$xmlfield->field_name);
-				$vals[$id] = ((string)$xmlfield->human_readable_value);
-				if (isset($xmlfield->options))
+				if (isset($xmlfield['display_in_submission']) && $xmlfield['display_in_submission'] == '1')
 					{
-					foreach ($xmlfield->options->option as $to)
+					$id = (int)$xmlfield['id'];
+					$names[$id] = ((string)$xmlfield->field_name);
+					$vals[$id] = ((string)$xmlfield->human_readable_value);
+					if (isset($xmlfield->options))
 						{
-						if ($to['name'] == 'field_alias')
+						foreach ($xmlfield->options->option as $to)
 							{
-							$aliases[$id]=((string)$to);
+							if ($to['name'] == 'field_alias')
+								{
+								$aliases[$id]=((string)$to);
+								}
 							}
 						}
+					}
+				}
+			else
+				{
+				$id = (int)$xmlfield['id'];
+				$arrTypes = $xmlfield->xpath('options/value'); 
+				if (count($arrTypes) > 1)
+					{
+					$vals[$id] = array();
+					foreach($arrTypes as $tv)
+						{
+						array_push($vals[$id],(string)$tv);
+						}
+					}
+				else
+					{
+					$vals[$id] = (string)$xmlfield->options->value;
 					}
 				}
 			}
@@ -601,15 +621,7 @@ class FormBuilder extends CMSModule
 		$ret = array();
 		$parm = array('form_id'=>$form_id);
 		$aeform = new fbForm($this, $parm, true);
-		$fields = $aeform->GetFields();
-		$fbField = false;
-		foreach($fields as $thisField)
-			{
-			if ($thisField->GetFieldType() == 'DispositionFormBrowser')
-				{
-				$fbField = $thisField;
-				}
-			}
+		$fbField = $aeform->GetFormBrowserField();
 		if ($fbField == false)
 			{
 			// error handling goes here.
