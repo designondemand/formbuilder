@@ -801,6 +801,16 @@ class FormBuilder extends CMSModule
       }
     return array(true,$enc);
    }
+
+
+  function getHashedSortFieldVal($val)
+	{
+	if (strlen($val) > 4)
+		{
+		$val = substr($val,0,4). md5(substr($val,4));
+		}
+	return $val;
+	}
    
    
    function fbencrypt($string,$key)

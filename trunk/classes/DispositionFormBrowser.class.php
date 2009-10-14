@@ -183,8 +183,17 @@ class fbDispositionFormBrowser extends fbFieldBase {
 		$this->HiddenDispositionFields($mainArray, $advArray);
 	}
 
-    // Write To the Database
+
 	function DisposeForm($returnid)
+	{
+		$form = &$this->form_ptr;
+		list($res,$msg) = $form->StoreResponse(($this->Value?$this->Value:-1),$this->approvedBy,$this);
+		return array($res, $msg);
+	}
+
+
+    // Write To the Database
+	function DisposeFormOld($returnid)
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		$form = &$this->form_ptr;
