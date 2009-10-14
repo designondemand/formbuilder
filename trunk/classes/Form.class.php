@@ -1806,8 +1806,47 @@ function fast_add(field_type)
       }
   }
     
-  // this will instantiate the form, and load the results
   function LoadResponse($response_id)
+  {
+	$mod = &$this->module_ptr;
+	$db =& $this->module_ptr->dbHandle;
+		
+	$oneset = new StdClass();
+	$res = $db->GetOne('SELECT response, form_id FROM '.cms_db_prefix().
+					'module_fb_formbrowser WHERE fbr_id=?', array($response_id));
+
+	if ($res && $row=$res->FetchRow())
+		{
+		$oneset->xml = $row['response'];
+		$oneset->form_id = $row['form_id'];
+		}
+	if ($oneset->form_id != $this->GetId())
+		{
+		return false;
+		}
+	$fbField = $this->GetFormBrowserField();
+	if ($fbField == false)
+		{
+		// error handling goes here.
+		debug_display("FAILED to instantiate field!");	
+		}
+	$mod->HandleResponseFromXML($fbField, $oneset);
+	debug_display($oneset->xml);
+	list($fnames, $aliases, $vals) = $mod->ParseResponseXML($oneset->xml, false);
+	$this->ResetFields();
+	foreach ($vals as $id=>$val)
+		{
+		$index = $this->GetFieldIndexFromId($id);
+		if($index != -1 &&  is_object($this->Fields[$index]) )
+			{
+			$this->Fields[$index]->SetValue($val);
+			}
+		}
+	return true;
+  }
+
+  // this will instantiate the form, and load the results
+  function LoadResponseOld($response_id)
   {
     $db = &$this->module_ptr->dbHandle;
     // loading a response -- at this point, we check that the response
@@ -1841,7 +1880,78 @@ function fast_add(field_type)
       }
   }   
 
+
+	function GetFormBrowserField()
+	{
+		$fields = $this->GetFields();
+		$fbField = false;
+		foreach($fields as $thisField)
+			{
+			if ($thisField->GetFieldType() == 'DispositionFormBrowser')
+				{
+				$fbField = $thisField;
+				}
+			}
+		if ($fbField == false)
+			{
+			// error handling goes here.	
+			}
+		return $fbField;		
+	}
+
+
+
+
   function LoadResponseValues(&$params)
+  {
+    // loading a response -- at this point, we check that the response
+    // is for the correct form_id!
+	$mod = &$this->module_ptr;
+	$db =& $this->module_ptr->dbHandle;
+		
+	$oneset = new StdClass();
+	$form_id = -1;
+	$res = $db->Execute('SELECT response, form_id FROM '.cms_db_prefix().
+					'module_fb_formbrowser WHERE fbr_id=?', array($params['response_id']));
+
+	if ($res && $row=$res->FetchRow())
+		{
+		$oneset->xml = $row['response'];
+		$form_id = $row['form_id'];
+		}
+	if ($form_id != $this->GetId())
+		{
+		return false;
+		}
+	$fbField = $mod->GetFormBrowserField($form_id);
+	if ($fbField == false)
+		{
+		// error handling goes here.
+		debug_display("FAILED to instantiate field!");	
+		}
+	$mod->HandleResponseFromXML($fbField, $oneset);
+	list($fnames, $aliases, $vals) = $mod->ParseResponseXML($oneset->xml, false);
+	foreach ($vals as $id=>$val)
+		{
+		if (isset($params['fbrp__'.$id]) &&
+			! is_array($params['fbrp__'.$id]))
+			{
+			$params['fbrp__'.$id] = array($params['fbrp__'.$id]);
+			array_push($params['fbrp__'.$id], $val);
+			}
+		elseif (isset($params['fbrp__'.$id]))
+			{
+			array_push($params['fbrp__'.$id], $val);
+			}
+		else
+			{
+			$params['fbrp__'.$id] = $val;
+			}
+		}
+	return true;
+  }
+
+  function LoadResponseValuesOld(&$params)
   {
     $db = $this->module_ptr->dbHandle;
     // loading a response -- at this point, we check that the response
