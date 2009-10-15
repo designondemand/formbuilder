@@ -47,6 +47,18 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
     	return $this->Value[0];
   	}
 
+   function SetValue($valStr)
+   {
+      if (! is_array($valStr))
+         {
+         $this->Value = array($valStr);
+         }
+      else
+         {
+         $this->Value = $valStr;
+         }
+   }
+
 	function GetHumanReadableValue($as_string=true)
 	{
 		if (is_array($this->Value))

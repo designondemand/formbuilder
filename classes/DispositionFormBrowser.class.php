@@ -186,6 +186,7 @@ class fbDispositionFormBrowser extends fbFieldBase {
 
 	function DisposeForm($returnid)
 	{
+	error_log($this->Value);
 		$form = &$this->form_ptr;
 		list($res,$msg) = $form->StoreResponse(($this->Value?$this->Value:-1),$this->approvedBy,$this);
 		return array($res, $msg);
