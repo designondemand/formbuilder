@@ -615,6 +615,10 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
       {
 	$hidden .= $mod->CreateInputHidden($id,'fbrp_browser_id',$params['fbrp_browser_id']);
       }
+    if (isset($params['response_id']))
+      {
+	  $hidden .= $mod->CreateInputHidden($id,'response_id',$params['response_id']);
+      }
     if ($this->Page > 1)
       {
 	$hidden .= $mod->CreateInputHidden($id, 'fbrp_previous', ($this->Page - 1));
@@ -645,14 +649,14 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		  {
 		    $hidden .= $mod->CreateInputHidden($id,
 						       $testIndex.'[]',
-						       /*htmlspecialchars($val,ENT_QUOTES)*/ $this->unmy_htmlentities($val));
+						       $this->unmy_htmlentities($val));
 		  }
 	      }
 	    else
 	      {
 		$hidden .= $mod->CreateInputHidden($id,
 						   $testIndex,
-						   /*htmlspecialchars($params[$testIndex],ENT_QUOTES)*/ $this->unmy_htmlentities($params[$testIndex]));
+						   $this->unmy_htmlentities($params[$testIndex]));
 	      }
 	    continue;
 	  }
@@ -1836,6 +1840,7 @@ function fast_add(field_type)
 	$this->ResetFields();
 	foreach ($vals as $id=>$val)
 		{
+		error_log("setting value fo field ".$id." to be ".$val);
 		$index = $this->GetFieldIndexFromId($id);
 		if($index != -1 &&  is_object($this->Fields[$index]) )
 			{
