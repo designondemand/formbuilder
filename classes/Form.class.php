@@ -2025,8 +2025,10 @@ function fast_add(field_type)
 
   function StoreResponse($response_id=-1,$approver='',&$formBuilderDisposition)
   {
-	$xml = $this->ResponseToXML();
 	$mod = &$this->module_ptr;
+    $db = $this->module_ptr->dbHandle;
+    $fields = &$this->GetFields();
+	$newrec = false;
 	
 	$crypt = false;
 	$hash_fields = false;
@@ -2040,11 +2042,29 @@ function fast_add(field_type)
 			$sort_fields[$i] = $formBuilderDisposition->getSortFieldVal($i+1);
 			}
 		}
+
+	if ($response_id == -1)
+		{
+		$response_id = $db->GenID(cms_db_prefix(). 'module_fb_formbrowser_seq');
+	    foreach ($fields as $thisField)
+			{
+			// set the response_id to be the attribute of the database disposition
+			if (($thisField->GetFieldType() == 'DispositionDatabase')||
+				($thisField->GetFieldType() == 'DispositionFormBrowser'))
+				{
+				$thisField->SetValue($response_id);
+				}
+			}
+		$newrec = true;
+		}
+		
+	$xml = $this->ResponseToXML();
 	
 	if (! $crypt)
 		{
 		$this->StoreResponseXML(
 			$response_id,
+			$newrec,
 			$approver,
 			isset($sort_fields[0])?$sort_fields[0]:'',
 			isset($sort_fields[1])?$sort_fields[1]:'',
@@ -2062,6 +2082,7 @@ function fast_add(field_type)
 			}
 		$this->StoreResponseXML(
 			$response_id,
+			$newrec,
 			$approver,
 			isset($sort_fields[0])?$sort_fields[0]:'',
 			isset($sort_fields[1])?$sort_fields[1]:'',
@@ -2079,6 +2100,7 @@ function fast_add(field_type)
 			}
 		$this->StoreResponseXML(
 			$response_id,
+			$newrec,
 			$approver,
 			isset($sort_fields[0])?$mod->getHashedSortFieldVal($sort_fields[0]):'',
 			isset($sort_fields[1])?$mod->getHashedSortFieldVal($sort_fields[1]):'',
@@ -2181,22 +2203,16 @@ function fast_add(field_type)
    return $xml;
   }
 
-  function StoreResponseXML($response_id=-1,$approver='',$sortfield1,$sortfield2,$sortfield3,$sortfield4,$sortfield5, $xml)
+  function StoreResponseXML($response_id=-1,$newrec=false,$approver='',$sortfield1,$sortfield2,$sortfield3,$sortfield4,$sortfield5, $xml)
   {
     $db = &$this->module_ptr->dbHandle;
     $secret_code = '';
-    $newrec = false;
-
-    if ($response_id == -1)
-      {
-	  $newrec = true;
-      }
 
     if ($newrec)
       {
 		// saving a new response
 		$secret_code = substr(md5(session_id().'_'.time()),0,7);
-		$response_id = $db->GenID(cms_db_prefix(). 'module_fb_formbrowser_seq');
+		//$response_id = $db->GenID(cms_db_prefix(). 'module_fb_formbrowser_seq');
 		$sql = 'INSERT INTO ' . cms_db_prefix().
 	  'module_fb_formbrowser (fbr_id, form_id, submitted, secret_code, index_key_1, index_key_2, index_key_3, index_key_4, index_key_5, response) VALUES (?,?,?,?,?,?,?,?,?,?)';
 		$res = $db->Execute($sql,

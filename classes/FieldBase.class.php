@@ -650,8 +650,8 @@ class fbFieldBase {
   // override me, if necessary to convert type or something.
   function SetValue($valStr)
   {
-  
-  error_log($valStr);
+
+  error_log($this->GetName().':'.print_r($valStr,true));
     $fm = &$this->form_ptr;
     if ($this->Value === false)
       {
