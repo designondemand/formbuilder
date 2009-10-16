@@ -539,7 +539,7 @@ class FormBuilder extends CMSModule
 		{
 			$sql .= ' AND resp_id IN ('. implode(',', $params['fbrp_response_search']) .')';
 		}
-		if (! isset($params['fbrp_sort_field']) || $params['fbrp_sort_field']=='submitdate')
+		if (! isset($params['fbrp_sort_field']) || $params['fbrp_sort_field']=='submitdate' || empty($params['fbrp_sort_field']))
 		{
 			if (isset($params['fbrp_sort_dir']) && $params['fbrp_sort_dir'] == 'd')
 			{
