@@ -69,7 +69,6 @@ class fbDispositionFormBrowser extends fbFieldBase {
 	
 	function SetValue($val)
 	{
-
 		$decval = base64_decode($val);
    
 		if ($val === false)
@@ -186,7 +185,6 @@ class fbDispositionFormBrowser extends fbFieldBase {
 
 	function DisposeForm($returnid)
 	{
-	error_log($this->Value);
 		$form = &$this->form_ptr;
 		list($res,$msg) = $form->StoreResponse(($this->Value?$this->Value:-1),$this->approvedBy,$this);
 		return array($res, $msg);
