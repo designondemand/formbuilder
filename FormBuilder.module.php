@@ -570,8 +570,14 @@ class FormBuilder extends CMSModule
 			$records = $row['num'];
 		}
 
-		$dbresult = $db->SelectLimit('SELECT * '.$sql, $number, $start_point, array($form_id));
-
+		if ($number > -1)
+			{
+			$dbresult = $db->SelectLimit('SELECT * '.$sql, $number, $start_point, array($form_id));
+			}
+		else
+			{
+			$dbresult = $db->Execute('SELECT * '.$sql, array($form_id));	
+			}
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
 			$oneset = new stdClass();
@@ -592,23 +598,39 @@ class FormBuilder extends CMSModule
 			}
 		
 		$populate_names = true;
+		$mapfields = (count($field_list) > 0);
 		for ($i=0;$i<count($values);$i++)
 		{
 			$this->HandleResponseFromXML($fbField, $values[$i]);
 			list($fnames, $aliases, $vals) = $this->ParseResponseXML($values[$i]->xml);
 			foreach ($fnames as $id=>$name)
 				{
-				if (isset($field_list[$id]) && $field_list[$id] > -1)
+				if ($mapfields)
+					{
+					if (isset($field_list[$id]) && $field_list[$id] > -1)
+						{
+						if ($populate_names)
+							{
+							$names[$field_list[$id]] = $name;
+							}
+						$values[$i]->fields[$field_list[$id]]=$vals[$id];
+						}
+					if (isset($aliases[$id]))
+						{
+						$values[$i]->fieldsbyalias[$aliases[$id]] = $vals[$id];
+						}
+					}
+				else
 					{
 					if ($populate_names)
 						{
-						$names[$field_list[$id]] = $name;
+						$names[$id] = $name;
 						}
-					$values[$i]->fields[$field_list[$id]]=$vals[$id];
-					}
-				if (isset($aliases[$id]))
-					{
-					$values[$i]->fieldsbyalias[$aliases[$id]] = $vals[$id];
+					$values[$i]->fields[$id]=$vals[$id];
+					if (isset($aliases[$id]))
+						{
+						$values[$i]->fieldsbyalias[$aliases[$id]] = $vals[$id];
+						}
 					}
 				}
 			$populate_names = false;
