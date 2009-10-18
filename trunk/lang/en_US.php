@@ -339,10 +339,15 @@ $lang['title_mle_version'] = 'Run in MLE Mode';
 $lang['title_mle_version_long'] = 'Changes/support for CMSMS Multi-Language Edition fork. Do not check this if you are not running the MLE version.';
 $lang['title_ensure_cert_key_match'] = 'Ensure that you select the private key that is appropriate for the certificate you are using for encryption!';
 $lang['choose_crypt'] = 'Encryption Library';
+$lang['title_encrypt_database_long'] = 'Check this to encrypt the stored data. This makes it more difficult (but not impossible) for hackers to view the information.';
 $lang['choose_crypt_long'] = 'The options below only apply if you are using the OpenSSL Encryption library';
 $lang['title_crypt_lib']='Encryption Library';
 $lang['openssl'] = 'OpenSSL Library';
 $lang['mcrypt'] = 'PHP mcrypt Library';
+$lang['title_feu_binding'] = 'Frontend User binding';
+$lang['title_install_feu'] = 'Please install the Frontend User module to connect a form and its data to a specific user';
+$lang['title_feu_bind_help'] = 'Check this to lock front-end access to this form\'s data to the logged-in front-end user.';
+$lang['title_encryption'] = 'Encryption';
 
 $lang['restricted_to_group'] = 'Only in group %s';
 $lang['title_show_to_user'] = 'Display to user?';

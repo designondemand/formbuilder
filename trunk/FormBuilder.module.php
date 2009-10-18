@@ -242,8 +242,9 @@ class FormBuilder extends CMSModule
 		if($rs && $rs->RecordCount() > 0)
 		{
 			$result = $rs->FetchRow();
+			return $result['form_id'];
 		}
-		return $result['form_id'];
+		return -1;
 	}
 
 	function GetFormNameFromID($form_id)
@@ -280,6 +281,12 @@ class FormBuilder extends CMSModule
 		$names = array();
 		$values = array();
 		$db =& $this->GetDb();
+		$fbField = $this->GetFormBrowserField($form_id);
+		if ($fbField == false)
+			{
+			// error handling goes here.
+			debug_display("FAILED to instantiate field!");	
+			}
 
 		$dbresult = $db->Execute('SELECT * FROM '.cms_db_prefix().
 					'module_fb_formbrowser WHERE fbr_id=?', array($response_id));
@@ -296,12 +303,6 @@ class FormBuilder extends CMSModule
 			$oneset->names = array();
 			$oneset->fieldsbyalias = array();
 		}
-		$fbField = $this->GetFormBrowserField($form_id);
-		if ($fbField == false)
-			{
-			// error handling goes here.
-			debug_display("FAILED to instantiate field!");	
-			}
 		
 		$populate_names = true;
 		$this->HandleResponseFromXML($fbField, $oneset);
@@ -489,7 +490,7 @@ class FormBuilder extends CMSModule
 			$keyfile = $fbField->GetOption('keyfile');
 			if ($cryptlib == 'openssl')
 				{
-				$openssl = $this->GetModuleInstance('OpenSSL');
+				$openssl = &$this->GetModuleInstance('OpenSSL');
 				$pkey = $fbField->GetOption('private_key');
 				$openssl->Reset();
 				$openssl->load_private_keyfile($pkey,$keyfile);
@@ -808,7 +809,7 @@ class FormBuilder extends CMSModule
    {
    if ($dispositionField->GetOption('crypt_lib') == 'openssl')
       {
-	   $openssl = $this->GetModuleInstance('OpenSSL');
+	   $openssl = &$this->GetModuleInstance('OpenSSL');
 	   if ($openssl === FALSE)
 		    {
 		    return array(false,$this->Lang('title_install_openssl'));

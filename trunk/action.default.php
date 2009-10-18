@@ -99,14 +99,26 @@ if (! $finished)
      $parms['form_id'] = $aeform->GetId();
      $this->SendEvent('OnFormBuilderFormDisplay',$parms);
 
-     $this->smarty->assign('fb_form_start',
+     if (isset($params['fb_from_fb']))
+		{
+		$this->smarty->assign('fb_form_start',
+			$this->CreateFormStart($id, 'user_edit_resp', $returnid, 'post',
+				'multipart/form-data', 
+				($aeform->GetAttr('inline','0')== '1'), '',
+				array('fbrp_callcount'=>$fbrp_callcount+1)).
+				$this->CreateInputHidden($id,'response_id',isset($params['response_id'])?$params['response_id']:'-1'));
+		}
+	else
+		{
+     	$this->smarty->assign('fb_form_start',
 			   $this->CreateFormStart($id, 'default', $returnid, 'post', 
-						  'multipart/form-data', 
-						  ($aeform->GetAttr('inline','0')== '1'), '',
-						  array('fbrp_callcount'=>$fbrp_callcount+1)));
+				'multipart/form-data', 
+				($aeform->GetAttr('inline','0')== '1'), '',
+				array('fbrp_callcount'=>$fbrp_callcount+1)));
+		}
 
-			   $this->smarty->assign('fb_form_end',$this->CreateFormEnd());
-			   $this->smarty->assign('fb_form_done',0);
+	$this->smarty->assign('fb_form_end',$this->CreateFormEnd());
+	$this->smarty->assign('fb_form_done',0);
    }
 else
    {

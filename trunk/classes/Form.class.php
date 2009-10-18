@@ -796,6 +796,8 @@ function unmy_htmlentities($val)
   function Load($formId, &$params, $loadDeep=false)
   {
 
+    $mod = $this->module_ptr;
+
 //error_log("entering Form Load with usage ".memory_get_usage());
     $sql = 'SELECT * FROM '.cms_db_prefix().'module_fb_form WHERE form_id=?';
     $rs = $this->module_ptr->dbHandle->Execute($sql, array($formId));
@@ -835,6 +837,28 @@ function unmy_htmlentities($val)
       {
 	// if it's a stored form, load the results -- but we need to manually merge them,
 	// since $params[] should override the database value (say we're resubmitting a form)
+		$fbf = $mod->GetFormBrowserField($formId);
+		if ($fbf != false)
+			{
+			// if we're binding to FEU, get the FEU ID, see if there's a response for
+			// that user. If so, load it. Otherwise, bring up an empty form.
+			if ($fbf->GetOption('feu_bind','0')=='1')
+				{
+				$feu = &$mod->GetModuleInstance('FrontEndUsers');
+				if ($feu == false)
+					{
+					debug_display("FAILED to instatiate FEU!");
+					return;
+					}
+				$response_id = $feu->LoggedInId();
+				$check = $this->module_ptr->dbHandle->GetOne('select count(*) from '.cms_db_prefix().
+					'module_fb_formbrowser where fbr_id=?',array($response_id));
+				if ($check == 1)
+					{
+					$params['response_id'] = $response_id;
+					}
+				}
+			}
 	if (isset($params['response_id']))
 	  {
 	    $loadParams = array('response_id'=>$params['response_id']);
@@ -1835,7 +1859,7 @@ function fast_add(field_type)
 		debug_display("FAILED to instantiate field!");	
 		}
 	$mod->HandleResponseFromXML($fbField, $oneset);
-	debug_display($oneset->xml);
+
 	list($fnames, $aliases, $vals) = $mod->ParseResponseXML($oneset->xml, false);
 	$this->ResetFields();
 	foreach ($vals as $id=>$val)
@@ -1850,42 +1874,6 @@ function fast_add(field_type)
 	return true;
   }
 
-  // this will instantiate the form, and load the results
-  function LoadResponseOld($response_id)
-  {
-    $db = &$this->module_ptr->dbHandle;
-    // loading a response -- at this point, we check that the response
-    // is for the correct form_id!
-    $sql = 'SELECT form_id FROM ' . cms_db_prefix().
-      'module_fb_resp where resp_id=?';
-    if($result = $db->GetRow($sql, array($response_id)))
-      {
-	if ($result['form_id'] != $this->GetId())
-	  {
-	    return false;
-	  }
-		    
-	$this->ResetFields();
-
-	$sql = 'SELECT * FROM '.cms_db_prefix().
-	  'module_fb_resp_val WHERE resp_id=? order by resp_val_id';
-	$dbresult = $db->Execute($sql, array($response_id));
-	while ($dbresult && $row = $dbresult->FetchRow())
-	  {
-	    $index = $this->GetFieldIndexFromId($row['field_id']);
-            if($index != -1 &&  is_object($this->Fields[$index]) )
-             {
-	       $this->Fields[$index]->SetValue($row['value']);
-             }
-	  }
-      }
-    else
-      {
-	return false;
-      }
-  }   
-
-
 	function GetFormBrowserField()
 	{
 		$fields = $this->GetFields();
@@ -1899,7 +1887,8 @@ function fast_add(field_type)
 			}
 		if ($fbField == false)
 			{
-			// error handling goes here.	
+			// error handling goes here.
+			return false;	
 			}
 		return $fbField;		
 	}
@@ -1909,11 +1898,21 @@ function fast_add(field_type)
 
   function LoadResponseValues(&$params)
   {
-    // loading a response -- at this point, we check that the response
-    // is for the correct form_id!
 	$mod = &$this->module_ptr;
 	$db =& $this->module_ptr->dbHandle;
-		
+	
+/*
+	if ($fbField->GetOption('feu_bind','0')=='1')
+		{
+		$feu = &$mod->GetModuleInstance('FrontEndUsers');
+		if ($feu == false)
+			{
+			debug_display("FAILED to instatiate FEU!");
+			return;
+			}
+		$params['response_id'] = $feu->LoggedInId();
+		}
+*/
 	$oneset = new StdClass();
 	$form_id = -1;
 	$res = $db->Execute('SELECT response, form_id FROM '.cms_db_prefix().
@@ -1924,6 +1923,8 @@ function fast_add(field_type)
 		$oneset->xml = $row['response'];
 		$form_id = $row['form_id'];
 		}
+	// loaded a response -- at this point, we check that the response
+	// is for the correct form_id!
 	if ($form_id != $this->GetId())
 		{
 		return false;
@@ -2045,7 +2046,20 @@ function fast_add(field_type)
 
 	if ($response_id == -1)
 		{
-		$response_id = $db->GenID(cms_db_prefix(). 'module_fb_formbrowser_seq');
+		if ($formBuilderDisposition->GetOption('feu_bind','0') == '1')
+			{
+			$feu = &$mod->GetModuleInstance('FrontEndUsers');
+			if ($feu == false)
+				{
+				debug_display("FAILED to instatiate FEU!");
+				return;
+				}
+			$response_id = $feu->LoggedInId();
+			}
+		else
+			{
+			$response_id = $db->GenID(cms_db_prefix(). 'module_fb_formbrowser_seq');	
+			}			
 	    foreach ($fields as $thisField)
 			{
 			// set the response_id to be the attribute of the database disposition
