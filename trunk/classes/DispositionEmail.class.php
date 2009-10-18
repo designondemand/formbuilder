@@ -162,19 +162,21 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 			$ret = false;
 			$message .= $mod->Lang('must_specify_one_destination').'</br>';
 			}
-		if (! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed),$this->GetOption('email_from_address')))
+		list($rv,$mess) = $this->validateEmailAddr($this->GetOption('email_from_address'));
+		if (!$rv)
 			{
-    	       	$ret = false;
-                $message .= $mod->Lang('not_valid_email',$this->GetOption('email_from_address')) . '<br/>';
+    	    $ret = false;
+            $message .= $mess;
 			}
         for($i=0;$i<count($opt);$i++)
     	   {
-    	   if (! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $opt[$i]))
-    	       {
-    	       	$ret = false;
-                $message .= $mod->Lang('not_valid_email',$opt[$i]) . '<br/>';
-    	       }
-        }
+		   list($rv,$mess) = $this->validateEmailAddr($opt[$i]);
+		   if (!$rv)
+				{
+				$ret = false;
+				$message .= $mess;
+    	        }
+			}
         return array($ret,$message);       
     }
 

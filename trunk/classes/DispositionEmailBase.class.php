@@ -180,7 +180,18 @@ class fbDispositionEmailBase extends fbFieldBase
       }
     foreach ($destination_array as $thisDest)
       {
-  $mail->AddAddress($thisDest);
+		if (strpos($thisDest,',') !== false)
+			{
+			$sub_ads = explode(',',$thisDest);
+			foreach ($sub_ads as $this_ad)
+				{
+				$mail->AddAddress(trim($this_ad));	
+				}
+			}
+		else
+			{
+  			$mail->AddAddress($thisDest);
+			}
       }
 
     $res = $mail->Send();
@@ -231,6 +242,30 @@ class fbDispositionEmailBase extends fbFieldBase
            )
      );
   }
+
+  function validateEmailAddr($email)
+	{
+	$mod = &$this->form_ptr->module_ptr;
+	$ret = true;
+	$message = '';
+	if (strpos($email,',') !== false)
+		{
+		$ta = explode(',',$email);	
+		}
+	else
+		{
+		$ta = array($email);	
+		}
+	foreach($ta as $to)
+		{
+		if (! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $to))
+	       {
+	       	$ret = false;
+            $message .= $mod->Lang('not_valid_email',$to).'<br/>';
+	       }
+		}
+	return array($ret, $message);
+	}
 
 }
 

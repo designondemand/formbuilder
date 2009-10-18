@@ -650,6 +650,7 @@ write your CSS.</p>
 functions to the field.</li>
 <li>Text Area. This is a big, free-form text input field.</li>
 <li>Checkbox. This is a standard check box.</li>
+<li>Button. This doens't do anything, but you can hook it into some Javascript.</li>
 <li>Checkbox Group. This is a collection of checkboxes. The only difference between this input and a
 collection of Checkbox inputs is that they are presented as a group, with one name, and can have a validation function requiring that you check one or more of the boxes in the group.</li>
 <li>Radio Group. This is a collection of radio buttons. Only one of the group may be selected by the user.</li>
@@ -686,7 +687,7 @@ independently validated. This is good for applications like online surveys.</li>
 </ul></li>
 
 <li>Form Handling Inputs (Dispositions)
-<ul><li>*Call a User Defined Tag With the Form Results. This submits all the form results to the User-Defined Tag you specify. The UDT can handle the results however it wants. Values are passed as \$params['field_name'].</li>
+<ul><li>*Call a User Defined Tag With the Form Results. This submits all the form results to the User-Defined Tag you specify. The UDT can handle the results however it wants. Values are passed as \$params['field_name'], and as \$params['field_alias'] (if defined).</li>
 <li>*Email Results Based on Pulldown. This is useful for web sites where comments get routed based on their subject matter, e.g., bugs get sent to one person, marketing questions to another person, sales requests to someone else, etc. The pulldown is populated with the subjects, and each gets directed to a specific email address. You set up these mappings in the when you create or edit a field of this type. If you use one of these \"Director\" pulldowns, the user must make a selection in order to submit the
 form. This input is part of the form the user sees, although the email addresses are not made visible nor
 are they embedded in the HTML.</li>
@@ -695,7 +696,7 @@ are they embedded in the HTML.</li>
 form that the user sees. The email addresses are not made visible nor
 are they embedded in the HTML.</li>
 <li>*Email to User-Supplied Address. This puts an input field in the form for the user to populate with an email address. The form results get sent to that address. Beware of Spam abuse! Active the primitive anti-spam features in the FormBuilder configuration screen.</li>
-<li>*Store Results in Database. This will store the form contents in an internal database. You will always use this disposition if you use the form with FormBrowser.</li>
+<li>*Store Results in Database. <strong>Deprecated.</strong> Use Store Results for FormBrowser Module instead! This will store the form contents in an internal database. You will always use this disposition if you use the form with FormBrowser.</li>
 <li>*Redirect to Page Based on Pulldown. This allows you to redirect the form to a different site page depending on its value. If you have multiple dispositions, make sure this is used last.</li>
 <li>*Validate via Email. This is a strange and powerful field. It provides the user a mandatory input for their email address. Once they submit their form, the standard form dispositions are not performed -- rather, it send the user an email with a special coded link. If they click on the link, the other form is considered \"approved,\" and the other dispositions are all performed.</li>
 <li>*Write Results to Flat File. This takes the form results and writes them into a text file. You may
@@ -704,10 +705,9 @@ module's installation directory, assuming the web server has permission to write
 <li>*Save Results to File Based on Pulldown. Like the Flat File disposition, except the value of a pull-down determines which file results get written to.</li>
 <li>*Save Results to File(s) Based on Multiple Selections. Like the Flat File disposition, except the value(s) of checkboxes  determines which file(s) results get written to.</li>
 <li>*Email to CMS Admin User. Provides a pull-down of CMS Admin users, and directs the results as an email to the selected admin.</li>
-<li>*Store Results for FormBrowser Module v.3. Stores the form results in an XML structure as a single database record. This will become the interface to Form Browser in the next release.</li>
+<li>*Store Results for FormBrowser Module v.3. Stores the form results in an XML structure as a single database record. This is the only interface to Form Browser. See section below.</li>
 
 </ul></li></li></ul>
-
 
 <h3>Passing Default Values to Forms</h3>
 <p>Calguy added a nice feature, which is that you can pass default field values to your form via the module tag. This allows you to have
@@ -715,7 +715,7 @@ the same form in multiple places, but with different default values. It may not 
 a single value, you can specify like:</p>
 <p>{FormBuilder form='my_form' value_<i>FIELDNAME</i>='default_value'}</p>
 <p>This will set the field with <i>FIELDNAME</i> to 'default_value'.</p>
-<p>This can be problematic, as sometimes field names are unweildy or contain characters that don't work well with Smarty. So there is an
+<p>This can be problematic, as sometimes field names are unwieldy or contain characters that don't work well with Smarty. So there is an
 alternative like this:</p>
 <p>{FormBuilder form='my_form' value_fld<i>NUMBER</i>='default_value'}</p>
 <p>That uses field <i>NUMBER</i>, where <i>NUMBER</i> is the internal FormBuilder field id. You might wonder how you know what that id is. Simply go into the FormBuilder configuration tab,
@@ -727,11 +727,32 @@ and check \"Show Field IDs\"</p>
 <p><strong>Note that once you've changed a template, it will no longer automatically add new fields.</strong> For this reason, it's usually best to create your templates as the last step of creating your form.</p>
 <p>As of version 0.2.4, you can opt to send any of these emails as HTML email. There should be a checkbox at the top of the template page for this. There is also a \"Create Sample HTML Template\" button over in the legend area. For HTML email, the email body will also provide the default text-only values.</p>
 
+<h3>Use with FormBrowser v3</h3>
+<p>There are some special features when using FormBuilder with FormBrowser. The new approach stores the form results in XML, so that far fewer
+queries are needed to retrieve records. This means you can use FormBrowser with hundreds or even thousands of records. It also means you
+will have to choose up front which fields you will want to be able to sort by. You can choose up to five.</p>
+<p>In advanced options, you can tie a form to Frontend Users. That means each user gets one record for the form; they can create it
+a single time, subsequent times they will be editing their record. The record will not be visible to any other users (excluding admins).
+This form should be added to your page using the syntax {FormBuilder action='feuserform' form='form_name'}.</p>
+<p>For greater data safety, you can encrypt the stored forms in the database. You can use the built-in mycrypt library or the OpenSSL module.
+In either case, for the passphrase, you can either enter text in the field or a file name. If you specify a file name, the contents of that
+file will be used as the passphrase for encrypting.</p>
+<p>If you encrypt, be aware that the fields you use for sorting are <strong>not</strong> encrypted. You can choose to hash them; the cheat here
+is that the first four letters are left intact to allow for sorting. The sorting may not be perfect, and this weakens the security since it
+exposes some cleartext, but it is better than nothing.</p>
+<p><strong>DISCLAIMER</strong>. The encryption offered here should be considered just one more hurdle for a hacker, not as a guarantee that
+your information will be secure. A smart hacker who has found some exploit to view database records may well be smart enough to get at
+the module source code, and find their way to the passphrase. This will not protect you against an enemy who has full access to your
+server, some familiarity with PHP, and the time to poke around. <em><strong>Do not</strong> use this to protect high-value information such as financial data,
+sensitive political information, human rights data, or anything else that might be of value to a repressive government or organized crime
+cartel.</em></p>
+
 <h3>Configuration</h3>
 <p>There are some global configuration options for FormBuilder:</p>
 <ul>
 <li>Enable fast field add pulldown. This enables the pulldown on the Form Edit page which saves a step in the creation of new fields.</li>
-<li>Hide Errors. This is set by default. Unchecking it will cause more detailed errors to be displayed if there are problems when you submit your form.</li>
+<li>Run in MLE Mode. This changes some queries against the content table to try to prevent ugly crashes under the MLE fork. Checking this will cause ugly crashes if you are NOT running the MLE fork.</li>
+<li>Hide Errors. This is no longer set by default. Checking it will hide the more detailed errors that would be displayed if there are problems when you submit your form.</li>
 <li>Require Field Names. Typically, you will want form fields to be named so you can tell which is which. However, in some cases, you might want to have nameless fields. Uncheck this if you want to allow nameless fields.</li>
 <li>Unique Field Names. Typically, you will want form fields to have unique names so you can tell which is which. Uncheck this if you want to allow fields to share names.</li>
 <li>Use relaxed email validation. This uses a less restrictive regular expression for validating email; e.g., x@y will be allowed, where typically x@y.tld is required.</li>
@@ -747,16 +768,21 @@ that you use for pages that contain your form.</p>
 
 ".$lang['template_variable_help']."
 
+<h3>Miscellaneous Notes</h3>
+<ul>
+<li>Any fields that sends email to a specified email addresses will accept a comma-separated list of email addresses.</li>
+</ul>
 <h3>Known Issues</h3>
 <ul>
-<li>FormBuilder is not yet integrated with FrontEnd Users. It will be.</li>
 <li>FormBuilder does not yet support pretty URLs, although that shouldn't matter since the user side is pretty simple.</li>
 <li>FileUpload Fields may not work correctly with multipage forms.</li>
 </ul>
 
 <h3>Troubleshooting</h3>
-<ol><li> First step is to check you're running CMS 1.1 or later.</li>
-<li> Second step is to read and understand the caveat about WYSIWYG editors up in the
+<ol>
+<li>FormBuilder/FormBrowser <strong>requires</strong> PHP 5 or later to function correctly.</li>
+<li>First step is to check you're running CMS 1.6 or later.</li>
+<li>Second step is to read and understand the caveat about WYSIWYG editors up in the
 section <em>Adding a Form to a Page</em>.</li>
 <li> If you're missing fields in an email that gets generated, check the disposition field's template, and make sure you're specifying the missing fields. Seems obvious, but it's an easy mistake to make.</li>
 <li>Uncheck the \"Hide Errors\" checkbox in the global options, and see what message gets displayed when you submit your form.</li>
@@ -779,8 +805,19 @@ ate the neighbor's nasty little yap dog, for which I was inappropriately gratefu
 <li>Lastly, you may have some success emailing the author directly and grovelling for free support.</li>
 <li>Donations are good motivators, too. Keep in mind that the dollar is weak, and if you are not in the US, your donation gets magnified.</li>
 </ul>
-<p>Keep in mind that the author has put hundreds and hundreds of hours into the development of this module. Please take the time to read the documentation before sending questions. Either that, or send your questions written on financially negotiable instruments (i.e., checks or cash). Am I sounding like a broken record? Do you kids these days even know what a broken record is? I would say skipping CD, but you might not know what that is either. Like a sample that got stuck on loop? Damn, I am getting old. So is this paragraph. Time to move on, here.</p>
-<p>As per the GPL, this software is provided as-is. Please read the text
+<p>Keep in mind that the author has put hundreds and hundreds of hours into the development of this module.
+Please take the time to read the documentation before sending questions. Either that, or send your questions written on
+financially negotiable instruments (i.e., checks or cash). Am I sounding like a broken record? Do you kids these days
+even know what a broken record is? I would say skipping CD, but you might not know what that is either. Like a
+sample that got stuck on loop? Damn, I am getting old. So is this paragraph. Time to move on, here.</p>".
+'<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+">
+</form>'.
+"<p>As per the GPL, this software is provided as-is. Please read the text
 of the license for the full disclaimer.</p>
 <h3>Copyright and License</h3>
 <p>Copyright &copy; 2008, Samuel Goldstein <a href=\"mailto:sjg@cmsmodules.com\">&lt;sjg@cmsmodules.com&gt;</a>. All Rights Are Reserved.</p>
