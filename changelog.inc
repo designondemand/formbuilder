@@ -2,6 +2,9 @@
 <li>Version 0.6.
 	<ul>
 		<li>Updated database code to be CMSMS 1.7-compatible</li>
+		<li>Added Button field type.</li>
+		<li>Implemented FormBrowser v.3 Disposition.</li>
+		<li>Numerous code fixes.</li>
 	</ul>
 </li>
 <li>Version 0.5.12. 3 Sept 09. Numerous user-submitted fixes. Thanks to Calguy and Simon Schaufi.</li>

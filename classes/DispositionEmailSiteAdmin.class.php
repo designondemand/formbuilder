@@ -191,13 +191,7 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
 	function AdminValidate()
     {
 		$mod = &$this->form_ptr->module_ptr;
-		$ret = true;
-		$message = "";
-		if (! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed),$this->GetOption('email_from_address')))
-			{
-    	       	$ret = false;
-                $message .= $mod->Lang('not_valid_email',$this->GetOption('email_from_address')) . '<br/>';
-			}
+		list($ret,$message) = $this->validateEmailAddr($this->GetOption('email_from_address'));
         return array($ret,$message);
     }
     
