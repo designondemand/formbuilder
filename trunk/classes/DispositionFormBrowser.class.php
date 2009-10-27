@@ -152,8 +152,11 @@ class fbDispositionFormBrowser extends fbFieldBase {
 		}
 	else
 		{
-		$keys = $openssl->getKeyList();
-		$certs = $openssl->getCertList();
+		if ($openssl !== FALSE)
+         {
+		    $keys = $openssl->getKeyList();
+		    $certs = $openssl->getCertList();
+		    }
 		array_push($adv,array($mod->Lang('title_encrypt_database_data'),
 			   $mod->CreateInputHidden($formDescriptor, 'fbrp_opt_crypt','0').
             		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_crypt',
@@ -183,15 +186,18 @@ class fbDispositionFormBrowser extends fbFieldBase {
             $cryptlibs,-1,$this->GetOption('crypt_lib'))));
 
 
-      array_push($adv,array($mod->Lang('choose_crypt'),$mod->Lang('choose_crypt_long')));
 
+      if ($openssl !== FALSE)
+         {
+         array_push($adv,array($mod->Lang('choose_crypt'),$mod->Lang('choose_crypt_long')));
 
-		array_push($adv,array($mod->Lang('title_crypt_cert'),
+		   array_push($adv,array($mod->Lang('title_crypt_cert'),
 					$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_crypt_cert', $certs,
 						-1,$this->GetOption('crypt_cert'))));
-		array_push($adv,array($mod->Lang('title_private_key'),
+		    array_push($adv,array($mod->Lang('title_private_key'),
 				$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_private_key', $keys,
 					-1,$this->GetOption('private_key')).$mod->Lang('title_ensure_cert_key_match')));
+         }
 		}
 
 		return array('main'=>$main,'adv'=>$adv);
