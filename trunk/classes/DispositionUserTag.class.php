@@ -33,7 +33,10 @@ class fbDispositionUserTag extends  fbFieldBase
     $others = &$this->form_ptr->GetFields();
     $unspec = $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
     $params = array();
-    $params['FORM'] =& $this->form_ptr;
+    if ($this->GetOption('export_form','0') == '1')
+      {
+      $params['FORM'] =& $this->form_ptr;
+      }
     for($i=0;$i<count($others);$i++)
       {
 	$replVal = '';
@@ -46,9 +49,12 @@ class fbDispositionUserTag extends  fbFieldBase
 	      }
 	  }
 	$params[$others[$i]->GetName()] = $replVal;
-	if (!empty($others[$i]->GetAlias()))
+	$id = $others[$i]->GetId();
+	$params['fld_'.$id] = $replVal;
+	$alias = $others[$i]->GetAlias();
+	if (!empty($alias))
       {
-	   $params[$others[$i]->GetAlias()] = $replVal;
+	   $params[$alias] = $replVal;
 	   }
    }
 
@@ -98,7 +104,10 @@ class fbDispositionUserTag extends  fbFieldBase
 		    $mod->CreateInputDropdown($formDescriptor,
 					      'fbrp_opt_udtname',$usertaglist,-1,
 					      $this->GetOption('udtname')));
-
+      $main[] = array($mod->Lang('title_export_form_to_udt'),
+			      $mod->CreateInputHidden($formDescriptor, 'fbrp_opt_export_form','0').
+            		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_export_form',
+            		'1',$this->GetOption('export_form','0')));
     return array('main'=>$main,'adv'=>$adv);
   }
 
