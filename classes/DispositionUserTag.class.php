@@ -18,6 +18,7 @@ class fbDispositionUserTag extends  fbFieldBase
     $this->IsDisposition = true;
     $this->NonRequirableField = true;
     $this->DisplayInForm = false;
+    $this->DisplayInSubmission = false;
     $this->sortable = false;
   }
 
