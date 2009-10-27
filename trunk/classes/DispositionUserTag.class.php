@@ -48,7 +48,8 @@ class fbDispositionUserTag extends  fbFieldBase
 		    $replVal = $unspec;
 	      }
 	  }
-	$params[$others[$i]->GetName()] = $replVal;
+   $name = preg_replace('/[\W\S]/','',$others[$i]->GetName());
+	$params[$name] = $replVal;
 	$id = $others[$i]->GetId();
 	$params['fld_'.$id] = $replVal;
 	$alias = $others[$i]->GetAlias();
