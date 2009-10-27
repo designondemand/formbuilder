@@ -32,12 +32,17 @@ class fbTextField extends fbFieldBase {
 	{
 	  $mod = &$this->form_ptr->module_ptr;
 	  $js = $this->GetOption('javascript','');
+	  $ro = '';
+     if ($this->GetOption('readonly','0') == '1')
+         {
+         $ro = ' readonly="readonly"';
+         }
 	
 	  return $mod->CreateInputText($id, 'fbrp__'.$this->Id,
 				    ($this->Value?$this->Value:$this->GetOption('default')),
             $this->GetOption('length')<25?$this->GetOption('length'):25,
             $this->GetOption('length'),
-            ($this->GetOption('clear_default','0')==1?('onfocus="if (this.value==\''.$this->GetOption('default').'\') {this.value=\'\';}" '):' ').$js);
+            ($this->GetOption('clear_default','0')==1?('onfocus="if (this.value==\''.$this->GetOption('default').'\') {this.value=\'\';}" '):' ').$js.$ro);
 	}
 
 	function StatusInfo()
@@ -48,6 +53,10 @@ class fbTextField extends fbFieldBase {
 		  {
 		  	$ret .= ", ".array_search($this->ValidationType,$this->ValidationTypes);
 		  }
+      if ($this->GetOption('readonly','0') == '1')
+         {
+         $ret .= ", ".$mod->Lang('title_read_only');
+         }
 		 return $ret;
 	}
 
@@ -59,7 +68,11 @@ class fbTextField extends fbFieldBase {
 			array($mod->Lang('title_maximum_length'),
 			      $mod->CreateInputText($formDescriptor, 
 						    'fbrp_opt_length',
-			         $this->GetOption('length','80'),25,25))
+			         $this->GetOption('length','80'),25,25)),
+			array($mod->Lang('title_read_only'),
+			      $mod->CreateInputHidden($formDescriptor, 'fbrp_opt_readonly','0').
+            		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_readonly',
+            		'1',$this->GetOption('readonly','0')))
 		);
 		$adv = array(
 			array($mod->Lang('title_field_regex'),

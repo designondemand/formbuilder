@@ -267,6 +267,7 @@ $lang['title_hide_label_long']='Hide this field\'s name on Form';
 $lang['title_text']='Static text to display';
 $lang['title_field_regex']='Validation Regex';
 $lang['title_lines_to_show'] = 'Number of Lines to display';
+$lang['title_read_only'] = 'Read Only';
 $lang['no_default']='No Default';
 $lang['redirect_after_approval']='Page to redirect after approval';
 $lang['title_regex_help']='This regular expression will only be used if "validation type" is set to a regex-related option. Include a full Perl-style regex, including the start/stop slashes and flags (e.g., "/image\.(\d+)/i")';
