@@ -68,6 +68,7 @@ $lang['email_address_does_not_match']='Email address does not match value in "%s
 $lang['please_enter_a_phone']='Please enter a valid phone number for "%s"';
 $lang['not_valid_email']='"%s" does not appear to be a valid email address!';
 $lang['please_enter_no_longer']='Please enter a value that is no longer than %s characters';
+$lang['please_enter_at_least'] = 'Please enter a value that is at least %s characters';
 $lang['title_list_delimiter'] = 'Character to use as delimiter in results that return more than one value';
 $lang['you_need_permission']='You need the "%s" permission to perform that operation.';
 $lang['lackpermission']='Sorry! You don\'t have adequate privileges to access this section.';
@@ -349,6 +350,7 @@ $lang['title_feu_binding'] = 'Frontend User binding';
 $lang['title_install_feu'] = 'Please install the Frontend User module to connect a form and its data to a specific user';
 $lang['title_feu_bind_help'] = 'Check this to lock front-end access to this form\'s data to the logged-in front-end user.';
 $lang['title_encryption'] = 'Encryption';
+$lang['title_export_form_to_udt'] = 'Export form reference to UDT as $params[\'FORM\']?';
 
 $lang['restricted_to_group'] = 'Only in group %s';
 $lang['title_show_to_user'] = 'Display to user?';
