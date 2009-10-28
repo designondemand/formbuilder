@@ -651,7 +651,7 @@ class fbFieldBase {
   function SetValue($valStr)
   {
 
-  error_log($this->GetName().':'.print_r($valStr,true));
+  //error_log($this->GetName().':'.print_r($valStr,true));
     $fm = &$this->form_ptr;
     if ($this->Value === false)
       {
