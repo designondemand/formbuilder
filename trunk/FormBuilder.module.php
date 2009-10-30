@@ -47,7 +47,7 @@ class FormBuilder extends CMSModule
 		$this->CMSModule();
 		
 		$this->module_ptr = &$this;
-		$this->dbHandle = & $this->GetDb();
+		$this->dbHandle =  $this->GetDb();
 		$this->module_id = '';
 		$this->email_regex = "/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i";
 		$this->email_regex_relaxed="/^([\w\d\.\-\_])+\@([\w\d\.\-\_])+$/i";
@@ -223,7 +223,7 @@ class FormBuilder extends CMSModule
 	*/
 	function GetForms($order_by='name')
 	{
-		$db =& $this->GetDb();
+		$db = $this->GetDb();
 		$sql = "SELECT * FROM ".cms_db_prefix().'module_fb_form ORDER BY '.$order_by;
 		$result = array();
 		$rs = $db->Execute($sql);
@@ -236,7 +236,7 @@ class FormBuilder extends CMSModule
 
 	function GetFormIDFromAlias($form_alias)
 	{
-		$db =& $this->GetDb();
+		$db = $this->GetDb();
 		$sql = 'SELECT form_id from '.cms_db_prefix().'module_fb_form WHERE alias = ?';
 		$rs = $db->Execute($sql, array($form_alias));
 		if($rs && $rs->RecordCount() > 0)
@@ -249,7 +249,7 @@ class FormBuilder extends CMSModule
 
 	function GetFormNameFromID($form_id)
 	{
-		$db =& $this->GetDb();
+		$db = $this->GetDb();
 		$sql = 'SELECT name from '.cms_db_prefix().'module_fb_form WHERE form_id = ?';
 		$rs = $db->Execute($sql, array($form_id));
 		if($rs && $rs->RecordCount() > 0)
@@ -280,7 +280,7 @@ class FormBuilder extends CMSModule
 	{
 		$names = array();
 		$values = array();
-		$db =& $this->GetDb();
+		$db = $this->GetDb();
 		$fbField = $this->GetFormBrowserField($form_id);
 		if ($fbField == false)
 			{
@@ -321,95 +321,6 @@ class FormBuilder extends CMSModule
 			}			
 		return $oneset;
 	}
-/*
-	function GetResponses($form_id, $start_point, $number, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y', &$params)
-	{
-		$db =& $this->GetDb();
-		$names = array();
-		$values = array();
-		$sql = 'FROM '.cms_db_prefix().
-				'module_fb_resp WHERE form_id=?';
-		if ($user_approved)
-		{
-			$sql .= ' and user_approved is not null';
-		}
-		if ($admin_approved)
-		{
-			$sql .= ' and admin_approved is not null';
-		}
-		// Start ALBY
-		if( (! empty($params['fbrp_response_search'])) && (is_array($params['fbrp_response_search'])) )
-			$sql .= ' AND resp_id IN ('. implode(',', $params['fbrp_response_search']) .')';
-		// End ALBY
-		$sql .= ' order by submitted';
-		$dbcount = $db->Execute('SELECT COUNT(*) as num '.$sql,array($form_id));
-	
-		$records = 0;
-		if ($dbcount && $row = $dbcount->FetchRow())
-		{
-			$records = $row['num'];
-		}
-		$dbresult = $db->SelectLimit('SELECT * '.$sql, $number, $start_point, array($form_id));
-	
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
-			$oneset = new stdClass();
-			$oneset->id = $row['resp_id'];
-			$oneset->user_approved = (empty($row['user_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['user_approved']))); 
-			$oneset->admin_approved = (empty($row['admin_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['admin_approved']))); 
-			$oneset->submitted = date($dateFmt,$db->UnixTimeStamp($row['submitted']));
-			$oneset->fields = array();
-			array_push($values,$oneset);
-		}
-		$populate_names = true;
-		$fm = -1;
-		$all_fields = false;
-		if (count($field_list) == 0)
-		{
-			$all_fields = true;
-		}
-		for($i=0;$i<count($values);$i++)
-		{
-			$paramSet = array('form_id'=>$form_id, 'response_id'=>$values[$i]->id);
-			if (gettype($fm) == "integer") // fix this, for better efficiency!
-			{
-				$fm = $this->GetFormByParams($paramSet, true);
-			}
-			else
-			{
-				$fm->LoadResponse($values[$i]->id);
-			}
-			$fields = &$fm->GetFields();
-			$ind = 0;
-			for($j=0;$j<count($fields);$j++)
-			{
-				if ($fields[$j]->DisplayInSubmission())
-				{
-					if (isset($field_list[$fields[$j]->GetId()])
-						&& $field_list[$fields[$j]->GetId()] > -1)
-					{
-						if ($populate_names)
-						{
-							$names[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetName();
-						}
-						$values[$i]->fields[$field_list[$fields[$j]->GetId()]] = $fields[$j]->GetHumanReadableValue();
-					}
-					else if ($all_fields)
-					{
-						if ($populate_names)
-						{
-							$names[$ind] = $fields[$j]->GetName();
-						}
-						$values[$i]->fields[$ind] = $fields[$j]->GetHumanReadableValue();
-						$ind++;
-					}
-				}
-			}
-			$populate_names = false;
-		}
-		return array($records, $names, $values);
-	}
-*/
 
 	function ParseResponseXML($xmlstr, $human_readable_values = true)
 	{
@@ -462,7 +373,7 @@ class FormBuilder extends CMSModule
 
 	function GetFormBrowserField($form_id)
 	{
-		$db =& $this->GetDb();
+		$db = $this->GetDb();
 		$sql = 'SELECT * FROM ' . cms_db_prefix().'module_fb_field WHERE form_id=? and type=?';
 		$rs = $this->module_ptr->dbHandle->Execute($sql, array($form_id,'DispositionFormBrowser'));
 		$result = array();
@@ -523,7 +434,7 @@ class FormBuilder extends CMSModule
 
 	function GetSortedResponses($form_id, $start_point, $number=100, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y', &$params)
 	{
-		$db =& $this->GetDb();
+		$db = $this->GetDb();
 		$names = array();
 		$values = array();
 		$sql = 'FROM '.cms_db_prefix().
@@ -668,7 +579,7 @@ class FormBuilder extends CMSModule
 	// For a given form, returns an array of response objects
 	function ListResponses($form_id, $sort_order='submitted')
 	{
-		$db =& $this->GetDb();
+		$db = $this->GetDb();
 		$ret = array();
 		$sql = 'SELECT * FROM '.cms_db_prefix().
 				'module_fb_resp WHERE form_id=? ORDER BY ?';
@@ -708,14 +619,14 @@ class FormBuilder extends CMSModule
 
 	function ClearFileLock()
 	{
-		$db =& $this->GetDb();
+		$db = $this->GetDb();
 		$sql = "DELETE from ".cms_db_prefix().'module_fb_flock';
 		$rs = $db->Execute($sql);
 	}
 
 	function GetFileLock()
 	{
-		$db =& $this->GetDb();
+		$db = $this->GetDb();
 		$sql = "insert into ".cms_db_prefix()."module_fb_flock (flock_id, flock) values (1,".$db->sysTimeStamp.")";
 		$rs = $db->Execute($sql);
 		if ($rs)
@@ -753,7 +664,7 @@ class FormBuilder extends CMSModule
 	{
 		// we get here (hopefully) when the template is changed
 		// in the dropdown.
-		$db =& $this->GetDb();
+		$db = $this->GetDb();
 		$defaultid = '';
 		if( $markdefault )
 		{
