@@ -8,7 +8,7 @@
 */
 if (!isset($gCms)) exit;
 
-		$db =& $this->GetDb();
+		$db = $this->GetDb();
 		$dict = NewDataDictionary($db);
 		$flds = "
 			form_id I KEY,

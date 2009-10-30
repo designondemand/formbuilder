@@ -17,7 +17,7 @@ if (! is_array($order_list))
 	$order_list = array($order_list);
 	}
 
-$db =& $this->GetDb();
+$db = $this->GetDb();
 $sql = 'update '.cms_db_prefix().
 	'module_fb_field set order_by=? where field_id=?';
 	

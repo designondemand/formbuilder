@@ -73,7 +73,7 @@ if ( !$fieldExpandOp &&
     else if (isset($params['fbrp_done']) && $params['fbrp_done']==1)
       {
       $ok = true;
-      $captcha = &$this->getModuleInstance('Captcha');
+      $captcha = $this->getModuleInstance('Captcha');
       if ($aeform->GetAttr('use_captcha','0')== '1' && $captcha != null)
          {
   	      if (! $captcha->CheckCaptcha($params['fbrp_captcha_phrase']))
@@ -166,7 +166,7 @@ else
 
 if( isset($fbrp_callcount) && $fbrp_callcount == 0 )
   {
-    $usertagops =& $gCms->GetUserTagOperations();
+    $usertagops = $gCms->GetUserTagOperations();
     $udt = $aeform->GetAttr('predisplay_udt','');
     if( !empty($udt) && "-1" != $udt )
     {

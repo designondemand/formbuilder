@@ -10,7 +10,7 @@ if (!isset($gCms)) exit;
 if (! $this->CheckAccess()) exit;
 
 		$this->initialize();
-		$db =& $this->GetDb();
+		$db = $this->GetDb();
 		$current_version = $oldversion;
 		$dict = NewDataDictionary($db);
 		$taboptarray = array('mysql' => 'TYPE=MyISAM');
