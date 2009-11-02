@@ -32,7 +32,7 @@ class fbFieldsetStart extends fbFieldBase {
     $legend = $this->GetOption('legend');
     if( $idstr != '' )
       {
-	$str .= " id=\"$isstr\"";
+	$str .= " id=\"$idstr\"";
       }
     if( $class != '' )
       {
