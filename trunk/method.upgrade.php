@@ -187,8 +187,13 @@ if (! $this->CheckAccess()) exit;
 		case "0.6":
         	$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_fb_formbrowser", "feuid I");
         	$dict->ExecuteSQLArray($sqlarray);
-
-		
+			$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_fb_formbrowser", "resnew LX");
+        	$dict->ExecuteSQLArray($sqlarray);
+			$db->Execute('update '.cms_db_prefix().'module_fb_formbrowser set resnew=response');
+			$sqlarray = $dict->DropColumnSQL(cms_db_prefix()."module_fb_formbrowser", "response");
+        	$dict->ExecuteSQLArray($sqlarray);
+			$sqlarray = $dict->RenameColumnSQL(cms_db_prefix()."module_fb_formbrowser", "resnew","response");
+        	$dict->ExecuteSQLArray($sqlarray);		
 		}
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('upgraded',$this->GetVersion()));
 

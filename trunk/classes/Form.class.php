@@ -22,7 +22,7 @@ class fbForm {
   var $sampleTemplateCode;
   var $templateVariables;
 
-  function fbForm(&$module_ptr, &$params, $loadDeep=false)
+  function fbForm(&$module_ptr, &$params, $loadDeep=false, $loadResp=false)
   {
     $this->module_ptr =& $module_ptr;
     $this->Fields = array();
@@ -95,7 +95,7 @@ class fbForm {
 	  {
 	    $this->formState = 'update';
 	  }
-	$this->Load($this->Id, $params, $loadDeep);
+	$this->Load($this->Id, $params, $loadDeep, $loadResp);
       }
     foreach ($params as $thisParamKey=>$thisParamVal)
       {
@@ -183,10 +183,18 @@ class fbForm {
     $this->Alias = $alias;
   }
 
-  function DebugDisplay()
+// dump params
+  function DebugDisplay($params=array())
   {
     $tmp = $this->module_ptr;
     $this->module_ptr = '[mdptr]';
+
+   if (isset($params['FORM']))
+		{
+		$fpt = $params['FORM'];
+		$params['FORM'] = '[form_pointer]';
+		}
+
     $template_tmp = $this->GetAttr('form_template','');
     $this->SetAttr('form_template',strlen($template_tmp).' characters');
     $field_tmp = $this->Fields;
@@ -793,7 +801,7 @@ function unmy_htmlentities($val)
 
 
 
-  function Load($formId, &$params, $loadDeep=false)
+  function Load($formId, &$params, $loadDeep=false, $loadResp=false)
   {
 
     $mod = $this->module_ptr;
@@ -831,10 +839,13 @@ function unmy_htmlentities($val)
     if (isset($params['response_id']))
       {
 	$loadDeep = true;
+	$loadResp = true;
       }
 			
     if ($loadDeep)
       {
+	  if ($loadResp)
+		{
 	// if it's a stored form, load the results -- but we need to manually merge them,
 	// since $params[] should override the database value (say we're resubmitting a form)
 		$fbf = $mod->GetFormBrowserField($formId);
@@ -871,7 +882,7 @@ function unmy_htmlentities($val)
 		  }
 	      }
 	  }
-
+	}
 	$sql = 'SELECT * FROM ' . cms_db_prefix().
 	  'module_fb_field WHERE form_id=? ORDER BY order_by';
 	$rs = $this->module_ptr->dbHandle->Execute($sql, array($formId));

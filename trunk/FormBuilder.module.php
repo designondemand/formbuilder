@@ -414,7 +414,7 @@ class FormBuilder extends CMSModule
 			        }
 				}
 			}
-		
+
 		if ($crypt == '1')
 			{
 			if ($cryptlib == 'openssl')
@@ -429,7 +429,7 @@ class FormBuilder extends CMSModule
 				{
 				$responseObj->xml = $this->fbdecrypt($responseObj->xml,$keyfile);
 				}
-			}		
+			}
 	}
 
 	function GetSortedResponses($form_id, $start_point, $number=100, $admin_approved=false, $user_approved=false, $field_list=array(), $dateFmt='d F y', &$params)
@@ -758,7 +758,41 @@ class FormBuilder extends CMSModule
 	return $val;
 	}
    
-   
+/*   function fbencrypt($string,$key)
+      {
+      $key = substr(md5($key),0,24);
+      $td = mcrypt_module_open ('tripledes', '', 'cbc', '');
+	  $iv = '';
+	  for ($i=0;$i<mcrypt_enc_get_iv_size ($td);$i++)
+		{
+		$iv	.= chr($i);
+		}
+      mcrypt_generic_init ($td, $key, $iv);
+      $enc = base64_encode(mcrypt_generic ($td, $string));
+      mcrypt_generic_deinit ($td);
+      mcrypt_module_close ($td);
+      return $enc;
+      }
+
+   function fbdecrypt($crypt,$key)
+      {
+      $crypt = base64_decode($crypt);
+      $td = mcrypt_module_open ('tripledes', '', 'cbc', '');
+      $key = substr(md5($key),0,24);
+	  $iv = '';
+	  for ($i=0;$i<mcrypt_enc_get_iv_size ($td);$i++)
+		{
+		$iv	.= chr($i);
+		}
+      mcrypt_generic_init ($td, $key, $iv);
+      $plain = mdecrypt_generic ($td, $crypt);
+      mcrypt_generic_deinit ($td);
+      mcrypt_module_close ($td);
+      return $plain;
+      }
+ 
+*/
+  
    function fbencrypt($string,$key)
       {
       $key = substr(md5($key),0,24);
