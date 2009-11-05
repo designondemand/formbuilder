@@ -126,7 +126,7 @@ if (!isset($gCms)) exit;
 				index_key_4 C(80),
 				index_key_5 C(80),
 				feuid I,
-				response X,
+				response XL,
 				user_approved ".CMS_ADODB_DT.",
 				secret_code C(35),
 				admin_approved ".CMS_ADODB_DT.",
