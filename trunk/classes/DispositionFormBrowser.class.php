@@ -126,7 +126,7 @@ class fbDispositionFormBrowser extends fbFieldBase {
 				}
 			}
 
-	  $feu =& $mod->GetModuleInstance('FrontEndUsers');
+	  $feu = $mod->GetModuleInstance('FrontEndUsers');
 	  if ($feu == FALSE)
 		{
 		array_push($adv,array($mod->Lang('title_feu_binding'),
