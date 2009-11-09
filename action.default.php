@@ -22,9 +22,27 @@ if( (isset($params['inline'])) && preg_match('/t(rue)*|y(yes)*|1/i',$params['inl
 	$inline = true;
 	}
 
-//debug_display($params);
+
+
 $fbrp_callcount = 0;
-$aeform = new fbForm($this,$params,true);
+$aeform = new fbForm($this,$params,true,true);
+
+$fld = $aeform->GetFormBrowserField();
+if ($fld !== false && $fld->GetOption('feu_bind','0')=='1')
+	{
+	$feu = $this->GetModuleInstance('FrontEndUsers');
+	if ($feu == false)
+		{
+		debug_display("FAILED to instatiate FEU!");
+		return;
+		}
+	if ($feu->LoggedInId() === false)
+		{
+		echo $this->Lang('please_login');
+		return;
+		}
+	}
+
 
 if( !($inline || ($aeform->GetAttr('inline','0')== '1'))) $id = 'cntnt01';
 

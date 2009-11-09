@@ -68,6 +68,7 @@ $lang['please_enter_an_integer']='Please enter an integer value for "%s"';
 $lang['please_enter_an_email']='Please enter a valid email address for "%s"';
 $lang['email_address_does_not_match']='Email address does not match value in "%s"';
 $lang['please_enter_a_phone']='Please enter a valid phone number for "%s"';
+$lang['please_login'] = 'Please log in to use this form';
 $lang['not_valid_email']='"%s" does not appear to be a valid email address!';
 $lang['please_enter_no_longer']='Please enter a value that is no longer than %s characters';
 $lang['please_enter_at_least'] = 'Please enter a value that is at least %s characters';

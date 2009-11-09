@@ -861,12 +861,15 @@ function unmy_htmlentities($val)
 					debug_display("FAILED to instatiate FEU!");
 					return;
 					}
-				$response_id = $feu->LoggedInId();
-				$check = $this->module_ptr->dbHandle->GetOne('select count(*) from '.cms_db_prefix().
-					'module_fb_formbrowser where fbr_id=?',array($response_id));
-				if ($check == 1)
+				$response_id = $mod->GetResponseIDFromFEUID($feu->LoggedInId());
+				if ($response_id !== false)
 					{
-					$params['response_id'] = $response_id;
+					$check = $this->module_ptr->dbHandle->GetOne('select count(*) from '.cms_db_prefix().
+						'module_fb_formbrowser where fbr_id=?',array($response_id));
+					if ($check == 1)
+						{
+						$params['response_id'] = $response_id;
+						}
 					}
 				}
 			}
@@ -1875,7 +1878,7 @@ function fast_add(field_type)
 	$this->ResetFields();
 	foreach ($vals as $id=>$val)
 		{
-		error_log("setting value fo field ".$id." to be ".$val);
+		//error_log("setting value of field ".$id." to be ".$val);
 		$index = $this->GetFieldIndexFromId($id);
 		if($index != -1 &&  is_object($this->Fields[$index]) )
 			{
@@ -2023,7 +2026,7 @@ function fast_add(field_type)
   {
     $db = $this->module_ptr->dbHandle;
     $sql = 'SELECT secret_code FROM ' . cms_db_prefix().
-      'module_fb_resp where form_id=? and resp_id=?';
+      'module_fb_formbrowser where form_id=? and resp_id=?';
     if($result = $db->GetRow($sql, array($form_id,$response_id)))
       {
 	if ($result['secret_code'] == $code)
@@ -2037,7 +2040,7 @@ function fast_add(field_type)
 
   function StoreResponse($response_id=-1,$approver='',&$formBuilderDisposition)
   {
-	$mod = &$this->module_ptr;
+	$mod = $this->module_ptr;
     $db = $this->module_ptr->dbHandle;
     $fields = &$this->GetFields();
 	$newrec = false;
@@ -2059,18 +2062,19 @@ function fast_add(field_type)
 		{
 		if ($formBuilderDisposition->GetOption('feu_bind','0') == '1')
 			{
-			$feu = &$mod->GetModuleInstance('FrontEndUsers');
+			$feu = $mod->GetModuleInstance('FrontEndUsers');
 			if ($feu == false)
 				{
 				debug_display("FAILED to instatiate FEU!");
 				return;
 				}
-			$response_id = $feu->LoggedInId();
+			$feu_id = $feu->LoggedInId();
 			}
 		else
 			{
-			$response_id = $db->GenID(cms_db_prefix(). 'module_fb_formbrowser_seq');	
+			$feu_id = -1;
 			}			
+		$response_id = $db->GenID(cms_db_prefix(). 'module_fb_formbrowser_seq');	
 	    foreach ($fields as $thisField)
 			{
 			// set the response_id to be the attribute of the database disposition
@@ -2081,6 +2085,10 @@ function fast_add(field_type)
 				}
 			}
 		$newrec = true;
+		}
+	else
+		{
+		$feu_id = $mod->getFEUIDFromResponseID($response_id);
 		}
 		
 	$xml = $this->ResponseToXML();
@@ -2096,6 +2104,7 @@ function fast_add(field_type)
 			isset($sort_fields[2])?$sort_fields[2]:'',
 			isset($sort_fields[3])?$sort_fields[3]:'',
 			isset($sort_fields[4])?$sort_fields[4]:'',
+			$feu_id,
 			$xml);
 		}
 	elseif (! $hash_fields)
@@ -2114,6 +2123,7 @@ function fast_add(field_type)
 			isset($sort_fields[2])?$sort_fields[2]:'',
 			isset($sort_fields[3])?$sort_fields[3]:'',
 			isset($sort_fields[4])?$sort_fields[4]:'',
+			$feu_id,
 			$xml);
 		}
 	else
@@ -2132,89 +2142,11 @@ function fast_add(field_type)
 			isset($sort_fields[2])?$mod->getHashedSortFieldVal($sort_fields[2]):'',
 			isset($sort_fields[3])?$mod->getHashedSortFieldVal($sort_fields[3]):'',
 			isset($sort_fields[4])?$mod->getHashedSortFieldVal($sort_fields[4]):'',
+			$feu_id,
 			$xml);
 		}
 	return array(true,'');
   }
-
-  function StoreResponseOld($response_id=-1,$approver='')
-  {
-    $db = $this->module_ptr->dbHandle;
-    $fields = &$this->GetFields();
-    $secret_code = '';
-    $newrec = false;
-    if ($response_id == -1)
-      {
-	$newrec = true;
-      }
-    if ($newrec)
-      {
-	// saving a new response
-	$secret_code = substr(md5(session_id().'_'.time()),0,7);
-	$response_id = $db->GenID(cms_db_prefix(). 'module_fb_resp_seq');
-	$sql = 'INSERT INTO ' . cms_db_prefix().
-	  'module_fb_resp (resp_id, form_id, submitted, secret_code)' .
-	  ' VALUES (?, ?, ?, ?)';
-	$res = $db->Execute($sql,
-			    array($response_id,
-				  $this->GetId(),
-				  $this->clean_datetime($db->DBTimeStamp(time())),
-				  $secret_code));
-      }
-    else if ($approver != '')
-      {
-	$sql = 'UPDATE ' . cms_db_prefix().
-	  'module_fb_resp set user_approved=? where resp_id=?';
-	$res = $db->Execute($sql,
-			    array($this->clean_datetime($db->DBTimeStamp(time())),$response_id));
-	audit(-1, (isset($name)?$name:""), $this->module_ptr->Lang('user_approved_submission',array($response_id,$approver)));
-      }
-    if (! $newrec)
-      {
-	// updating an old response, so we purge old values
-	$sql = 'DELETE FROM ' . cms_db_prefix().
-	  'module_fb_resp_val where resp_id=?';
-	$res = $db->Execute($sql, array($response_id));
-      }
-    $sql = 'INSERT INTO ' . cms_db_prefix().
-      'module_fb_resp_val (resp_val_id, resp_id, field_id, value)' .
-      'VALUES (?, ?, ?, ?)';
-    foreach ($fields as $thisField)
-      {
-	// set the response_id to be the attribute of the database disposition
-	if (($thisField->GetFieldType() == 'DispositionDatabase')||
-		($thisField->GetFieldType() == 'DispositionFormBrowser'))
-	  {
-	    $thisField->SetValue($response_id);
-	  }
-	elseif (! $thisField->DisplayInSubmission())
-	  {
-	    // skip if not a displayable field.
-	    continue;
-	  }
-	if (! is_array($thisField->GetValue()))
-	  {
-	    $store = array();
-	    array_push($store,$thisField->GetValue());
-	  }
-	else
-	  {
-	    $store = $thisField->GetValue();
-	  }
-	foreach ($store as $thisFieldVal)
-	  {
-	    if ($thisFieldVal !== false)
-	      {
-		$resp_val_id = $db->GenID(cms_db_prefix().
-					  'module_fb_resp_val_seq');
-		$res = $db->Execute($sql, array($resp_val_id,$response_id,
-						$thisField->GetId(),$thisFieldVal));
-	      }
-	  } 
-      }
-    return array($response_id,$secret_code);
-  }   
-    
     
   function &ResponseToXML()
   {
@@ -2228,7 +2160,7 @@ function fast_add(field_type)
    return $xml;
   }
 
-  function StoreResponseXML($response_id=-1,$newrec=false,$approver='',$sortfield1,$sortfield2,$sortfield3,$sortfield4,$sortfield5, $xml)
+  function StoreResponseXML($response_id=-1,$newrec=false,$approver='',$sortfield1,$sortfield2,$sortfield3,$sortfield4,$sortfield5, $feu_id,$xml)
   {
     $db = &$this->module_ptr->dbHandle;
     $secret_code = '';
@@ -2239,20 +2171,21 @@ function fast_add(field_type)
 		$secret_code = substr(md5(session_id().'_'.time()),0,7);
 		//$response_id = $db->GenID(cms_db_prefix(). 'module_fb_formbrowser_seq');
 		$sql = 'INSERT INTO ' . cms_db_prefix().
-	  'module_fb_formbrowser (fbr_id, form_id, submitted, secret_code, index_key_1, index_key_2, index_key_3, index_key_4, index_key_5, response) VALUES (?,?,?,?,?,?,?,?,?,?)';
+	  'module_fb_formbrowser (fbr_id, form_id, submitted, secret_code, index_key_1, index_key_2, index_key_3, index_key_4, index_key_5, feuid, response) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
 		$res = $db->Execute($sql,
 			array($response_id,
 				$this->GetId(),
 				$this->clean_datetime($db->DBTimeStamp(time())),
 				$secret_code,
 				$sortfield1,$sortfield2,$sortfield3,$sortfield4,$sortfield5,
+				$feu_id,
 				$xml
 			));
       }
     else if ($approver != '')
       {
 		$sql = 'UPDATE ' . cms_db_prefix().
-			'module_fb_formrowser set user_approved=? where fbr_id=?';
+			'module_fb_formbrowser set user_approved=? where fbr_id=?';
 		$res = $db->Execute($sql,
 			    array($this->clean_datetime($db->DBTimeStamp(time())),$response_id));
 		audit(-1, (isset($name)?$name:""), $this->module_ptr->Lang('user_approved_submission',array($response_id,$approver)));

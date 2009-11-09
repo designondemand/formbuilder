@@ -564,6 +564,29 @@ class FormBuilder extends CMSModule
 		return $fbField->getSortFieldList();
 	}
 
+  function getFEUIDFromResponseID($response_id)
+	{
+	$db = $this->GetDb();
+    $sql = 'SELECT feuid FROM ' . cms_db_prefix().
+      'module_fb_formbrowser where fbr_id=?';
+    if($result = $db->GetRow($sql, array($response_id)))
+      {
+	    return $result['feuid'];
+      }
+    return -1;
+	}
+
+  function getResponseIDFromFEUID($feu_id)
+	{
+	$db = $this->GetDb();
+    $sql = 'SELECT fbr_id FROM ' . cms_db_prefix().
+      'module_fb_formbrowser where feuid=?';
+    if($result = $db->GetRow($sql, array($feu_id)))
+      {
+	    return $result['fbr_id'];
+      }
+    return false;
+ 	}
 
 	function field_sorter_asc($a, $b)
 	{
