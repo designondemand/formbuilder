@@ -15,7 +15,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 	function fbCheckboxGroupField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
+        $mod = $form_ptr->module_ptr;
 		$this->Type = 'CheckboxGroupField';
 		$this->DisplayInForm = true;
 		$this->HasAddOp = true;
@@ -30,7 +30,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	function countBoxes()
 	{
-			$tmp = &$this->GetOptionRef('box_name');
+			$tmp = $this->GetOptionRef('box_name');
 			if (is_array($tmp))
 				{
 	        	$this->boxCount = count($tmp);
@@ -47,7 +47,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 
     function StatusInfo()
 	{
-        $mod = &$this->form_ptr->module_ptr;
+        $mod = $this->form_ptr->module_ptr;
 		$this->countBoxes();
 		$ret = $mod->Lang('boxes',$this->boxCount);
 		 return $ret;
@@ -55,21 +55,21 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	function GetOptionAddButton()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		return $mod->Lang('add_checkboxes');
 	}
 
 	function GetOptionDeleteButton()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		return $mod->Lang('delete_checkboxes');
 	}
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
-		$names = &$this->GetOptionRef('box_name');
-		$is_set = &$this->GetOptionRef('box_is_set');
+		$mod = $this->form_ptr->module_ptr;
+		$names = $this->GetOptionRef('box_name');
+		$is_set = $this->GetOptionRef('box_is_set');
 		$js = $this->GetOption('javascript','');
 		if (! is_array($names))
 			{
@@ -111,18 +111,18 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	function GetHumanReadableValue($as_string=true)
 	{
-		$form = &$this->form_ptr;
-		$names = &$this->GetOptionRef('box_name');
+		$form = $this->form_ptr;
+		$names = $this->GetOptionRef('box_name');
 		if (! is_array($names))
 			{
 				$names = array($names);
 			}		
-		$checked = &$this->GetOptionRef('box_checked');
+		$checked = $this->GetOptionRef('box_checked');
 		if (! is_array($checked))
 			{
 				$checked = array($checked);
 			}
-		$unchecked = &$this->GetOptionRef('box_unchecked');
+		$unchecked = $this->GetOptionRef('box_unchecked');
 		if (! is_array($unchecked))
 			{
 				$unchecked = array($unchecked);
@@ -177,7 +177,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$yesNo = array($mod->Lang('no')=>'n',$mod->Lang('yes')=>'y');
 
 		$this->countBoxes();
@@ -225,7 +225,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		// remove the "required" field, since this can only be done via validation
       $this->RemoveAdminField($mainArray, $mod->Lang('title_field_required'));
 	}
@@ -233,10 +233,10 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	function PostAdminSubmitCleanup()
 	{
-		$names = &$this->GetOptionRef('box_name');
-		$checked = &$this->GetOptionRef('box_checked');
-		$unchecked = &$this->GetOptionRef('box_unchecked');
-		$is_set = &$this->GetOptionRef('box_is_set');
+		$names = $this->GetOptionRef('box_name');
+		$checked = $this->GetOptionRef('box_checked');
+		$unchecked = $this->GetOptionRef('box_unchecked');
+		$is_set = $this->GetOptionRef('box_is_set');
 		for ($i=0;$i<count($names);$i++)
 			{
 			if ($names[$i] == '' && $checked[$i] == '' )

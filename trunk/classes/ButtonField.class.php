@@ -13,7 +13,7 @@ class fbButtonField extends fbFieldBase
   function fbButtonField(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
-    $mod = &$form_ptr->module_ptr;
+    $mod = $form_ptr->module_ptr;
     $this->Type = 'ButtonField';
     $this->DisplayInForm = true;
     $this->DisplayInSubmission = false;
@@ -25,7 +25,7 @@ class fbButtonField extends fbFieldBase
 
   function GetFieldInput($id, &$params, $returnid)
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
 	$js = $this->GetOption('javascript','');
     $ret = '<input type="button" name="'.$id.'fbrp__'.$this->Id.'" value="' .
 	   $this->GetOption('text','').'" '.$js.'/>';
@@ -35,7 +35,7 @@ class fbButtonField extends fbFieldBase
 
   function PrePopulateAdminForm($formDescriptor)
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
     $main = array(
 		  array($mod->Lang('title_button_text'),
             		$mod->CreateInputText($formDescriptor,'fbrp_opt_text',
@@ -47,7 +47,7 @@ class fbButtonField extends fbFieldBase
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
       $this->RemoveAdminField($advArray, $mod->Lang('title_field_alias'));
       $this->CheckForAdvancedTab($advArray);
 	}

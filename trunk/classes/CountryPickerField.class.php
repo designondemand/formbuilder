@@ -13,7 +13,7 @@ class fbCountryPickerField extends fbFieldBase {
 	function fbCountryPickerField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
+        $mod = $form_ptr->module_ptr;
 		$this->Type = 'CountryPickerField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
@@ -125,7 +125,7 @@ class fbCountryPickerField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 
 		unset($this->Countries[$mod->Lang('no_default')]);
 		$js = $this->GetOption('javascript','');
@@ -148,7 +148,7 @@ class fbCountryPickerField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		ksort($this->Countries);
 
 		$main = array(
