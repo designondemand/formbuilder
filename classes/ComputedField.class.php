@@ -13,7 +13,7 @@ class fbComputedField extends fbFieldBase
   function fbComputedField(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
-    $mod = &$form_ptr->module_ptr;
+    $mod = $form_ptr->module_ptr;
     $this->Type = 'ComputedField';
     $this->DisplayInForm = false;
     $this->DisplayInSubmission = true;
@@ -32,8 +32,8 @@ class fbComputedField extends fbFieldBase
 
     function Compute()
     {
-		$mod = &$this->form_ptr->module_ptr;
-        $others = &$this->form_ptr->GetFields();
+		$mod = $this->form_ptr->module_ptr;
+        $others = $this->form_ptr->GetFields();
 
         $mapId = array();
 
@@ -100,7 +100,7 @@ class fbComputedField extends fbFieldBase
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$processType = array($mod->Lang('title_numeric')=>'numeric',
 		    $mod->Lang('title_string')=>'string');
 		
@@ -108,7 +108,7 @@ class fbComputedField extends fbFieldBase
         $ret .= '<tr><th>'.$mod->Lang('help_php_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';
         $odd = false;
 
-        $others = &$this->form_ptr->GetFields();
+        $others = $this->form_ptr->GetFields();
         for($i=0;$i<count($others);$i++)
             {
             if (! $others[$i]->HasMultipleFormComponents())

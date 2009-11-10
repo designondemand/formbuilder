@@ -20,7 +20,7 @@ class fbCatalogerItemsField extends fbFieldBase {
   function fbCatalogerItemsField(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
-    $mod = &$form_ptr->module_ptr;
+    $mod = $form_ptr->module_ptr;
     $this->Type = 'CatalogerItemsField';
     $this->DisplayInForm = true;
     $this->NonRequirableField = false;
@@ -37,15 +37,15 @@ class fbCatalogerItemsField extends fbFieldBase {
   {
     global $gCms;
 
-    $mod = &$this->form_ptr->module_ptr;
-    $cataloger =& $mod->GetModuleInstance('Cataloger');
+    $mod = $this->form_ptr->module_ptr;
+    $cataloger = $mod->GetModuleInstance('Cataloger');
     if( !$cataloger )
       {
 	return $mod->Lang('error_cataloger_module_not_available');
       }
     
     $cataloger->getUserAttributes();
-    $tmp_attrs =& $gCms->variables['catalog_attrs'];
+    $tmp_attrs = $gCms->variables['catalog_attrs'];
     $lines = (int)$this->GetOption('lines','5');
     $nameregex = trim($this->GetOption('nameregex',''));
     
@@ -62,8 +62,8 @@ class fbCatalogerItemsField extends fbFieldBase {
     // put the hidden fields into smarty.
     if( !isset($gCms->variables['fb_smarty_vars_set']) )
       {
-	$smarty =& $gCms->GetSmarty();
-	$theFields =& $this->form_ptr->GetFields();
+	$smarty = $gCms->GetSmarty();
+	$theFields = $this->form_ptr->GetFields();
 	
 	for($i = 0; $i < count($theFields); $i++ )
 	  {
@@ -79,7 +79,7 @@ class fbCatalogerItemsField extends fbFieldBase {
       }
 
     // for each hierarchy item (from the root down)
-    $hm =& $gCms->GetHierarchyManager();
+    $hm = $gCms->GetHierarchyManager();
     $allcontent = $hm->getFlatList();
     $results = array();
     foreach( $allcontent as $onepage )
@@ -193,8 +193,8 @@ class fbCatalogerItemsField extends fbFieldBase {
   function StatusInfo()
   {
     // return a string for displaying in the options field
-    $mod = &$this->form_ptr->module_ptr;
-    $cataloger =& $mod->GetModuleInstance('Cataloger');
+    $mod = $this->form_ptr->module_ptr;
+    $cataloger = $mod->GetModuleInstance('Cataloger');
     if( !$cataloger )
       {
 	return $mod->Lang('error_cataloger_module_not_available');
@@ -205,10 +205,10 @@ class fbCatalogerItemsField extends fbFieldBase {
 
   function PrePopulateAdminForm($formDescriptor)
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
 
     $main = array();
-    $cataloger =& $mod->GetModuleInstance('Cataloger');
+    $cataloger = $mod->GetModuleInstance('Cataloger');
     if( !$cataloger )
       {
 	$tmp = array($mod->Lang('warning'),$mod->Lang('error_cataloger_module_not_available'));
@@ -218,7 +218,7 @@ class fbCatalogerItemsField extends fbFieldBase {
       {
 	global $gCms;
 	$cataloger->getUserAttributes();
-	$attrs =& $gCms->variables['catalog_attrs'];
+	$attrs = $gCms->variables['catalog_attrs'];
 
 	$tmp = array($mod->Lang('title_field_height'),
 		     $mod->CreateInputText($formDescriptor,
@@ -258,8 +258,8 @@ class fbCatalogerItemsField extends fbFieldBase {
 
   function GetHumanReadableValue($as_string=true)
   {
-    $mod = &$this->form_ptr->module_ptr;
-    $form = &$this->form_ptr;
+    $mod = $this->form_ptr->module_ptr;
+    $form = $this->form_ptr;
     if ($this->HasValue())
       {
 	$fieldRet = array();

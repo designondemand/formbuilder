@@ -131,7 +131,7 @@ class FormBuilder extends CMSModule
 		return 'sjg@cmsmodules.com';
 	}
 
-	function GetAdminDescription()
+	function GetAdminDescription($lang = 'en_US')
 	{
 		return $this->Lang('admindesc');
 	}
@@ -387,7 +387,7 @@ class FormBuilder extends CMSModule
 
 		$className = $aeform->MakeClassName($thisRes[0]['type'], '');
 		// create the field object
-		$field = &$aeform->NewField($thisRes[0]);
+		$field = $aeform->NewField($thisRes[0]);
 		return $field;		
 	}
 	
@@ -401,7 +401,7 @@ class FormBuilder extends CMSModule
 			$keyfile = $fbField->GetOption('keyfile');
 			if ($cryptlib == 'openssl')
 				{
-				$openssl = &$this->GetModuleInstance('OpenSSL');
+				$openssl = $this->GetModuleInstance('OpenSSL');
 				$pkey = $fbField->GetOption('private_key');
 				$openssl->Reset();
 				$openssl->load_private_keyfile($pkey,$keyfile);
@@ -691,7 +691,7 @@ class FormBuilder extends CMSModule
 		$defaultid = '';
 		if( $markdefault )
 		{
-			$contentops =& $gCms->GetContentOperations();
+			$contentops = $gCms->GetContentOperations();
 			$defaultid = $contentops->GetDefaultPageID();
 		}
 		
@@ -743,7 +743,7 @@ class FormBuilder extends CMSModule
    {
    if ($dispositionField->GetOption('crypt_lib') == 'openssl')
       {
-	   $openssl = &$this->GetModuleInstance('OpenSSL');
+	   $openssl = $this->GetModuleInstance('OpenSSL');
 	   if ($openssl === FALSE)
 		    {
 		    return array(false,$this->Lang('title_install_openssl'));
