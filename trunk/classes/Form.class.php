@@ -861,14 +861,17 @@ function unmy_htmlentities($val)
 					debug_display("FAILED to instatiate FEU!");
 					return;
 					}
-				$response_id = $mod->GetResponseIDFromFEUID($feu->LoggedInId());
-				if ($response_id !== false)
+				if (!isset($_COOKIE['cms_admin_user_id']))
 					{
-					$check = $this->module_ptr->dbHandle->GetOne('select count(*) from '.cms_db_prefix().
-						'module_fb_formbrowser where fbr_id=?',array($response_id));
-					if ($check == 1)
+					$response_id = $mod->GetResponseIDFromFEUID($feu->LoggedInId());
+					if ($response_id !== false)
 						{
-						$params['response_id'] = $response_id;
+						$check = $this->module_ptr->dbHandle->GetOne('select count(*) from '.cms_db_prefix().
+							'module_fb_formbrowser where fbr_id=?',array($response_id));
+						if ($check == 1)
+							{
+							$params['response_id'] = $response_id;
+							}
 						}
 					}
 				}
