@@ -1,9 +1,9 @@
 <ul>
-<li>Version 0.6.
+<li>Version 0.6b1.
 	<ul>
 		<li>Updated database code to be CMSMS 1.7-compatible</li>
 		<li>Added Button field type.</li>
-		<li>Implemented FormBrowser v.3 Disposition.</li>
+		<li>Implemented FormBrowser v0.3 Disposition.</li>
 		<li>Numerous code fixes.</li>
 	</ul>
 </li>
