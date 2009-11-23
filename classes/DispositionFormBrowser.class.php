@@ -107,23 +107,12 @@ class fbDispositionFormBrowser extends fbFieldBase {
 			}
 		for ($i=1;$i<6;$i++)
 			{
-			if ($this->GetOption('sortfield'.$i,'-1') == '-1')
-				{
+			$fname = array_search($this->GetOption('sortfield'.$i),$fieldlist);
 				array_push($main,
 					array($mod->Lang('title_sortable_field',array($i)),
 						$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_sortfield'.$i, $fieldlist, -1,
 					$this->GetOption('sortfield'.$i,-1))
 					));
-				}
-			else
-				{
-				$fname = array_search($this->GetOption('sortfield'.$i),$fieldlist);
-				array_push($main,
-					array($mod->Lang('title_sortable_field',array($i)),
-						$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_sortfield'.$i, $this->GetOption('sortfield'.$i)).
-						$mod->Lang('value_set',array($fname))
-					));
-				}
 			}
 
 	  $feu = $mod->GetModuleInstance('FrontEndUsers');
@@ -236,8 +225,11 @@ class fbDispositionFormBrowser extends fbFieldBase {
 			{
 			if ($this->GetOption('sortfield'.$i,'-1') != '-1')
 				{
-				$afield = &$form->GetFieldById($this->GetOption('sortfield'.$i));
-				$ret[$i] = $afield->GetName();
+				$afield = $form->GetFieldById($this->GetOption('sortfield'.$i));
+				if ($afield !== false)
+               {
+				   $ret[$i] = $afield->GetName();
+               }
 				}
 			}
 		return $ret;
@@ -249,8 +241,11 @@ class fbDispositionFormBrowser extends fbFieldBase {
 		$val = "";
 		if ($this->GetOption('sortfield'.$sortFieldNumber,'-1') != '-1')
 			{
-			$afield = &$form->GetFieldById($this->GetOption('sortfield'.$sortFieldNumber));
-			$val = $afield->GetHumanReadableValue();
+			$afield = $form->GetFieldById($this->GetOption('sortfield'.$sortFieldNumber));
+         if ($afield !== false)
+            {
+            $val = $afield->GetHumanReadableValue();
+            }
 			}
 		if (strlen($val) > 80)
 			{
