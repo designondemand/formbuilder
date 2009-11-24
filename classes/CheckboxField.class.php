@@ -30,14 +30,14 @@ class fbCheckboxField extends fbFieldBase {
 		$label = '';
 		if (strlen($this->GetOption('label','')) > 0)
 			{
-			$label = '&nbsp;<label for="'.$id.'_'.$this->Id.'">'.$this->GetOption('label').'</label>';
+			$label = '&nbsp;<label for="'.$this->GetCSSId().'">'.$this->GetOption('label').'</label>';
 			}
 		if ($this->Value === false && $this->GetOption('is_checked','0')=='1')
 			{
 			$this->Value = 't';
 			}
 		$js = $this->GetOption('javascript','');
-		return $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id, 't',$this->Value,' id="'.$id.'_'.$this->Id.'" '.$js).$label;
+		return $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id, 't',$this->Value,$js.$this->GetCSSIdTag()).$label;
 	}
 
 	function GetHumanReadableValue($as_string=true)

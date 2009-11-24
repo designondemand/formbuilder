@@ -275,6 +275,26 @@ class fbFieldBase {
     return $this->GetOption('field_alias','');
   }
 
+  function GetCSSIdTag($suffix='')
+  {
+      return ' id="'.$this->GetCSSId($suffix).'"';
+  }
+
+  function GetCSSId($suffix='')
+  {
+	$alias = $this->GetAlias();
+	if (empty($alias))
+      {
+      $cssid = 'fbrp__'.$this->Id;
+      }
+   else
+      {
+      $cssid = $alias;
+      }
+   $cssid .= $suffix;
+   return $cssid;
+  }
+
   function SetAlias($alias)
   {
     $this->SetOption('field_alias',$alias);

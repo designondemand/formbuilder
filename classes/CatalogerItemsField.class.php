@@ -182,8 +182,9 @@ class fbCatalogerItemsField extends fbFieldBase {
 		$val = array($this->Value);
 	      }
 	  }
+   $cssid = $this->GetCSSIdTag();
 	return $mod->CreateInputSelectList($id,'fbrp__'.$this->Id.'[]', $results, $val,
-					   $size);
+					   $size, $cssid);
       }
 
     return ''; // error

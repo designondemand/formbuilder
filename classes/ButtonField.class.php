@@ -27,8 +27,10 @@ class fbButtonField extends fbFieldBase
   {
     $mod = $this->form_ptr->module_ptr;
 	$js = $this->GetOption('javascript','');
+	$cssid = $this->GetCSSIdTag();
+
     $ret = '<input type="button" name="'.$id.'fbrp__'.$this->Id.'" value="' .
-	   $this->GetOption('text','').'" '.$js.'/>';
+	   $this->GetOption('text','').'" '.$js.$cssid.'/>';
 	
 	return $ret;
   }
@@ -43,15 +45,6 @@ class fbButtonField extends fbFieldBase
     $adv = array();
     return array('main'=>$main,'adv'=>$adv);
   }
-
-
-	function PostPopulateAdminForm(&$mainArray, &$advArray)
-	{
-		$mod = $this->form_ptr->module_ptr;
-      $this->RemoveAdminField($advArray, $mod->Lang('title_field_alias'));
-      $this->CheckForAdvancedTab($advArray);
-	}
-
 
 }
 
