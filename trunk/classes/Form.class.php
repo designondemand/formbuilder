@@ -688,16 +688,18 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	$oneset->name = $thisField->GetName();
 	$oneset->input = $thisField->GetFieldInput($id, $params, $returnid);
 	$oneset->smarty_eval = $thisField->GetSmartyEval()?1:0;
-
-	$oneset->input_id = $id.'fbrp__'.$thisField->GetID();
+	
 	$oneset->multiple_parts = $thisField->HasMultipleFormComponents()?1:0;
 	$oneset->label_parts = $thisField->LabelSubComponents()?1:0;
 	$oneset->type = $thisField->GetDisplayType();
-	$mod->smarty->assign($thisField->GetName(),$oneset);
+	$oneset->input_id = $thisField->GetCSSId();
+   $mod->smarty->assign($thisField->GetName(),$oneset);
+
 	if ($thisField->GetAlias() != '')
 		{
 		$mod->smarty->assign($thisField->GetAlias(),$oneset);
 		}
+
 	array_push($fields,$oneset);
       }
 

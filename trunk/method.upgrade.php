@@ -184,7 +184,8 @@ if (! $this->CheckAccess()) exit;
 		case "0.5.9":
 		case "0.5.10":
 		case "0.5.11":
-		case "0.6":
+		case "0.6b1":
+		case "0.6b2":
         	$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_fb_formbrowser", "feuid I");
         	$dict->ExecuteSQLArray($sqlarray);
 			$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_fb_formbrowser", "resnew LX");
