@@ -13,7 +13,7 @@ class fbDispositionUserTag extends  fbFieldBase
   function fbDispositionUserTag(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
-    $mod = &$form_ptr->module_ptr;
+    $mod = $form_ptr->module_ptr;
     $this->Type = 'DispositionUserTag';
     $this->IsDisposition = true;
     $this->NonRequirableField = true;
@@ -24,19 +24,19 @@ class fbDispositionUserTag extends  fbFieldBase
 
   function StatusInfo()
   {
-    $mod=&$this->form_ptr->module_ptr;
+    $mod=$this->form_ptr->module_ptr;
     return $this->GetOption('udtname',$mod->Lang('unspecified'));
   }
 
   function DisposeForm($returnid)
   {
-    $mod=&$this->form_ptr->module_ptr;
-    $others = &$this->form_ptr->GetFields();
+    $mod=$this->form_ptr->module_ptr;
+    $others = $this->form_ptr->GetFields();
     $unspec = $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
     $params = array();
     if ($this->GetOption('export_form','0') == '1')
       {
-      $params['FORM'] =& $this->form_ptr;
+      $params['FORM'] = $this->form_ptr;
       }
     for($i=0;$i<count($others);$i++)
       {
@@ -61,7 +61,7 @@ class fbDispositionUserTag extends  fbFieldBase
    }
 
     global $gCms;
-    $usertagops =& $gCms->GetUserTagOperations();
+    $usertagops = $gCms->GetUserTagOperations();
     $res = $usertagops->CallUserTag( $this->GetOption('udtname'), $params);
 
     if( $res === FALSE )
@@ -90,12 +90,12 @@ class fbDispositionUserTag extends  fbFieldBase
 
   function PrePopulateAdminForm($formDescriptor)
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
     $main = array();
     $adv = array();
 
     global $gCms;
-    $usertagops =& $gCms->GetUserTagOperations();
+    $usertagops = $gCms->GetUserTagOperations();
     $usertags = $usertagops->ListUserTags();
     $usertaglist = array();
     foreach( $usertags as $key => $value )

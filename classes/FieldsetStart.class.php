@@ -12,7 +12,7 @@ class fbFieldsetStart extends fbFieldBase {
   function fbFieldsetStart(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
-    $mod = &$form_ptr->module_ptr;
+    $mod = $form_ptr->module_ptr;
     $this->Type = 'FieldsetStart';
     $this->DisplayInForm = true;
     $this->DisplayInSubmission = false;
@@ -27,13 +27,9 @@ class fbFieldsetStart extends fbFieldBase {
   {
     $js = $this->GetOption('javascript','');
     $str = '<fieldset';
-    $idstr = $this->GetOption('css_id');
     $class = $this->GetOption('css_class');
     $legend = $this->GetOption('legend');
-    if( $idstr != '' )
-      {
-	$str .= " id=\"$idstr\"";
-      }
+	$str .= $this->GetCSSIdTag();
     if( $class != '' )
       {
 	$str .= " class=\"$class\"";
@@ -71,16 +67,12 @@ class fbFieldsetStart extends fbFieldBase {
 	
   function PrePopulateAdminForm($formDescriptor)
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
     $main = array(
 		  array($mod->Lang('title_legend'),
             		$mod->CreateInputText($formDescriptor,'fbrp_opt_legend',
 					      $this->GetOption('legend',''), 50)));
-    $adv = array(
-		 array($mod->Lang('title_field_css_id'),
-		       $mod->CreateInputText($formDescriptor,'fbrp_opt_css_id',
-					     $this->GetOption('css_id',''), 20))
-		 );
+    $adv = array();
     return array('main'=>$main,'adv'=>$adv);
   }
 

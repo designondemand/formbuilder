@@ -30,7 +30,7 @@ class fbPulldownField extends fbFieldBase {
 	function fbPulldownField(&$form_ptr, &$params)
 	{
 		$this->fbFieldBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
+        $mod = $form_ptr->module_ptr;
 		$this->Type = 'PulldownField';
 		$this->DisplayInForm = true;
 		$this->HasAddOp = true;
@@ -42,13 +42,13 @@ class fbPulldownField extends fbFieldBase {
 
 	function GetOptionAddButton()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		return $mod->Lang('add_options');
 	}
 
 	function GetOptionDeleteButton()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		return $mod->Lang('delete_options');
 	}
 
@@ -73,7 +73,7 @@ class fbPulldownField extends fbFieldBase {
 
 	function countItems()
 	{
-			$tmp = &$this->GetOptionRef('option_name');
+			$tmp = $this->GetOptionRef('option_name');
 			if (is_array($tmp))
 				{
 	        	$this->optionCount = count($tmp);
@@ -90,13 +90,13 @@ class fbPulldownField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
 
 		// why all this? Associative arrays are not guaranteed to preserve
 		// order, except in "chronological" creation order.
 		$sorted =array();
-		$subjects = &$this->GetOptionRef('option_name');
+		$subjects = $this->GetOptionRef('option_name');
 		if (count($subjects) > 1) {
 			for($i=0;$i<count($subjects);$i++) {
 				$sorted[$subjects[$i]]=($i+1);
@@ -110,21 +110,19 @@ class fbPulldownField extends fbFieldBase {
 		}
 
 		if ($this->GetOption('select_one','') != '') {
-			//$sorted = array_merge(array(' '.$this->GetOption('select_one','')=>''),$sorted);
 			$sorted = array(' '.$this->GetOption('select_one','')=>'') + $sorted;
 		}
 		else {
-			//$sorted = array_merge(array(' '.$mod->Lang('select_one')=>''),$sorted);
 			$sorted = array(' '.$mod->Lang('select_one')=>'') + $sorted;
 		}
-		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id.'fbrp__'.$this->Id.'" '.$js);
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value,$js.$this->GetCSSIdTag());
 	}
 
 
 
     function StatusInfo()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$opt = $this->GetOption('option_name','');
 		
 		if (is_array($opt))
@@ -145,7 +143,7 @@ class fbPulldownField extends fbFieldBase {
 	
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 
 		$this->countItems();
 		if ($this->optionAdd > 0)
@@ -185,7 +183,7 @@ class fbPulldownField extends fbFieldBase {
 
 	function GetHumanReadableValue($as_string=true)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
 			$ret = $this->GetOptionElement('option_value',($this->Value-1));

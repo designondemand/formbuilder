@@ -14,7 +14,7 @@ class fbDispositionFormBrowser extends fbFieldBase {
 	function fbDispositionFormBrowser(&$form_ptr, &$params)
 	{
       $this->fbFieldBase($form_ptr, $params);
-      $mod = &$form_ptr->module_ptr;
+      $mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionFormBrowser';
 		$this->IsDisposition = true;
 		$this->NonRequirableField = true;
@@ -28,7 +28,7 @@ class fbDispositionFormBrowser extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		if ($this->Value === false)
 			{
 			return '';
@@ -44,7 +44,7 @@ class fbDispositionFormBrowser extends fbFieldBase {
 
 	function StatusInfo()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$enc = ($this->GetOption('crypt','0') == '1'?$mod->Lang('yes'):$mod->Lang('no'));
 		$feu = ($this->GetOption('feu_bind','0') == '1'?$mod->Lang('yes'):$mod->Lang('no'));
 		return $mod->Lang('title_encryption').':'.$enc.', '.$mod->Lang('title_feu_binding').':'.$feu;
@@ -92,9 +92,9 @@ class fbDispositionFormBrowser extends fbFieldBase {
 	
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
-		$form = &$this->form_ptr;
-		$fields = &$form->GetFields();
+		$mod = $this->form_ptr->module_ptr;
+		$form = $this->form_ptr;
+		$fields = $form->GetFields();
 		$fieldlist = array($mod->Lang('none')=>'-1');
 		$main = array();
 		$adv = array();
@@ -132,7 +132,7 @@ class fbDispositionFormBrowser extends fbFieldBase {
 
 
 			
-	  $openssl =& $mod->GetModuleInstance('OpenSSL');
+	  $openssl = $mod->GetModuleInstance('OpenSSL');
 	  if ($openssl == FALSE && !function_exists('mcrypt_encrypt'))
 		{
 		array_push($adv,array($mod->Lang('title_encryption_functions'),
@@ -194,14 +194,14 @@ class fbDispositionFormBrowser extends fbFieldBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$this->HiddenDispositionFields($mainArray, $advArray);
 	}
 
 
 	function DisposeForm($returnid)
 	{
-		$form = &$this->form_ptr;
+		$form = $this->form_ptr;
 		list($res,$msg) = $form->StoreResponse(($this->Value?$this->Value:-1),$this->approvedBy,$this);
 		return array($res, $msg);
 	}
@@ -219,7 +219,7 @@ class fbDispositionFormBrowser extends fbFieldBase {
 	
 	function getSortFieldList()
 	{
-		$form = &$this->form_ptr;
+		$form = $this->form_ptr;
 		$ret = array();
 		for ($i=1;$i<6;$i++)
 			{
@@ -237,7 +237,7 @@ class fbDispositionFormBrowser extends fbFieldBase {
 
 	function getSortFieldVal($sortFieldNumber)
 	{
-		$form = &$this->form_ptr;
+		$form = $this->form_ptr;
 		$val = "";
 		if ($this->GetOption('sortfield'.$sortFieldNumber,'-1') != '-1')
 			{

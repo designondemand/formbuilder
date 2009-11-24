@@ -13,7 +13,7 @@ class fbUniqueIntegerField extends fbFieldBase
   function fbUniqueIntegerField(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
-    $mod = &$form_ptr->module_ptr;
+    $mod = $form_ptr->module_ptr;
     $this->Type = 'UniqueIntegerField';
     $this->DisplayInForm = true;
     $this->NonRequirableField = true;
@@ -24,7 +24,7 @@ class fbUniqueIntegerField extends fbFieldBase
 
   function GetFieldInput($id, &$params, $returnid)
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
    if ($this->Value !== false)
       {
       $ret = $mod->CreateInputHidden($id, 'fbrp__'.$this->Id,
@@ -36,7 +36,7 @@ class fbUniqueIntegerField extends fbFieldBase
 	  }
 	else
 	   {
-	   $db = &$mod->dbHandle;
+	   $db = $mod->dbHandle;
 	   $seq = $db->GenID(cms_db_prefix(). 'module_fb_uniquefield_seq');
        $ret = $mod->CreateInputHidden($id, 'fbrp__'.$this->Id,$seq);
 	   if ($this->GetOption('show_to_user','0') == '1')
@@ -49,7 +49,7 @@ class fbUniqueIntegerField extends fbFieldBase
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$main = array(
 				array($mod->Lang('title_show_to_user'),
 				$mod->CreateInputHidden($formDescriptor,'fbrp_opt_show_to_user','0').

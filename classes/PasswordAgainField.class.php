@@ -12,7 +12,7 @@ class fbPasswordAgainField extends fbFieldBase {
 	function fbPasswordAgainField(&$form_ptr, &$params)
 	{
 		$this->fbFieldBase($form_ptr, $params);
-		$mod = &$form_ptr->module_ptr;
+		$mod = $form_ptr->module_ptr;
 		$this->Type = 'PasswordAgainField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
@@ -22,34 +22,35 @@ class fbPasswordAgainField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-	  $mod = &$this->form_ptr->module_ptr;
+	  $mod = $this->form_ptr->module_ptr;
 	  $js = $this->GetOption('javascript','');
      if ($this->GetOption('hide','1') == '0')
        {
-	     return $mod->CreateInputText($id, 'fbrp__'.$this->Id,
+	     return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,
 				    ($this->Value?$this->Value:$this->GetOption('default')),
             $this->GetOption('length'),
             255,
-            ($this->GetOption('clear_default','0')==1?('onfocus="if (this.value==\''.$this->GetOption('default').'\') {this.value=\'\';}" '):' ').$js);
+            ($this->GetOption('clear_default','0')==1?('onfocus="if (this.value==\''.$this->GetOption('default').'\') {this.value=\'\';}" '):' ').
+			$js.$this->GetCSSIdTag());
         }
       else
          {
          return $mod->CreateInputPassword($id, 'fbrp__'.$this->Id,
             ($this->Value?$this->Value:''), $this->GetOption('length'),
-            255, $js);
+            255, $js.$this->GetCSSIdTag());
          }
    }
 
 	function StatusInfo()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		return $mod->Lang('title_field_id') . ': ' . $this->GetOption('field_to_validate','');
 	}
 	
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
-		$flds = &$this->form_ptr->GetFields();
+		$mod = $this->form_ptr->module_ptr;
+		$flds = $this->form_ptr->GetFields();
 		$opts = array();
 		foreach ($flds as $tf)
 			{
@@ -86,7 +87,7 @@ class fbPasswordAgainField extends fbFieldBase {
 	{
 		$this->validated = true;
 		$this->validationErrorText = '';
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 
 		$field_to_validate = $this->GetOption('field_to_validate','');
 

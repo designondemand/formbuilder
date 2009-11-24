@@ -15,7 +15,7 @@ class fbDispositionPageRedirector extends fbFieldBase {
 	function fbDispositionPageRedirector(&$form_ptr, &$params)
 	{
  		$this->fbFieldBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
+        $mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionPageRedirector';
 		$this->DisplayInForm = true;
 		$this->NonRequirableField = false;
@@ -29,13 +29,13 @@ class fbDispositionPageRedirector extends fbFieldBase {
 
 	function GetOptionAddButton()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		return $mod->Lang('add_destination');
 	}
 
 	function GetOptionDeleteButton()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		return $mod->Lang('delete_destination');
 	}
 
@@ -60,7 +60,7 @@ class fbDispositionPageRedirector extends fbFieldBase {
 
 	function countAddresses()
 	{
-			$tmp = &$this->GetOptionRef('destination_page');
+			$tmp = $this->GetOptionRef('destination_page');
 			if (is_array($tmp))
 				{
 	        	$this->addressCount = count($tmp);
@@ -77,7 +77,7 @@ class fbDispositionPageRedirector extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
 
 		// why all this? Associative arrays are not guaranteed to preserve
@@ -91,7 +91,7 @@ class fbDispositionPageRedirector extends fbFieldBase {
 			{
 			$sorted[' '.$mod->Lang('select_one')]='';
 			}
-		$subjects = &$this->GetOptionRef('destination_subject');
+		$subjects = $this->GetOptionRef('destination_subject');
 
 		if (count($subjects) > 1)
 			{
@@ -104,14 +104,14 @@ class fbDispositionPageRedirector extends fbFieldBase {
 			{
 			$sorted[$subjects] = '1';
 			}
-		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, $js);
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, $js.$this->GetCSSIdTag());
 	}
 
 
 
     function StatusInfo()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$opt = $this->GetOption('destination_page','');
 		
 		if (is_array($opt))
@@ -135,8 +135,8 @@ class fbDispositionPageRedirector extends fbFieldBase {
 	{
    		global $gCms;
 		global $id;
-    		$contentops =& $gCms->GetContentOperations();
-		$mod = &$this->form_ptr->module_ptr;
+    		$contentops = $gCms->GetContentOperations();
+		$mod = $this->form_ptr->module_ptr;
 
 		$this->countAddresses();
 		if ($this->addressAdd > 0)
@@ -180,7 +180,7 @@ class fbDispositionPageRedirector extends fbFieldBase {
 
 	function GetHumanReadableValue($as_string)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
 			$ret = $this->GetOptionElement('destination_page',($this->Value - 1));
@@ -206,7 +206,7 @@ class fbDispositionPageRedirector extends fbFieldBase {
 		// Not really needed, the 'FromEmailAddressField' already calls modify other fields, Just need to make sure the the email results things are listed before this one and everything should be fine.
 		// print_r($this->GetOptionElement('destination_page',($this->Value - 1)));
     		global $gCms;
-    		$mod = &$this->form_ptr->module_ptr;
+    		$mod = $this->form_ptr->module_ptr;
     		$mod->RedirectContent($this->GetOptionElement('destination_page',($this->Value - 1)));
 		//return $this->SendForm($this->GetOptionElement('destination_page',($this->Value - 1)),
 		//	$this->GetOptionElement('destination_subject',($this->Value - 1)));
@@ -216,7 +216,7 @@ class fbDispositionPageRedirector extends fbFieldBase {
 
 	function AdminValidate()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
     		$opt = $this->GetOption('destination_page');
   		list($ret, $message) = $this->DoesFieldHaveName();
 		if ($ret)

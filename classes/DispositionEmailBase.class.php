@@ -13,7 +13,7 @@ class fbDispositionEmailBase extends fbFieldBase
   function fbDispositionEmailBase(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
-    $mod = &$form_ptr->module_ptr;
+    $mod = $form_ptr->module_ptr;
     $this->IsDisposition = true;
     $this->ValidationTypes = array();
 
@@ -26,7 +26,7 @@ class fbDispositionEmailBase extends fbFieldBase
 
   function TemplateStatus()
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
     if ($this->GetOption('email_template','') == '')
       {
   return $mod->Lang('email_template_not_set');
@@ -54,12 +54,12 @@ class fbDispositionEmailBase extends fbFieldBase
   // Send off those emails
   function SendForm($destination_array, $subject)
   {
-    $mod = &$this->form_ptr->module_ptr;
-    $form = &$this->form_ptr;
+    $mod = $this->form_ptr->module_ptr;
+    $form = $this->form_ptr;
 
    if ($mod->GetPreference('enable_antispam',1))
      {
-    $db =& $mod->GetDb();
+    $db =$mod->GetDb();
     $query = 'select count(src_ip) as sent from '.cms_db_prefix().
       'module_fb_ip_log where src_ip=? AND sent_time > ?';
 
@@ -75,7 +75,7 @@ class fbDispositionEmailBase extends fbFieldBase
       }
     }
 
-    $mail =& $mod->GetModuleInstance('CMSMailer');
+    $mail = $mod->GetModuleInstance('CMSMailer');
     if ($mail == FALSE)
       {
   $msg = '';
@@ -118,7 +118,7 @@ class fbDispositionEmailBase extends fbFieldBase
     }
     $form->setFinishedFormSmarty($htmlemail);
 
-    $theFields = &$form->GetFields();
+    $theFields = $form->GetFields();
 
     for($i=0;$i<count($theFields);$i++)
 		{
@@ -201,7 +201,7 @@ class fbDispositionEmailBase extends fbFieldBase
       }
     else if ($mod->GetPreference('enable_antispam',1))
      {
-    $db =& $mod->GetDb();
+    $db = $mod->GetDb();
 
     $rec_id = $db->GenID(cms_db_prefix().'module_fb_ip_log_seq');
     $query = 'INSERT INTO '.cms_db_prefix().
@@ -215,7 +215,7 @@ class fbDispositionEmailBase extends fbFieldBase
 
   function PrePopulateAdminFormBase($formDescriptor)
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
     $message = $this->GetOption('email_template','');
 
 	$parm = array();
@@ -245,7 +245,7 @@ class fbDispositionEmailBase extends fbFieldBase
 
   function validateEmailAddr($email)
 	{
-	$mod = &$this->form_ptr->module_ptr;
+	$mod = $this->form_ptr->module_ptr;
 	$ret = true;
 	$message = '';
 	if (strpos($email,',') !== false)

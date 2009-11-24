@@ -14,7 +14,7 @@ class fbTimePickerField extends fbFieldBase {
 	function fbTimePickerField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
+        $mod = $form_ptr->module_ptr;
 		$this->Type = 'TimePickerField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
@@ -30,14 +30,14 @@ class fbTimePickerField extends fbFieldBase {
 
     function StatusInfo()
 	{
-      $mod = &$this->form_ptr->module_ptr;
+      $mod = $this->form_ptr->module_ptr;
 		return ($this->GetOption('24_hour','0') == '0'?$mod->Lang('12_hour'):$mod->Lang('24_hour'));
 	}
 
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
 		
        $now = localtime(time(),true);
@@ -78,22 +78,22 @@ class fbTimePickerField extends fbFieldBase {
 
             $hr = new stdClass();
             $hr->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]',
-       			$Hours, -1, $now['tm_hour'],'id="'.$id.'_'.$this->Id.'_1" '.$js);
+       			$Hours, -1, $now['tm_hour'],$js.$this->GetCSSIdTag('_hour'));
        		$hr->title = $mod->Lang('hour');
-       		$hr->name = '<label for="'.$id.'_'.$this->Id.'_1">'.$mod->Lang('hour').'</label>';
+       		$hr->name = '<label for="'..$this->GetCSSId('_hour').'">'.$mod->Lang('hour').'</label>';
        		array_push($ret, $hr);
        		
             $min = new stdClass();
             $min->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]',
-       			$Mins, -1, $now['tm_min'],'id="'.$id.'_'.$this->Id.'_2" '.$js);
+       			$Mins, -1, $now['tm_min'],$js.$this->GetCSSIdTag('_min'));
        		$min->title = $mod->Lang('min');
-       		$min->name = '<label for="'.$id.'_'.$this->Id.'_2">'.$mod->Lang('min').'</label>';
+       		$min->name = '<label for="'.$this->GetCSSId('_min').'">'.$mod->Lang('min').'</label>';
        		array_push($ret, $min);
 
             $mer = new stdClass();
             $mer->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]',
-       			$this->flag12hour, -1, $now['merid'], 'id="'.$id.'_'.$this->Id.'_3" '.$js);
-            $mer->name = '<label for="'.$id.'_'.$this->Id.'_3">'.$mod->Lang('merid').'</label>';
+       			$this->flag12hour, -1, $now['merid'], $js..$this->GetCSSIdTag('_meridian'));
+            $mer->name = '<label for="'.$this->GetCSSId('_meridian').'">'.$mod->Lang('merid').'</label>';
             $mer->title = $mod->Lang('merid');
             array_push($ret,$mer);
             return $ret;
@@ -113,16 +113,16 @@ class fbTimePickerField extends fbFieldBase {
 				}
             $hr = new stdClass();
             $hr->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]',
-       			$Hours, -1, $now['tm_hour'],'id="'.$id.'_'.$this->Id.'_1" '.$js);
+       			$Hours, -1, $now['tm_hour'],$js.$this->GetCSSIdTag('_hour'));
        		$hr->title = $mod->Lang('hour');
-       		$hr->name = '<label for="'.$id.'_'.$this->Id.'_1">'.$mod->Lang('hour').'</label>';
+       		$hr->name = '<label for="'.$this->GetCSSId('_hour').'">'.$mod->Lang('hour').'</label>';
        		array_push($ret, $hr);
        		
             $min = new stdClass();
             $min->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]',
-       			$Mins, -1, $now['tm_min'],'id="'.$id.'_'.$this->Id.'_2" '.$js);
+       			$Mins, -1, $now['tm_min'],$js..$this->GetCSSIdTag('_min'));
        		$min->title = $mod->Lang('min');
-       		$min->name = '<label for="'.$id.'_'.$this->Id.'_2">'.$mod->Lang('min').'</label>';
+       		$min->name = '<label for="'.$this->GetCSSId('_min').'">'.$mod->Lang('min').'</label>';
        		array_push($ret, $min);
 
             return $ret;
@@ -153,7 +153,7 @@ class fbTimePickerField extends fbFieldBase {
 
 	function GetHumanReadableValue($as_string=true)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
 			if ($this->GetOption('24_hour','0') == '0')
@@ -184,7 +184,7 @@ class fbTimePickerField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$main = array(
 			array($mod->Lang('title_24_hour'),
             		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_24_hour',

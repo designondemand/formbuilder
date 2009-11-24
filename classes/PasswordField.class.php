@@ -12,7 +12,7 @@ class fbPasswordField extends fbFieldBase {
 	function fbPasswordField(&$form_ptr, &$params)
 	{
       $this->fbFieldBase($form_ptr, $params);
-      $mod = &$form_ptr->module_ptr;
+      $mod = $form_ptr->module_ptr;
 		$this->Type = 'PasswordField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
@@ -26,7 +26,7 @@ class fbPasswordField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-	  $mod = &$this->form_ptr->module_ptr;
+	  $mod = $this->form_ptr->module_ptr;
 	  $js = $this->GetOption('javascript','');
 	  $ro = '';
      if ($this->GetOption('readonly','0') == '1')
@@ -39,19 +39,20 @@ class fbPasswordField extends fbFieldBase {
 				    ($this->Value?$this->Value:$this->GetOption('default')),
             $this->GetOption('length'),
             255,
-            ($this->GetOption('clear_default','0')==1?('onfocus="if (this.value==\''.$this->GetOption('default').'\') {this.value=\'\';}" '):' ').$js.$ro);
+            ($this->GetOption('clear_default','0')==1?('onfocus="if (this.value==\''.$this->GetOption('default').'\') {this.value=\'\';}" '):' ').
+			$js.$ro.$this->GetCSSIdTag());
         }
       else
          {
          return $mod->CreateInputPassword($id, 'fbrp__'.$this->Id,
             ($this->Value?$this->Value:''), $this->GetOption('length'),
-            255, $js.$ro);
+            255, $js.$ro.$this->GetCSSIdTag());
          }
 	}
 
 	function StatusInfo()
 	{
-	  $mod = &$this->form_ptr->module_ptr;
+	  $mod = $this->form_ptr->module_ptr;
 	  $ret = $mod->Lang('abbreviation_length',$this->GetOption('length','80'));
 		if (strlen($this->ValidationType)>0)
 		  {
@@ -67,7 +68,7 @@ class fbPasswordField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$main = array(
 			array($mod->Lang('title_display_length'),
 			      $mod->CreateInputText($formDescriptor,
@@ -100,7 +101,7 @@ class fbPasswordField extends fbFieldBase {
 	{
 		$this->validated = true;
 		$this->validationErrorText = '';
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		switch ($this->ValidationType)
 		  {
 		  	   case 'none':

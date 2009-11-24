@@ -13,7 +13,7 @@ class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
 	function fbDispositionDeliverToEmailAddressField(&$form_ptr, &$params)
 	{
       $this->fbDispositionEmailBase($form_ptr, $params);
-      $mod = &$form_ptr->module_ptr;
+      $mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionDeliverToEmailAddressField';
       $this->IsDisposition = true;
 		$this->DisplayInForm = true;
@@ -27,11 +27,11 @@ class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
-		return $mod->CreateInputText($id, 'fbrp__'.$this->Id,
+		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,
 			htmlspecialchars($this->Value, ENT_QUOTES),
-           25,128,$js);
+           25,128,$js.$this->GetCSSIdTag());
 	}
 
 	function DisposeForm()
@@ -65,7 +65,7 @@ class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
   		$this->validationErrorText = '';
 		$result = true;
 		$message = '';
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
       if ($this->Value !== false &&
             ! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $this->Value))
          {

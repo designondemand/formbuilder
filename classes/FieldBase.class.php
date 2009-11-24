@@ -47,8 +47,8 @@ class fbFieldBase {
   function fbFieldBase(&$form_ptr, &$params)
   {
 
-    $this->form_ptr = &$form_ptr;
-    $mod = &$form_ptr->module_ptr;
+    $this->form_ptr = $form_ptr;
+    $mod = $form_ptr->module_ptr;
     $this->Options = array();
     $this->DisplayInForm = true;
     $this->DisplayInSubmission = true;
@@ -560,7 +560,7 @@ class fbFieldBase {
   // clear fields unused by invisible dispositions
   function HiddenDispositionFields(&$mainArray, &$advArray, $hideReq=true)
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
     if ($hideReq)
     	{
     	// remove the "required" field
@@ -592,7 +592,7 @@ class fbFieldBase {
   // override me!
   function GetHumanReadableValue($as_string=true)
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
     if ($this->Value !== false)
       {
 		$ret = $this->Value;
@@ -672,7 +672,7 @@ class fbFieldBase {
   {
 
   //error_log($this->GetName().':'.print_r($valStr,true));
-    $fm = &$this->form_ptr;
+    $fm = $this->form_ptr;
     if ($this->Value === false)
       {
       if (is_array($valStr))
@@ -728,7 +728,7 @@ class fbFieldBase {
 
   function DoesFieldNameExist()
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
 		
     // field name in use??
     if ($mod->GetPreference('unique_fieldnames','1') == '1' &&
@@ -743,7 +743,7 @@ class fbFieldBase {
 
    function DoesFieldHaveName()
    {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
   	if ($mod->GetPreference('require_fieldnames','1') == '1' &&
   		strlen($this->GetName()) < 1)
   		{
@@ -848,7 +848,7 @@ class fbFieldBase {
 				}
 			else
 				{
-				$thisVal = &$this->Value;
+				$thisVal = $this->Value;
 				}
 			foreach ($thisVal as $thisValOut)
 				{

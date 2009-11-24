@@ -12,7 +12,7 @@ class fbTextFieldExpandable extends fbFieldBase {
 	function fbTextFieldExpandable(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
+        $mod = $form_ptr->module_ptr;
 		$this->Type = 'TextFieldExpandable';
 		$this->DisplayInForm = true;
 		$this->HasUserAddOp = true;
@@ -32,7 +32,7 @@ class fbTextFieldExpandable extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-	  $mod = &$this->form_ptr->module_ptr;
+	  $mod = $this->form_ptr->module_ptr;
 	 //debug_display($this->Value);
 	  $js = $this->GetOption('javascript','');
 	
@@ -78,25 +78,27 @@ class fbTextFieldExpandable extends fbFieldBase {
 	    $thisRow = new stdClass();
         $thisRow->name = '';
         $thisRow->title = '';
-	    $thisRow->input = $mod->CreateInputText($id, 'fbrp__'.$this->Id.'[]',
+	    $thisRow->input = $mod->fbCreateInputText($id, 'fbrp__'.$this->Id.'[]',
 				       $this->Value[$i],
             $this->GetOption('length')<25?$this->GetOption('length'):25,
-            $this->GetOption('length'),$js);
-        $thisRow->op = $mod->CreateInputSubmit($id, 'fbrp_FeD_'.$this->Id.'_'.$i, $this->GetOption('del_button','X'));
+            $this->GetOption('length'),$js.$this->GetCSSIdTag('_'.$i));
+        $thisRow->op = $mod->fbCreateInputSubmit($id, 'fbrp_FeD_'.$this->Id.'_'.$i, $this->GetOption('del_button','X'),
+			$this->GetCSSIdTag('_del_'.$i));
         array_push($ret, $thisRow);
         }
       $thisRow = new stdClass();
       $thisRow->name = '';
       $thisRow->title = '';
       $thisRow->input = '';
-      $thisRow->op = $mod->CreateInputSubmit($id, 'fbrp_FeX_'.$this->Id, $this->GetOption('add_button','+'));
+      $thisRow->op = $mod->fbCreateInputSubmit($id, 'fbrp_FeX_'.$this->Id.'_'.$i, $this->GetOption('add_button','+'),
+			$this->GetCSSIdTag('_add_'.$i));
       array_push($ret, $thisRow);
       return $ret;
 	}
 
 	function StatusInfo()
 	{
-	  $mod = &$this->form_ptr->module_ptr;
+	  $mod = $this->form_ptr->module_ptr;
 	  $ret = $mod->Lang('abbreviation_length',$this->GetOption('length','80'));
 		if (strlen($this->ValidationType)>0)
 		  {
@@ -107,7 +109,7 @@ class fbTextFieldExpandable extends fbFieldBase {
 
 	function GetHumanReadableValue($as_string = true)
 	{
-		$form = &$this->form_ptr;
+		$form = $this->form_ptr;
       if (! is_array($this->Value))
 	      {
 	      $this->Value = array($this->Value);
@@ -126,7 +128,7 @@ class fbTextFieldExpandable extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$main = array(
 			array($mod->Lang('title_maximum_length'),
 			      $mod->CreateInputText($formDescriptor, 
@@ -155,7 +157,7 @@ class fbTextFieldExpandable extends fbFieldBase {
 	{
 		$this->validated = true;
 		$this->validationErrorText = '';
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		if (! is_array($this->Value))
 		    {
 		    $this->Value = array($this->Value);

@@ -12,7 +12,7 @@ class fbSystemLinkField extends fbFieldBase {
 	function fbSystemLinkField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
+        $mod = $form_ptr->module_ptr;
 		$this->Type =  'SystemLinkField';
 		$this->DisplayInForm = true;
 		$this->NonRequirableField = true;
@@ -37,7 +37,7 @@ class fbSystemLinkField extends fbFieldBase {
 			}
 		else
 			{
-			$contentops =& $gCms->GetContentOperations();
+			$contentops = $gCms->GetContentOperations();
     		$cobj = $contentops->LoadContentFromId($this->GetOption('target_page','0'));
 			$thisLink->input = $this->form_ptr->module_ptr->CreateContentLink($cobj->Id(), $cobj->Name());
 			$thisLink->name = $cobj->Name();
@@ -56,7 +56,7 @@ class fbSystemLinkField extends fbFieldBase {
 			}
 		else
 			{
-			$contentops =& $gCms->GetContentOperations();
+			$contentops = $gCms->GetContentOperations();
     		$cobj = $contentops->LoadContentFromId($this->GetOption('target_page','0'));
 			$ret = $this->form_ptr->module_ptr->CreateContentLink($cobj->Id(), $cobj->Name());
 			}
@@ -72,9 +72,9 @@ class fbSystemLinkField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
     	global $gCms;
-    	$contentops =& $gCms->GetContentOperations();
+    	$contentops = $gCms->GetContentOperations();
 
 		$main = array(
 		 		 array($mod->Lang('title_link_autopopulate'),$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_auto_link',

@@ -15,7 +15,7 @@ class fbMultiselectField extends fbFieldBase {
 	function fbMultiselectField(&$form_ptr, &$params)
 	{
        $this->fbFieldBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
+        $mod = $form_ptr->module_ptr;
 		$this->Type = 'MultiselectField';
 		$this->DisplayInForm = true;
 		$this->NonRequirableField = false;
@@ -29,13 +29,13 @@ class fbMultiselectField extends fbFieldBase {
 
 	function GetOptionAddButton()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		return $mod->Lang('add_options');
 	}
 
 	function GetOptionDeleteButton()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		return $mod->Lang('delete_options');
 	}
 
@@ -60,7 +60,7 @@ class fbMultiselectField extends fbFieldBase {
 
 	function countItems()
 	{
-			$tmp = &$this->GetOptionRef('option_name');
+			$tmp = $this->GetOptionRef('option_name');
 			if (is_array($tmp))
 				{
 	        	$this->optionCount = count($tmp);
@@ -77,13 +77,13 @@ class fbMultiselectField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
 
 		// why all this? Associative arrays are not guaranteed to preserve
 		// order, except in "chronological" creation order.
 		$sorted =array();
-		$subjects = &$this->GetOptionRef('option_name');
+		$subjects = $this->GetOptionRef('option_name');
 
 		if (count($subjects) > 1)
 			{
@@ -109,14 +109,14 @@ class fbMultiselectField extends fbFieldBase {
 			$val = $this->Value;
 			}
 		return $mod->CreateInputSelectList($id, 'fbrp__'.$this->Id.'[]', $sorted,$val, $this->GetOption('lines','3'),
-         'id="'.$id. '_'.$this->Id.'" '.$js);
+         $js.$this->GetCSSIdTag());
 	}
 
 
 
     function StatusInfo()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$opt = $this->GetOption('option_name','');
 		
 		if (is_array($opt))
@@ -137,7 +137,7 @@ class fbMultiselectField extends fbFieldBase {
 	
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 
 		$this->countItems();
 		if ($this->optionAdd > 0)
@@ -170,9 +170,9 @@ class fbMultiselectField extends fbFieldBase {
 
 	function GetHumanReadableValue($as_string=true)
 	{
-		$mod = &$this->form_ptr->module_ptr;
-		$form = &$this->form_ptr;
-		$vals = &$this->GetOptionRef('option_value');
+		$mod = $this->form_ptr->module_ptr;
+		$form = $this->form_ptr;
+		$vals = $this->GetOptionRef('option_value');
 		if ($this->HasValue())
 			{
 			$fieldRet = array();

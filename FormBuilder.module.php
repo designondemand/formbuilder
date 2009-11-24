@@ -841,6 +841,56 @@ class FormBuilder extends CMSModule
       return $plain;
       }
 
+  function fbCreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+	{
+  	$value = cms_htmlentities($value);
+  	$id = cms_htmlentities($id);
+  	$name = cms_htmlentities($name);
+  	$size = cms_htmlentities($size);
+  	$maxlength = cms_htmlentities($maxlength);
+
+  	$value = str_replace('"', '&quot;', $value);
+
+  	$text = '<input type="text" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+  	if ($addttext != '')
+    	{
+      	$text .= ' ' . $addttext;
+    	}
+  	$text .= " />\n";
+  	return $text;
+	}
+
+	function fbCreateInputSubmit($id, $name, $value='', $addttext='', $image='', $confirmtext='')
+	{
+	  $id = cms_htmlentities($id);
+	  $name = cms_htmlentities($name);
+	  $image = cms_htmlentities($image);
+		global $gCms;
+		$config = $gCms->GetConfig();
+		$text = '<input name="'.$id.$name.'" value="'.$value.'" type=';
+		if ($image != '')
+		{
+			$text .= '"image"';
+			$img = $config['root_url'] . '/' . $image;
+			$text .= ' src="'.$img.'"';
+		}
+		else
+		{
+			$text .= '"submit"';
+		}
+		if ($confirmtext != '' )
+		  {
+			$text .= ' onclick="return confirm(\''.$confirmtext.'\');"';
+		  }
+		if ($addttext != '')
+		{
+			$text .= ' '.$addttext;
+		}
+		$text .= ' />';
+		return $text . "\n";
+	}
+
+
 } // End of Class
 
 # vim:ts=4 sw=4 noet

@@ -21,7 +21,7 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
   function fbDispositionMultiselectFileDirector(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
-    $mod = &$form_ptr->module_ptr;
+    $mod = $form_ptr->module_ptr;
     $this->Type = 'DispositionMultiselectFileDirector';
     $this->IsDisposition = true;
     $this->DisplayInForm = true;
@@ -34,7 +34,7 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
     $this->fileAdd = 0;
 
     global $gCms;
-    $config =& $gCms->getConfig();
+    $config = $gCms->getConfig();
     $this->dflt_filepath = $config['uploads_path'];
   }
 
@@ -60,7 +60,7 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
 
   function countFiles()
   {
-    $tmp = &$this->GetOptionRef('destination_filename');
+    $tmp = $this->GetOptionRef('destination_filename');
     if (is_array($tmp))
       {
 	$this->fileCount = count($tmp);
@@ -77,28 +77,27 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
 
   function GetFieldInput($id, &$params, $returnid)
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
     $js = $this->GetOption('javascript','');
 	
     // why all this? Associative arrays are not guaranteed to preserve
     // order, except in "chronological" creation order.
-    $displaynames = &$this->GetOptionRef('destination_displayname');
-    $displayfiles = &$this->GetOptionRef('destination_filename');
-    $displayvalues = &$this->GetOptionRef('destination_value');
+    $displaynames = $this->GetOptionRef('destination_displayname');
+    $displayfiles = $this->GetOptionRef('destination_filename');
+    $displayvalues = $this->GetOptionRef('destination_value');
 
     $fields = array();
     for( $i = 0; $i < count($displaynames); $i++ )
       {
 	$label = '';
 	$ctrl = new stdClass();
-	$ctrl->name = '<label for="'.$id.'_'.$this->Id.'_'.$i.'">'.$displaynames[$i].'</label>';
+	$ctrl->name = '<label for="'.$this->GetCSSId('_'.$i).'">'.$displaynames[$i].'</label>';
 	$ctrl->title = $displaynames[$i];
 	$ctrl->input = $mod->CreateInputCheckbox($id,
 						 'fbrp__'.$this->Id.'[]', 
 						 $displayvalues[$i],
-                                                 (is_array($this->Value) && in_array($displayvalues[$i],$this->Value))?$displayvalues[$i]:'-1',
-						 sprintf(' id="%s_%s_%s" ',
-							 $id, $this->Id,$i).$js);
+                         (is_array($this->Value) && in_array($displayvalues[$i],$this->Value))?$displayvalues[$i]:'-1',
+						 $this->GetCSSIdTag('_'.$i).$js);
 	$fields[] = $ctrl;
       }
     return $fields;
@@ -106,7 +105,7 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
 
   function GetHumanReadableValue($as_string=true)
   {
-    $form = &$this->form_ptr;
+    $form = $this->form_ptr;
     $tmp = array();
     if( is_array($this->Value) )
       {
@@ -128,7 +127,7 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
   function StatusInfo()
   {
     $this->countFiles();
-    $mod=&$this->form_ptr->module_ptr;
+    $mod=$this->form_ptr->module_ptr;
     $ret= $mod->Lang('file_count',$this->fileCount);
     return $ret;
   }
@@ -136,7 +135,7 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
   function DisposeForm($returnid)
   {
 
-    $mod=&$this->form_ptr->module_ptr;
+    $mod=$this->form_ptr->module_ptr;
     $count = 0;
     while (! $mod->GetFileLock() && $count<200)
       {
@@ -168,8 +167,8 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
     // Begin output to files
     if( is_array($this->Value) )
       {
-	$displayfiles = &$this->GetOptionRef('destination_filename');
-	$displayvalues = &$this->GetOptionRef('destination_value');
+	$displayfiles = $this->GetOptionRef('destination_filename');
+	$displayvalues = $this->GetOptionRef('destination_value');
 
 	foreach( $this->Value as $onevalue )
 	  {
@@ -224,7 +223,7 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
 
   function PrePopulateAdminForm($formDescriptor)
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
 
     $this->countFiles();
     if( $this->fileAdd > 0 )

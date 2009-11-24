@@ -12,7 +12,7 @@ class fbPageBreakField extends fbFieldBase {
 	function fbPageBreakField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
+        $mod = $form_ptr->module_ptr;
 		$this->Type = 'PageBreakField';
 		$this->DisplayInForm = false;
 		$this->Required = false;
@@ -40,7 +40,7 @@ class fbPageBreakField extends fbFieldBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		// remove the "required" field
       $this->RemoveAdminField($mainArray, $mod->Lang('title_field_required'));
       $this->HiddenDispositionFields($mainArray, $advArray);

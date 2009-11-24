@@ -16,7 +16,7 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 	function fbDispositionEmailConfirmation(&$form_ptr, &$params)
 	{
         $this->fbDispositionEmailBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
+        $mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionEmailConfirmation';
 		$this->DisplayInForm = true;
 		$this->NonRequirableField = false;
@@ -43,7 +43,7 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 
 	function ModifyOtherFields()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 
 		if ($this->form_ptr->GetFormState() == 'update')
 			{
@@ -51,7 +51,7 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 			return;
 			}
 		// If we haven't been approved, inhibit all other dispositions!
-		$others = &$this->form_ptr->GetFields();
+		$others = $this->form_ptr->GetFields();
 
 		for($i=0;$i<count($others);$i++)
 			{
@@ -70,16 +70,16 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
-		return $mod->CreateInputText($id, 'fbrp__'.$this->Id,
-			htmlspecialchars($this->Value, ENT_QUOTES),25,80);
+		$mod = $this->form_ptr->module_ptr;
+		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,
+			htmlspecialchars($this->Value, ENT_QUOTES),25,80,$this->GetCSSIdTag());
 	}
 
 
     // Send off those emails
 	function DisposeForm($returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		if (! $this->approvedToGo)
 			{
 			// create response URL
@@ -98,10 +98,10 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-	  $mod = &$this->form_ptr->module_ptr;
+	  $mod = $this->form_ptr->module_ptr;
 	  
 	  global $gCms;
-	  $contentops =& $gCms->GetContentOperations();
+	  $contentops = $gCms->GetContentOperations();
 
 	  list($main,$adv) = $this->PrePopulateAdminFormBase($formDescriptor);
 	  array_push($main,array($mod->Lang('redirect_after_approval'),
@@ -113,7 +113,7 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 	{
   		$this->validated = true;
   		$this->validationErrorText = '';
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		switch ($this->ValidationType)
 		  {
 		  	   case 'email':
