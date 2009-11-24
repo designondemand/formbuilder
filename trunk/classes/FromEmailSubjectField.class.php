@@ -12,7 +12,7 @@ class fbFromEmailSubjectField extends fbFieldBase {
 	function fbFromEmailSubjectField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
+        $mod = $form_ptr->module_ptr;
 		$this->Type = 'FromEmailSubjectField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
@@ -22,18 +22,18 @@ class fbFromEmailSubjectField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
 		
 		return $mod->CreateInputText($id, 'fbrp__'.$this->Id,
 			htmlspecialchars($this->Value, ENT_QUOTES),
-           25,128,$js);
+           25,128,$js.$this->GetCSSIdTag());
 	}
 	
 	function ModifyOtherFields()
 	{
-		$mod = &$this->form_ptr->module_ptr;
-		$others = &$this->form_ptr->GetFields();
+		$mod = $this->form_ptr->module_ptr;
+		$others = $this->form_ptr->GetFields();
 		if ($this->Value !== false)
 			{		
 			for($i=0;$i<count($others);$i++)

@@ -13,7 +13,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 	function fbDispositionFromEmailAddressField(&$form_ptr, &$params)
 	{
       $this->fbDispositionEmailBase($form_ptr, $params);
-      $mod = &$form_ptr->module_ptr;
+      $mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionFromEmailAddressField';
       $this->IsDisposition = true;
 		$this->DisplayInForm = true;
@@ -27,16 +27,16 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
-		$retstr = '<input type="text" name="'.$id.'fbrp__'.$this->Id.'[]" id="'.$id.'fbrp__'.
-			$this->Id.'" value="'.htmlspecialchars($this->Value[0], ENT_QUOTES).
+		$retstr = '<input type="text" name="'.$id.'fbrp__'.$this->Id.'[]" '.
+			$this->GetCSSIdTag('_1').' value="'.htmlspecialchars($this->Value[0], ENT_QUOTES).
 			'" size="25" maxlength="128" '.$js.'/>';
  		if ($this->GetOption('send_user_copy','n') == 'c')
 			{
 			$retstr .= $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id.'[]', 1,
-					0,' id="fbrp__'.$this->Id.'_2" class="checkbox"');
-			$retstr .= '<label for="fbrp__'.$this->Id.'_2" class="label">'.$this->GetOption('send_user_label',
+					0,' class="checkbox"'.$this->GetCSSIdTag('_2'));
+			$retstr .= '<label for="'.$this->GetCSSId('_2').'" class="label">'.$this->GetOption('send_user_label',
 				$mod->Lang('title_send_me_a_copy')).'</label>';
 			}
 		return $retstr;
@@ -97,7 +97,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		list($main,$adv) = $this->PrePopulateAdminFormBase($formDescriptor);
 		$opts = array($mod->Lang('option_never')=>'n',$mod->Lang('option_user_choice')=>'c',$mod->Lang('option_always')=>'a');
 		array_push($main,array($mod->Lang('title_send_usercopy'),
@@ -110,15 +110,15 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$this->RemoveAdminField($mainArray, $mod->Lang('title_email_from_address'));
 	}
 
 
 	function ModifyOtherFields()
 	{
-		$mod = &$this->form_ptr->module_ptr;
-		$others = &$this->form_ptr->GetFields();
+		$mod = $this->form_ptr->module_ptr;
+		$others = $this->form_ptr->GetFields();
 		if ($this->Value !== false)
 			{
 			for($i=0;$i<count($others);$i++)
@@ -139,7 +139,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
   		$this->validationErrorText = '';
 		$result = true;
 		$message = '';
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		if ($this->ValidationType != 'none')
 			{
 		      if ($this->Value !== false &&

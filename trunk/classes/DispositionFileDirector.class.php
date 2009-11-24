@@ -21,7 +21,7 @@ class fbDispositionFileDirector extends fbFieldBase
   function fbDispositionFileDirector(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
-    $mod = &$form_ptr->module_ptr;
+    $mod = $form_ptr->module_ptr;
     $this->Type = 'DispositionFileDirector';
     $this->IsDisposition = true;
     $this->DisplayInSubmission = false;
@@ -32,7 +32,7 @@ class fbDispositionFileDirector extends fbFieldBase
     $this->fileAdd = 0;
 
     global $gCms;
-    $config =& $gCms->getConfig();
+    $config = $gCms->getConfig();
     $this->dflt_filepath = $config['uploads_path'];
   }
 
@@ -58,7 +58,7 @@ class fbDispositionFileDirector extends fbFieldBase
 
   function countFiles()
   {
-    $tmp = &$this->GetOptionRef('destination_filename');
+    $tmp = $this->GetOptionRef('destination_filename');
     if (is_array($tmp))
       {
 	$this->fileCount = count($tmp);
@@ -75,7 +75,7 @@ class fbDispositionFileDirector extends fbFieldBase
 
   function GetFieldInput($id, &$params, $returnid)
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
     $js = $this->GetOption('javascript','');
 	
     // why all this? Associative arrays are not guaranteed to preserve
@@ -89,7 +89,7 @@ class fbDispositionFileDirector extends fbFieldBase
       {
 	$sorted[' '.$mod->Lang('select_one')]='';
       }
-    $displaynames = &$this->GetOptionRef('destination_displayname');
+    $displaynames = $this->GetOptionRef('destination_displayname');
     
     if (count($displaynames) > 1)
       {
@@ -102,13 +102,13 @@ class fbDispositionFileDirector extends fbFieldBase
       {
 	$sorted[$displaynames] = '1';
       }
-    return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'" '.$js);
+    return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, $js.$this->GetCSSIdTag());
   }
 
   function StatusInfo()
   {
     $this->countFiles();
-    $mod=&$this->form_ptr->module_ptr;
+    $mod=$this->form_ptr->module_ptr;
     $ret= $mod->Lang('file_count',$this->fileCount);
     return $ret;
   }
@@ -117,8 +117,8 @@ class fbDispositionFileDirector extends fbFieldBase
   {
 	global $gCms;
 	$options = $gCms->GetConfig();
-    $mod=&$this->form_ptr->module_ptr;
-    $form=&$this->form_ptr;
+    $mod=$this->form_ptr->module_ptr;
+    $form=$this->form_ptr;
     $count = 0;
     while (! $mod->GetFileLock() && $count<200)
       {
@@ -191,8 +191,8 @@ class fbDispositionFileDirector extends fbFieldBase
 
   function createSampleHeader()
   {
-    $mod = &$this->form_ptr->module_ptr;
-    $others = &$this->form_ptr->GetFields();
+    $mod = $this->form_ptr->module_ptr;
+    $others = $this->form_ptr->GetFields();
     $fields = array();
     for($i=0;$i<count($others);$i++)
       {
@@ -207,8 +207,8 @@ class fbDispositionFileDirector extends fbFieldBase
 
   function createSampleTemplate()
   {
-    $mod = &$this->form_ptr->module_ptr;
-    $others = &$this->form_ptr->GetFields();
+    $mod = $this->form_ptr->module_ptr;
+    $others = $this->form_ptr->GetFields();
     $fields = array();
     for($i=0;$i<count($others);$i++)
       {
@@ -223,7 +223,7 @@ class fbDispositionFileDirector extends fbFieldBase
 
   function PrePopulateAdminForm($formDescriptor)
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
 
     $this->countFiles();
     if( $this->fileAdd > 0 )

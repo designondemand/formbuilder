@@ -16,7 +16,7 @@ class fbDispositionFile extends  fbFieldBase
   function fbDispositionFile(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
-    $mod = &$form_ptr->module_ptr;
+    $mod = $form_ptr->module_ptr;
     $this->Type = 'DispositionFile';
     $this->IsDisposition = true;
     $this->NonRequirableField = true;
@@ -46,7 +46,7 @@ function populate_header(formname)
 
   function StatusInfo()
   {
-    $mod=&$this->form_ptr->module_ptr;
+    $mod=$this->form_ptr->module_ptr;
     return $this->GetOption('filespec',$mod->Lang('unspecified'));
   }
 
@@ -54,8 +54,8 @@ function populate_header(formname)
   {
 	global $gCms;
 	$options = $gCms->GetConfig();
-    $mod=&$this->form_ptr->module_ptr;
-    $form=&$this->form_ptr;
+    $mod=$this->form_ptr->module_ptr;
+    $form=$this->form_ptr;
     $count = 0;
     while (! $mod->GetFileLock() && $count<200)
       {
@@ -129,7 +129,7 @@ function populate_header(formname)
   function PrePopulateAdminForm($formDescriptor)
   {
 	global $gCms;
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
 	$config = $gCms->GetConfig();
 
     $main = array();

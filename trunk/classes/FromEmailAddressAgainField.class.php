@@ -12,7 +12,7 @@ class fbFromEmailAddressAgainField extends fbFieldBase {
 	function fbFromEmailAddressAgainField(&$form_ptr, &$params)
 	{
 		$this->fbFieldBase($form_ptr, $params);
-		$mod = &$form_ptr->module_ptr;
+		$mod = $form_ptr->module_ptr;
 		$this->Type = 'FromEmailAddressAgainField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
@@ -23,24 +23,24 @@ class fbFromEmailAddressAgainField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
 
-		return $mod->CreateInputText($id, 'fbrp__'.$this->Id,
+		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,
 			htmlspecialchars($this->Value, ENT_QUOTES),
-			25,128,$js);
+			25,128,$js.$this->GetCSSIdTag());
 	}
 
 	function StatusInfo()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		return $mod->Lang('title_field_id') . ': ' . $this->GetOption('field_to_validate','');
 	}
 	
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
-		$flds = &$this->form_ptr->GetFields();
+		$mod = $this->form_ptr->module_ptr;
+		$flds = $this->form_ptr->GetFields();
 		$opts = array();
 		foreach ($flds as $tf)
 			{
@@ -61,7 +61,7 @@ class fbFromEmailAddressAgainField extends fbFieldBase {
 	{
 		$this->validated = true;
 		$this->validationErrorText = '';
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 
 		$field_to_validate = $this->GetOption('field_to_validate','');
 

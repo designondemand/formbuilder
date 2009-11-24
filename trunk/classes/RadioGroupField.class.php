@@ -16,7 +16,7 @@ class fbRadioGroupField extends fbFieldBase
   function fbRadioGroupField(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
-    $mod = &$form_ptr->module_ptr;
+    $mod = $form_ptr->module_ptr;
     $this->Type = 'RadioGroupField';
     $this->DisplayInForm = true;
     $this->HasAddOp = true;
@@ -31,7 +31,7 @@ class fbRadioGroupField extends fbFieldBase
 
   function countBoxes()
   {
-    $tmp = &$this->GetOptionRef('button_name');
+    $tmp = $this->GetOptionRef('button_name');
     if (is_array($tmp))
       {
 	$this->optionCount = count($tmp);
@@ -48,7 +48,7 @@ class fbRadioGroupField extends fbFieldBase
 
   function StatusInfo()
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
     $this->countBoxes();
     $ret = $mod->Lang('options',$this->optionCount);
     if (strlen($this->ValidationType)>0)
@@ -60,21 +60,21 @@ class fbRadioGroupField extends fbFieldBase
 
   function GetOptionAddButton()
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
     return $mod->Lang('add_options');
   }
 
   function GetOptionDeleteButton()
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
     return $mod->Lang('delete_options');
   }
 
   function GetFieldInput($id, &$params, $returnid)
   {
-    $mod = &$this->form_ptr->module_ptr;
-    $names = &$this->GetOptionRef('button_name');
-    $is_set = &$this->GetOptionRef('button_is_set');
+    $mod = $this->form_ptr->module_ptr;
+    $names = $this->GetOptionRef('button_name');
+    $is_set = $this->GetOptionRef('button_is_set');
 	$js = $this->GetOption('javascript','');
 
     $fieldDisp = array();
@@ -84,7 +84,7 @@ class fbRadioGroupField extends fbFieldBase
 	$thisBox = new stdClass();
 	if (strlen($names[$i]) > 0)
 	  {
-	    $thisBox->name = '<label for="'.$id.'fbrp__'.$this->Id.'_'.$i.'">'.$names[$i].'</label>';
+	    $thisBox->name = '<label for="'.$this->GetCSSId('_'.$i).'">'.$names[$i].'</label>';
 	    $thisBox->title = $names[$i];
 	  }
 	$check_val = false;
@@ -104,7 +104,7 @@ class fbRadioGroupField extends fbFieldBase
 	  {
 	    $thisBox->input .= ' checked="checked"';
 	  }
-	$thisBox->input .= ' id="'.$id. 'fbrp__'.$this->Id.'_'.$i.'" '.$js.' />';
+	$thisBox->input .= $js.$this->GetCSSIdTag().' />';
 	array_push($fieldDisp, $thisBox);
       }
     return $fieldDisp;
@@ -112,7 +112,7 @@ class fbRadioGroupField extends fbFieldBase
 
   function GetHumanReadableValue($as_string=true)
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
     if ($this->HasValue())
       {
 	   $ret = $this->GetOptionElement('button_checked',($this->Value - 1));
@@ -155,7 +155,7 @@ class fbRadioGroupField extends fbFieldBase
 
   function PrePopulateAdminForm($formDescriptor)
   {
-    $mod = &$this->form_ptr->module_ptr;
+    $mod = $this->form_ptr->module_ptr;
     $yesNo = array($mod->Lang('no')=>'n',$mod->Lang('yes')=>'y');
 
     $this->countBoxes();
@@ -194,8 +194,8 @@ class fbRadioGroupField extends fbFieldBase
 
   function PostAdminSubmitCleanup()
   {
-    $names = &$this->GetOptionRef('button_name');
-    $checked = &$this->GetOptionRef('button_checked');
+    $names = $this->GetOptionRef('button_name');
+    $checked = $this->GetOptionRef('button_checked');
     for ($i=0;$i<count($names);$i++)
       {
 	if ($names[$i] == '' && $checked[$i] == '' )

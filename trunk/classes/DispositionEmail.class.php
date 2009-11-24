@@ -17,7 +17,7 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 	function fbDispositionEmail(&$form_ptr, &$params)
 	{
         $this->fbDispositionEmailBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
+        $mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionEmail';
 		$this->DisplayInForm = false;
 		$this->NonRequirableField = true;
@@ -30,13 +30,13 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 
 	function GetOptionAddButton()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		return $mod->Lang('add_address');
 	}
 
 	function GetOptionDeleteButton()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		return $mod->Lang('delete_address');
 	}
 
@@ -62,7 +62,7 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 
     function StatusInfo()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$opt = $this->GetOption('destination_address','');
 		$ret= $mod->Lang('to').": ";
 		if (is_array($opt))
@@ -91,7 +91,7 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 
 	function countAddresses()
 	{
-			$tmp = &$this->GetOptionRef('destination_address');
+			$tmp = $this->GetOptionRef('destination_address');
 			if (is_array($tmp))
 				{
 	        	$this->addressCount = count($tmp);
@@ -110,13 +110,13 @@ class fbDispositionEmail extends fbDispositionEmailBase {
     // Send off those emails
 	function DisposeForm()
 	{
-		$tmp = &$this->GetOptionRef('destination_address');
+		$tmp = $this->GetOptionRef('destination_address');
 		return $this->SendForm($tmp,$this->GetOption('email_subject'));
 	}
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 
 		$this->countAddresses();
 		if ($this->addressAdd > 0)
@@ -150,8 +150,8 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 
 	function AdminValidate()
     {
-		$mod = &$this->form_ptr->module_ptr;
-    	$opt = &$this->GetOptionRef('destination_address');
+		$mod = $this->form_ptr->module_ptr;
+    	$opt = $this->GetOptionRef('destination_address');
   		list($ret, $message) = $this->DoesFieldHaveName();
 		if ($ret)
 			{

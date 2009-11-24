@@ -41,7 +41,7 @@ class fbHiddenField extends fbFieldBase
       {
       $v =  $mod->ProcessTemplateFromData($v);
       }
-    return '<input type="hidden" name="'.$id.'fbrp__'.$this->Id.'" value="'.$v.'" />';
+    return '<input type="hidden" name="'.$id.'fbrp__'.$this->Id.'" value="'.$v.'"'.$this->GetCSSIdTag().' />';
   }
 
 	function PrePopulateAdminForm($formDescriptor)

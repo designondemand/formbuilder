@@ -17,7 +17,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 	function fbDispositionDirector(&$form_ptr, &$params)
 	{
        $this->fbDispositionEmailBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
+        $mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionDirector';
 		$this->DisplayInForm = true;
 		$this->IsDisposition = true;
@@ -30,13 +30,13 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 
 	function GetOptionAddButton()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		return $mod->Lang('add_destination');
 	}
 
 	function GetOptionDeleteButton()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		return $mod->Lang('delete_destination');
 	}
 
@@ -61,7 +61,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 
 	function countAddresses()
 	{
-			$tmp = &$this->GetOptionRef('destination_address');
+			$tmp = $this->GetOptionRef('destination_address');
 			if (is_array($tmp))
 				{
 	        	$this->addressCount = count($tmp);
@@ -78,7 +78,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
 
 		// why all this? Associative arrays are not guaranteed to preserve
@@ -92,7 +92,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 			{
 			$sorted[' '.$mod->Lang('select_one')]='';
 			}
-		$subjects = &$this->GetOptionRef('destination_subject');
+		$subjects = $this->GetOptionRef('destination_subject');
 
 		if (count($subjects) > 1)
 			{
@@ -105,14 +105,14 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 			{
 			$sorted[$subjects] = '1';
 			}
-		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'" '.$js);
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, $js.$this->GetCSSIdTag());
 	}
 
 
 
     function StatusInfo()
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$opt = $this->GetOption('destination_address','');
 		
 		if (is_array($opt))
@@ -134,7 +134,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 	
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 
 		$this->countAddresses();
 		if ($this->addressAdd > 0)
@@ -173,7 +173,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		// remove the "email subject" field
       $this->RemoveAdminField($mainArray, $mod->Lang('title_email_subject'));
 
@@ -181,7 +181,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 
 	function GetHumanReadableValue($as_string=true)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
 			$ret = $this->GetOptionElement('destination_subject',($this->Value - 1));
@@ -217,7 +217,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 
 	function AdminValidate()
     {
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
     	$opt = $this->GetOption('destination_address');
   		list($ret, $message) = $this->DoesFieldHaveName();
 		if ($ret)
@@ -251,7 +251,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
     
     function Validate()
     {
-         $mod = &$this->form_ptr->module_ptr;
+         $mod = $this->form_ptr->module_ptr;
          $result = true;
          $message = '';
 

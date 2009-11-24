@@ -14,7 +14,7 @@ class fbDispositionDatabase extends fbFieldBase {
 	function fbDispositionDatabase(&$form_ptr, &$params)
 	{
       $this->fbFieldBase($form_ptr, $params);
-      $mod = &$form_ptr->module_ptr;
+      $mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionDatabase';
 		$this->IsDisposition = true;
 		$this->NonRequirableField = true;
@@ -28,7 +28,7 @@ class fbDispositionDatabase extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		if ($this->Value === false)
 			{
 			return '';
@@ -95,14 +95,14 @@ class fbDispositionDatabase extends fbFieldBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$this->HiddenDispositionFields($mainArray, $advArray);
 	}
 
     // Write To the Database
 	function DisposeForm($returnid)
 	{
-		$form = &$this->form_ptr;
+		$form = $this->form_ptr;
 		$form->StoreResponse(($this->Value?$this->Value:-1),$this->approvedBy);
 		return array(true,'');	   
 	}

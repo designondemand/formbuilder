@@ -24,7 +24,7 @@ class fbForm {
 
   function fbForm(&$module_ptr, &$params, $loadDeep=false, $loadResp=false)
   {
-    $this->module_ptr =& $module_ptr;
+    $this->module_ptr = $module_ptr;
     $this->Fields = array();
     $this->Attrs = array();
     $this->formState = 'new';
@@ -288,7 +288,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
   function createSampleTemplate($htmlish=false,$email=true, $oneline=false,$header=false)
   {
-    $mod = &$this->module_ptr;
+    $mod = $this->module_ptr;
     $ret = "";
 	if ($email)
 		{
@@ -333,7 +333,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 			$ret .= '</h2>';
 			}
 		}
-    $others = &$this->GetFields();
+    $others = $this->GetFields();
     for($i=0;$i<count($others);$i++)
       {
 	if ($others[$i]->DisplayInSubmission())
@@ -379,7 +379,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 //  	$includeHTML=true, $includeText=true, $oneline = false, $headerName='')
   function AdminTemplateHelp($formDescriptor,$fieldStruct)
   {
-    $mod = &$this->module_ptr;
+    $mod = $this->module_ptr;
     $ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_template').'</th></tr>';
     $ret .= '<tr><th>'.$mod->Lang('help_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';
     $odd = false;
@@ -391,7 +391,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
       $odd = ! $odd;
       }
 
-    $others = &$this->GetFields();
+    $others = $this->GetFields();
     for($i=0;$i<count($others);$i++)
       {
 	if ($others[$i]->DisplayInSubmission())
@@ -754,7 +754,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
       }
     else
       {
-      $captcha = &$mod->getModuleInstance('Captcha');
+      $captcha = $mod->getModuleInstance('Captcha');
       if ($this->GetAttr('use_captcha','0')== '1' && $captcha != null)
          {
          $mod->smarty->assign('graphic_captcha',$captcha->getCaptcha());
@@ -857,7 +857,7 @@ function unmy_htmlentities($val)
 			// that user. If so, load it. Otherwise, bring up an empty form.
 			if ($fbf->GetOption('feu_bind','0')=='1')
 				{
-				$feu = &$mod->GetModuleInstance('FrontEndUsers');
+				$feu = $mod->GetModuleInstance('FrontEndUsers');
 				if ($feu == false)
 					{
 					debug_display("FAILED to instatiate FEU!");
@@ -928,7 +928,7 @@ function unmy_htmlentities($val)
 		  {
 		    $thisRes = array_merge($thisRes,$params);
 		  }
-		$this->Fields[$fieldCount] = &$this->NewField($thisRes);
+		$this->Fields[$fieldCount] = $this->NewField($thisRes);
 		$fieldCount++;
 	      }
 	  }
@@ -1205,7 +1205,7 @@ function unmy_htmlentities($val)
   function AddEditForm($id, $returnid, $message='')
   {
     global $gCms;
-    $mod = &$this->module_ptr;
+    $mod = $this->module_ptr;
     $mod->smarty->assign('message',$message);
     $mod->smarty->assign('formstart',
 			 $mod->CreateFormStart($id, 'admin_store_form', $returnid));
@@ -1332,7 +1332,7 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
     $mod->smarty->assign('input_submit_action',
           $mod->CreateInputRadioGroup($id, 'fbrp_forma_submit_action', $submitActions, $this->GetAttr('submit_action','text')));
 
-    $captcha = &$mod->getModuleInstance('Captcha');
+    $captcha = $mod->getModuleInstance('Captcha');
     if ($captcha == null)
          {
          $mod->smarty->assign('title_install_captcha',
@@ -1508,7 +1508,7 @@ function fast_add(field_type)
     $mod->smarty->assign('title_form_predisplay_udt',
                          $mod->Lang('title_form_predisplay_udt'));
     {
-      $usertagops =& $gCms->GetUserTagOperations();
+      $usertagops = $gCms->GetUserTagOperations();
       $usertags = $usertagops->ListUserTags();
       $usertaglist = array();
       $usertaglist[$mod->lang('none')] = -1;
@@ -1530,7 +1530,7 @@ function fast_add(field_type)
 			 $mod->CreateInputText($id, 'fbrp_forma_list_delimiter',
 					       $this->GetAttr('list_delimiter',','), 50));
 
-    $contentops =& $gCms->GetContentOperations();
+    $contentops = $gCms->GetContentOperations();
     $mod->smarty->assign('input_redirect_page',$contentops->CreateHierarchyDropdown('',$this->GetAttr('redirect_page','0'), $id.'fbrp_forma_redirect_page'));
 
     $mod->smarty->assign('input_form_template',
@@ -1775,8 +1775,8 @@ function fast_add(field_type)
     
   function SwapFieldsByIndex($src_field_index, $dest_field_index)
   {
-    $srcField = &$this->GetFieldByIndex($src_field_index);
-    $destField = &$this->GetFieldByIndex($dest_field_index);
+    $srcField = $this->GetFieldByIndex($src_field_index);
+    $destField = $this->GetFieldByIndex($dest_field_index);
     $tmpOrderBy = $destField->GetOrder();
     $destField->SetOrder($srcField->GetOrder());
     $srcField->SetOrder($tmpOrderBy);
@@ -1855,8 +1855,8 @@ function fast_add(field_type)
     
   function LoadResponse($response_id)
   {
-	$mod = &$this->module_ptr;
-	$db =& $this->module_ptr->dbHandle;
+	$mod = $this->module_ptr;
+	$db = $this->module_ptr->dbHandle;
 		
 	$oneset = new StdClass();
 	$res = $db->GetOne('SELECT response, form_id FROM '.cms_db_prefix().
@@ -1917,8 +1917,8 @@ function fast_add(field_type)
 
   function LoadResponseValues(&$params)
   {
-	$mod = &$this->module_ptr;
-	$db =& $this->module_ptr->dbHandle;
+	$mod = $this->module_ptr;
+	$db = $this->module_ptr->dbHandle;
 	
 /*
 	if ($fbField->GetOption('feu_bind','0')=='1')
@@ -2047,7 +2047,7 @@ function fast_add(field_type)
   {
 	$mod = $this->module_ptr;
     $db = $this->module_ptr->dbHandle;
-    $fields = &$this->GetFields();
+    $fields = $this->GetFields();
 	$newrec = false;
 	
 	$crypt = false;
@@ -2167,7 +2167,7 @@ function fast_add(field_type)
 
   function StoreResponseXML($response_id=-1,$newrec=false,$approver='',$sortfield1,$sortfield2,$sortfield3,$sortfield4,$sortfield5, $feu_id,$xml)
   {
-    $db = &$this->module_ptr->dbHandle;
+    $db = $this->module_ptr->dbHandle;
     $secret_code = '';
 
     if ($newrec)
@@ -2231,9 +2231,9 @@ function fast_add(field_type)
   
   function setFinishedFormSmarty($htmlemail=false)
 	{
-		$mod = &$this->module_ptr;
+		$mod = $this->module_ptr;
 	   
-	    $theFields = &$this->GetFields();
+	    $theFields = $this->GetFields();
 	    $unspec = $this->GetAttr('unspecified',$mod->Lang('unspecified'));
 
 		$formInfo = array();
@@ -2283,8 +2283,8 @@ function fast_add(field_type)
 	function manageFileUploads()
 	{
 		global $gCms;
-		$theFields = &$this->GetFields();
-		$mod = &$this->module_ptr;
+		$theFields = $this->GetFields();
+		$mod = $this->module_ptr;
 
 	    for($i=0;$i<count($theFields);$i++)
 	      {
@@ -2304,7 +2304,7 @@ function fast_add(field_type)
 	    			if( $theFields[$i]->GetOption('sendto_uploads') )
 	      				{
 	        			// we have a file we can send to the uploads
-	        			$uploads =& $mod->GetModuleInstance('Uploads');
+	        			$uploads = $mod->GetModuleInstance('Uploads');
 	        			if( !$uploads )
 	          				{
 	      					// no uploads module

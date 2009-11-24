@@ -12,7 +12,7 @@ class fbTextField extends fbFieldBase {
 	function fbTextField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
+        $mod = $form_ptr->module_ptr;
 		$this->Type = 'TextField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
@@ -30,7 +30,7 @@ class fbTextField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-	  $mod = &$this->form_ptr->module_ptr;
+	  $mod = $this->form_ptr->module_ptr;
 	  $js = $this->GetOption('javascript','');
 	  $ro = '';
      if ($this->GetOption('readonly','0') == '1')
@@ -38,16 +38,17 @@ class fbTextField extends fbFieldBase {
          $ro = ' readonly="readonly"';
          }
 	
-	  return $mod->CreateInputText($id, 'fbrp__'.$this->Id,
+	  return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,
 				    ($this->Value?$this->Value:$this->GetOption('default')),
             $this->GetOption('length')<25?$this->GetOption('length'):25,
             $this->GetOption('length'),
-            ($this->GetOption('clear_default','0')==1?('onfocus="if (this.value==\''.$this->GetOption('default').'\') {this.value=\'\';}" '):' ').$js.$ro);
+            ($this->GetOption('clear_default','0')==1?('onfocus="if (this.value==\''.$this->GetOption('default').'\') {this.value=\'\';}" '):' ').$js.$ro.
+			$this->GetCSSIdTag());
 	}
 
 	function StatusInfo()
 	{
-	  $mod = &$this->form_ptr->module_ptr;
+	  $mod = $this->form_ptr->module_ptr;
 	  $ret = $mod->Lang('abbreviation_length',$this->GetOption('length','80'));
 		if (strlen($this->ValidationType)>0)
 		  {
@@ -63,7 +64,7 @@ class fbTextField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		$main = array(
 			array($mod->Lang('title_maximum_length'),
 			      $mod->CreateInputText($formDescriptor, 
@@ -96,7 +97,7 @@ class fbTextField extends fbFieldBase {
 	{
 		$this->validated = true;
 		$this->validationErrorText = '';
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		switch ($this->ValidationType)
 		  {
 		  	   case 'none':

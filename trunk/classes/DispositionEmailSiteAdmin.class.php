@@ -17,7 +17,7 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
 	function fbDispositionEmailSiteAdmin(&$form_ptr, &$params)
 	{
        $this->fbDispositionEmailBase($form_ptr, $params);
-        $mod = &$form_ptr->module_ptr;
+        $mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionEmailSiteAdmin';
 		$this->DisplayInForm = true;
 		$this->IsDisposition = true;
@@ -31,8 +31,8 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
 	function GetFieldInput($id, &$params, $returnid)
 	{
 	    global $gCms;
-	    $userops =& $gCms->GetUserOperations();
-		$mod = &$this->form_ptr->module_ptr;
+	    $userops = $gCms->GetUserOperations();
+		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
 
 		// why all this? Associative arrays are not guaranteed to preserve
@@ -73,7 +73,7 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
 			$sname = implode(' ',$name);
 			$sorted[$sname]=($i+1);
 			}
-		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, 'id="'.$id. '_'.$this->Id.'" '.$js);
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, $js.$this->GetCSSIdTag());
 	}
 
 
@@ -81,8 +81,8 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
     function StatusInfo()
 	{
 	    global $gCms;
-	    $groupops =& $gCms->GetGroupOperations();
-		$mod = &$this->form_ptr->module_ptr;
+	    $groupops = $gCms->GetGroupOperations();
+		$mod = $this->form_ptr->module_ptr;
         $ret = $this->TemplateStatus();
 		if ($this->GetOption('restrict_to_group','0')=='1')
 			{
@@ -98,9 +98,9 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
 	function PrePopulateAdminForm($formDescriptor)
 	{
 	    global $gCms;
-	    $groupops =& $gCms->GetGroupOperations();
+	    $groupops = $gCms->GetGroupOperations();
 	    $groups = $groupops->LoadGroups();
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 
 		list($main,$adv) = $this->PrePopulateAdminFormBase($formDescriptor);
 		array_push($main,array($mod->Lang('title_select_one_message'),
@@ -139,8 +139,8 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
 	function GetHumanReadableValue($as_string=true)
 	{
 	    global $gCms;
-	    $userops =& $gCms->GetUserOperations();
-		$mod = &$this->form_ptr->module_ptr;
+	    $userops = $gCms->GetUserOperations();
+		$mod = $this->form_ptr->module_ptr;
 
 		if ($this->GetOption('restrict_to_group','0')=='1')
 			{
@@ -172,8 +172,8 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
 	function DisposeForm($returnid)
 	{
 	    global $gCms;
-	    $userops =& $gCms->GetUserOperations();
-		$mod = &$this->form_ptr->module_ptr;
+	    $userops = $gCms->GetUserOperations();
+		$mod = $this->form_ptr->module_ptr;
 
 		if ($this->GetOption('restrict_to_group','0')=='1')
 			{
@@ -190,14 +190,14 @@ class fbDispositionEmailSiteAdmin extends fbDispositionEmailBase {
 
 	function AdminValidate()
     {
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
 		list($ret,$message) = $this->validateEmailAddr($this->GetOption('email_from_address'));
         return array($ret,$message);
     }
     
     function Validate()
     {
-         $mod = &$this->form_ptr->module_ptr;
+         $mod = $this->form_ptr->module_ptr;
          $result = true;
          $message = '';
 

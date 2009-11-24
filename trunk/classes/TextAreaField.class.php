@@ -12,7 +12,7 @@ class fbTextAreaField extends fbFieldBase {
 	function fbTextAreaField(&$form_ptr, &$params)
 	{
       $this->fbFieldBase($form_ptr, $params);
-		$mod = &$form_ptr->module_ptr;
+		$mod = $form_ptr->module_ptr;
 		$this->Type = 'TextAreaField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
@@ -23,14 +23,14 @@ class fbTextAreaField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{            
-	   $mod = &$this->form_ptr->module_ptr;	
+	   $mod = $this->form_ptr->module_ptr;	
        $ret = $mod->CreateTextArea(
 				  ($this->GetOption('wysiwyg','0') == '1'?true:false),
 				   $id,
 				  ($this->Value?$this->Value:$this->GetOption('default')),
 				   'fbrp__'.$this->Id,
 				  '',
-				  $id.'fbrp__'.$this->Id,
+				  $this->GetCSSId(),
 				  '',
 				  '',
                	  $this->GetOption('cols','80'),
@@ -38,7 +38,7 @@ class fbTextAreaField extends fbFieldBase {
 		if ($this->GetOption('clear_default','0')=='1')
 			{
 			$ret .= '<script type="text/javascript">';
-			$ret .= "\nvar f = document.getElementById('".$id."fbrp__".$this->Id."');\n";
+			$ret .= "\nvar f = document.getElementById('".$this->GetCSSId()."');\n";
 			$ret .= "if (f)\n{\nf.onfocus=function(){\nif (this.value=='";
 			$ret .= preg_replace('/(\r)?\n/','\\n',$this->GetOption('default'))."') {this.value='';}\n}\n";
 			$ret .= "}\n;";
@@ -51,7 +51,7 @@ class fbTextAreaField extends fbFieldBase {
 
 	function StatusInfo()
 	{
-	   $mod = &$this->form_ptr->module_ptr;
+	   $mod = $this->form_ptr->module_ptr;
 		$ret = '';
 		if (strlen($this->ValidationType)>0)
 		  {
@@ -73,7 +73,7 @@ class fbTextAreaField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-	   $mod = &$this->form_ptr->module_ptr;
+	   $mod = $this->form_ptr->module_ptr;
 	   $main = array(
          	array($mod->Lang('title_use_wysiwyg'),
 			$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_wysiwyg','0').
@@ -104,7 +104,7 @@ class fbTextAreaField extends fbFieldBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = &$this->form_ptr->module_ptr;
+		$mod = $this->form_ptr->module_ptr;
     // hide "javascript"
     $this->RemoveAdminField($advArray, $mod->Lang('title_field_javascript'));
 	}
