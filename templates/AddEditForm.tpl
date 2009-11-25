@@ -225,3 +225,4 @@ function replaceTemplate(originalRequest)
 		<p class="pageinput">{$save_button}{$submit_button}</p>
 	</div>
 {$form_end}
+{$back}

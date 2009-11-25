@@ -448,7 +448,7 @@ $lang['title_minimum_length'] = 'Minimum response length';
 $lang['title_hide'] = 'Hide input';
 $lang['title_hide_help'] = 'Show symbols rather plain text when user enters password?';
 $lang['password_does_not_match'] = 'Password does not match %s';
-$lang[''] = '';
+$lang['back_top'] = 'Back to FormBuilder Main Page';
 $lang[''] = '';
 
 $lang['option_never'] = 'Never';
@@ -564,6 +564,10 @@ $lang['template_variable_help'] = "
 <tr><td>field->multiple_parts</td><td>1 if the field->input is actually a collection of controls</td></tr>
 <tr><td>field->label_parts</td><td>1 if the collection of controls has separate labels for each control</td></tr>
 </table>
+
+<p>In the case of a multipage form, you will also have access to the value of previous fields. They
+are in the \$previous array, or accessible by their names (e.g., &#123;\$myfield->value} ).
+You can use this in Static Text fields as well, which is a nice way to personalize forms!</p>
 
 <p>In certain cases, field->input is actually an array of objects rather than an input. This happens, for example, in CheckBoxGroups or RadioButtonGroups. For them, you can iterate through field->input->name and field->input->inputs.</p>
     
