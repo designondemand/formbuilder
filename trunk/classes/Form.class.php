@@ -636,6 +636,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	$hidden .= $mod->CreateInputHidden($id, 'fbrp_done', 1);
       }
     $fields = array();
+    $prev = array();
     $formPageCount = 1;
     for ($i=0; $i < count($this->Fields); $i++)
       {
@@ -666,6 +667,21 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 						   $testIndex,
 						   $this->unmy_htmlentities($params[$testIndex]));
 	      }
+	      
+      if ($formPageCount < $this->Page && $this->Fields[$i]->DisplayInSubmission())
+         {
+         $oneset = new stdClass();
+         $oneset->value = $this->Fields[$i]->GetHumanReadableValue();
+
+         $mod->smarty->assign($this->Fields[$i]->GetName(),$oneset);
+
+	      if ($this->Fields[$i]->GetAlias() != '')
+            {
+		      $mod->smarty->assign($this->Fields[$i]->GetAlias(),$oneset);
+		      }
+
+	      array_push($prev,$oneset);
+         }
 	    continue;
 	  }
 	$oneset = new stdClass();
@@ -705,6 +721,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
     $mod->smarty->assign_by_ref('fb_hidden',$hidden);
     $mod->smarty->assign_by_ref('fields',$fields);
+    $mod->smarty->assign_by_ref('previous',$prev);
 
     $jsStr = '';
     $jsTrigger = '';
@@ -1350,6 +1367,7 @@ function unmy_htmlentities($val)
 			     $mod->Lang('title_field_alias_short'));
       }
 
+    $mod->smarty->assign('back', $mod->CreateLink($id, 'defaultadmin', '', $mod->Lang('back_top'), array()));
 
     $mod->smarty->assign('title_field_name',
 			 $mod->Lang('title_field_name'));

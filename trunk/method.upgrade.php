@@ -194,7 +194,12 @@ if (! $this->CheckAccess()) exit;
 			$sqlarray = $dict->DropColumnSQL(cms_db_prefix()."module_fb_formbrowser", "response");
         	$dict->ExecuteSQLArray($sqlarray);
 			$sqlarray = $dict->RenameColumnSQL(cms_db_prefix()."module_fb_formbrowser", "resnew","response");
-        	$dict->ExecuteSQLArray($sqlarray);		
+        	$dict->ExecuteSQLArray($sqlarray);
+		   $path = cms_join_path(dirname(__FILE__),'includes');
+       	$params['fbrp_xml_file'] = cms_join_path($path,'Advanced_Contact_Form.xml');
+       	$aeform = new fbForm($this, $params, true);
+		   $res = $aeform->ImportXML($params);
+
 		}
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('upgraded',$this->GetVersion()));
 
