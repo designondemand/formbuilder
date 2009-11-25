@@ -108,7 +108,7 @@ if (!isset($gCms)) exit;
 	$this->smarty->assign('title_show_fieldaliases',$this->Lang('title_show_fieldaliases'));
 	$this->smarty->assign('input_show_fieldaliases',
 		$this->CreateInputcheckbox($id,'fbrp_show_fieldaliases',1,
-		$this->GetPreference('show_fieldaliases','0')). $this->Lang('title_show_fieldaliases_long'));
+		$this->GetPreference('show_fieldaliases','1')). $this->Lang('title_show_fieldaliases_long'));
 	
 	$this->smarty->assign('title_show_version',$this->Lang('title_show_version'));
 	$this->smarty->assign('input_show_version',$this->CreateInputCheckbox($id, 'fbrp_show_version', 1, $this->GetPreference('show_version','1')). $this->Lang('title_show_version_long'));				

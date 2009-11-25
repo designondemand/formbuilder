@@ -960,11 +960,11 @@ function unmy_htmlentities($val)
    xml_parser_set_option( $parser, XML_OPTION_SKIP_WHITE, 0 ); // was 1
     if (isset($params['fbrp_xml_file']) && ! empty($params['fbrp_xml_file']))
 		{
-		xml_parse_into_struct($parser, file_get_contents($params['fbrp_xml_file']), $params);
+		xml_parse_into_struct($parser, file_get_contents($params['fbrp_xml_file']), $values);
 		}
 	elseif (isset($params['xml_string']) && ! empty($params['xml_string']))
 		{
-		xml_parse_into_struct($parser, $params['xml_string'], $params);
+		xml_parse_into_struct($parser, $params['xml_string'], $values);
 		}
 	else
 		{
@@ -974,7 +974,7 @@ function unmy_htmlentities($val)
 	$elements = array();
 	$stack = array();
 	$fieldMap = array();
-	foreach ( $params as $tag )
+	foreach ( $values as $tag )
 		{
 		$index = count( $elements );
 		if ( $tag['type'] == "complete" || $tag['type'] == "open" )
@@ -1005,10 +1005,19 @@ function unmy_htmlentities($val)
 		}
 	$params['form_id'] = -1; // override any form_id values that may be around
 	$formAttrs = &$elements[0]['attributes'];
-	if ($this->inXML($formAttrs['alias']))
+
+   if (isset($params['fbrp_import_formalias']) && !empty($params['fbrp_import_formalias']))
+      {
+      $this->SetAlias($params['fbrp_import_formalias']);
+      }
+   else if ($this->inXML($formAttrs['alias']))
 		{
 		$this->SetAlias($formAttrs['alias']);
 		}
+   if (isset($params['fbrp_import_formname']) && !empty($params['fbrp_import_formname']))
+      {
+      $this->SetName($params['fbrp_import_formname']);
+      }
 	$foundfields = false;
 	// populate the attributes and field name first. When we see a field, we save the form and then start adding the fields to it.
 
@@ -1016,7 +1025,11 @@ function unmy_htmlentities($val)
 		{
 		if ($thisChild['name'] == 'form_name')
 			{
-			$this->SetName($thisChild['content']);
+			$curname =  $this->GetName();
+			if (empty($curname))
+            {
+			   $this->SetName($thisChild['content']);
+			   }
 			}
 		elseif ($thisChild['name'] == 'attribute')
 			{
@@ -1081,25 +1094,69 @@ function unmy_htmlentities($val)
 					}
 				}
 			$newField->Store(true);
-			$fieldMap[$newField->GetId()] = $oldId;
-				
+			$fieldMap[$oldId] = $newField->GetId();
 			}
 		}
-/*	foreach ($elements[0]['children'] as $thisChild)
-		{
-		if ($thisChild['name'] == 'field')
-			{
-			}
-		}
-*/	
+
+   // clean up references
+   
 	if (isset($params['fbrp_xml_file']) && ! empty($params['fbrp_xml_file']))
 		{
 		// need to update mappings in templates.
-		
-		}
+		$tmp = $this->updateRefs($this->GetAttr('form_template',''), $fieldMap);
+		$this->SetAttr('form_template',$tmp);
+		$tmp = $this->updateRefs($this->GetAttr('submit_response',''), $fieldMap);
+		$this->SetAttr('submit_response',$tmp);
+
+		// need to update mappings in field templates.
+      $options = array('email_template','file_template');
+		foreach($this->Fields as $fid=>$thisField)
+         {
+         $changes = false;
+         foreach ($options as $to)
+            {
+            $templ = $thisField->GetOption($to,'');
+            if (!empty($templ))
+               {
+               $tmp = $this->updateRefs($templ, $fieldMap);
+               $thisField->SetOption($to,$tmp);
+               $changes = true;
+               }
+            }
+		   // need to update mappings in FormBrowser sort fields
+         if ($thisField->GetFieldType() == 'DispositionFormBrowser')
+            {
+            for ($i=1;$i<6;$i++)
+               {
+               $old = $thisField->GetOption('sortfield'.$i);
+               if (isset($fieldMap[$old]))
+                  {
+                  $thisField->SetOption('sortfield'.$i,$fieldMap[$old]);
+                  $changes = true;
+                  }
+               }
+            }
+         if ($changes)
+            {
+            $thisField->Store(true);
+            }
+         }
+         
+      $this->Store();
+   	}
 	
 	return true;	
   }
+
+
+  function updateRefs($text, &$fieldMap)
+   {
+      foreach ($fieldMap as $k=>$v)
+         {
+         $text = str_replace('{$fld_'.$k.'}','{$fld_'.$v.'}',$text);
+         }
+      return $text;
+   }
 
   function inXML(&$var)
   {
@@ -1286,10 +1343,10 @@ function unmy_htmlentities($val)
 	  $mod->smarty->assign('title_field_id',
 			     $mod->Lang('title_field_id'));
       }
-    if( $mod->GetPreference('show_fieldaliases',0) != 0 )
+    if( $mod->GetPreference('show_fieldaliases',1) != 0 )
       {
 	  $mod->smarty->assign('title_field_alias',
-			     $mod->Lang('title_field_alias'));
+			     $mod->Lang('title_field_alias_short'));
       }
 
 
