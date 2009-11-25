@@ -32,8 +32,9 @@ $lang['field_type_DispositionEmailConfirmation']='*Validate-via-Email Address';
 $lang['field_type_DispositionFromEmailAddressField']='*Email "From Address" Field, and send copy';
 $lang['field_type_DispositionFile']='*Write Results to Flat File';
 $lang['field_type_DispositionDatabase']='*Store Results in Database';
-$lang['field_type_DispositionFormBrowser']='*Store Results for FormBrowser Module v0.3';
+$lang['field_type_DispositionFormBrowser']='*Store Results for FormBrowser Module v.0.3';
 $lang['field_type_DispositionUserTag']='*Call A User Defined Tag With the Form Results';
+$lang['field_type_DispositionForm'] = '*Submit to an arbitrary form action';
 $lang['field_type_DispositionDeliverToEmailAddressField']='*Email to User-Supplied Email Address';
 $lang['field_type_DispositionEmailSiteAdmin']='*Email to CMS Admin User';
 $lang['field_type_PageBreakField']='-Page Break';
@@ -341,6 +342,7 @@ $lang['title_private_key'] = 'Private Key to use for encrypting data';
 $lang['title_encrypt_sortfields_help'] = 'This hashes the sort fields, but leaves the first few letters unencrypted. Cryptographically, this creates a vulnerability, but for most users it is an acceptable tradeoff between security and the ability to sort records. Sorting becomes approximate, but will remain pretty good. If you do not use this option, sort fields are stored in plaintext.';
 $lang['title_encryption_functions'] = 'Storage Encryption Unavailable';
 $lang['title_install_crypto'] = 'Please install the OpenSSL module or mcrypt support if you would like to enable database encryption.';
+$lang['title_install_curl'] = 'Please make sure you have CURL support active in your PHP install. See http://www.php.net/manual/en/book.curl.php';
 $lang['title_mle_version'] = 'Run in MLE Mode';
 $lang['title_mle_version_long'] = 'Changes/support for CMSMS Multi-Language Edition fork. Do not check this if you are not running the MLE version.';
 $lang['title_ensure_cert_key_match'] = 'Ensure that you select the private key that is appropriate for the certificate you are using for encryption!';
@@ -355,6 +357,23 @@ $lang['title_install_feu'] = 'Please install the Frontend User module to connect
 $lang['title_feu_bind_help'] = 'Check this to lock front-end access to this form\'s data to the logged-in front-end user.';
 $lang['title_encryption'] = 'Encryption';
 $lang['title_export_form_to_udt'] = 'Export form reference to UDT as $params[\'FORM\']?';
+$lang['title_url_help'] = 'Entire URL, including protocol and path (e.g., http://myhost.com/form_handler.cgi)';
+$lang['title_url'] = 'Form submission URL';
+$lang['title_method'] = 'Form method';
+$lang['title_maps_to'] = 'Map field "%s" to form submission variable';
+$lang['title_additional'] = 'Additional submission';
+$lang['title_additional_help'] = 'Anything to be appended to the submission payload, in URL-encoded form (.e.g, "user=steve+jobs&employee_number=1)';
+$lang['title_include_in_submission'] = 'Include field in Submission';
+$lang[''] = '';
+$lang[''] = '';
+$lang[''] = '';
+$lang[''] = '';
+$lang[''] = '';
+$lang[''] = '';
+$lang[''] = '';
+
+
+
 
 $lang['restricted_to_group'] = 'Only in group %s';
 $lang['title_show_to_user'] = 'Display to user?';
@@ -676,6 +695,9 @@ collection of Checkbox inputs is that they are presented as a group, with one na
 group, but is better when there are a large number of options.</li>
 <li>Multiselect. This is a multi-select field. It's really conceptually the same thing as a checkbox button
 group, but is better when there are a large number of options, as you can limit the number displayed on the screen at any one time.</li>
+<li>Password. This is an asterisked-out text field, useful for passwords.</li>
+<li>Password Again (verify). This is a field that must match a Password field for submission
+to succeed.</li>
 <li>State. This is a pulldown listing the States of the U.S.</li>
 <li>Canadian Province. This is a pulldown listing the Canadian Provinces (Contributed by Noel McGran. Thanks!)</li>
 <li>Countries. This is a pulldown listing the Countries of the world (as of July 2005).</li>
@@ -723,7 +745,8 @@ module's installation directory, assuming the web server has permission to write
 <li>*Save Results to File Based on Pulldown. Like the Flat File disposition, except the value of a pull-down determines which file results get written to.</li>
 <li>*Save Results to File(s) Based on Multiple Selections. Like the Flat File disposition, except the value(s) of checkboxes  determines which file(s) results get written to.</li>
 <li>*Email to CMS Admin User. Provides a pull-down of CMS Admin users, and directs the results as an email to the selected admin.</li>
-<li>*Store Results for FormBrowser Module v.3. Stores the form results in an XML structure as a single database record. This is the only interface to Form Browser. See section below.</li>
+<li>*Store Results for FormBrowser Module v.0.3. Stores the form results in an XML structure as a single database record. This is the only interface to Form Browser. See section below.</li>
+<ul><li>*Submit to an arbitrary form action. Craft an HTTP GET or POST, and transmit it using cURL to the specified URL. This lets you use FormBuilder as a front-end to any CGI or Form Handling script out there.</li>
 
 </ul></li></li></ul>
 
@@ -823,7 +846,7 @@ ate the neighbor's nasty little yap dog, for which I was inappropriately gratefu
 <li>Lastly, you may have some success emailing the author directly and grovelling for free support.</li>
 <li>Donations are good motivators, too. Keep in mind that the dollar is weak, and if you are not in the US, your donation gets magnified.</li>
 </ul>
-<p>Keep in mind that the author has put hundreds and hundreds of hours into the development of this module.
+<p>Keep in mind that the author has put <em>hundreds and hundreds of hours</em> into the development of this module.
 Please take the time to read the documentation before sending questions. Either that, or send your questions written on
 financially negotiable instruments (i.e., checks or cash). Am I sounding like a broken record? Do you kids these days
 even know what a broken record is? I would say skipping CD, but you might not know what that is either. Like a

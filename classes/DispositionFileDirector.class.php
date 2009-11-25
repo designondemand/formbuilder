@@ -172,23 +172,6 @@ class fbDispositionFileDirector extends fbFieldBase
     return array(true,'');        
   }
 
-  function MakeVar($string)
-  {
-    $maxvarlen = 24;
-    $string = strtolower(preg_replace('/\s+/','_',$string));
-    $string = strtolower(preg_replace('/\W/','_',$string));
-    if (strlen($string) > $maxvarlen)
-      {
-	$string = substr($string,0,$maxvarlen);
-	$pos = strrpos($string,'_');
-	if ($pos !== false)
-	  {
-	    $string = substr($string,0,$pos);
-	  }
-      }
-    return $string;
-  }
-
   function createSampleHeader()
   {
     $mod = $this->form_ptr->module_ptr;
@@ -214,7 +197,7 @@ class fbDispositionFileDirector extends fbFieldBase
       {
 	if ($others[$i]->DisplayInSubmission())
 	  {
-	    array_push($fields,'{$' . $this->MakeVar($others[$i]->GetName()) . '}');
+	    array_push($fields,'{$' . $others[$i]->GetVariableName() . '}');
 	  }
       }
     return implode('{$TAB}',$fields);

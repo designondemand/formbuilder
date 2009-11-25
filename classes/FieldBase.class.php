@@ -275,6 +275,23 @@ class fbFieldBase {
     return $this->GetOption('field_alias','');
   }
 
+  function GetVariableName()
+  {
+    $maxvarlen = 24;
+    $string = strtolower(preg_replace('/\s+/','_',$this->Name));
+    $string = strtolower(preg_replace('/\W/','_',$string));
+    if (strlen($string) > $maxvarlen)
+      {
+      $string = substr($string,0,$maxvarlen);
+      $pos = strrpos($string,'_');
+      if ($pos !== false)
+         {
+         $string = substr($string,0,$pos);
+         }
+      }
+   return $string;
+  }
+
   function GetCSSIdTag($suffix='')
   {
       return ' id="'.$this->GetCSSId($suffix).'"';
