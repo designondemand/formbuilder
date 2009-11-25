@@ -237,6 +237,7 @@ $lang['title_redirect_page']='Page to redirect to after form submission';
 $lang['title_not_ready2']='Please add a field to the form so that the user\'s input gets handled. You can';
 $lang['title_not_ready_link']='use this shortcut';
 $lang['title_form_alias']='Form Alias';
+$lang['title_field_alias_short']='Alias';
 $lang['title_form_fields']='Form Fields';
 $lang['title_field_id']='Field Id';
 $lang['title_show_fieldaliases']='Show Field Aliases';
