@@ -108,24 +108,6 @@ function populate_header(formname)
     return array(true,'');        
   }
 
-  function MakeVar($string)
-  {
-    $maxvarlen = 24;
-    $string = strtolower(preg_replace('/\s+/','_',$string));
-    $string = strtolower(preg_replace('/\W/','_',$string));
-    if (strlen($string) > $maxvarlen)
-      {
-	$string = substr($string,0,$maxvarlen);
-	$pos = strrpos($string,'_');
-	if ($pos !== false)
-	  {
-	    $string = substr($string,0,$pos);
-	  }
-      }
-    return $string;
-  }
-
-
   function PrePopulateAdminForm($formDescriptor)
   {
 	global $gCms;

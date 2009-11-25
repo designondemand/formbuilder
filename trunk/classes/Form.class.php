@@ -251,22 +251,6 @@ class fbForm {
     $this->templateVariables[$theKey] = $def;
   }
 
-  function MakeVar($string)
-  {
-    $maxvarlen = 24;
-    $string = strtolower(preg_replace('/\s+/','_',$string));
-    $string = strtolower(preg_replace('/\W/','_',$string));
-    if (strlen($string) > $maxvarlen)
-      {
-	$string = substr($string,0,$maxvarlen);
-	$pos = strrpos($string,'_');
-	if ($pos !== false)
-	  {
-	    $string = substr($string,0,$pos);
-	  }
-      }
-    return $string;
-  }
 
   function createSampleTemplateJavascript($fieldName='opt_email_template', $button_text='', $suffix='')
   {
@@ -397,7 +381,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	if ($others[$i]->DisplayInSubmission())
 	  {                
 	    $ret .= '<tr><td class="'.($odd?'odd':'even').
-	    '">{$'.$this->MakeVar($others[$i]->GetName()).
+	    '">{$'.$others[$i]->GetVariableName().
 	    '} / {$fld_'.
 	    $others[$i]->GetId().'}';
 		if ($others[$i]->GetAlias() != '')
@@ -2335,10 +2319,10 @@ function fast_add(field_type)
 		      			}
 		  		}
 		
-		 	$mod->smarty->assign($this->MakeVar($theFields[$i]->GetName()),$replVal);
+		 	$mod->smarty->assign($theFields[$i]->GetVariableName(),$replVal);
 		 	$mod->smarty->assign('fld_'.$theFields[$i]->GetId(),$replVal);
 			$fldobj = $theFields[$i]->ExportObject();
-		 	$mod->smarty->assign($this->MakeVar($theFields[$i]->GetName()).'_obj',$fldobj);
+		 	$mod->smarty->assign($theFields[$i]->GetVariableName().'_obj',$fldobj);
 		 	$mod->smarty->assign('fld_'.$theFields[$i]->GetId().'_obj',$fldobj);
 			if ($theFields[$i]->GetAlias() != '')
 				{
