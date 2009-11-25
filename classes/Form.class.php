@@ -1094,6 +1094,7 @@ function unmy_htmlentities($val)
 					}
 				}
 			$newField->Store(true);
+         array_push($this->Fields,$newField);
 			$fieldMap[$oldId] = $newField->GetId();
 			}
 		}
@@ -1153,7 +1154,7 @@ function unmy_htmlentities($val)
    {
       foreach ($fieldMap as $k=>$v)
          {
-         $text = str_replace('{$fld_'.$k.'}','{$fld_'.$v.'}',$text);
+         $text = preg_replace('/([\{\b\s])\$fld_'.$k.'([\}\b\s])/','$1\$fld_'.$v.'$2',$text);
          }
       return $text;
    }
