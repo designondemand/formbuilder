@@ -364,7 +364,7 @@ $lang['title_maps_to'] = 'Map field "%s" to form submission variable';
 $lang['title_additional'] = 'Additional submission';
 $lang['title_additional_help'] = 'Anything to be appended to the submission payload, in URL-encoded form (.e.g, "user=steve+jobs&employee_number=1)';
 $lang['title_include_in_submission'] = 'Include field in Submission';
-$lang[''] = '';
+$lang['title_data_stored_in_fbr'] = 'Data will be stored in an XML format in the [PREFIX]_module_fb_frombrowser database table.';
 $lang[''] = '';
 $lang[''] = '';
 $lang[''] = '';

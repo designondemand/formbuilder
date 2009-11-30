@@ -88,9 +88,26 @@ class fbDispositionDatabase extends fbFieldBase {
 			}
 	}
 	
+	function getSortFieldVal($sortFieldNumber)
+	{
+      return -1;
+   }
+	
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		return array();
+		$mod = $this->form_ptr->module_ptr;
+      $main = array();
+      $adv = array();
+      array_push($main, array($mod->Lang('title_data_stored_in_fbr'),
+         $mod->CreateInputHidden($formDescriptor, 'fbrp_opt_feu_bnd','0').
+         $mod->CreateInputHidden($formDescriptor, 'fbrp_opt_crypt','0').
+         $mod->CreateInputHidden($formDescriptor, 'fbrp_opt_hash_sort','0').
+         $mod->CreateInputHidden($formDescriptor, 'fbrp_opt_sortfield1','').
+         $mod->CreateInputHidden($formDescriptor, 'fbrp_opt_sortfield2','').
+         $mod->CreateInputHidden($formDescriptor, 'fbrp_opt_sortfield3','').
+         $mod->CreateInputHidden($formDescriptor, 'fbrp_opt_sortfield4','').
+         $mod->CreateInputHidden($formDescriptor, 'fbrp_opt_sortfield5','')));
+		return array('main'=>$main,'adv'=>$adv);
 	}
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
@@ -103,8 +120,8 @@ class fbDispositionDatabase extends fbFieldBase {
 	function DisposeForm($returnid)
 	{
 		$form = $this->form_ptr;
-		$form->StoreResponse(($this->Value?$this->Value:-1),$this->approvedBy);
-		return array(true,'');	   
+		list($res,$msg) = $form->StoreResponse(($this->Value?$this->Value:-1),$this->approvedBy,$this);
+		return array($res, $msg);
 	}
 
 }

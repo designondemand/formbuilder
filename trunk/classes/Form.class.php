@@ -1980,18 +1980,6 @@ function fast_add(field_type)
 	$mod = $this->module_ptr;
 	$db = $this->module_ptr->dbHandle;
 	
-/*
-	if ($fbField->GetOption('feu_bind','0')=='1')
-		{
-		$feu = &$mod->GetModuleInstance('FrontEndUsers');
-		if ($feu == false)
-			{
-			debug_display("FAILED to instatiate FEU!");
-			return;
-			}
-		$params['response_id'] = $feu->LoggedInId();
-		}
-*/
 	$oneset = new StdClass();
 	$form_id = -1;
 	$res = $db->Execute('SELECT response, form_id FROM '.cms_db_prefix().
@@ -2113,7 +2101,9 @@ function fast_add(field_type)
 	$crypt = false;
 	$hash_fields = false;
 	$sort_fields = array();
-	if (is_object($formBuilderDisposition) && $formBuilderDisposition->GetFieldType()=='DispositionFormBrowser')
+	if (is_object($formBuilderDisposition) &&
+      ($formBuilderDisposition->GetFieldType()=='DispositionFormBrowser' ||
+       $formBuilderDisposition->GetFieldType()=='DispositionDatabase'))
 		{
 		$crypt = ($formBuilderDisposition->GetOption('crypt','0') == '1');
 		$hash_fields = ($formBuilderDisposition->GetOption('hash_sort','0') == '1');
@@ -2225,7 +2215,8 @@ function fast_add(field_type)
    return $xml;
   }
 
-  function StoreResponseXML($response_id=-1,$newrec=false,$approver='',$sortfield1,$sortfield2,$sortfield3,$sortfield4,$sortfield5, $feu_id,$xml)
+  function StoreResponseXML($response_id=-1,$newrec=false,$approver='',$sortfield1,
+   $sortfield2,$sortfield3,$sortfield4,$sortfield5, $feu_id,$xml)
   {
     $db = $this->module_ptr->dbHandle;
     $secret_code = '';
