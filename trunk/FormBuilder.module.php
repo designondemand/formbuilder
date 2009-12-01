@@ -285,7 +285,7 @@ class FormBuilder extends CMSModule
 		if ($fbField == false)
 			{
 			// error handling goes here.
-			debug_display("FAILED to instantiate field!");	
+			echo($this->Lang('error_has_no_fb_field'));
 			}
 
 		$dbresult = $db->Execute('SELECT * FROM '.cms_db_prefix().
@@ -506,7 +506,7 @@ class FormBuilder extends CMSModule
 		if ($fbField == false)
 			{
 			// error handling goes here.
-			debug_display("FAILED to instantiate field!");	
+			echo($this->Lang('error_has_no_fb_field'));
 			}
 		
 		$populate_names = true;

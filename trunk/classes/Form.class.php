@@ -1935,7 +1935,7 @@ function fast_add(field_type)
 	if ($fbField == false)
 		{
 		// error handling goes here.
-		debug_display("FAILED to instantiate field!");	
+		echo($mod->Lang('error_has_no_fb_field'));
 		}
 	$mod->HandleResponseFromXML($fbField, $oneset);
 
@@ -2000,7 +2000,7 @@ function fast_add(field_type)
 	if ($fbField == false)
 		{
 		// error handling goes here.
-		debug_display("FAILED to instantiate field!");	
+		echo($mod->Lang('error_has_no_fb_field'));
 		}
 	$mod->HandleResponseFromXML($fbField, $oneset);
 	list($fnames, $aliases, $vals) = $mod->ParseResponseXML($oneset->xml, false);

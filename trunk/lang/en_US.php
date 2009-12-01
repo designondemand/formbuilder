@@ -365,7 +365,7 @@ $lang['title_additional'] = 'Additional submission';
 $lang['title_additional_help'] = 'Anything to be appended to the submission payload, in URL-encoded form (.e.g, "user=steve+jobs&employee_number=1)';
 $lang['title_include_in_submission'] = 'Include field in Submission';
 $lang['title_data_stored_in_fbr'] = 'Data will be stored in an XML format in the [PREFIX]_module_fb_frombrowser database table.';
-$lang[''] = '';
+$lang['error_has_no_fb_field'] = 'Error! Either the form has no form_builder disposition, or it failed to instantiate (due to memory issues?)';
 $lang[''] = '';
 $lang[''] = '';
 $lang[''] = '';
