@@ -1,4 +1,15 @@
 <ul>
+<li>Version 0.6b2.
+   <ul>
+      <li>Numerous bug fixes. Thanks for all who reported on bugs!</li>
+      <li>Added Form Disposition to do an HTTP GET or POST to any arbitrary URL for form handling</li>
+      <li>Added capability (and example of) advanced multipage contact form where a previous response gets displayed on a subsequent page as per uptoeleven's FR</li>
+
+      <li>Fix for template $fld_X remapping on XML import</li>
+      <li>Extended to provide DOM/CSS id attributes to fields</li>
+      <li>Cleaned up bad use of references for PHP 5.x</li>
+   </ul>
+</li>
 <li>Version 0.6b1.
 	<ul>
 		<li>Updated database code to be CMSMS 1.7-compatible</li>
