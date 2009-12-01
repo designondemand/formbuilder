@@ -29,19 +29,41 @@ class fbFromEmailNameField extends fbFieldBase {
 			htmlspecialchars($this->Value, ENT_QUOTES),
            25,128,$js.$this->GetCSSIdTag());
 	}
-	
+
+	function PrePopulateAdminForm($formDescriptor)
+	{
+		$mod = $this->form_ptr->module_ptr;
+      $main = array();
+      $adv = array();
+		$hopts = array($mod->Lang('option_from')=>'f',$mod->Lang('option_reply')=>'r',$mod->Lang('option_both')=>'b');
+		array_push($main,array($mod->Lang('title_headers_to_modify'),
+			$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_headers_to_modify', $hopts, -1, $this->GetOption('headers_to_modify','b'))));
+
+		return array('main'=>$main,'adv'=>$adv);
+	}
+
 	function ModifyOtherFields()
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$others = $this->form_ptr->GetFields();
+		$htm = $this->GetOption('headers_to_modify','b');
+
 		if ($this->Value !== false)
 			{		
 			for($i=0;$i<count($others);$i++)
 				{
 				$replVal = '';
-				if ($others[$i]->IsDisposition() && is_subclass_of($others[$i],'fbDispositionEmailBase'))
+				if ($others[$i]->IsDisposition()
+               && is_subclass_of($others[$i],'fbDispositionEmailBase'))
 					{
-					$others[$i]->SetOption('email_from_name',$this->Value);
+					if ($htm == 'f' || $htm == 'b')
+                  {
+					    $others[$i]->SetOption('email_from_name',$this->Value);
+					   }
+               if ($htm == 'r' || $htm == 'b')
+                  {
+					    $others[$i]->SetOption('email_reply_to_name',$this->Value);
+                  }
 					}
 				}
 			}
