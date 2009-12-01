@@ -468,11 +468,15 @@ $lang['title_hide'] = 'Hide input';
 $lang['title_hide_help'] = 'Show symbols rather plain text when user enters password?';
 $lang['password_does_not_match'] = 'Password does not match %s';
 $lang['back_top'] = 'Back to FormBuilder Main Page';
-$lang[''] = '';
+$lang['title_headers_to_modify'] = 'Which email headers should this input populate?';
 
 $lang['option_never'] = 'Never';
 $lang['option_user_choice'] = 'Give user a choice (checkbox)';
 $lang['option_always'] = 'Always';
+$lang['option_from'] = '"From" email address';
+$lang['option_reply'] = '"Reply-To" email address';
+$lang['option_both'] = 'Both "From" and "Reply-To" email addresses';
+
 
 
 $lang['error_usertag_disposition'] = 'User defined tag returned an error';

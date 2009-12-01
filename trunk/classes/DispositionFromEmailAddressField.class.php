@@ -105,6 +105,9 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		array_push($main,array($mod->Lang('title_send_usercopy_label'),
 			$mod->CreateInputText($formDescriptor, 'fbrp_opt_send_user_label', $this->GetOption('send_user_label',
 				$mod->Lang('title_send_me_a_copy')),25,125)));
+		$hopts = array($mod->Lang('option_from')=>'f',$mod->Lang('option_reply')=>'r',$mod->Lang('option_both')=>'b');
+		array_push($main,array($mod->Lang('title_headers_to_modify'),
+			$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_headers_to_modify', $hopts, -1, $this->GetOption('headers_to_modify','f'))));
 		return array('main'=>$main,'adv'=>$adv);
 	}
 
@@ -119,14 +122,23 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$others = $this->form_ptr->GetFields();
+		$htm = $this->GetOption('headers_to_modify','f');
 		if ($this->Value !== false)
 			{
 			for($i=0;$i<count($others);$i++)
 				{
 				$replVal = '';
-				if ($others[$i]->IsDisposition() && is_subclass_of($others[$i],'fbDispositionEmailBase'))
+				if ($others[$i]->IsDisposition() &&
+               is_subclass_of($others[$i],'fbDispositionEmailBase'))
 					{
-					$others[$i]->SetOption('email_from_address',$this->Value[0]);
+					if ($htm == 'f' || $htm == 'b')
+                  {
+					    $others[$i]->SetOption('email_from_address',$this->Value[0]);
+					   }
+               if ($htm == 'r' || $htm == 'b')
+                  {
+					    $others[$i]->SetOption('email_reply_to_address',$this->Value[0]);
+                  }
 					}
 				}
 			}

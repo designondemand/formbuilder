@@ -51,6 +51,18 @@ class fbDispositionEmailBase extends fbFieldBase
     return true;
   }
 
+  // override me as necessary
+  function SetReplyToName()
+  {
+    return true;
+  }
+
+  // override me as necessary
+  function SetReplyToAddress()
+  {
+    return true;
+  }
+
   // Send off those emails
   function SendForm($destination_array, $subject)
   {
@@ -87,14 +99,25 @@ class fbDispositionEmailBase extends fbFieldBase
   return array(false,$msg);
       }
     $mail->reset();
+    
+    $rt = $this->GetOption('email_reply_to_address','');
+    $rn = $this->GetOption('email_reply_to_name','');
+    if (empty($rn))
+      {
+      $rn = $this->GetOption('email_from_name','');
+      }
+    if ($this->SetReplyToAddress() && !empty($rt))
+      {
+      $mail->AddReplyTo($rt,$this->SetFromName()?$rn:'');
+      }
+    
     if ($this->SetFromAddress())
       {
-  	  //$mail->SetFrom($this->GetOption('email_from_address'));
-      $mail->AddReplyTo($this->GetOption('email_from_address'),$this->SetFromName()?$this->GetOption('email_from_name'):'');
+  	   $mail->SetFrom($this->GetOption('email_from_address'));
       }
     if ($this->SetFromName())
       {
-  $mail->SetFromName($this->GetOption('email_from_name'));
+      $mail->SetFromName($this->GetOption('email_from_name'));
       }
     $mail->SetCharSet($this->GetOption('email_encoding','utf-8'));
 
