@@ -366,14 +366,6 @@ $lang['title_additional_help'] = 'Anything to be appended to the submission payl
 $lang['title_include_in_submission'] = 'Include field in Submission';
 $lang['title_data_stored_in_fbr'] = 'Data will be stored in an XML format in the [PREFIX]_module_fb_frombrowser database table.';
 $lang['error_has_no_fb_field'] = 'Error! Either the form has no form_builder disposition, or it failed to instantiate (due to memory issues?)';
-$lang[''] = '';
-$lang[''] = '';
-$lang[''] = '';
-$lang[''] = '';
-$lang[''] = '';
-
-
-
 
 $lang['restricted_to_group'] = 'Only in group %s';
 $lang['title_show_to_user'] = 'Display to user?';
