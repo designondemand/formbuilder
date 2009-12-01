@@ -184,17 +184,23 @@ if (! $this->CheckAccess()) exit;
 		case "0.5.9":
 		case "0.5.10":
 		case "0.5.11":
+		case "0.5.12":
 		case "0.6b1":
 		case "0.6b2":
         	$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_fb_formbrowser", "feuid I");
         	$dict->ExecuteSQLArray($sqlarray);
-			$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_fb_formbrowser", "resnew LX");
+			$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_fb_formbrowser", "resnew XL");
         	$dict->ExecuteSQLArray($sqlarray);
 			$db->Execute('update '.cms_db_prefix().'module_fb_formbrowser set resnew=response');
 			$sqlarray = $dict->DropColumnSQL(cms_db_prefix()."module_fb_formbrowser", "response");
         	$dict->ExecuteSQLArray($sqlarray);
-			$sqlarray = $dict->RenameColumnSQL(cms_db_prefix()."module_fb_formbrowser", "resnew","response");
+         // adodb-lite hoses column renames, so we do it the hard way
+			$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_fb_formbrowser", "response XL");
         	$dict->ExecuteSQLArray($sqlarray);
+			$db->Execute('update '.cms_db_prefix().'module_fb_formbrowser set response=resnew');
+			$sqlarray = $dict->DropColumnSQL(cms_db_prefix()."module_fb_formbrowser", "resnew");
+        	$dict->ExecuteSQLArray($sqlarray);
+        	// whew. that was lame.
 		   $path = cms_join_path(dirname(__FILE__),'includes');
        	$params['fbrp_xml_file'] = cms_join_path($path,'Advanced_Contact_Form.xml');
        	$aeform = new fbForm($this, $params, true);
