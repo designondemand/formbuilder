@@ -685,6 +685,7 @@ class FormBuilder extends CMSModule
 	function CreatePageDropdown($id,$name,$current='',
 								$addtext='',$markdefault =true)
 	{
+      global $gCms;
 		// we get here (hopefully) when the template is changed
 		// in the dropdown.
 		$db = $this->GetDb();
