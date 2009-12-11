@@ -595,6 +595,9 @@ You can use this in Static Text fields as well, which is a nice way to personali
 <tr><td>css_class</td><td>CSS Class for the form</td></tr>
 <tr><td>form_name</td><td>Form name</td></tr>
 <tr><td>form_id</td><td>Form database ID</td></tr>
+<tr><td>in_formbrowser</td><td>1 if form is being viewed from FormBrowser</td></tr>
+<tr><td>in_admin</td><td>1 if form is being viewed via FormBrowser admin</td></tr>
+<tr><td>fbr_id</td><td>Response ID if form is being viewed from FormBrowser</td></tr>
 <tr><td>prev</td><td>\"Back\" button for multipart forms</td></tr>
 <tr><td>submit</td><td>\"Continue\" or \"Submit\" button for multipart forms, adjusts automatically</td></tr>
 </table>
@@ -742,7 +745,7 @@ module's installation directory, assuming the web server has permission to write
 <li>*Save Results to File(s) Based on Multiple Selections. Like the Flat File disposition, except the value(s) of checkboxes  determines which file(s) results get written to.</li>
 <li>*Email to CMS Admin User. Provides a pull-down of CMS Admin users, and directs the results as an email to the selected admin.</li>
 <li>*Store Results for FormBrowser Module v.0.3. Stores the form results in an XML structure as a single database record. This is the only interface to Form Browser. See section below.</li>
-<ul><li>*Submit to an arbitrary form action. Craft an HTTP GET or POST, and transmit it using cURL to the specified URL. This lets you use FormBuilder as a front-end to any CGI or Form Handling script out there.</li>
+<li>*Submit to an arbitrary form action. Craft an HTTP GET or POST, and transmit it using cURL to the specified URL. This lets you use FormBuilder as a front-end to any CGI or Form Handling script out there.</li>
 
 </ul></li></li></ul>
 
@@ -759,8 +762,8 @@ alternative like this:</p>
 and check \"Show Field IDs\"</p>
 
 <h3>Email and Flat File Templates</h3>
-<p>Many disposition types allow you to create a template for the email that is generated, or for the way the results are written to a file. If you opt not to create a template, the FormBuilder will use it's own best guess, which may or may not work out to your liking. You can always click on the \"Create Sample Template\" and then customize the results.</p>
-<p>To the right, you'll find a legend which lists all of the variables that are available to you to use in your template. As of version 0.3, variables have two names, one based on the field name, the other based on the field ID. If you use field names that have characters outside of the ASCII 32-126 range, it will be safer to use the ID-based variables.</p>
+<p>Many disposition types allow you to create a template for the email that is generated, or for the way the results are written to a file. If you opt not to create a template, the FormBuilder will use its own best guess, which may or may not work out to your liking. You can always click on the \"Create Sample Template\" and then customize the results.</p>
+<p>To the right, you'll find a legend which lists all of the variables that are available to you to use in your template. As of version 0.3, variables have two names, one based on the field name, the other based on the field ID. If you use field names that have characters outside of the ASCII 32-126 range, it will be safer to use the ID-based variables. As of version 0.5, variables also have aliases, whcih you can use.</p>
 <p><strong>Note that once you've changed a template, it will no longer automatically add new fields.</strong> For this reason, it's usually best to create your templates as the last step of creating your form.</p>
 <p>As of version 0.2.4, you can opt to send any of these emails as HTML email. There should be a checkbox at the top of the template page for this. There is also a \"Create Sample HTML Template\" button over in the legend area. For HTML email, the email body will also provide the default text-only values.</p>
 
@@ -807,7 +810,7 @@ that you use for pages that contain your form.</p>
 
 <h3>Miscellaneous Notes</h3>
 <ul>
-<li>Any fields that sends email to a specified email addresses will accept a comma-separated list of email addresses.</li>
+<li>Any fields that sends email to a specified email address will also accept a comma-separated list of email addresses.</li>
 </ul>
 <h3>Known Issues</h3>
 <ul>
@@ -857,7 +860,7 @@ sample that got stuck on loop? Damn, I am getting old. So is this paragraph. Tim
 "<p>As per the GPL, this software is provided as-is. Please read the text
 of the license for the full disclaimer.</p>
 <h3>Copyright and License</h3>
-<p>Copyright &copy; 2008, Samuel Goldstein <a href=\"mailto:sjg@cmsmodules.com\">&lt;sjg@cmsmodules.com&gt;</a>. All Rights Are Reserved.</p>
+<p>Copyright &copy; 2009, Samuel Goldstein <a href=\"mailto:sjg@cmsmodules.com\">&lt;sjg@cmsmodules.com&gt;</a>. All Rights Are Reserved.</p>
 <p>This module has been released under the <a href=\"http://www.gnu.org/licenses/licenses.html#GPL\">GNU Public License</a>. You must agree to this license before using the module.</p>";
 
 

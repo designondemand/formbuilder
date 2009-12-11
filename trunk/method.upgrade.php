@@ -205,6 +205,7 @@ if (! $this->CheckAccess()) exit;
        	$params['fbrp_xml_file'] = cms_join_path($path,'Advanced_Contact_Form.xml');
        	$aeform = new fbForm($this, $params, true);
 		   $res = $aeform->ImportXML($params);
+      case "0.6":
 
 		}
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('upgraded',$this->GetVersion()));

@@ -2369,6 +2369,7 @@ function fast_add(field_type)
 	        			$parms['category_id'] = $theFields[$i]->GetOption('uploads_category');
 	        			$parms['field_name'] = $_id;
 	        			$res = $uploads->AttemptUpload(-1,$parms,-1);
+	        			
 	        			if( $res[0] == false )
 	          				{
 	      					// failed upload kills the send.
