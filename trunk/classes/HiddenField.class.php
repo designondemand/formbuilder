@@ -49,7 +49,7 @@ class fbHiddenField extends fbFieldBase
 		$mod = &$this->form_ptr->module_ptr;
 		$main = array(
 				array($mod->Lang('title_value'),
-            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_value',$this->GetOption('value',''),25,128))
+            		$mod->CreateInputText($formDescriptor, 'fbrp_opt_value',$this->GetOption('value',''),25,1024))
 		);
 		$adv = array(
 				array($mod->Lang('title_smarty_eval'),
