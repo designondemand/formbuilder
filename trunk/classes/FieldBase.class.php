@@ -808,7 +808,9 @@ class fbFieldBase {
 	$xmlstr .= "\t\t\t<options>\n".$this->OptionsAsXML()."\t\t\t</options>\n";
 	if ($exportValues)
 		{
-			$xmlstr .= "\t\t\t<human_readable_value><![CDATA[".$this->GetHumanReadableValue()."]]></human_readable_value>\n";
+			$xmlstr .= "\t\t\t<human_readable_value><![CDATA[".
+            $this->GetHumanReadableValue().
+            "]]></human_readable_value>\n";
 		}
 
 	$xmlstr .= "</field>\n";
@@ -854,7 +856,8 @@ class fbFieldBase {
 				}
 			foreach ($value as $thisVal)
 				{
-				$xmlstr .= "\t\t\t<option name=\"$name\"><![CDATA[$thisVal]]></option>\n";
+				$xmlstr .= "\t\t\t<option name=\"$name\"><![CDATA[".$thisVal.
+               "]]></option>\n";
 				}
 			}
 		if (isset($this->Value))
@@ -869,7 +872,8 @@ class fbFieldBase {
 				}
 			foreach ($thisVal as $thisValOut)
 				{
-				$xmlstr .= "\t\t\t<value>$thisValOut</value>\n";
+				$xmlstr .= "\t\t\t<value><![CDATA[".$thisValOut.
+               "]]></value>\n";
 				}
 			}
 		return  $xmlstr;
