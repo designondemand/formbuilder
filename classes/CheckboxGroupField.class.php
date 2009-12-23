@@ -20,7 +20,7 @@ class fbCheckboxGroupField extends fbFieldBase {
 		$this->DisplayInForm = true;
 		$this->HasAddOp = true;
 		$this->HasDeleteOp = true;
-		$this->NonRequirableField = true;
+		$this->NonRequirableField = false;
 		$this->ValidationTypes = array(
             );
         $this->boxAdd = 0;
