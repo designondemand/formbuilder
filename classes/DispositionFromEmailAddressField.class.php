@@ -42,6 +42,11 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		return $retstr;
 	}
 
+   function HasValue()
+   {
+   return ($this->Value[0] !== false && !empty($this->Value[0]));
+   }
+
   	function GetValue()
   	{
     	return $this->Value[0];
