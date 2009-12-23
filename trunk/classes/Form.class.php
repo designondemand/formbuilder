@@ -466,9 +466,14 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	  {
 	    continue;
 	  }
+/*	  debug_display($this->Fields[$i]->GetName().' '.
+      ($this->Fields[$i]->HasValue() === false?'False':'true'));
+      if ($this->Fields[$i]->HasValue())
+         debug_display($this->Fields[$i]->GetValue());
+*/
 	if (/*! $this->Fields[$i]->IsNonRequirableField() && */
 	    $this->Fields[$i]->IsRequired() &&
-	    $this->Fields[$i]->HasValue() == false)
+	    $this->Fields[$i]->HasValue() === false)
 	  {
 	    array_push($message,
 	    	$this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName()));
@@ -1979,7 +1984,6 @@ function fast_add(field_type)
   {
 	$mod = $this->module_ptr;
 	$db = $this->module_ptr->dbHandle;
-	
 	$oneset = new StdClass();
 	$form_id = -1;
 	$res = $db->Execute('SELECT response, form_id FROM '.cms_db_prefix().

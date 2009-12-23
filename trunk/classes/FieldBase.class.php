@@ -303,6 +303,10 @@ class fbFieldBase {
 	if (empty($alias))
       {
       $cssid = 'fbrp__'.$this->Id;
+      if ($this->HasMultipleFormComponents())
+         {
+         $cssid .= '_1';
+         }
       }
    else
       {
@@ -633,7 +637,13 @@ class fbFieldBase {
   // especially if "false" is a valid value!
   function HasValue()
   {
-    return ($this->Value !== false);
+     $def = $this->GetOption('default','');
+     if ($this->Value !== false &&
+      ($def == '' || $this->Value != $def))
+      {
+      return true;
+      }
+   return false;
   }
 	
   // probably don't need to override this
@@ -1072,7 +1082,6 @@ class fbFieldBase {
 	    $this->SetValue($params['value_fld'.$this->Id]);
 	  }
       }
-
 
     return true;
   }
