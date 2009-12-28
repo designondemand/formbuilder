@@ -124,7 +124,7 @@ class fbDispositionFormBrowser extends fbFieldBase {
 	else
 		{
 		array_push($adv,array($mod->Lang('title_feu_binding'),
-			$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_feu_bnd','0').
+			$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_feu_bind','0').
 			$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_feu_bind',
 			'1',$this->GetOption('feu_bind','0')).
 			$mod->Lang('title_feu_bind_help')));
