@@ -1,4 +1,5 @@
 <ul>
+<li>Version 0.6. Bug fixes. Finally releasing this thing!</li>
 <li>Version 0.6b2.
    <ul>
       <li>Numerous bug fixes. Thanks for all who reported on bugs!</li>
