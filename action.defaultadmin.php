@@ -111,7 +111,13 @@ if (!isset($gCms)) exit;
 		$this->GetPreference('show_fieldaliases','1')). $this->Lang('title_show_fieldaliases_long'));
 	
 	$this->smarty->assign('title_show_version',$this->Lang('title_show_version'));
-	$this->smarty->assign('input_show_version',$this->CreateInputCheckbox($id, 'fbrp_show_version', 1, $this->GetPreference('show_version','1')). $this->Lang('title_show_version_long'));				
+	$this->smarty->assign('input_show_version',$this->CreateInputCheckbox($id, 'fbrp_show_version', 1, $this->GetPreference('show_version','1')). $this->Lang('title_show_version_long'));
+
+	$this->smarty->assign('title_blank_invalid',$this->Lang('title_blank_invalid'));
+	$this->smarty->assign('input_blank_invalid',$this->CreateInputCheckbox($id,
+      'fbrp_blank_invalid', 1, $this->GetPreference('blank_invalid','0')).
+      $this->Lang('title_blank_invalid_long'));
+   			
 	$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'fbrp_submit', $this->Lang('save')));
 	$this->smarty->assign('end_configform',$this->CreateFormEnd());
 	

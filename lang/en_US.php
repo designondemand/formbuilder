@@ -461,6 +461,8 @@ $lang['title_hide_help'] = 'Show symbols rather plain text when user enters pass
 $lang['password_does_not_match'] = 'Password does not match %s';
 $lang['back_top'] = 'Back to FormBuilder Main Page';
 $lang['title_headers_to_modify'] = 'Which email headers should this input populate?';
+$lang['title_blank_invalid'] = 'Do not accept blank space as valid response';
+$lang['title_blank_invalid_long'] = 'If a field is required, checking this will require that people put in some alphanumeric characters, not just spaces';
 
 $lang['option_never'] = 'Never';
 $lang['option_user_choice'] = 'Give user a choice (checkbox)';

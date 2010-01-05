@@ -177,7 +177,7 @@ class fbDatePickerField extends fbFieldBase {
 		return array('main'=>$main,array());
 	}
 
-  function HasValue()
+  function HasValue($deny_blank_responses=false)
   {
     if ($this->Value === false)
 		{

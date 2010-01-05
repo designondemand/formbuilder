@@ -24,6 +24,8 @@ if (! $this->CheckAccess()) exit;
         $this->SetPreference('show_fieldids',isset($params['fbrp_show_fieldids'])?$params['fbrp_show_fieldids']:0);
         $this->SetPreference('show_fieldaliases',isset($params['fbrp_show_fieldaliases'])?$params['fbrp_show_fieldaliases']:0);
 
+        $this->SetPreference('blank_invalid',isset($params['fbrp_blank_invalid'])?$params['fbrp_blank_invalid']:0);
+
 		$params['fbrp_message'] = $this->Lang('configuration_updated');
         $this->DoAction('defaultadmin', $id, $params);
 

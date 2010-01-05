@@ -466,6 +466,8 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	  {
 	    continue;
 	  }
+	  
+    $deny_space_validation = ($this->module_ptr->GetPreference('blank_invalid','0') == '1');
 /*	  debug_display($this->Fields[$i]->GetName().' '.
       ($this->Fields[$i]->HasValue() === false?'False':'true'));
       if ($this->Fields[$i]->HasValue())
@@ -473,7 +475,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 */
 	if (/*! $this->Fields[$i]->IsNonRequirableField() && */
 	    $this->Fields[$i]->IsRequired() &&
-	    $this->Fields[$i]->HasValue() === false)
+	    $this->Fields[$i]->HasValue($deny_space_validation) === false)
 	  {
 	    array_push($message,
 	    	$this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName()));

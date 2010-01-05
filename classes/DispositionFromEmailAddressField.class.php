@@ -42,7 +42,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		return $retstr;
 	}
 
-   function HasValue()
+   function HasValue($deny_blank_responses=false)
    {
    return ($this->Value[0] !== false && !empty($this->Value[0]));
    }
