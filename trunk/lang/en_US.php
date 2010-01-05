@@ -265,6 +265,7 @@ $lang['title_field_css_id']='CSS id for this field';
 $lang['title_form_css_class']='CSS Class for this form';
 $lang['title_field_css_class']='CSS Class for this field';
 $lang['title_form_predisplay_udt'] = 'User defined tag to call before form is displayed';
+$lang['title_form_validate_udt'] = 'User defined tag to call during form validation';
 $lang['title_form_required_symbol']='Symbol to mark required Fields';
 $lang['title_field_required']='Required';
 $lang['title_field_required_long']='Require a response for this Field';
@@ -463,15 +464,21 @@ $lang['back_top'] = 'Back to FormBuilder Main Page';
 $lang['title_headers_to_modify'] = 'Which email headers should this input populate?';
 $lang['title_blank_invalid'] = 'Do not accept blank space as valid response';
 $lang['title_blank_invalid_long'] = 'If a field is required, checking this will require that people put in some alphanumeric characters, not just spaces';
-
+$lang['error_CompanyDirectory_module_not_available'] = 'Company Directory module is not available!';
 $lang['option_never'] = 'Never';
 $lang['option_user_choice'] = 'Give user a choice (checkbox)';
 $lang['option_always'] = 'Always';
 $lang['option_from'] = '"From" email address';
 $lang['option_reply'] = '"Reply-To" email address';
 $lang['option_both'] = 'Both "From" and "Reply-To" email addresses';
-
-
+$lang['option_dropdown']='Dropdown';
+$lang['option_selectlist_single']='Select List (single)';
+$lang['option_selectlist_multiple']='Select List (multiple)';
+$lang['option_radiogroup']='Radio Group';
+$lang['title_company_field_note']='Note: Output will be in the form of<br/>"company name"=>"value"';
+$lang['title_pick_categories']='Pick a category (multiple)';
+$lang['title_pick_fielddef']='Pull a field Definition\'s value (single) <em>optional</em>';
+$lang['title_choose_user_input']='Choose User input';
 
 $lang['error_usertag_disposition'] = 'User defined tag returned an error';
 $lang['error_cataloger_module_not_available']='<strong>Cataloger module does not seem to be installed/active.</strong>';
@@ -788,7 +795,17 @@ the module source code, and find their way to the passphrase. This will not prot
 server, some familiarity with PHP, and the time to poke around. <em><strong>Do not</strong> use this to protect high-value information such as financial data,
 sensitive political information, human rights data, or anything else that might be of value to a repressive government or organized crime
 cartel.</em></p>
+<h3>Using with User Defined Tags (UDTs)</h3>
+<p>Several options for customizing behavior via UDTs is provided (thanks to kind code contributions, see credits).</p>
 
+<ul><li>Call User Defined Tag With the Form Results. This field type submits the human-readable form results to the User-Defined
+Tag you specify. The UDT can handle the results however it wants. Values are passed as \$params['field_name'], and
+as \$params['field_alias'] (if defined).</li>
+<li>Validation UDT. Set this for a form, and the UDT will receive all of the form\'s human-readable results. The UDT should do whatever
+validation it wants, and return an array with the first value being true or false (indication whether the form validates), and the second
+value being error messages (if any).</li>
+<li></li>
+<li></li>
 <h3>Configuration</h3>
 <p>There are some global configuration options for FormBuilder:</p>
 <ul>
@@ -809,7 +826,22 @@ that you use for pages that contain your form.</p>
 <p>This default CSS was graciously provided by Paul Noone.</p>
 
 ".$lang['template_variable_help']."
-
+<h3>Credits</h3>
+<p>Many people have contributed code, bug reports, cash, and ideas to FormBrowser. Among them:
+<ul>
+<li>Robert Campbell - numerous code contributions</li>
+<li>Tyler Boespflug - funding and ideas</li>
+<li>Paul Noone - CSS and ideas</li>
+<li>Jeff Bosch - UDT Validation</li>
+<li>Nuno Costa - suggestions</li>
+<li>Alberto Benati - code</li>
+<li>Morten Poulsen - code</li>
+<li>Marc Geldon - code</li>
+<li>Kevin Grandon - code</li>
+<li>Simon Schaufelberger - code</li>
+<li>Ronny Krijt - code</li>
+</ul>
+<p>I apologize for any omissions - notify me, and I'll correct the omission!</p>
 <h3>Miscellaneous Notes</h3>
 <ul>
 <li>Any fields that sends email to a specified email address will also accept a comma-separated list of email addresses.</li>

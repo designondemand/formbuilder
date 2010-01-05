@@ -452,6 +452,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
   function Validate()
   {
+	global $gCms;
     $validated = true;
     $message = array();
     $formPageCount=1;
@@ -498,6 +499,42 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		$this->Fields[$i]->SetOption('is_valid',true);
 	      }
 	  }
+	$usertagops = $gCms->GetUserTagOperations();
+	$udt = $this->GetAttr('validate_udt','');
+	$unspec = $this->GetAttr('unspecified',$this->module_ptr->Lang('unspecified'));
+	
+	if( $validated == true && !empty($udt) && "-1" != $udt )
+		{
+		$parms = $params; 
+		$others = $this->GetFields();
+		for($i=0;$i<count($others);$i++)
+			{
+			$replVal = '';
+			if ($others[$i]->DisplayInSubmission())
+				{
+				$replVal = $others[$i]->GetHumanReadableValue();
+				if ($replVal == '')
+					{
+					$replVal = $unspec;
+					}
+				}
+			$name = $others[$i]->GetVariableName();
+			$parms[$name] = $replVal;
+			$id = $others[$i]->GetId();
+			$parms['fld_'.$id] = $replVal;
+			$alias = $others[$i]->GetAlias();
+			if (!empty($alias))
+				{
+				$parms[$alias] = $replVal;
+				}
+			}
+		$res = $usertagops->CallUserTag($udt,$parms);
+		if ($res[0] != true)
+			{	
+			array_push($message,$res[1]);
+			$validated = false;	
+			}
+		}	
       }
     return array($validated, $message);
   }
@@ -1586,6 +1623,21 @@ function fast_add(field_type)
       $mod->smarty->assign('input_form_predisplay_udt',
             $mod->CreateInputDropdown($id,'fbrp_forma_predisplay_udt',$usertaglist,-1,
                                       $this->GetAttr('predisplay_udt',-1)));
+    }
+    $mod->smarty->assign('title_form_validate_udt',
+                         $mod->Lang('title_form_validate_udt'));
+    {
+      $usertagops = $gCms->GetUserTagOperations();
+      $usertags = $usertagops->ListUserTags();
+      $usertaglist = array();
+      $usertaglist[$mod->lang('none')] = -1;
+      foreach( $usertags as $key => $value )
+        {
+  	  $usertaglist[$value] = $key;
+        }
+      $mod->smarty->assign('input_form_validate_udt',
+            $mod->CreateInputDropdown($id,'fbrp_forma_validate_udt',$usertaglist,-1,
+                                      $this->GetAttr('validate_udt',-1)));
     }
 
     $mod->smarty->assign('title_form_required_symbol',
