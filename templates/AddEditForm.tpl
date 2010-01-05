@@ -126,6 +126,10 @@ function replaceTemplate(originalRequest)
 	</fieldset>
 <fieldset class="module_fb_fieldset"><legend>{$title_submit_actions}</legend>
 	<div class="pageoverflow">
+		<p class="pagetext">{$title_form_validate_udt}:</p>
+		<p class="pageinput">{$input_form_validate_udt}</p>
+	</div>
+	<div class="pageoverflow">
 		<p class="pagetext">{$title_submit_action}:</p>
 		<p class="pageinput">{$input_submit_action}</p>
 	</div>

@@ -1,5 +1,14 @@
 <ul>
-<li>Version 0.6. Bug fixes. Finally releasing this thing!</li>
+<li>Version 0.6.1.
+	<ul>
+		<li>Bug fixes.</li>
+		<li>New Validation UDT code provided by Jeff Bosch</li>
+		<li>Ability to reject blank/only spaces for required fields</li>
+		<li>CompanyDirectory Field provided by Jeremy Bass</li>
+		<li></li>
+	</ul>
+</li>
+<li>Version 0.6. 30 Dec 09. Bug fixes. Finally releasing this thing!</li>
 <li>Version 0.6b2.
    <ul>
       <li>Numerous bug fixes. Thanks for all who reported on bugs!</li>
