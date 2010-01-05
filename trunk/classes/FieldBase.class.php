@@ -635,12 +635,16 @@ class fbFieldBase {
 
   // override this if you have some unusual format for values,
   // especially if "false" is a valid value!
-  function HasValue()
+  function HasValue($deny_blank_responses=false)
   {
      $def = $this->GetOption('default','');
      if ($this->Value !== false &&
       ($def == '' || $this->Value != $def))
       {
+      if ($deny_blank_responses && preg_match('/^\s+$/',$this->Value))
+         {
+         return false;
+         }
       return true;
       }
    return false;

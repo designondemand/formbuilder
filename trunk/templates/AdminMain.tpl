@@ -77,6 +77,10 @@
 	<p class="pageinput">{$input_unique_fieldnames}</p>
 </div>
 <div class="pageoverflow">
+	<p class="pagetext">{$title_blank_invalid}:</p>
+	<p class="pageinput">{$input_blank_invalid}</p>
+</div>
+<div class="pageoverflow">
 	<p class="pagetext">{$title_relaxed_email_regex}:</p>
 	<p class="pageinput">{$input_relaxed_email_regex}</p>
 </div>
