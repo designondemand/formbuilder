@@ -73,9 +73,9 @@ class fbStatePickerField extends fbFieldBase {
 			}
 
 
-		if (! $this->HasValue() && $this->GetOption('default','') != '')
+		if (! $this->HasValue() && $this->GetOption('default_state','') != '')
 		  {
-		  $this->SetValue($this->GetOption('default',''));
+		  $this->SetValue($this->GetOption('default_state',''));
 		  }
 
 		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $this->States, -1, $this->Value, $js.$this->GetCSSIdTag());
@@ -88,8 +88,8 @@ class fbStatePickerField extends fbFieldBase {
 
 		$main = array(
 			array($mod->Lang('title_select_default_state'),
-            		$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_default',
-            		$this->States, -1, $this->GetOption('default',''))),
+            		$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_default_state',
+            		$this->States, -1, $this->GetOption('default_state',''))),
 			array($mod->Lang('title_select_one_message'),
             		$mod->CreateInputText($formDescriptor, 'fbrp_opt_select_one',
             		$this->GetOption('select_one',$mod->Lang('select_one'))))

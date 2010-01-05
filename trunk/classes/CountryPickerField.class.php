@@ -138,9 +138,9 @@ class fbCountryPickerField extends fbFieldBase {
 			$this->Countries = array_merge(array($mod->Lang('select_one')=>''),$this->Countries);
 			}
 
-		if (! $this->HasValue() && $this->GetOption('default','') != '')
+		if (! $this->HasValue() && $this->GetOption('default_country','') != '')
 		  {
-		  $this->SetValue($this->GetOption('default',''));
+		  $this->SetValue($this->GetOption('default_country',''));
 		  }
 
 		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $this->Countries, -1,
@@ -154,8 +154,8 @@ class fbCountryPickerField extends fbFieldBase {
 
 		$main = array(
 			array($mod->Lang('title_select_default_country'),
-            		$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_default',
-            		$this->Countries, -1, $this->GetOption('default',''))),
+            		$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_default_country',
+            		$this->Countries, -1, $this->GetOption('default_country',''))),
 			array($mod->Lang('title_select_one_message'),
             		$mod->CreateInputText($formDescriptor, 'fbrp_opt_select_one',
             		$this->GetOption('select_one',$mod->Lang('select_one'))))
