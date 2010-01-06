@@ -162,10 +162,6 @@ function replaceTemplate(originalRequest)
 </fieldset>
 {$tab_end}{$symboltab_start}
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_form_predisplay_udt}:</p>
-		<p class="pageinput">{$input_form_predisplay_udt}</p>
-	</div>
-	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_required_symbol}:</p>
 		<p class="pageinput">{$input_form_required_symbol}</p>
 	</div>
@@ -177,7 +173,18 @@ function replaceTemplate(originalRequest)
 		<p class="pagetext">{$title_list_delimiter}:</p>
 		<p class="pageinput">{$input_list_delimiter}</p>
 	</div>
-	
+{$tab_end}{$udttab_start}
+	<div class="pageoverflow">
+		<p class="pagetext">{$title_see_also_udt}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">{$title_form_predisplay_udt}:</p>
+		<p class="pageinput">{$input_form_predisplay_udt}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">{$title_form_predisplay_each_udt}:</p>
+		<p class="pageinput">{$input_form_predisplay_each_udt}</p>
+	</div>
 {$tab_end}{$captchatab_start}
 {if $captcha_installed}
 	<div class="pageoverflow">

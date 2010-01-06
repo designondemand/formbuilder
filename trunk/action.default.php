@@ -155,6 +155,7 @@ else
 
 		 $aeform->setFinishedFormSmarty();
          echo $this->ProcessTemplateFromData( $message );
+         return;
          }
       else if ($act == 'redir')
          {
@@ -162,6 +163,7 @@ else
          if ($ret != -1)
             {
             $this->RedirectContent($ret);
+            return;
 	   		}
          }
       }
@@ -182,16 +184,27 @@ else
       }
    }
 
-if( isset($fbrp_callcount) && $fbrp_callcount == 0 )
-  {
-    $usertagops = $gCms->GetUserTagOperations();
-    $udt = $aeform->GetAttr('predisplay_udt','');
-    if( !empty($udt) && "-1" != $udt )
-    {
-      $parms = $params;
-	  $parms['FORM'] =& $aeform;
-	  $tmp = $usertagops->CallUserTag($udt,$parms);
-    }
+$udtonce = $aeform->GetAttr('predisplay_udt','');
+$udtevery = $aeform->GetAttr('predisplay_each_udt','');
+if (!$finished &&
+   ((!empty($udtonce) && $udtonce != '-1') ||
+   (!empty($udtevery) && $udtevery != '-1')))
+   {
+   $usertagops = $gCms->GetUserTagOperations();
+   $parms = $params;
+	$parms['FORM'] =& $aeform;
+
+   if( isset($fbrp_callcount) && $fbrp_callcount == 0 &&
+      !empty($udtonce) && "-1" != $udtonce )
+      {
+	   $tmp = $usertagops->CallUserTag($udtonce,$parms);
+      }
+   if(!empty($udtevery) && "-1" != $udtevery)
+      {
+	   $tmp = $usertagops->CallUserTag($udtevery,$parms);
+      }
+
   }
+
 echo $aeform->RenderForm($id, $params, $returnid);
 ?>

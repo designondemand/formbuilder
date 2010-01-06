@@ -49,6 +49,7 @@ $lang['field_type_LinkField']='Link (User-entered)';
 $lang['field_type_HiddenField'] = '-Hidden Field';
 $lang['field_type_ComputedField'] = '-Computed Field';
 $lang['field_type_UniqueIntegerField']='-Unique Integer (Serial)';
+$lang['field_type_CompanyDirectoryField'] = 'Company Directory Field';
 
 // validation types
 $lang['validation_none']='No Validation';
@@ -160,6 +161,7 @@ $lang['tab_captcha']='Captcha Settings';
 $lang['tab_advanced']='Advanced Settings';
 $lang['tab_templatelayout'] = 'Form Template';
 $lang['tab_submissiontemplate'] = 'Submission Template';
+$lang['tab_udt'] = 'UDT Integration';
 
 
 $lang['canuse_smarty'] = '<em>Smarty variables are valid in this field.</em>';
@@ -264,7 +266,8 @@ $lang['title_field_to_validate'] = 'Field to Validate';
 $lang['title_field_css_id']='CSS id for this field';
 $lang['title_form_css_class']='CSS Class for this form';
 $lang['title_field_css_class']='CSS Class for this field';
-$lang['title_form_predisplay_udt'] = 'User defined tag to call before form is displayed';
+$lang['title_form_predisplay_udt'] = 'User defined tag to call before form is displayed the first time (only called once)';
+$lang['title_form_predisplay_each_udt'] = 'User defined tag to call before form is displayed (called on every page of multipage forms)';
 $lang['title_form_validate_udt'] = 'User defined tag to call during form validation';
 $lang['title_form_required_symbol']='Symbol to mark required Fields';
 $lang['title_field_required']='Required';
@@ -479,6 +482,7 @@ $lang['title_company_field_note']='Note: Output will be in the form of<br/>"comp
 $lang['title_pick_categories']='Pick a category (multiple)';
 $lang['title_pick_fielddef']='Pull a field Definition\'s value (single) <em>optional</em>';
 $lang['title_choose_user_input']='Choose User input';
+$lang['title_see_also_udt']='(Also take a look at the Form Submission tab if you want to set a UDT for form validation)';
 
 $lang['error_usertag_disposition'] = 'User defined tag returned an error';
 $lang['error_cataloger_module_not_available']='<strong>Cataloger module does not seem to be installed/active.</strong>';

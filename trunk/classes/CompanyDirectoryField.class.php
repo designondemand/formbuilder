@@ -11,6 +11,7 @@
  * or more items from the CompanyDirectory 
  * the item list is filtered by an array
  * of options as specified in the admin.
+ * This Field written by Jeremy Bass <jeremyBass@cableone.net>
  */
 class fbCompanyDirectoryField extends fbFieldBase {
 
@@ -105,10 +106,16 @@ class fbCompanyDirectoryField extends fbFieldBase {
 			}
 		}
 
+      foreach($companies as $key=>$val)
+         {
+         if (empty($val))
+            {
+            $companies[$key]=$key;
+            }
+         }
 		// All done, do we have something to display?
 		if( count($companies) ){
-			$size = min($lines,count($companies));
-			$size = min(50,$size); // maximum 50 lines, though this is probably big
+			$size = min(50,count($companies)); // maximum 50 lines, though this is probably big
 			
 			$val = array();
 			if( $this->Value !== false ){
