@@ -641,7 +641,7 @@ class fbFieldBase {
      if ($this->Value !== false &&
       ($def == '' || $this->Value != $def))
       {
-      if ($deny_blank_responses && preg_match('/^\s+$/',$this->Value))
+      if ($deny_blank_responses && !is_array($this->Value) && preg_match('/^\s+$/',$this->Value))
          {
          return false;
          }

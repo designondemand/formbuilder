@@ -1319,6 +1319,7 @@ function unmy_htmlentities($val)
          $mod->SetTabHeader('submittab',$mod->Lang('tab_submit')).
          $mod->SetTabHeader('symboltab',$mod->Lang('tab_symbol')).
          $mod->SetTabHeader('captchatab',$mod->Lang('tab_captcha')).
+         $mod->SetTabHeader('udttab',$mod->Lang('tab_udt')).
          $mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout')).
          $mod->SetTabHeader('submittemplate',$mod->Lang('tab_submissiontemplate')).
 			$mod->EndTabHeaders() . $mod->StartTabContent());
@@ -1327,6 +1328,7 @@ function unmy_htmlentities($val)
     $mod->smarty->assign('maintab_start',$mod->StartTab("maintab"));
     $mod->smarty->assign('submittab_start',$mod->StartTab("submittab"));
     $mod->smarty->assign('symboltab_start',$mod->StartTab("symboltab"));
+    $mod->smarty->assign('udttab_start',$mod->StartTab("udttab"));
     $mod->smarty->assign('templatetab_start',$mod->StartTab("templatelayout"));
     $mod->smarty->assign('submittemplatetab_start',$mod->StartTab("submittemplate"));
     $mod->smarty->assign('captchatab_start',$mod->StartTab("captchatab"));
@@ -1611,6 +1613,8 @@ function fast_add(field_type)
 					       $this->GetAttr('next_button_text',$mod->Lang('button_continue')), 35, 35));
     $mod->smarty->assign('title_form_predisplay_udt',
                          $mod->Lang('title_form_predisplay_udt'));
+    $mod->smarty->assign('title_form_predisplay_each_udt',
+                         $mod->Lang('title_form_predisplay_each_udt'));
     {
       $usertagops = $gCms->GetUserTagOperations();
       $usertags = $usertagops->ListUserTags();
@@ -1623,6 +1627,10 @@ function fast_add(field_type)
       $mod->smarty->assign('input_form_predisplay_udt',
             $mod->CreateInputDropdown($id,'fbrp_forma_predisplay_udt',$usertaglist,-1,
                                       $this->GetAttr('predisplay_udt',-1)));
+      $mod->smarty->assign('input_form_predisplay_each_udt',
+            $mod->CreateInputDropdown($id,'fbrp_forma_predisplay_each_udt',$usertaglist,-1,
+                                      $this->GetAttr('predisplay_each_udt',-1)));
+
     }
     $mod->smarty->assign('title_form_validate_udt',
                          $mod->Lang('title_form_validate_udt'));
