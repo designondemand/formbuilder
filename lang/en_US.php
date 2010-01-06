@@ -49,6 +49,7 @@ $lang['field_type_LinkField']='Link (User-entered)';
 $lang['field_type_HiddenField'] = '-Hidden Field';
 $lang['field_type_ComputedField'] = '-Computed Field';
 $lang['field_type_UniqueIntegerField']='-Unique Integer (Serial)';
+$lang['field_type_UserTagField'] = '-User Defined Tag Call';
 $lang['field_type_CompanyDirectoryField'] = 'Company Directory Field';
 
 // validation types
@@ -485,6 +486,7 @@ $lang['title_choose_user_input']='Choose User input';
 $lang['title_see_also_udt']='(Also take a look at the Form Submission tab if you want to set a UDT for form validation)';
 
 $lang['error_usertag_disposition'] = 'User defined tag returned an error';
+$lang['error_usertag'] = 'User defined tag %s returned an error.';
 $lang['error_cataloger_module_not_available']='<strong>Cataloger module does not seem to be installed/active.</strong>';
 $lang['warning'] = 'WARNING!';
 $lang['default_template'] = 'Default Template';
@@ -736,6 +738,7 @@ independently validated. This is good for applications like online surveys.</li>
 <li>-Static Link. This allows you to put a link to a given page into your form. Optionally, you can have it autopopulate with the page where the form is embedded (useful if you're sending results via email).</li>
 <li>-Computed Field. This allows you to embed a computed field in your form. It is not visible to the user until after the form is submitted. It allows you to do simple arithmetic or string concatenation.</li>
 <li>-Unique Integer (Serial). This is an integer that increases every time someone hits your form. Your results may not be sequential, but they will increase monotonically.</li>
+<li>-User Tag. This calls the specified User Defined Tag, and displays anything it returns. The UDT gets called any time the field would be visible.</li>
 </ul></li>
 
 <li>Form Handling Inputs (Dispositions)
@@ -783,7 +786,7 @@ and check \"Show Field IDs\"</p>
 <h3>Use with FormBrowser v3</h3>
 <p>There are some special features when using FormBuilder with FormBrowser. The new approach stores the form results in XML, so that far fewer
 queries are needed to retrieve records. This means you can use FormBrowser with hundreds or even thousands of records. It also means you
-will have to choose up front which fields you will want to be able to sort by. You can choose up to five.</p>
+will have to choose up front which fields you will want to be able to sort by. You can choose up to five. Changing these after there are submitted records will result in improper sorting! A re-index function will be added to a future version.</p>
 <p>In advanced options, you can tie a form to Frontend Users. That means each user gets one record for the form; they can create it
 a single time, subsequent times they will be editing their record. The record will not be visible to any other users (excluding admins).
 This form should be added to your page using the syntax {FormBuilder action='feuserform' form='form_name'}.</p>
@@ -805,6 +808,7 @@ cartel.</em></p>
 <ul><li>Call User Defined Tag With the Form Results. This field type submits the human-readable form results to the User-Defined
 Tag you specify. The UDT can handle the results however it wants. Values are passed as \$params['field_name'], and
 as \$params['field_alias'] (if defined).</li>
+<li>User Tag Field. This calls the specified UDT, and displays anything it returns. The UDT gets called any time the field would be visible.</li>
 <li>Validation UDT. Set this for a form, and the UDT will receive all of the form\'s human-readable results. The UDT should do whatever
 validation it wants, and return an array with the first value being true or false (indication whether the form validates), and the second
 value being error messages (if any).</li>
