@@ -808,8 +808,13 @@ as \$params['field_alias'] (if defined).</li>
 <li>Validation UDT. Set this for a form, and the UDT will receive all of the form\'s human-readable results. The UDT should do whatever
 validation it wants, and return an array with the first value being true or false (indication whether the form validates), and the second
 value being error messages (if any).</li>
-<li></li>
-<li></li>
+<li>User defined tag to call before form is displayed the first time (only called once). This
+is set in the Form Admin in the UDT Integration tab. The UDT gets called on the first display
+of the form.</li>
+<li>User defined tag to call before form is displayed (called on every page of multipage
+forms). This is set in the Form Admin in the UDT Integration tab. The UDT gets called
+every time any page of the form is displayed (including when validation fails).</li>
+</ul>
 <h3>Configuration</h3>
 <p>There are some global configuration options for FormBuilder:</p>
 <ul>
