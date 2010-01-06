@@ -637,16 +637,30 @@ class fbFieldBase {
   // especially if "false" is a valid value!
   function HasValue($deny_blank_responses=false)
   {
-     $def = $this->GetOption('default','');
-     if ($this->Value !== false &&
-      ($def == '' || $this->Value != $def))
-      {
-      if ($deny_blank_responses && !is_array($this->Value) && preg_match('/^\s+$/',$this->Value))
+     if ($this->GetFieldType()=='TextField' || $this->GetFieldType()=='TextAreaField')
          {
-         return false;
+         // fields with defaults
+         $def = $this->GetOption('default','');
+         if ($this->Value !== false &&
+            ($def == '' || $this->Value != $def))
+            {
+            if ($deny_blank_responses && !is_array($this->Value)
+               && preg_match('/^\s+$/',$this->Value))
+               {
+               return false;
+               }
+            return true;
+            }
          }
-      return true;
-      }
+      else if ($this->Value !== false)
+         {
+         if ($deny_blank_responses && !is_array($this->Value)
+            && preg_match('/^\s+$/',$this->Value))
+            {
+            return false;
+            }
+         return true;
+         }
    return false;
   }
 	

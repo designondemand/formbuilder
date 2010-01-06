@@ -27,10 +27,9 @@ class fbPasswordAgainField extends fbFieldBase {
      if ($this->GetOption('hide','1') == '0')
        {
 	     return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,
-				    ($this->Value?$this->Value:$this->GetOption('default')),
+				    ($this->Value?$this->Value:''),
             $this->GetOption('length'),
             255,
-            ($this->GetOption('clear_default','0')==1?('onfocus="if (this.value==\''.$this->GetOption('default').'\') {this.value=\'\';}" '):' ').
 			$js.$this->GetCSSIdTag());
         }
       else
