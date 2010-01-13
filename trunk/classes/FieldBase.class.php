@@ -512,7 +512,7 @@ class fbFieldBase {
 					   'fbrp_opt_helptext','module_fb_area_short')));
 		array_push($adv,array($mod->Lang('title_field_javascript'),
 			$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('javascript',''),
-						   'fbrp_opt_javascript','module_fb_area_short').'<br />'.
+						   'fbrp_opt_javascript','module_fb_area_short','','', '', '80', '15','','js').'<br />'.
 			$mod->Lang('title_field_javascript_long')));
 	  }
 	
