@@ -259,7 +259,7 @@ class fbDispositionEmailBase extends fbFieldBase
            array($mod->Lang('title_email_template'),
            array($mod->CreateTextArea(false, $formDescriptor,
               /*($this->GetOption('html_email','0')=='1'?$message:htmlspecialchars($message))*/
-			 $message,'fbrp_opt_email_template', 'module_fb_area_wide', '','',0,0),
+			 $message,'fbrp_opt_email_template', 'module_fb_area_wide', '','','','80', '15','','html'),
               $this->form_ptr->AdminTemplateHelp($formDescriptor,$parm))),
            array($mod->Lang('title_email_encoding'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_encoding',$this->GetOption('email_encoding','utf-8'),25,128))
            )

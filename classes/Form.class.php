@@ -1662,17 +1662,20 @@ function fast_add(field_type)
 
     $mod->smarty->assign('input_form_template',
 			 $mod->CreateTextArea(false, $id,
-					      $this->GetAttr('form_template',$this->DefaultTemplate()), 'fbrp_forma_form_template','','fb_form_template'));
+				$this->GetAttr('form_template',$this->DefaultTemplate()), 'fbrp_forma_form_template','','fb_form_template',
+				'', '', '80', '15','','html'));
 
 	$mod->smarty->assign('input_submit_javascript',
 		$mod->CreateTextArea(false, $id,
-				$this->GetAttr('submit_javascript',''), 'fbrp_forma_submit_javascript','module_fb_area_short','fb_submit_javascript').
+				$this->GetAttr('submit_javascript',''), 'fbrp_forma_submit_javascript','module_fb_area_short','fb_submit_javascript',
+				'', '', '80', '15','','js').
 				'<br />'.$mod->Lang('title_submit_javascript_long'));
 
 					      
     $mod->smarty->assign('input_submit_response',
 			 $mod->CreateTextArea(false, $id,
-					      $this->GetAttr('submit_response',''), 'fbrp_forma_submit_response','module_fb_area_wide'));
+				$this->GetAttr('submit_response',''), 'fbrp_forma_submit_response','module_fb_area_wide','',
+				'', '', '80', '15','','html'));
 
 	$parms = array();
 	$parms['forma_submit_response']['html_button'] = true;
