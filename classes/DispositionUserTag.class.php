@@ -60,6 +60,7 @@ class fbDispositionUserTag extends  fbFieldBase
 	   }
    }
 
+	$this->form_ptr->setFinishedFormSmarty();
     global $gCms;
     $usertagops = $gCms->GetUserTagOperations();
     $res = $usertagops->CallUserTag( $this->GetOption('udtname'), $params);
