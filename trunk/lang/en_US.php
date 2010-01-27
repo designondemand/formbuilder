@@ -51,6 +51,7 @@ $lang['field_type_ComputedField'] = '-Computed Field';
 $lang['field_type_UniqueIntegerField']='-Unique Integer (Serial)';
 $lang['field_type_UserTagField'] = '-User Defined Tag Call';
 $lang['field_type_CompanyDirectoryField'] = 'Company Directory Field';
+$lang['field_type_ModuleInterfaceField'] = '-Module Interface Field';
 
 // validation types
 $lang['validation_none']='No Validation';
@@ -503,6 +504,21 @@ $lang['upgrade03to04'] = 'Form Template was updated automatically as part of the
 $lang['admindesc']='Add, edit and manage interactive Forms';
 
 $lang['operators_help'] = 'If you use String evaluation, the only operation available is concatenation (+), while if you use Number evaluation you have basic, very simple math (, +, -, *, /, ).'; 
+$lang['help_module_interface']='<h1>This field is used as a gateway to other modules!</h1>
+How you use it is by creating you form elements in the templates of the mod you wish to incorporate.<br/><br/>
+Use <strong>{$FBid}</strong> in the form element like this<br/>
+&lt;input type="hidden" name="{$FBid}" value="The field" /&gt;<br/>
+Use <strong>{$FBvalue}</strong> in the form element like this<br/>
+&lt;input type="hidden" name="{$FBid}" value={$FBvalue} /&gt; <em>note:use if statements to switch</em><br/>
+So in, lets say, the Products mod you may do something like this:<br/><br/>
+<h2>In the Products Module summary template</h2>
+{foreach from=$items item=entry}<br/>
+&lt;div class="ProductDirectoryItem"&gt;<br/>
+&lt;input type="checkbox" value="{$entry-&gt;price}" name="{$FBid}[]"/&gt;{$entry-&gt;product_name} ({$entry-&gt;weight}{$weight_units})  {$currency_symbol}{$entry-&gt;price} <br/>
+&lt;/div&gt;<br/>
+{/foreach}<br/><br/>
+where in the input below you put something like <strong>{Products category="cat" summarytemplate="Your_FB_template"}</strong>';
+$lang['title_add_tag'] = 'Add your tag';
 
 $lang['date_january']='January';
 $lang['date_february']='February';

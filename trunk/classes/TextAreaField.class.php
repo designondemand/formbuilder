@@ -39,8 +39,8 @@ class fbTextAreaField extends fbFieldBase {
 			{
 			$ret .= '<script type="text/javascript">';
 			$ret .= "\nvar f = document.getElementById('".$this->GetCSSId()."');\n";
-			$ret .= "if (f)\n{\nf.onfocus=function(){\nif (this.value=='";
-			$ret .= preg_replace('/(\r)?\n/','\\n',$this->GetOption('default'))."') {this.value='';}\n}\n";
+			$ret .= "if (f)\n{\nf.onfocus=function(){\nif (this.value==this.defaultValue) {this.value='';}\n}\n";
+			$ret .= "f.onblur=function(){\nif (this.value=='') {this.value=this.defaultValue;}\n}\n";
 			$ret .= "}\n;";
 			$ret .= "</script>\n";
 			}

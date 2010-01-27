@@ -42,7 +42,7 @@ class fbTextField extends fbFieldBase {
 				    ($this->Value?$this->Value:$this->GetOption('default')),
             $this->GetOption('length')<25?$this->GetOption('length'):25,
             $this->GetOption('length'),
-            ($this->GetOption('clear_default','0')==1?('onfocus="if (this.value==\''.$this->GetOption('default').'\') {this.value=\'\';}" '):' ').$js.$ro.
+            ($this->GetOption('clear_default','0')==1?(' onfocus="if(this.value==this.defaultValue) this.value=\'\';" onblur="if(this.value==\'\') this.value=this.defaultValue;"'):' ').$js.$ro.
 			$this->GetCSSIdTag());
 	}
 
