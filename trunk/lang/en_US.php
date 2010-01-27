@@ -362,7 +362,7 @@ $lang['title_feu_binding'] = 'Frontend User binding';
 $lang['title_install_feu'] = 'Please install the Frontend User module to connect a form and its data to a specific user';
 $lang['title_feu_bind_help'] = 'Check this to lock front-end access to this form\'s data to the logged-in front-end user.';
 $lang['title_encryption'] = 'Encryption';
-$lang['title_export_form_to_udt'] = 'Export form reference to UDT as $params[\'FORM\']?';
+$lang['title_export_form_to_udt'] = 'Export form reference to UDT as $params[\'FORM\']? (do not do this if you are going to print_r($params) )';
 $lang['title_url_help'] = 'Entire URL, including protocol and path (e.g., http://myhost.com/form_handler.cgi)';
 $lang['title_url'] = 'Form submission URL';
 $lang['title_method'] = 'Form method';
@@ -504,19 +504,25 @@ $lang['upgrade03to04'] = 'Form Template was updated automatically as part of the
 $lang['admindesc']='Add, edit and manage interactive Forms';
 
 $lang['operators_help'] = 'If you use String evaluation, the only operation available is concatenation (+), while if you use Number evaluation you have basic, very simple math (, +, -, *, /, ).'; 
-$lang['help_module_interface']='<h1>This field is used as a gateway to other modules!</h1>
-How you use it is by creating you form elements in the templates of the mod you wish to incorporate.<br/><br/>
-Use <strong>{$FBid}</strong> in the form element like this<br/>
-&lt;input type="hidden" name="{$FBid}" value="The field" /&gt;<br/>
-Use <strong>{$FBvalue}</strong> in the form element like this<br/>
-&lt;input type="hidden" name="{$FBid}" value={$FBvalue} /&gt; <em>note:use if statements to switch</em><br/>
-So in, lets say, the Products mod you may do something like this:<br/><br/>
-<h2>In the Products Module summary template</h2>
-{foreach from=$items item=entry}<br/>
-&lt;div class="ProductDirectoryItem"&gt;<br/>
-&lt;input type="checkbox" value="{$entry-&gt;price}" name="{$FBid}[]"/&gt;{$entry-&gt;product_name} ({$entry-&gt;weight}{$weight_units})  {$currency_symbol}{$entry-&gt;price} <br/>
-&lt;/div&gt;<br/>
-{/foreach}<br/><br/>
+$lang['help_module_interface']='Using Module Interface';
+$lang['help_module_interface_long']='<b>This field is used as a gateway to other modules!</b>
+Use it by creating your form elements in the templates of the other module(s) you wish to incorporate, and using the <strong>{$FBid}</strong> to tie it back to FormBuilder. For example, to include form options based on the Products module, create the following template in Products:<br/>
+<pre>
+{foreach from=$items item=entry}
+	{assign var=MData value=\'\'}
+	{assign var=Cd value=\'\'}
+		{foreach from=$FBvalue item=MData}
+			{assign var=MData value=\'::\'|explode:$MData}
+			{if $MData[1]==$entry->id}
+				{assign var=Cd value=\' checked="checked"\'}
+			{/if}
+		{/foreach}
+	&lt;div class="ProductDirectoryItem">
+		&lt;input type="checkbox" value="{$entry->price}::{$entry->id}" name="{$FBid}[]" {$Cd} />{$entry->product_name} ({$entry->weight}{$weight_units}) &pound;{$entry->price}    
+	&lt;/div>
+{/foreach}
+</pre>
+<br/>
 where in the input below you put something like <strong>{Products category="cat" summarytemplate="Your_FB_template"}</strong>';
 $lang['title_add_tag'] = 'Add your tag';
 
@@ -823,7 +829,7 @@ cartel.</em></p>
 
 <ul><li>Call User Defined Tag With the Form Results. This field type submits the human-readable form results to the User-Defined
 Tag you specify. The UDT can handle the results however it wants. Values are passed as \$params['field_name'], and
-as \$params['field_alias'] (if defined).</li>
+as \$params['field_alias'] (if defined). As per a suggestion, it also populates all of the Smarty values that would be visible to the Submission Template too!</li>
 <li>User Tag Field. This calls the specified UDT, and displays anything it returns. The UDT gets called any time the field would be visible.</li>
 <li>Validation UDT. Set this for a form, and the UDT will receive all of the form\'s human-readable results. The UDT should do whatever
 validation it wants, and return an array with the first value being true or false (indication whether the form validates), and the second
@@ -856,13 +862,14 @@ that you use for pages that contain your form.</p>
 
 ".$lang['template_variable_help']."
 <h3>Credits</h3>
-<p>Many people have contributed code, bug reports, cash, and ideas to FormBrowser. Among them:
+<p>Many people have contributed code, bug reports, cash, and ideas to FormBuilder. Among them:
 <ul>
 <li>Robert Campbell - numerous code contributions</li>
 <li>Tyler Boespflug - funding and ideas</li>
 <li>Paul Noone - CSS and ideas</li>
 <li>Jeff Bosch - UDT Validation</li>
 <li>Nuno Costa - suggestions</li>
+<li>Jeremy Bass - code and suggestions</li>
 <li>Alberto Benati - code</li>
 <li>Morten Poulsen - code</li>
 <li>Marc Geldon - code</li>
