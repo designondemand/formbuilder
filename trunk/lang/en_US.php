@@ -762,6 +762,7 @@ independently validated. This is good for applications like online surveys.</li>
 <li>-Unique Integer (Serial). This is an integer that increases every time someone hits your form. Your results may not be sequential, but they will increase monotonically.</li>
 <li>-User Tag. This calls the specified User Defined Tag, and displays anything it returns. The UDT gets called any time the field would be visible.</li>
 </ul></li>
+<li>-Module Include Tag. This allows you to embed other module output into your form, e.g., a list of products from the Products module.</li>
 
 <li>Form Handling Inputs (Dispositions)
 <ul><li>*Call a User Defined Tag With the Form Results. This submits all the form results to the User-Defined Tag you specify. The UDT can handle the results however it wants. Values are passed as \$params['field_name'], and as \$params['field_alias'] (if defined).</li>
