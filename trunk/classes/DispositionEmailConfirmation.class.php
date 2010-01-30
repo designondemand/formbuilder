@@ -83,7 +83,8 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 		if (! $this->approvedToGo)
 			{
 			// create response URL
-			list($rid,$code) = $this->form_ptr->StoreResponse();
+			$fbrf = null;
+			list($rid,$code) = $this->form_ptr->StoreResponse(-1,'',$fbrf);
 					
 			$mod->smarty->assign('confirm_url',$mod->CreateFrontendLink('', $returnid,
 				'validate', '', array('fbrp_f'=>$this->form_ptr->GetId(),'fbrp_r'=>$rid,'fbrp_c'=>$code), '',

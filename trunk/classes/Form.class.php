@@ -274,6 +274,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
   {
     $mod = $this->module_ptr;
     $ret = "";
+
 	if ($email)
 		{
     	if ($htmlish)
@@ -2184,7 +2185,7 @@ function fast_add(field_type)
 
 	if ($response_id == -1)
 		{
-		if ($formBuilderDisposition->GetOption('feu_bind','0') == '1')
+		if (is_object($formBuilderDisposition) && $formBuilderDisposition->GetOption('feu_bind','0') == '1')
 			{
 			$feu = $mod->GetModuleInstance('FrontEndUsers');
 			if ($feu == false)
