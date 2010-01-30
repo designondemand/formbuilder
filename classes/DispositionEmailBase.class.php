@@ -123,6 +123,10 @@ class fbDispositionEmailBase extends fbFieldBase
 
     $message = $this->GetOption('email_template','');
     $htmlemail = ($this->GetOption('html_email','0') == '1');
+	if ($this->GetFieldType() == 'DispositionEmailConfirmation')
+		{
+		$form->AddTemplateVariable('confirm_url',$mod->Lang('title_confirmation_url'));
+		}
     if ($htmlemail)
      {
     $mail->IsHTML(true);
@@ -245,6 +249,11 @@ class fbDispositionEmailBase extends fbFieldBase
 	$parm['opt_email_template']['html_button'] = true;
 	$parm['opt_email_template']['text_button'] = true;
 	$parm['opt_email_template']['is_email'] = true;
+	if ($this->GetFieldType() == 'DispositionEmailConfirmation')
+		{
+		$this->form_ptr->AddTemplateVariable('confirm_url',$mod->Lang('title_confirmation_url'));
+		}
+
     return array(
      array(
            array($mod->Lang('title_email_subject'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_subject',$this->GetOption('email_subject',''),50).'<br/>'.$mod->Lang('canuse_smarty')),
