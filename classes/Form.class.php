@@ -1486,6 +1486,8 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	      }
 	    $oneset->type = $thisField->GetDisplayType();
 	    $oneset->alias = $thisField->GetAlias();
+		$oneset->id = $thisField->GetID();
+
 	    if (/*$thisField->IsDisposition() ||*/
 		!$thisField->DisplayInForm() ||
 		$thisField->IsNonRequirableField())
