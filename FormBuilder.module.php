@@ -490,6 +490,7 @@ class FormBuilder extends CMSModule
 			{
 			$dbresult = $db->Execute('SELECT * '.$sql, array($form_id));	
 			}
+			
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
 			$oneset = new stdClass();
@@ -549,6 +550,99 @@ class FormBuilder extends CMSModule
 		}
 		return array($records, $names, $values);
 	}
+
+	// writes all records into a flat file.
+	function WriteSortedResponsesToFile($form_id, $filespec, $striptags=true, $dateFmt='d F y', &$params)
+	{
+		$db = $this->GetDb();
+		$names = array();
+		$values = array();
+		$sql = 'FROM '.cms_db_prefix().
+				'module_fb_formbrowser WHERE form_id=?';
+
+		if (! isset($params['fbrp_sort_field']) || $params['fbrp_sort_field']=='submitdate' || empty($params['fbrp_sort_field']))
+		{
+			if (isset($params['fbrp_sort_dir']) && $params['fbrp_sort_dir'] == 'd')
+			{
+				$sql .= ' order by submitted desc';	
+			}
+			else
+			{
+				$sql .= ' order by submitted asc';
+			}
+		}
+		else if (isset($params['fbrp_sort_field']))
+			{
+			if (isset($params['fbrp_sort_dir']) && $params['fbrp_sort_dir'] == 'd')
+				{
+					$sql .= ' order by index_key_'.(int)$params['fbrp_sort_field'].' desc';	
+				}
+				else
+				{
+					$sql .= ' order by index_key_'.(int)$params['fbrp_sort_field'].' asc';
+				}
+			}
+
+		$fbField = $this->GetFormBrowserField($form_id);
+		if ($fbField == false)
+			{
+			// error handling goes here.
+			echo($this->Lang('error_has_no_fb_field'));
+			}
+
+		$fh = fopen($filespec, 'w+');
+		if ($fh === false)
+			{
+			return false;
+			}
+
+		$dbresult = $db->Execute('SELECT * '.$sql, array($form_id));	
+			
+		$populate_names = true;
+		while ($dbresult && $row = $dbresult->FetchRow())
+		{
+			$oneset = new stdClass();
+			$oneset->id = $row['fbr_id'];
+			$oneset->user_approved = (empty($row['user_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['user_approved']))); 
+			$oneset->admin_approved = (empty($row['admin_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['admin_approved']))); 
+			$oneset->submitted = date($dateFmt,$db->UnixTimeStamp($row['submitted']));
+			$oneset->xml = $row['response'];
+			$this->HandleResponseFromXML($fbField, $oneset);
+			list($fnames, $aliases, $vals) = $this->ParseResponseXML($oneset->xml);
+			if ($populate_names)
+				{
+				if ($striptags)
+		         	{
+					foreach ($fnames as $id=>$name)
+						{
+		            	$fnames[$i] = strip_tags($fnames[$i]);
+		            	}
+		         	}
+				fputs ($fh, $this->Lang('title_submit_date')."\t".
+					$this->Lang('title_approval_date')."\t".
+					$this->Lang('title_user_approved')."\t".
+					implode("\t",$fnames)."\n");
+				$populate_names = false;
+				}
+			fputs ($fh,$oneset->submitted . "\t");
+			fputs ($fh,$oneset->admin_approved . "\t");
+			fputs ($fh,$oneset->user_approved . "\t");
+			foreach ($vals as $tv)
+				{
+				if ($striptags)
+	               {
+	               $tv = strip_tags($tv);
+	               }
+				fputs ($fh,preg_replace('/[\n\t\r]/',' ',$tv));
+				fputs ($fh,"\t");
+				}
+			fputs($fh,"\n");
+		}					
+		fclose($fh);
+		return true;
+	}
+
+
 
 	function GetSortableFields($form_id)
 	{
