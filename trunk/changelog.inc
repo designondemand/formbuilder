@@ -1,11 +1,12 @@
 <ul>
 <li>Version 0.6.1.
 	<ul>
-		<li>Bug fixes.</li>
+		<li>Numerous Bug fixes. If your bug isn't fixed, post it in the tracker!</li>
 		<li>New Validation UDT code provided by Jeff Bosch</li>
 		<li>Ability to reject blank/only spaces for required fields</li>
-		<li>CompanyDirectory Field provided by Jeremy Bass</li>
+		<li>New "CompanyDirectory"" Field type provided by Jeremy Bass</li>
 		<li>Improvements to default value code provided by Jeremy Bass</li>
+		<li>New "Module Interface" field type provided by Jeremy Bass</li>
 		<li>New "User Defined Tag Call" field type</li>
 		<li>Fix to support syntax highlighters for templates and Javascript on admin side</li>
 		<li></li>
