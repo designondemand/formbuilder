@@ -16,6 +16,7 @@ $lang['field_type_ButtonField']='Button';
 $lang['field_type_CheckboxField']='Check Box';
 $lang['field_type_CheckboxGroupField']='Check Box Group';
 $lang['field_type_PulldownField']='Pulldown';
+$lang['field_type_YearPullDownField']='Year Pulldown';
 $lang['field_type_MultiselectField']='Multiselect';
 $lang['field_type_StatePickerField']='U.S. State Picker';
 $lang['field_type_ProvincePickerField']='Canadian Province Picker';
@@ -488,6 +489,7 @@ $lang['title_pick_categories']='Pick a category (multiple)';
 $lang['title_pick_fielddef']='Pull a field Definition\'s value (single) <em>optional</em>';
 $lang['title_choose_user_input']='Choose User input';
 $lang['title_see_also_udt']='(Also take a look at the Form Submission tab if you want to set a UDT for form validation)';
+$lang['title_year_end_message']='End year';
 
 $lang['error_usertag_disposition'] = 'User defined tag returned an error';
 $lang['error_usertag'] = 'User defined tag %s returned an error.';
