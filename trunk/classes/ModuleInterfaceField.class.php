@@ -13,16 +13,16 @@
 class fbModuleInterfaceField extends fbFieldBase 
 {
 
-  function fbHiddenField(&$form_ptr, &$params)
+  function fbModuleInterfaceField(&$form_ptr, &$params)
   {
     $this->fbFieldBase($form_ptr, $params);
     $mod = &$form_ptr->module_ptr;
     $this->Type = 'ModuleInterfaceField';
     $this->DisplayInForm = true;
-    $this->NonRequirableField = true;
+    //$this->NonRequirableField = true; REMOVED BY Stikki
     $this->ValidationTypes = array();
     $this->HasLabel = 0;
-    $this->NeedsDiv = 0;
+    $this->NeedsDiv = 0; 
     $this->sortable = false;
 	$this->DisplayInSubmission = true;
   }
