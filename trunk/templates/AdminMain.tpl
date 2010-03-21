@@ -6,7 +6,9 @@
 <thead><tr>
 	<th>{$title_form_name}</th>
 	<th>{$title_form_alias}</th>
-	<th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th>
+	<th width="50px">&nbsp;</th>
+	<th width="33px">&nbsp;</th>
+	<th width="33px">&nbsp;</th>
 </tr>
 </thead>
 
@@ -23,7 +25,7 @@
 <tr>
 	<td colspan="5">&nbsp;</td>
 </tr>
-<tr class="row1">
+<tr>
 	<td colspan="5">
 {if $addlink != ''}{$addlink}{$addform}{/if}
 	</td>
