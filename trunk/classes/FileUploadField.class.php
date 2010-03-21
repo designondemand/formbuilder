@@ -159,7 +159,8 @@ class fbFileUploadField extends fbFieldBase {
     $ms = $this->GetOption('max_size');
     $exts = $this->GetOption('permitted_extensions');
     $mod = $this->form_ptr->module_ptr;
-    $fullAlias = $this->GetValue();
+    //$fullAlias = $this->GetValue(); -- Stikki modifys: Now gets correct alias
+    $fullAlias = $mod->module_id.'fbrp__'.$this->Id;
     if ($_FILES[$fullAlias]['size'] < 1 && ! $this->Required)
       {
 	return array(true,'');

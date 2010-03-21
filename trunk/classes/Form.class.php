@@ -28,6 +28,12 @@ class fbForm {
     $this->Fields = array();
     $this->Attrs = array();
     $this->formState = 'new';
+	
+	// Stikki adding: $id overwrite possible with $param
+    if ((!isset($this->module_ptr->module_id) || empty($this->module_ptr->module_id)) && isset($params['module_id']))
+      {
+	$this->module_ptr->module_id = $params['module_id'];
+      }	  
     if (isset($params['form_id']))
       {
 	$this->Id = $params['form_id'];
@@ -166,7 +172,6 @@ class fbForm {
   {
     $this->Page--;
   }
-
 
   function SetName($name)
   {
@@ -622,6 +627,8 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
   // returns a string.
   function RenderForm($id, &$params, $returnid)
   {
+	include(dirname(__FILE__) . '/../../../lib/replacement.php');  
+
     $mod = $this->module_ptr;
     if ($this->Id == -1)
       {
@@ -738,16 +745,25 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	$oneset->label_parts = $thisField->LabelSubComponents()?1:0;
 	$oneset->type = $thisField->GetDisplayType();
 	$oneset->input_id = $thisField->GetCSSId();
-   $mod->smarty->assign($thisField->GetName(),$oneset);
 
+	// Added by Stikki STARTS
+	$name_alias = $thisField->GetName();
+	$name_alias = str_replace($toreplace, $replacement, $name_alias);
+	$name_alias = strtolower($name_alias);
+	$name_alias = preg_replace('/[^a-z0-9]+/i','_',$name_alias);
+
+    $mod->smarty->assign($name_alias,$oneset);
+	// Added by Stikki ENDS
+	
 	if ($thisField->GetAlias() != '')
 		{
 		$mod->smarty->assign($thisField->GetAlias(),$oneset);
 		}
 
-	array_push($fields,$oneset);
+	$fields[$oneset->input_id] = $oneset;
+	//array_push($fields,$oneset);
       }
-
+	  
     $mod->smarty->assign_by_ref('fb_hidden',$hidden);
     $mod->smarty->assign_by_ref('fields',$fields);
     $mod->smarty->assign_by_ref('previous',$prev);
@@ -816,6 +832,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 				$this->GetAttr('submit_button_text'),
 				'class="fbsubmit" '.$jsTrigger.' '.$js));
       }
+
 	  return $mod->ProcessTemplateFromDatabase('fb_'.$this->Id);
   }
 
@@ -1336,18 +1353,16 @@ function unmy_htmlentities($val)
     $mod->smarty->assign('tab_end',$mod->EndTab());
     $mod->smarty->assign('form_end',$mod->CreateFormEnd());
     $mod->smarty->assign('title_form_name',$mod->Lang('title_form_name'));
-    $mod->smarty->assign('input_form_name',
-			 $mod->CreateInputText($id, 'fbrp_form_name',
-					       $this->Name, 50));
+    $mod->smarty->assign('input_form_name', $mod->CreateInputText($id, 'fbrp_form_name', $this->Name, 50));
 	
-	
-	$mod->smarty->assign('template_are_you_sure',$mod->Lang('template_are_you_sure'));
+	// Removed by Stikki - Remaked whole template submit system with jQuery, so most of stuff is unneccery.
+	//$mod->smarty->assign('template_are_you_sure',$mod->Lang('template_are_you_sure'));
 	$mod->smarty->assign('title_load_template',$mod->Lang('title_load_template'));
 	$modLink = $mod->CreateLink($id, 'admin_get_template', $returnid, '', array(), '', true);
-	list($mod_path, $mod_param) = explode('?',$modLink);
+	//list($mod_path, $mod_param) = explode('?',$modLink);
 	$mod->smarty->assign('security_key',CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY]);
-	$mod->smarty->assign('mod_path',$mod_path);
-	$mod->smarty->assign('mod_param',html_entity_decode($mod_param));
+	//$mod->smarty->assign('mod_path',$mod_path);
+	//$mod->smarty->assign('mod_param',html_entity_decode($mod_param));
 	
 	$templateList = array(''=>'',$mod->Lang('default_template')=>'RenderFormDefault.tpl',
 		$mod->Lang('table_left_template')=>'RenderFormTableTitleLeft.tpl',
@@ -1364,7 +1379,7 @@ function unmy_htmlentities($val)
 		}
 	
 	$mod->smarty->assign('input_load_template',$mod->CreateInputDropdown($id,
-		'fbrp_fb_template_load', $templateList, -1, '', 'id="fb_template_load" onchange="getTemplate()"'));
+		'fbrp_fb_template_load', $templateList, -1, '', 'id="fb_template_load" onchange="$(this).fb_get_template(\''.$mod->Lang('template_are_you_sure').'\',\''.$modLink.'\');"'));
 	$mod->smarty->assign('help_template_variables',$mod->Lang('template_variable_help'));
     $mod->smarty->assign('title_form_unspecified',$mod->Lang('title_form_unspecified'));
     $mod->smarty->assign('input_form_unspecified',
@@ -1496,11 +1511,11 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	      }
 	    else if ($thisField->IsRequired())
 	      {
-		$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/true.gif','true','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'off','field_id'=>$thisField->GetId()));
+		$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/true.gif','true','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'off','field_id'=>$thisField->GetId()),'', '', '', 'class="true" onclick="$(this).fb_admin_update_field_required(); return false;"');
 	      }
 	    else
 	      {
-		$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/false.gif','false','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'on','field_id'=>$thisField->GetId()));
+		$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/false.gif','false','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'on','field_id'=>$thisField->GetId()),'', '', '', 'class="false" onclick="$(this).fb_admin_update_field_required(); return false;"');
 	      }
 	    $oneset->field_status = $thisField->StatusInfo();
 	    if ($count > 1)
@@ -1520,7 +1535,7 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 		$oneset->down = '&nbsp;';
 	      }
 	    $oneset->editlink = $mod->CreateLink($id, 'admin_add_edit_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/edit.gif',$mod->Lang('edit'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
-	    $oneset->deletelink = $mod->CreateLink($id, 'admin_delete_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif',$mod->Lang('delete'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),$mod->Lang('are_you_sure_delete_field',htmlspecialchars($thisField->GetName())));
+	    $oneset->deletelink = $mod->CreateLink($id, 'admin_delete_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif',$mod->Lang('delete'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),'', '', '', 'onclick="$(this).fb_delete_field(\''.$mod->Lang('are_you_sure_delete_field',htmlspecialchars($thisField->GetName())).'\'); return false;"');
 	    ($currow == "row1"?$currow="row2":$currow="row1");
 	    $count++;
 	    if ($thisField->GetOrder() >= $maxOrder)
@@ -1685,9 +1700,9 @@ function fast_add(field_type)
 	$parms['forma_submit_response']['txt_button'] = false;
 	$parms['forma_submit_response']['is_one_line'] = false;
 	$parms['forma_submit_response']['is_email'] = false;
-	$mod->smarty->assign('help_submit_response',
-		$this->AdminTemplateHelp($id,$parms));
-    return $mod->ProcessTemplate('AddEditForm.tpl');
+	$mod->smarty->assign('help_submit_response', $this->AdminTemplateHelp($id,$parms));
+
+	return $mod->ProcessTemplate('AddEditForm.tpl');
   }
 
     function &NewField(&$params)
@@ -2420,7 +2435,9 @@ function fast_add(field_type)
 			      // if the option is not checked, then the file is merely uploaded to
 				  // the "uploads" directory
 			      //
-	      		$_id = $theFields[$i]->GetValue();
+				  
+	      		//$_id = $theFields[$i]->GetValue(); -- Stikki modifys: now gets correct id
+	      		$_id = $mod->module_id.'fbrp__'.$theFields[$i]->Id;
 	      		if( isset( $_FILES[$_id] ) && $_FILES[$_id]['size'] > 0 )
 	        		{
 	    			$thisFile =& $_FILES[$_id];
