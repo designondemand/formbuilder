@@ -45,16 +45,17 @@ class FormBuilder extends CMSModule
 	{
 		global $gCms;
 		$this->CMSModule();
-		
+
 		$this->module_ptr = &$this;
 		$this->dbHandle =  $this->GetDb();
 		$this->module_id = '';
 		$this->email_regex = "/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i";
 		$this->email_regex_relaxed="/^([\w\d\.\-\_])+\@([\w\d\.\-\_])+$/i";
+		
 		require_once dirname(__FILE__).'/classes/Form.class.php';
 		require_once dirname(__FILE__).'/classes/FieldBase.class.php';
 	}
-
+	
 	function initialize()
 	{
 		$dir=opendir(dirname(__FILE__).'/classes');
@@ -159,9 +160,21 @@ class FormBuilder extends CMSModule
 
 	function AdminStyle()
 	{
-		return "\n.module_fb_table {font-size: 10px;}\n.module_fb_area_wide {width: 500px;}\n.module_fb_legend{font-size: 9px; margin: 6px; border: 1px solid black;}.module_fb_area_short {width: 500px; height: 100px;}\n.module_fb_link {text-decoration: underline;}\n.module_fb_fieldset {margin-bottom:2em;}\n.odd {background-color: #fff;text-align:left;vertical-alignment: top;}\n.even {background-color: #ddd;text-align:left;vertical-alignment: top;}\n";
+		$fn = dirname(__FILE__).'/includes/admin.css';
+		return @file_get_contents($fn);
 	}
 
+	function GetHeaderHTML()
+	{
+		global $gCms;	
+		
+		$tmpl = '<script type="text/javascript" src="'.cms_join_path($gCms->config['root_url'],'modules',$this->GetName(),'includes').'/jquery-1.3.2.min.js"></script>';
+		$tmpl .= '<script type="text/javascript" src="'.cms_join_path($gCms->config['root_url'],'modules',$this->GetName(),'includes').'/fb_jquery.js"></script>';
+
+        return $this->ProcessTemplateFromData($tmpl);
+		
+	}		
+	
 	function SetParameters()
 	{
 		$this->RegisterModulePlugin();
@@ -185,6 +198,10 @@ class FormBuilder extends CMSModule
 
 	function DoAction($name,$id,$params,$returnid='')
 	{
+	
+		global $gCms;
+		$smarty =& $gCms->GetSmarty();
+	
 		$this->module_id = $id;
 		parent::DoAction($name,$id,$params,$returnid);
 	}
@@ -221,6 +238,7 @@ class FormBuilder extends CMSModule
 	database access. If we let ADODB quote it, the SQL is not valid (not that MySQL cares,
 	but Postgres does).
 	*/
+	
 	function GetForms($order_by='name')
 	{
 		$db = $this->GetDb();

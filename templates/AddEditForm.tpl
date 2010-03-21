@@ -1,42 +1,3 @@
-<script type="text/javascript">
-{literal}
-/* <![CDATA[ */
-function getTemplate()
-	{		
-	var selector = document.getElementById('fb_template_load');
-	if (selector)
-		{
-		var templ = selector[selector.selectedIndex].value;
-
-		if (templ.length > 0 && confirm('{/literal}{$template_are_you_sure}{literal}'))
-			{
-			var url = '{/literal}{$mod_path}{literal}';
-			var pars = '{/literal}{$mod_param}{literal}&m1_fbrp_tid='+templ;
-		
-			var myAjax = new Ajax.Request(
-				url, 
-				{
-					method: 'get', 
-					parameters: pars,
-					onFailure: reportError,
-					onComplete: replaceTemplate
-				});		
-			}
-		}
-	}
-function reportError(request)
-	{
-		alert('Sorry. There was an error.');
-	}
-
-function replaceTemplate(originalRequest)
-	{
-		//put returned template in the textarea
-		$('fb_form_template').value = originalRequest.responseText;
-	}
-/* ]]> */
-{/literal}
-</script>
 {if $message != ''}<div class="pagemcontainer"><p class="pagemessage">{$message}</p></div>{/if}
 {$formstart}{$formid}{$fb_hidden}{$tab_start}{$maintab_start}
 <fieldset class="module_fb_fieldset"><legend>{$title_form_main}</legend>
@@ -93,7 +54,7 @@ function replaceTemplate(originalRequest)
 				</thead>
 				<tbody>
 				{foreach from=$fields item=entry}
-					<tr class="{$entry->rowclass}" onmouseover="this.className='{$entry->rowclass}hover';" onmouseout="this.className='{$entry->rowclass}';">
+					<tr id="{$entry->id}" class="{$entry->rowclass}">
 				{if isset($title_field_id)}
 					<td>{$entry->id}</td>
 				{/if}
@@ -110,8 +71,8 @@ function replaceTemplate(originalRequest)
 					<td>{$entry->deletelink}</td>
 					</tr>
 				{/foreach}
-               	<tr><td colspan="8" class="row2">&nbsp;</td></tr>
-               	<tr><td colspan="8" class="row1">{$add_field_link} &nbsp; {$order_field_link}</td></tr>
+               	<tr><td colspan="9">&nbsp;</td></tr>
+               	<tr><td colspan="9">{$add_field_link} &nbsp; {$order_field_link}</td></tr>
 				</tbody>
             </table>
         </div>
