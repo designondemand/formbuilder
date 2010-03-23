@@ -11,7 +11,7 @@ require_once('DispositionEmailBase.class.php');
 
 class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 
-	var $validated;
+	//var $validated;
 
 	function fbDispositionEmailConfirmation(&$form_ptr, &$params)
 	{
@@ -22,8 +22,7 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 		$this->NonRequirableField = false;
 		$this->DisplayInSubmission = true;
 		$this->IsDisposition = true;
-		$this->ValidationTypes = array(
-       		);
+		$this->ValidationTypes = array();
        	$this->ValidationType = 'email';
        	$this->modifiesOtherFields = true;
        	$this->form_ptr->AddTemplateVariable('confirm_url',
@@ -38,7 +37,7 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 
 	function ApproveToGo($response_id)
 	{
-	$this->approvedToGo = true;
+		$this->approvedToGo = true;
 	}
 
 	function ModifyOtherFields()
@@ -85,7 +84,7 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 			// create response URL
 			$fbrf = null;
 			list($rid,$code) = $this->form_ptr->StoreResponse(-1,'',$fbrf);
-					
+			
 			$mod->smarty->assign('confirm_url',$mod->CreateFrontendLink('', $returnid,
 				'validate', '', array('fbrp_f'=>$this->form_ptr->GetId(),'fbrp_r'=>$rid,'fbrp_c'=>$code), '',
 				true,false,'',true));
