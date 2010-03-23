@@ -2151,22 +2151,19 @@ function fast_add(field_type)
       }
   }   
 
-  function DeleteResponse($response_id)
+  function DeleteResponse($response_id) // TODO: Remove this, totally useless function, check with SjG first
   {
     $db = $this->module_ptr->dbHandle;
-    $sql = 'DELETE FROM ' . cms_db_prefix().
-      'module_fb_resp_val where resp_id=?';
+    $sql = 'DELETE FROM ' . cms_db_prefix(). 'module_fb_resp_val where resp_id=?';
     $res = $db->Execute($sql, array($response_id));
-    $sql = 'DELETE FROM '.cms_db_prefix().
-      'module_fb_resp where resp_id=?';
+    $sql = 'DELETE FROM '.cms_db_prefix().'module_fb_resp where resp_id=?';
     $res = $db->Execute($sql, array($response_id));	
   }
 
   function CheckResponse($form_id, $response_id, $code)
   {
     $db = $this->module_ptr->dbHandle;
-    $sql = 'SELECT secret_code FROM ' . cms_db_prefix().
-      'module_fb_formbrowser where form_id=? and resp_id=?';
+    $sql = 'SELECT secret_code FROM ' . cms_db_prefix(). 'module_fb_formbrowser WHERE form_id=? AND fbr_id=?';
     if($result = $db->GetRow($sql, array($form_id,$response_id)))
       {
 	if ($result['secret_code'] == $code)
@@ -2237,7 +2234,7 @@ function fast_add(field_type)
 	
 	if (! $crypt)
 		{
-		$this->StoreResponseXML(
+		$output = $this->StoreResponseXML(
 			$response_id,
 			$newrec,
 			$approver,
@@ -2256,7 +2253,7 @@ function fast_add(field_type)
 			{
 			return array(false, $xml);
 			}
-		$this->StoreResponseXML(
+		$output = $this->StoreResponseXML(
 			$response_id,
 			$newrec,
 			$approver,
@@ -2275,7 +2272,7 @@ function fast_add(field_type)
 			{
 			return array(false, $xml);
 			}
-		$this->StoreResponseXML(
+		$output = $this->StoreResponseXML(
 			$response_id,
 			$newrec,
 			$approver,
@@ -2287,7 +2284,8 @@ function fast_add(field_type)
 			$feu_id,
 			$xml);
 		}
-	return array(true,'');
+	//return array(true,''); Stikki replaced: instead of true, return actual data, didn't saw any side effects.
+	return $output;
   }
     
   function &ResponseToXML()
