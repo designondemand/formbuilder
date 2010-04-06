@@ -275,7 +275,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
   }
 
 
-  function createSampleTemplate($htmlish=false,$email=true, $oneline=false,$header=false)
+  function createSampleTemplate($htmlish=false,$email=true, $oneline=false,$header=false,$footer=false)
   {
     $mod = $this->module_ptr;
     $ret = "";
@@ -311,7 +311,8 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
     	  	$ret .= "\n-------------------------------------------------\n";
     	  	}
     	}
-	elseif (! $oneline)
+		
+	elseif (!$oneline)
 		{
 		if ($htmlish)
 			{
@@ -323,6 +324,14 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 			$ret .= '</h2>';
 			}
 		}
+		
+		
+	if ($footer)
+		 {
+		 $ret .= '------------------------------------------\nEOF\n';
+		 return $ret;
+		 }			
+		
     $others = $this->GetFields();
     for($i=0;$i<count($others);$i++)
       {
@@ -336,8 +345,10 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		{
 		$fldref = 'fld_'. $others[$i]->GetId();
 		}
+		
 	  $ret .= '{if $'.$fldref.' != "" && $'.$fldref.' != "'.$this->GetAttr('unspecified',$mod->Lang('unspecified')).'" }';
 	  $fldref = '{$'.$fldref.'}';
+	  
 	  if ($htmlish)
      	  {
   		  $ret .= '<strong>'.$others[$i]->GetName() . '</strong>: ' . $fldref. "<br />";
@@ -349,18 +360,21 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	  elseif ($oneline && $header)
 		 {
 		 $ret .= $others[$i]->GetName().'{$TAB}';
-		 }
+		 }	 
 	  else
   	  	  {
 	      $ret .= $others[$i]->GetName() . ': ' .$fldref;
 	      }
 	  	$ret .= "{/if}\n";
 		}
-      }
+      }	  
+	  
+	 /* Stikki says: Don't see any use for this, correct me if i'm wrong.
     if ($oneline)
 		{
 		$ret = substr($ret,0,strlen($ret) - 6). "\n";
 		}
+	*/
     return $ret;
   }
 
@@ -411,6 +425,8 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		$is_oneline = (isset($val['is_oneline']) && $val['is_oneline']);
 		$is_email = (isset($val['is_email']) && $val['is_email']);
 		$is_header = (isset($val['is_header']) && $val['is_header']);
+		$is_footer = (isset($val['is_footer']) && $val['is_footer']);
+		
 		if ($html_button)
 			{
 			$button_text = $mod->Lang('title_create_sample_html_template');
@@ -419,6 +435,10 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 			{
 			$button_text = $mod->Lang('title_create_sample_header_template');
 			}
+		elseif ($is_footer)
+			{
+			$button_text = $mod->Lang('title_create_sample_footer_template');
+			}						
 		else
 			{
 			$button_text = $mod->Lang('title_create_sample_template');
@@ -426,32 +446,24 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
 		if ($html_button && $text_button)
 			{
-			$sample = $this->createSampleTemplate(false, $is_email, $is_oneline, $is_header);
+			$sample = $this->createSampleTemplate(false, $is_email, $is_oneline, $is_header, $is_footer);
 			$sample = preg_replace('/\'/',"\\'",$sample);
 			$sample = preg_replace('/\n/',"\\n'+\n'", $sample);
 			$sampleTemplateCode .= preg_replace('/\|TEMPLATE\|/',"'".$sample."'",
-			    	$this->createSampleTemplateJavascript($key, $mod->Lang('title_create_sample_template'),'text'));
+			$this->createSampleTemplateJavascript($key, $mod->Lang('title_create_sample_template'),'text'));
 			}
 		
-		$sample = $this->createSampleTemplate($html_button,$is_email, $is_oneline,$is_header);
+		$sample = $this->createSampleTemplate($html_button,$is_email, $is_oneline,$is_header, $is_footer);
 		$sample = preg_replace('/\'/',"\\'",$sample);
 		$sample = preg_replace('/\n/',"\\n'+\n'", $sample);
 		$sampleTemplateCode .= preg_replace('/\|TEMPLATE\|/',"'".$sample."'",
-	    	$this->createSampleTemplateJavascript($key, $button_text));
+	    $this->createSampleTemplateJavascript($key, $button_text));
 		}
-/*    $escapedSample = preg_replace('/\'/',"\\'",$this->createSampleTemplate(false,true,$oneline));
-    $escapedSampleHTML = preg_replace('/\'/',"\\'",$this->createSampleTemplate(true,true,$oneline));
-    $escapedSample = preg_replace('/\n/',"\\n'+\n'", $escapedSample);
-    $escapedSampleHTML = preg_replace('/\n/',"\\n'+\n'", $escapedSampleHTML);
-    
-    $sampleTemplateCode = preg_replace('/\|TEMPLATE\|/',"'".$escapedSample."'",
-    	$this->createSampleTemplateJavascript($fieldName, $includeHTML, $includeText));
-    $sampleTemplateCode = preg_replace('/\|HTMLTEMPLATE\|/',"'".$escapedSampleHTML."'",
-    	$sampleTemplateCode); */
-    $sampleTemplateCode = preg_replace('/ID/',$formDescriptor,
-    	$sampleTemplateCode);
+
+    $sampleTemplateCode = preg_replace('/ID/',$formDescriptor, $sampleTemplateCode);
     $ret .= '<tr><td colspan="2">'.$sampleTemplateCode.'</td></tr>';
     $ret .= '</table>';
+	
     return $ret;
   }
 

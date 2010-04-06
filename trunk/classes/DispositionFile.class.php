@@ -7,11 +7,8 @@
   This project's homepage is: http://www.cmsmadesimple.org
 */
 
-class fbDispositionFile extends  fbFieldBase 
+class fbDispositionFile extends fbFieldBase 
 {
-
-  var $sampleTemplateCode;
-  var $sampleHeader;
 
   function fbDispositionFile(&$form_ptr, &$params)
   {
@@ -22,26 +19,7 @@ class fbDispositionFile extends  fbFieldBase
     $this->NonRequirableField = true;
     $this->DisplayInForm = false;
     $this->sortable = false;
-    $this->sampleTemplateCode = "<script type=\"text/javascript\">\n
-		/* <![CDATA[ */
-function populate_file(formname)
-    {
-    var fname = 'IDfbrp_opt_file_template';
-    formname[fname].value=TEMPLATE;
-    }
-    /* ]]> */
-</script>
-<input type=\"button\" value=\"".$mod->Lang('title_create_sample_template')."\" onclick=\"javascript:populate_file(this.form)\" />";
-    $this->sampleHeader = "<script type=\"text/javascript\">\n
-		/* <![CDATA[ */
-function populate_header(formname)
-    {
-    var fname = 'IDfbrp_opt_file_header';
-    formname[fname].value=TEMPLATE;
-    }
-    /* ]]> */
-</script>
-<input type=\"button\" value=\"".$mod->Lang('title_create_sample_header')."\" onclick=\"javascript:populate_header(this.form)\" />";
+
   }
 
   function StatusInfo()
@@ -73,6 +51,8 @@ function populate_header(formname)
     $form->setFinishedFormSmarty();
 
     $line = '';
+	
+	// Check if first time, write header
     if (! file_exists($filespec))
       {
 	$header = $this->GetOption('file_header','');
@@ -83,6 +63,9 @@ function populate_header(formname)
 	$header = $mod->ProcessTemplateFromData( $header );
 	$header .= "\n";
       }
+	  
+	  
+	// Make newline  
     $template = $this->GetOption('file_template','');
     if ($template == '')
       {
@@ -101,15 +84,51 @@ function populate_header(formname)
       {
 	  $newline .= "\n";
       }
+	
+	// Get footer
+	$footer = $this->GetOption('file_footer','');
+	if ($footer == '')
+	  {
+	    $footer = $form->createSampleTemplate(false,false,false,false,true);
+	  } 	
+	$footer = $mod->ProcessTemplateFromData($footer);
+
+
+	// Write file
+	if(file_exists($filespec)) {
+	
+		$rows = file($filespec);
+		$fp = fopen($filespec, 'w');
+		
+		foreach($rows as $oneline) {
+		
+			if(substr($footer, 0, strlen($oneline)) == $oneline) {
+			
+				break;
+			}
+			
+			fwrite($fp,$oneline);
+		}
+	
+	} else {
+		
+		$fp = fopen($filespec, 'w');
+	}
+	
+	fwrite($fp,$header.$newline.$footer);
+	fclose($fp);
+	
+	/*  Stikki removed: due new rewrite method
     $f2 = fopen($filespec,"a");
     fwrite($f2,$header.$newline);
-    fclose($f2); 
+    fclose($f2);*/ 
     $mod->ReturnFileLock();
     return array(true,'');        
   }
 
   function PrePopulateAdminForm($formDescriptor)
   {
+  
 	global $gCms;
     $mod = $this->form_ptr->module_ptr;
 	$config = $gCms->GetConfig();
@@ -120,24 +139,35 @@ function populate_header(formname)
     $parmMain['opt_file_template']['is_oneline']=true;
     $parmMain['opt_file_header']['is_oneline']=true;
     $parmMain['opt_file_header']['is_header']=true;
+    $parmMain['opt_file_footer']['is_oneline']=true;
+    $parmMain['opt_file_footer']['is_footer']=true;	
+	
     array_push($main,array($mod->Lang('title_file_root'),
 			   $mod->CreateInputText($formDescriptor, 'fbrp_opt_fileroot',
 						 $this->GetOption('fileroot',$config['uploads_path']),45,255).'<br />'.
 				$mod->Lang('title_file_root_help')));
+				
     array_push($main,array($mod->Lang('title_file_name'),
 			   $mod->CreateInputText($formDescriptor, 'fbrp_opt_filespec',
 						 $this->GetOption('filespec','form_submissions.txt'),25,128)));
-    array_push($adv,array($mod->Lang('title_file_template'),
-			  array($mod->CreateTextArea(false, $formDescriptor,
-						     htmlspecialchars($this->GetOption('file_template','')),'fbrp_opt_file_template', 'module_fb_area_short', '','',0,0),$this->form_ptr->AdminTemplateHelp($formDescriptor,$parmMain))));
-												
-    array_push($adv,array($mod->Lang('title_file_header'),
-			  $mod->CreateTextArea(false, $formDescriptor,
-					       htmlspecialchars($this->GetOption('file_header','')),'fbrp_opt_file_header', 'module_fb_area_short', '','',0,0)));
+
     array_push($main,array($mod->Lang('title_newline_replacement'),
 			   $mod->CreateInputText($formDescriptor, 'fbrp_opt_newlinechar',
 						 $this->GetOption('newlinechar',''),5,15).'<br />'.
 						$mod->Lang('title_newline_replacement_help')));
+						 
+    array_push($adv,array($mod->Lang('title_file_template'),
+			  array($mod->CreateTextArea(false, $formDescriptor, $this->GetOption('file_template',''),'fbrp_opt_file_template', 'module_fb_area_short', '','',0,0),$this->form_ptr->AdminTemplateHelp($formDescriptor,$parmMain))));
+						   //htmlspecialchars($this->GetOption('file_template','')),'fbrp_opt_file_template', 'module_fb_area_short', '','',0,0),$this->form_ptr->AdminTemplateHelp($formDescriptor,$parmMain)))); Stikki changed: breiking template
+												
+    array_push($adv,array($mod->Lang('title_file_header'),
+			  $mod->CreateTextArea(false, $formDescriptor, $this->GetOption('file_header',''),'fbrp_opt_file_header', 'module_fb_area_short', '','',0,0)));
+					       //htmlspecialchars($this->GetOption('file_header','')),'fbrp_opt_file_header', 'module_fb_area_short', '','',0,0))); Stikki changed: breiking template
+						   
+    array_push($adv,array($mod->Lang('title_file_footer'),
+			  $mod->CreateTextArea(false, $formDescriptor, $this->GetOption('file_footer',''), 'fbrp_opt_file_footer', 'module_fb_area_short', '','',0,0)));						   
+						   
+						   
 
     return array('main'=>$main,'adv'=>$adv);
   }
@@ -146,6 +176,7 @@ function populate_header(formname)
   {
     $this->HiddenDispositionFields($mainArray, $advArray);
   }
+  
 }
 
 ?>
