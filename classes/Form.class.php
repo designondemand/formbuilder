@@ -641,16 +641,20 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
   {
 	include(dirname(__FILE__) . '/../../../lib/replacement.php');  
 
+	// Check if form id given
     $mod = $this->module_ptr;
     if ($this->Id == -1)
       {
-	return "<!-- no form -->\n";
+		return "<!-- no form -->\n";
       }
+	  
+	// Check if show full form
     if ($this->loaded != 'full')
       {
-	$this->Load($this->Id,$params,true);
+		$this->Load($this->Id,$params,true);
       }
 
+	// Usual crap
     $reqSymbol = $this->GetAttr('required_field_symbol','*');
 
     $mod->smarty->assign('title_page_x_of_y',$mod->Lang('title_page_x_of_y',array($this->Page,$this->formTotalPages)));
@@ -661,6 +665,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
     $mod->smarty->assign('form_name',$this->Name);
     $mod->smarty->assign('form_id',$this->Id);
 
+	// Build hidden
     $hidden = $mod->CreateInputHidden($id, 'form_id', $this->Id);
 	if (isset($params['lang']))
 		{
@@ -683,12 +688,19 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
       {
 	$hidden .= $mod->CreateInputHidden($id, 'fbrp_done', 1);
       }
+	  
+	  
+	  
+	// Start building fields
     $fields = array();
     $prev = array();
     $formPageCount = 1;
-    for ($i=0; $i < count($this->Fields); $i++)
-      {
+	
+    for ($i=0; $i < count($this->Fields); $i++) {
+	
+	
 	$thisField = &$this->Fields[$i];
+	
 	if ($thisField->GetFieldType() == 'PageBreakField')
 	  {
 	    $formPageCount++;
@@ -698,7 +710,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	    $testIndex = 'fbrp__'.$this->Fields[$i]->GetId();
 	    if (!isset($params[$testIndex]))
 	      {
-		// do we need to write something?
+			// do we need to write something?
 	      }
 	    elseif (is_array($params[$testIndex]))
 	      {
@@ -751,6 +763,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	$oneset->needs_div = $thisField->NeedsDiv();
 	$oneset->name = $thisField->GetName();
 	$oneset->input = $thisField->GetFieldInput($id, $params, $returnid);
+	$oneset->values = $thisField->GetAllHumanReadableValues();
 	$oneset->smarty_eval = $thisField->GetSmartyEval()?1:0;
 	
 	$oneset->multiple_parts = $thisField->HasMultipleFormComponents()?1:0;

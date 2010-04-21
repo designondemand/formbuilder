@@ -631,6 +631,22 @@ class fbFieldBase {
 		return array($ret);
 		}
   }
+  
+  // override me!
+  function GetAllHumanReadableValues()
+  {
+		
+	$mod = $this->form_ptr->module_ptr;	
+	if(in_array('option_value',$this->GetOptionNames())) {
+		
+		if(count($this->GetOption('option_value')) > 0) {
+		
+			return $this->GetOption('option_value');
+		}
+	}
+	
+	return false;
+  }	
 
 
   // override this if you have some unusual format for values,
