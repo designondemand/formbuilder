@@ -824,9 +824,15 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
     if ($this->Page > 1)
       {
+
+/*	CHANGED DUE 1.7.1 CORE CHANGES
+
 	$mod->smarty->assign('prev',$mod->CreateInputSubmit($id, 'fbrp_prev',
 							    $this->GetAttr('prev_button_text'),
 							    'class="fbsubmit_prev" '.$js));
+*/
+							
+	$mod->smarty->assign('prev','<input class="cms_submit fbsubmit_prev" name="'.$id.'fbrp_prev" id="'.$id.'fbrp_prev" value="'.$this->GetAttr('prev_button_text').'" type="submit" '.$js.' />');						
       }
     else
       {
@@ -835,9 +841,16 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
     if ($this->Page < $formPageCount)
       {
+
+	$mod->smarty->assign('submit','<input class="cms_submit fbsubmit_next" name="'.$id.'fbrp_submit" id="'.$id.'fbrp_submit" value="'.$this->GetAttr('next_button_text').'" type="submit" '.$js.' />');  
+	  
+/*	CHANGED DUE 1.7.1 CORE CHANGES
+  
 	$mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'fbrp_submit',
 							      $this->GetAttr('next_button_text'),
 							      'class="fbsubmit_next" '.$js));
+								  
+*/								  
       }
     else
       {
@@ -853,9 +866,17 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
          {
          $mod->smarty->assign('has_captcha','0');
          }
-	   $mod->smarty->assign('submit',$jsStr . $mod->CreateInputSubmit($id, 'fbrp_submit',
+		 
+		 
+		$mod->smarty->assign('submit','<input class="cms_submit fbsubmit" name="'.$id.'fbrp_submit" id="'.$id.'fbrp_submit" value="'.$this->GetAttr('submit_button_text').'" type="submit" '.$js.' />');  		 
+		
+/*		CHANGED DUE 1.7.1 CORE CHANGES
+		 
+		$mod->smarty->assign('submit',$jsStr . $mod->CreateInputSubmit($id, 'fbrp_submit',
 				$this->GetAttr('submit_button_text'),
 				'class="fbsubmit" '.$jsTrigger.' '.$js));
+				
+*/				
       }
 
 	  return $mod->ProcessTemplateFromDatabase('fb_'.$this->Id);
