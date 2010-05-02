@@ -1,8 +1,7 @@
 {if $message != ''}<div class="pagemcontainer"><p class="pagemessage">{$message}</p></div>{/if}
 
 {$formstart}
-{$formid}
-{$fb_hidden}
+{$formid}{$fb_hidden}
 {$tab_start}
 
 {$maintab_start}
@@ -43,16 +42,16 @@
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_fields}</p>
 		<div class="pageinput">
-			<table class="module_fb_table" width="600">
+			<table class="module_fb_table pagetable" cellpadding="0" cellspacing="0">
 				<thead><tr>
 	       	{if isset($title_field_id)}
-                <th>{$title_field_id}</th>
+                <th width="20">{$title_field_id}</th>
 		{/if}
-    				<th>{$title_field_name}</th>
+    				<th width="120">{$title_field_name}</th>
         {if isset($title_field_alias)}
-    				<th>{$title_field_alias}</th>
+    				<th width="60">{$title_field_alias}</th>
 		{/if}
-                	<th>{$title_field_type}</th>
+                	<th width="85">{$title_field_type}</th>
                 	<th width="20">{$title_field_required_abbrev}</th>
                 	<th>{$title_information}</th>
                     <th width="20">&nbsp;</th>
@@ -77,7 +76,7 @@
 				{/foreach}
 				</tbody>
             </table>
-			<br /><br />
+			<br />
 			{$add_field_link}
         </div>
      </div>
