@@ -1389,6 +1389,7 @@ function unmy_htmlentities($val)
   {
     global $gCms;
     $mod = $this->module_ptr;
+	$config = $mod->GetConfig();
 	
     $mod->smarty->assign('message',$message);
     $mod->smarty->assign('formstart', $mod->CreateFormStart($id, 'admin_store_form', $returnid));
@@ -1563,11 +1564,9 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	    $oneset->alias = $thisField->GetAlias();
 		$oneset->id = $thisField->GetID();
 
-	    if (/*$thisField->IsDisposition() ||*/
-		!$thisField->DisplayInForm() ||
-		$thisField->IsNonRequirableField())
+	    if (!$thisField->DisplayInForm() || $thisField->IsNonRequirableField())
 	      {
-			$oneset->disposition = '.';
+			$oneset->disposition = '<img src="'.$config['root_url'].'/modules/'.$mod->GetName().'/images/stop.gif" width="20" height="20" alt="No available" title="No available" />';
 	      }
 	    else if ($thisField->IsRequired())
 	      {
