@@ -1,4 +1,14 @@
 <ul>
+<li>Version 0.6.2.
+	<ul>
+		<li>Alot of small and big bugs fixes. Thanks to everyone who reported.</li>
+		<li>Introducing dynamic field management.</li>
+		<li>New "YearPullDown" field type added</li>
+		<li>Compatible with CMSMS 1.7.1 and further.</li>
+		<li>Added jQuery. Prototype removed completly.</li>
+		<li>Added some styling.</li>
+	</ul>
+</li>
 <li>Version 0.6.1.
 	<ul>
 		<li>Numerous Bug fixes. If your bug isn't fixed, post it in the tracker!</li>
