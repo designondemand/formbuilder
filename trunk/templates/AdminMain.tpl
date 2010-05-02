@@ -6,9 +6,9 @@
 <thead><tr>
 	<th>{$title_form_name}</th>
 	<th>{$title_form_alias}</th>
-	<th width="50px">&nbsp;</th>
-	<th width="33px">&nbsp;</th>
-	<th width="33px">&nbsp;</th>
+	<th width="50">&nbsp;</th>
+	<th width="33">&nbsp;</th>
+	<th width="33">&nbsp;</th>
 </tr>
 </thead>
 
