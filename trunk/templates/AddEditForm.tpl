@@ -1,5 +1,11 @@
 {if $message != ''}<div class="pagemcontainer"><p class="pagemessage">{$message}</p></div>{/if}
-{$formstart}{$formid}{$fb_hidden}{$tab_start}{$maintab_start}
+
+{$formstart}
+{$formid}
+{$fb_hidden}
+{$tab_start}
+
+{$maintab_start}
 <fieldset class="module_fb_fieldset"><legend>{$title_form_main}</legend>
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_name}:</p>
@@ -37,7 +43,7 @@
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_fields}</p>
 		<div class="pageinput">
-			<table class="module_fb_table">
+			<table class="module_fb_table" width="600">
 				<thead><tr>
 	       	{if isset($title_field_id)}
                 <th>{$title_field_id}</th>
@@ -47,14 +53,14 @@
     				<th>{$title_field_alias}</th>
 		{/if}
                 	<th>{$title_field_type}</th>
-                	<th>{$title_field_required_abbrev}</th>
+                	<th width="20">{$title_field_required_abbrev}</th>
                 	<th>{$title_information}</th>
-                    <th colspan="2">{$title_order}</th>
-                    <th>&nbsp;</th><th>&nbsp;</th></tr>
+                    <th width="20">&nbsp;</th>
+					<th width="20">&nbsp;</th></tr>
 				</thead>
 				<tbody>
 				{foreach from=$fields item=entry}
-					<tr id="{$entry->id}" class="{$entry->rowclass}">
+					<tr id="fbrp_{$entry->id}" class="{$entry->rowclass}">
 				{if isset($title_field_id)}
 					<td>{$entry->id}</td>
 				{/if}
@@ -65,16 +71,14 @@
 					<td>{$entry->type}</td>
 					<td>{$entry->disposition}</td>
 					<td>{$entry->field_status}</td>
-					<td>{$entry->up}</td>
-					<td>{$entry->down}</td>
 					<td>{$entry->editlink}</td>
 					<td>{$entry->deletelink}</td>
 					</tr>
 				{/foreach}
-               	<tr><td colspan="9">&nbsp;</td></tr>
-               	<tr><td colspan="9">{$add_field_link} &nbsp; {$order_field_link}</td></tr>
 				</tbody>
             </table>
+			<br /><br />
+			{$add_field_link}
         </div>
      </div>
 </fieldset>

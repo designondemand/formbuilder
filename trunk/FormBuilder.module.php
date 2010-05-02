@@ -53,7 +53,8 @@ class FormBuilder extends CMSModule
 		$this->email_regex_relaxed="/^([\w\d\.\-\_])+\@([\w\d\.\-\_])+$/i";
 		
 		require_once dirname(__FILE__).'/classes/Form.class.php';
-		require_once dirname(__FILE__).'/classes/FieldBase.class.php';
+		require_once dirname(__FILE__).'/classes/FieldBase.class.php';		
+		
 	}
 	
 	function initialize()
@@ -160,17 +161,24 @@ class FormBuilder extends CMSModule
 
 	function AdminStyle()
 	{
+		$output = '';
+		
 		$fn = dirname(__FILE__).'/includes/admin.css';
-		return @file_get_contents($fn);
+		$output .= @file_get_contents($fn);
+		
+		return $output;
 	}
 
 	function GetHeaderHTML()
 	{
 		global $gCms;	
-		
-		$tmpl = '<script type="text/javascript" src="'.cms_join_path($gCms->config['root_url'],'modules',$this->GetName(),'includes').'/jquery-1.3.2.min.js"></script>';
-		$tmpl .= '<script type="text/javascript" src="'.cms_join_path($gCms->config['root_url'],'modules',$this->GetName(),'includes').'/fb_jquery.js"></script>';
+		$tmpl = '';
 
+		$tmpl .= '<script type="text/javascript" src="'.cms_join_path($gCms->config['root_url'],'modules',$this->GetName(),'includes').'/jquery-1.4.2.min.js"></script>';
+		$tmpl .= '<script type="text/javascript" src="'.cms_join_path($gCms->config['root_url'],'modules',$this->GetName(),'includes').'/jquery.tablednd.js"></script>';		
+		$tmpl .= '<script type="text/javascript" src="'.cms_join_path($gCms->config['root_url'],'modules',$this->GetName(),'includes').'/fb_jquery_functions.js"></script>';
+		$tmpl .= '<script type="text/javascript" src="'.cms_join_path($gCms->config['root_url'],'modules',$this->GetName(),'includes').'/fb_jquery.js"></script>';
+		
         return $this->ProcessTemplateFromData($tmpl);
 		
 	}		
@@ -201,9 +209,10 @@ class FormBuilder extends CMSModule
 	
 		global $gCms;
 		$smarty =& $gCms->GetSmarty();
-	
+		
 		$this->module_id = $id;
 		parent::DoAction($name,$id,$params,$returnid);
+
 	}
 
 	function GetDependencies()

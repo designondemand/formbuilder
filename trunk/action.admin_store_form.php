@@ -9,15 +9,19 @@
 if (!isset($gCms)) exit;
 if (! $this->CheckAccess()) exit;
 
-        $aeform = new fbForm($this, $params, true);
-        $aeform->Store();
-        if ($params['fbrp_submit'] == $this->Lang('save'))
-            {
-            $params['fbrp_message'] = $this->Lang('form',$params['fbrp_form_op']);
-            $this->DoAction('defaultadmin', $id, $params);
-            }
-        else
-        	{
-			echo $aeform->AddEditForm($id, $returnid,$this->Lang('form',$params['fbrp_form_op']));
-			}
+// Store data
+$aeform = new fbForm($this, $params, true);
+$aeform->Store();
+
+// Check witch button was pressed
+if ($params['fbrp_submit'] == $this->Lang('save')) {
+
+    $params['fbrp_message'] = $this->Lang('form',$params['fbrp_form_op']);
+    $this->DoAction('defaultadmin', $id, $params);
+	
+} else {
+
+	echo $aeform->AddEditForm($id, $returnid,$this->Lang('form',$params['fbrp_form_op']));
+}
+
 ?>

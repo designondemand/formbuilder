@@ -10,6 +10,7 @@
 class fbForm {
 
   var $module_ptr = -1;
+  var $module_params = -1;
   var $Id = -1;
   var $Name = '';
   var $Alias = '';
@@ -25,6 +26,7 @@ class fbForm {
   function fbForm(&$module_ptr, &$params, $loadDeep=false, $loadResp=false)
   {
     $this->module_ptr = $module_ptr;
+    $this->module_params = $params;
     $this->Fields = array();
     $this->Attrs = array();
     $this->formState = 'new';
@@ -32,19 +34,19 @@ class fbForm {
 	// Stikki adding: $id overwrite possible with $param
     if ((!isset($this->module_ptr->module_id) || empty($this->module_ptr->module_id)) && isset($params['module_id']))
       {
-	$this->module_ptr->module_id = $params['module_id'];
+		$this->module_ptr->module_id = $params['module_id'];
       }	  
     if (isset($params['form_id']))
       {
-	$this->Id = $params['form_id'];
+		$this->Id = $params['form_id'];
       }
     if (isset($params['fbrp_form_alias']))
       {
-	$this->Alias = $params['fbrp_form_alias'];
+		$this->Alias = $params['fbrp_form_alias'];
       }
     if (isset($params['fbrp_form_name']))
       {
-	$this->Name = $params['fbrp_form_name'];
+		$this->Name = $params['fbrp_form_name'];
       }
 
    $fieldExpandOp = false;
@@ -1283,43 +1285,57 @@ function unmy_htmlentities($val)
   // storeDeep also stores all fields and options for a form
   function Store($storeDeep=false)
   {
-    if ($this->Id == -1)
-      {
-	$this->Id = $this->module_ptr->dbHandle->GenID(cms_db_prefix().
-						       'module_fb_form_seq');
-	$sql = 'INSERT INTO ' . cms_db_prefix().
-	  'module_fb_form (form_id, name, alias) '.
-	  'VALUES (?, ?, ?)';
-	$res = $this->module_ptr->dbHandle->Execute($sql,
-						    array($this->Id, $this->Name, $this->Alias));
-      }
-    else
-      {
-	$sql = 'UPDATE ' . cms_db_prefix().
-	  'module_fb_form set name=?, alias=? where form_id=?';
-	$res = $this->module_ptr->dbHandle->Execute($sql,
-						    array($this->Name, $this->Alias, $this->Id));
-      }
-    // save out the attrs
-    $sql = 'DELETE FROM '.cms_db_prefix().
-      'module_fb_form_attr WHERE form_id=?';
-    $res = $this->module_ptr->dbHandle->Execute($sql, array($this->Id));
-    foreach ($this->Attrs as $thisAttrKey=>$thisAttrValue)
-      {
-	$formAttrId = $this->module_ptr->dbHandle->GenID(cms_db_prefix().
-							 'module_fb_form_attr_seq');
-	$sql = 'INSERT INTO ' . cms_db_prefix().
-	  'module_fb_form_attr (form_attr_id, form_id, name, value) '.
-	  'VALUES (?, ?, ?, ?)';
-	$res = $this->module_ptr->dbHandle->Execute($sql,
-						    array($formAttrId, $this->Id, $thisAttrKey,
-							  $thisAttrValue));
-	if ($thisAttrKey == 'form_template')
-	  {
-	    $this->module_ptr->SetTemplate('fb_'.$this->Id,$thisAttrValue);
-	  }
-      }
+  
+	$db = $this->module_ptr->dbHandle;
+	$params = $this->module_params;
+  
+	// Check if new or old form
+    if ($this->Id == -1) {
+	
+		$this->Id = $db->GenID(cms_db_prefix().'module_fb_form_seq');
+		$sql = "INSERT INTO ".cms_db_prefix()."module_fb_form (form_id, name, alias) VALUES (?, ?, ?)";
+		$res = $db->Execute($sql, array($this->Id, $this->Name, $this->Alias));
+    } else {
 		
+		$sql = "UPDATE ".cms_db_prefix()."module_fb_form set name=?, alias=? where form_id=?";
+		$res = $db->Execute($sql, array($this->Name, $this->Alias, $this->Id));
+    }
+	  
+    // Save out the attrs
+    $sql = "DELETE FROM ".cms_db_prefix()."module_fb_form_attr WHERE form_id=?";
+    $res = $db->Execute($sql, array($this->Id));
+	
+    foreach ($this->Attrs as $thisAttrKey=>$thisAttrValue) {
+	
+		$formAttrId = $db->GenID(cms_db_prefix().'module_fb_form_attr_seq');
+		$sql = "INSERT INTO ".cms_db_prefix()."module_fb_form_attr (form_attr_id, form_id, name, value) VALUES (?, ?, ?, ?)";
+		$res = $db->Execute($sql, array($formAttrId, $this->Id, $thisAttrKey, $thisAttrValue));
+	
+		if ($thisAttrKey == 'form_template') {
+		
+			$this->module_ptr->SetTemplate('fb_'.$this->Id,$thisAttrValue);
+		}
+    }
+	
+	// Update field position
+	$order_list = explode(',',$params['fbrp_sort']);
+	
+	if(is_array($order_list) && count($order_list) > 0) {
+		
+		$count = 1;
+		$sql = "UPDATE ".cms_db_prefix()."module_fb_field SET order_by=? WHERE field_id=?";
+
+		foreach ($order_list as $onefldid) {
+	
+			$fieldid = substr($onefldid,5);
+			$db->Execute($sql, array($count, $fieldid));
+			$count++;
+		}
+	}
+	
+	// Reload everything
+	$this->Load($this->Id,$params,true);
+	
     return $res;
   }
 
@@ -1373,20 +1389,19 @@ function unmy_htmlentities($val)
   {
     global $gCms;
     $mod = $this->module_ptr;
+	
     $mod->smarty->assign('message',$message);
-    $mod->smarty->assign('formstart',
-			 $mod->CreateFormStart($id, 'admin_store_form', $returnid));
-    $mod->smarty->assign('formid',
-			 $mod->CreateInputHidden($id, 'form_id', $this->Id));
+    $mod->smarty->assign('formstart', $mod->CreateFormStart($id, 'admin_store_form', $returnid));
+    $mod->smarty->assign('formid', $mod->CreateInputHidden($id, 'form_id', $this->Id));
     $mod->smarty->assign('tab_start',$mod->StartTabHeaders().
-         $mod->SetTabHeader('maintab',$mod->Lang('tab_main')).
-         $mod->SetTabHeader('submittab',$mod->Lang('tab_submit')).
-         $mod->SetTabHeader('symboltab',$mod->Lang('tab_symbol')).
-         $mod->SetTabHeader('captchatab',$mod->Lang('tab_captcha')).
-         $mod->SetTabHeader('udttab',$mod->Lang('tab_udt')).
-         $mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout')).
-         $mod->SetTabHeader('submittemplate',$mod->Lang('tab_submissiontemplate')).
-			$mod->EndTabHeaders() . $mod->StartTabContent());
+							$mod->SetTabHeader('maintab',$mod->Lang('tab_main')).
+							$mod->SetTabHeader('submittab',$mod->Lang('tab_submit')).
+							$mod->SetTabHeader('symboltab',$mod->Lang('tab_symbol')).
+							$mod->SetTabHeader('captchatab',$mod->Lang('tab_captcha')).
+							$mod->SetTabHeader('udttab',$mod->Lang('tab_udt')).
+							$mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout')).
+							$mod->SetTabHeader('submittemplate',$mod->Lang('tab_submissiontemplate')).
+							$mod->EndTabHeaders() . $mod->StartTabContent());
 	  
     $mod->smarty->assign('tabs_end',$mod->EndTabContent());
     $mod->smarty->assign('maintab_start',$mod->StartTab("maintab"));
@@ -1524,14 +1539,13 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
     $maxOrder = 1;
     if($this->Id > 0)
       {
-	$mod->smarty->assign('submit_button',
-			     $mod->CreateInputSubmit($id, 'fbrp_submit',
-						     $mod->Lang('save_and_continue')));
-	$mod->smarty->assign('fb_hidden',
-			     $mod->CreateInputHidden($id, 'fbrp_form_op',$mod->Lang('updated')));
+	  
+	$mod->smarty->assign('fb_hidden', $mod->CreateInputHidden($id, 'fbrp_form_op',$mod->Lang('updated')).
+									$mod->CreateInputHidden($id, 'fbrp_sort','','id="fbrp_sort"'));
 	$mod->smarty->assign('adding',0);
-	$mod->smarty->assign('save_button',
-			     $mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('save')));
+	$mod->smarty->assign('save_button', $mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('save')));
+	$mod->smarty->assign('submit_button', $mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('save_and_continue')));
+	
 	$fieldList = array();
 	$currow = "row1";
 	$count = 1;
@@ -1543,7 +1557,7 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	    $oneset->name = $mod->CreateLink($id, 'admin_add_edit_field', '', $thisField->GetName(), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
 	    if( $mod->GetPreference('show_fieldids',0) != 0 )
 	      {
-		$oneset->id = $mod->CreateLink($id, 'admin_add_edit_field', '', $thisField->GetId(), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
+			$oneset->id = $mod->CreateLink($id, 'admin_add_edit_field', '', $thisField->GetId(), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
 	      }
 	    $oneset->type = $thisField->GetDisplayType();
 	    $oneset->alias = $thisField->GetAlias();
@@ -1553,17 +1567,20 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 		!$thisField->DisplayInForm() ||
 		$thisField->IsNonRequirableField())
 	      {
-		$oneset->disposition = '.';
+			$oneset->disposition = '.';
 	      }
 	    else if ($thisField->IsRequired())
 	      {
-		$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/true.gif','true','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'off','field_id'=>$thisField->GetId()),'', '', '', 'class="true" onclick="$(this).fb_admin_update_field_required(); return false;"');
+			$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/true.gif','true','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'off','field_id'=>$thisField->GetId()),'', '', '', 'class="true" onclick="$(this).fb_admin_update_field_required(); return false;"');
 	      }
 	    else
 	      {
-		$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/false.gif','false','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'on','field_id'=>$thisField->GetId()),'', '', '', 'class="false" onclick="$(this).fb_admin_update_field_required(); return false;"');
+			$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/false.gif','false','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'on','field_id'=>$thisField->GetId()),'', '', '', 'class="false" onclick="$(this).fb_admin_update_field_required(); return false;"');
 	      }
+		  
 	    $oneset->field_status = $thisField->StatusInfo();
+
+		/* Removed By Stikki
 	    if ($count > 1)
 	      {
 		$oneset->up = $mod->CreateLink($id, 'admin_update_field_order', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/arrow-u.gif','up','','','systemicon'), array('form_id'=>$this->Id,'fbrp_dir'=>'up','field_id'=>$thisField->GetId()));
@@ -1580,21 +1597,28 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	      {
 		$oneset->down = '&nbsp;';
 	      }
+		*/
+		  
+		  
 	    $oneset->editlink = $mod->CreateLink($id, 'admin_add_edit_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/edit.gif',$mod->Lang('edit'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
 	    $oneset->deletelink = $mod->CreateLink($id, 'admin_delete_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif',$mod->Lang('delete'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),'', '', '', 'onclick="$(this).fb_delete_field(\''.$mod->Lang('are_you_sure_delete_field',htmlspecialchars($thisField->GetName())).'\'); return false;"');
 	    ($currow == "row1"?$currow="row2":$currow="row1");
 	    $count++;
 	    if ($thisField->GetOrder() >= $maxOrder)
 	      {
-		$maxOrder = $thisField->GetOrder() + 1;
+			$maxOrder = $thisField->GetOrder() + 1;
 	      }
 	    array_push($fieldList, $oneset);
 	  }
+	  
 	$mod->smarty->assign('fields',$fieldList);
 	$mod->smarty->assign('add_field_link',
 			     $mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->cms->variables['admintheme']->DisplayImage('icons/system/newobject.gif',$mod->Lang('title_add_new_field'),'','','systemicon'),array('form_id'=>$this->Id, 'fbrp_order_by'=>$maxOrder), '', false) . $mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_add_new_field'),array('form_id'=>$this->Id, 'fbrp_order_by'=>$maxOrder), '', false));
+
+/*  Removed By Stikki
 	$mod->smarty->assign('order_field_link',
 			     $mod->CreateLink($id, 'admin_reorder_form', $returnid,$mod->cms->variables['admintheme']->DisplayImage('icons/system/reorder.gif',$mod->Lang('title_reorder_form'),'','','systemicon'),array('form_id'=>$this->Id), '', false) . $mod->CreateLink($id, 'admin_reorder_form', $returnid,$mod->Lang('title_reorder_form'),array('form_id'=>$this->Id), '', false));
+*/
 			     			     
 	if ($mod->GetPreference('enable_fastadd',1) == 1)
 	  {
@@ -1633,7 +1657,7 @@ function fast_add(field_type)
 	$mod->smarty->assign('submit_button',
 			     $mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('add')));
 	$mod->smarty->assign('fb_hidden',
-			     $mod->CreateInputHidden($id, 'fbrp_form_op',$mod->Lang('added')));
+			     $mod->CreateInputHidden($id, 'fbrp_form_op',$mod->Lang('added')).$mod->CreateInputHidden($id, 'fbrp_sort','','id="fbrp_sort"'));
 	$mod->smarty->assign('adding',1);
       }
     $mod->smarty->assign('link_notready',"<strong>".$mod->Lang('title_not_ready1')."</strong> ".$mod->Lang('title_not_ready2')." ".$mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_not_ready_link'),array('form_id'=>$this->Id, 'fbrp_order_by'=>$maxOrder,'fbrp_dispose_only'=>1), '', false, false,'class="module_fb_link"')." ".$mod->Lang('title_not_ready3')
