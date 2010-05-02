@@ -1,100 +1,24 @@
-jQuery.fn.fb_delete_field = function(message) {
+jQuery(document).ready(function($) {
 
-    if (confirm(message)) {
-
-		var url = jQuery(this).attr("href");
-		var parent = jQuery(this).closest("tr");
-		
-		jQuery.ajax({
-			type: "GET",
-			url: url,
-			error: function() {
-				
-				alert('Sorry. There was an error.');
-			},			
-			success: function() {
-			
-				parent.fadeOut("1000", function() {
-
-					parent.remove();
-					var totalrows = jQuery(".module_fb_table").find("tbody tr").size();
-				
-					jQuery(".module_fb_table").find("tbody tr").removeClass();
-					jQuery(".module_fb_table").find("tbody tr:nth-child(2n+1)").addClass("row1");
-					jQuery(".module_fb_table").find("tbody tr:nth-child(2n)").addClass("row2");
-					jQuery(".module_fb_table").find("tbody tr").eq(totalrows-1).removeClass();
-					jQuery(".module_fb_table").find("tbody tr").eq(totalrows-2).removeClass();		
-					
-				});			
-			}	
-		});
-		
-	}
+	$(".module_fb_table").tableDnD({
 	
-
-};
-
-jQuery.fn.fb_get_template = function(message, url) {
-
-	var value = jQuery(this).val();
+		onDragClass: "row1hover",
+		onDrop: function(table, row) {
 		
-	if (confirm(message)) {
-			
-		jQuery.ajax({
-			type: "GET",
-			url: url,			
-			data: '&m1_fbrp_tid='+value,
-			error: function() {
+				var totalrows = jQuery(".module_fb_table").find("tbody tr").size();
 				
-				alert('Sorry. There was an error.');
-			},
-			success: function(data) {
+				jQuery(".module_fb_table").find("tbody tr").removeClass();
+				jQuery(".module_fb_table").find("tbody tr:nth-child(2n+1)").addClass("row1");
+				jQuery(".module_fb_table").find("tbody tr:nth-child(2n)").addClass("row2");
 				
-				jQuery("#fb_form_template").val(data);
-			}
-		});	
+				var rows = table.tBodies[0].rows;
+				var sortstr = rows[0].id;
+				for (var i=1; i<rows.length; i++) {
+					sortstr += ","+rows[i].id;
+				}
 				
-	
-	}
-	
-};
-
-jQuery.fn.fb_admin_update_field_required = function() {
-
-	var url = jQuery(this).attr("href");
-	var current = jQuery(this);
-	
-	jQuery.ajax({
-		type: "GET",
-		url: url,
-		error: function() {
-				
-			alert('Sorry. There was an error.');
-		},			
-		success: function() {
-			
-			if(current.hasClass("true")) {
-		
-				var replaceurl = current.attr("href").replace('fbrp_active=off','fbrp_active=on');
-				var replacepic = current.children().attr("src").replace('true', 'false');
-				var replaceother = 'false';			
-				current.removeClass("true").addClass("false");
-			
-			} else {
-				
-				var replaceurl = current.attr("href").replace('fbrp_active=on','fbrp_active=off');
-				var replacepic = current.children().attr("src").replace('false', 'true');
-				var replaceother = 'true';
-				current.removeClass("false").addClass("true");
-		
-			}
-		
-			current.attr({ href : replaceurl });
-			current.children().attr({ src : replacepic, title : replaceother, alt : replaceother });		
-			
-			
+				$('#fbrp_sort').val(sortstr);
 		}
 	});
-		
-};
 
+});
