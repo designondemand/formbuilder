@@ -55,13 +55,11 @@ class fbDispositionFile extends fbFieldBase
 	// Check if first time, write header
     if (! file_exists($filespec))
       {
-	$header = $this->GetOption('file_header','');
-	if ($header == '')
-	  {
-	    $header = $form->createSampleTemplate(false,false,false,true);
-	  } 
-	$header = $mod->ProcessTemplateFromData( $header );
-	$header .= "\n";
+		$header = $this->GetOption('file_header','');
+
+		if($header != '') {
+			$header = $mod->ProcessTemplateFromData($header);
+		}
       }
 	  
 	  
@@ -87,12 +85,10 @@ class fbDispositionFile extends fbFieldBase
 	
 	// Get footer
 	$footer = $this->GetOption('file_footer','');
-	if ($footer == '')
-	  {
-	    $footer = $form->createSampleTemplate(false,false,false,false,true);
-	  } 	
-	$footer = $mod->ProcessTemplateFromData($footer);
 
+	if($footer != '') {
+		$footer = $mod->ProcessTemplateFromData($footer);
+	}
 
 	// Write file
 	if(file_exists($filespec)) {
@@ -133,6 +129,7 @@ class fbDispositionFile extends fbFieldBase
     $mod = $this->form_ptr->module_ptr;
 	$config = $gCms->GetConfig();
 
+	
     $main = array();
     $adv = array();
     $parmMain = array();
@@ -165,9 +162,7 @@ class fbDispositionFile extends fbFieldBase
 					       //htmlspecialchars($this->GetOption('file_header','')),'fbrp_opt_file_header', 'module_fb_area_short', '','',0,0))); Stikki changed: breiking template
 						   
     array_push($adv,array($mod->Lang('title_file_footer'),
-			  $mod->CreateTextArea(false, $formDescriptor, $this->GetOption('file_footer',''), 'fbrp_opt_file_footer', 'module_fb_area_short', '','',0,0)));						   
-						   
-						   
+			  $mod->CreateTextArea(false, $formDescriptor, $this->GetOption('file_footer',''), 'fbrp_opt_file_footer', 'module_fb_area_short', '','',0,0)));	   
 
     return array('main'=>$main,'adv'=>$adv);
   }
