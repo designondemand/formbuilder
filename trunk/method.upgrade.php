@@ -206,6 +206,7 @@ if (! $this->CheckAccess()) exit;
        	$aeform = new fbForm($this, $params, true);
 		   $res = $aeform->ImportXML($params);
       case "0.6":
+	  case "0.6.1":
 
 		}
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('upgraded',$this->GetVersion()));
