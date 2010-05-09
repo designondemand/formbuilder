@@ -27,68 +27,56 @@ class fbTextField extends fbFieldBase {
 
 	}
 
-
 	function GetFieldInput($id, &$params, $returnid)
 	{
-	  $mod = $this->form_ptr->module_ptr;
-	  $js = $this->GetOption('javascript','');
-	  $ro = '';
-     if ($this->GetOption('readonly','0') == '1')
-         {
-         $ro = ' readonly="readonly"';
-         }
+		$mod = $this->form_ptr->module_ptr;
+		$js = $this->GetOption('javascript','');
+		$ro = '';
+		
+		if ($this->GetOption('readonly','0') == '1') {
+			$ro = ' readonly="readonly"';
+        }
 	
-	  return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,
-				    ($this->Value?$this->Value:$this->GetOption('default')),
-            $this->GetOption('length')<25?$this->GetOption('length'):25,
-            $this->GetOption('length'),
-            ($this->GetOption('clear_default','0')==1?(' onfocus="if(this.value==this.defaultValue) this.value=\'\';" onblur="if(this.value==\'\') this.value=this.defaultValue;"'):' ').$js.$ro.
-			$this->GetCSSIdTag());
+		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,($this->Value?$this->Value:$this->GetOption('default')),$this->GetOption('length')<25?$this->GetOption('length'):25, $this->GetOption('length'),
+			($this->GetOption('clear_default','0')==1?(' onfocus="if(this.value==this.defaultValue) this.value=\'\';" onblur="if(this.value==\'\') this.value=this.defaultValue;"'):' ').$js.$ro.$this->GetCSSIdTag());
 	}
 
 	function StatusInfo()
 	{
-	  $mod = $this->form_ptr->module_ptr;
-	  $ret = $mod->Lang('abbreviation_length',$this->GetOption('length','80'));
-		if (strlen($this->ValidationType)>0)
-		  {
+		$mod = $this->form_ptr->module_ptr;
+		$ret = $mod->Lang('abbreviation_length',$this->GetOption('length','80'));
+		
+		if (strlen($this->ValidationType)>0) {
+		
 		  	$ret .= ", ".array_search($this->ValidationType,$this->ValidationTypes);
-		  }
-      if ($this->GetOption('readonly','0') == '1')
-         {
-         $ret .= ", ".$mod->Lang('title_read_only');
-         }
-		 return $ret;
+		}
+		
+		if ($this->GetOption('readonly','0') == '1') {
+        
+			$ret .= ", ".$mod->Lang('title_read_only');
+        }
+		 
+		return $ret;
 	}
 
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = $this->form_ptr->module_ptr;
+		
 		$main = array(
-			array($mod->Lang('title_maximum_length'),
-			      $mod->CreateInputText($formDescriptor, 
-						    'fbrp_opt_length',
-			         $this->GetOption('length','80'),25,25)),
-			array($mod->Lang('title_read_only'),
-			      $mod->CreateInputHidden($formDescriptor, 'fbrp_opt_readonly','0').
-            		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_readonly',
-            		'1',$this->GetOption('readonly','0')))
+			array($mod->Lang('title_maximum_length'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_length',$this->GetOption('length','80'),25,25)),
+			array($mod->Lang('title_read_only'),$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_readonly','0').
+						$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_readonly','1',$this->GetOption('readonly','0')))
 		);
+		
 		$adv = array(
-			array($mod->Lang('title_field_regex'),
-			      array($mod->CreateInputText($formDescriptor, 
-							  'fbrp_opt_regex',
-							  $this->GetOption('regex'),25,1024),$mod->Lang('title_regex_help'))),
-			array($mod->Lang('title_field_default_value'),
-			      $mod->CreateInputText($formDescriptor, 
-							  'fbrp_opt_default',
-							  $this->GetOption('default'),25,1024)),
-      array($mod->Lang('title_clear_default'),
-		 		 	array($mod->CreateInputHidden($formDescriptor,'fbrp_opt_clear_default','0').$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_clear_default',
-            		'1',$this->GetOption('clear_default','0')),
-          $mod->Lang('title_clear_default_help')))	
+			array($mod->Lang('title_field_regex'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_regex',$this->GetOption('regex'),25,1024).'<br />'.$mod->Lang('title_regex_help')),
+			array($mod->Lang('title_field_default_value'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_default',$this->GetOption('default'),25,1024)),
+			array($mod->Lang('title_clear_default'),$mod->CreateInputHidden($formDescriptor,'fbrp_opt_clear_default','0').
+						$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_clear_default','1',$this->GetOption('clear_default','0')).'<br />'.$mod->Lang('title_clear_default_help'))	
 		);
+		
 		return array('main'=>$main,'adv'=>$adv);
 	}
 
@@ -157,11 +145,13 @@ class fbTextField extends fbFieldBase {
                     }
 		  	   	   break;
 		  }
+		  
 		if ($this->GetOption('length',0) > 0 && strlen($this->Value) > $this->GetOption('length',0))
 			{
 			$this->validated = false;
 			$this->validationErrorText = $mod->Lang('please_enter_no_longer',$this->GetOption('length',0));
 			}
+			
 		return array($this->validated, $this->validationErrorText);
 	}
 }
