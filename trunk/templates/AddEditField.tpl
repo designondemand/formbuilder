@@ -5,7 +5,7 @@
 	{foreach from=$mainList item=entry}
 		<div class="pageoverflow">
 			<p class="pagetext">{$entry->title}:</p>
-			<p class="pageinput">{$entry->input}</p>
+			<div class="pageinput">{$entry->input}</div>
 			{if $entry->help != ''}{$entry->help}{/if}
 		</div>
 	{/foreach}
@@ -14,7 +14,7 @@
 	{foreach from=$advList item=entry}
 		<div class="pageoverflow">
 			<p class="pagetext">{$entry->title}:</p>
-			<p class="pageinput">{$entry->input}</p>
+			<div class="pageinput">{$entry->input}</div>
 			{if $entry->help != ''}{$entry->help}{/if}
 		</div>
 	{/foreach}

@@ -493,6 +493,14 @@ $lang['title_pick_fielddef']='Pull a field Definition\'s value (single) <em>opti
 $lang['title_choose_user_input']='Choose User input';
 $lang['title_see_also_udt']='(Also take a look at the Form Submission tab if you want to set a UDT for form validation)';
 $lang['title_year_end_message']='End year';
+$lang['title_field_logic']='Smarty data or logic that is ment to be send with this field';
+$lang['title_field_logic_long']='Can be smarty data, javascript, or some other data you wan\'t to sent along with this field.<br />Goes trought smarty complier, so remeber use {literal}{/literal} tags with &lt;script&gt;&lt;/script&gt;';
+$lang['title_field_includelabels']='Include labels';
+$lang['title_field_includelabels_help']='Enabling this includes labels to output. example - label: value,label2: value2';
+$lang['title_field_siblings']='Link this field to it\'s sibling';
+$lang['title_field_siblings_help']='Dropdown lists all siblings of this field and allows you to link this field to one of it\'s sibling. Makes possible controlling this field with selected sibling controls.';
+$lang['title_field_hidebuttons']='Hide control buttons';
+$lang['title_field_hidebuttons_help']='Hides frontend control buttons of this field.';
 
 $lang['error_usertag_disposition'] = 'User defined tag returned an error';
 $lang['error_usertag'] = 'User defined tag %s returned an error.';
