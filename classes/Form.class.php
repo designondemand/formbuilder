@@ -32,22 +32,25 @@ class fbForm {
     $this->formState = 'new';
 	
 	// Stikki adding: $id overwrite possible with $param
-    if ((!isset($this->module_ptr->module_id) || empty($this->module_ptr->module_id)) && isset($params['module_id']))
-      {
+    if ((!isset($this->module_ptr->module_id) || empty($this->module_ptr->module_id)) && isset($params['module_id'])) {
+	
 		$this->module_ptr->module_id = $params['module_id'];
-      }	  
-    if (isset($params['form_id']))
-      {
+    }	 
+	  
+    if (isset($params['form_id'])) {
+		
 		$this->Id = $params['form_id'];
-      }
-    if (isset($params['fbrp_form_alias']))
-      {
+    }
+	  
+    if (isset($params['fbrp_form_alias'])) {
+	  
 		$this->Alias = $params['fbrp_form_alias'];
-      }
-    if (isset($params['fbrp_form_name']))
-      {
+    }
+	  
+    if (isset($params['fbrp_form_name'])) {
+	
 		$this->Name = $params['fbrp_form_name'];
-      }
+    }
 
    $fieldExpandOp = false;
 
@@ -327,8 +330,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 			}
 		}
 		
-		
-	if ($footer)
+	elseif ($footer)
 		 {
 		 $ret .= '------------------------------------------\nEOF\n';
 		 return $ret;
@@ -765,6 +767,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	$oneset->needs_div = $thisField->NeedsDiv();
 	$oneset->name = $thisField->GetName();
 	$oneset->input = $thisField->GetFieldInput($id, $params, $returnid);
+	$oneset->logic = $thisField->GetFieldLogic();
 	$oneset->values = $thisField->GetAllHumanReadableValues();
 	$oneset->smarty_eval = $thisField->GetSmartyEval()?1:0;
 	
@@ -1343,15 +1346,15 @@ function unmy_htmlentities($val)
   {
     if ($this->Id == -1)
       {
-	return false;
+		return false;
       }
     if ($this->loaded != 'full')
       {
-	$this->Load($this->Id,array(),true);
+		$this->Load($this->Id,array(),true);
       }
     foreach ($this->Fields as $field)
       {
-	$field->Delete();
+		$field->Delete();
       }
     $this->module_ptr->DeleteTemplate('fb_'.$this->Id);
     $sql = 'DELETE FROM ' . cms_db_prefix() . 'module_fb_form where form_id=?';
@@ -1566,7 +1569,13 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 
 	    if (!$thisField->DisplayInForm() || $thisField->IsNonRequirableField())
 	      {
-			$oneset->disposition = '<img src="'.$config['root_url'].'/modules/'.$mod->GetName().'/images/stop.gif" width="20" height="20" alt="No available" title="No available" />';
+			if($mod->cms->variables['admintheme']->themeName == 'NCleanGrey') {
+
+				$oneset->disposition = '<img src="'.$config['root_url'].'/modules/'.$mod->GetName().'/images/stop.gif" width="20" height="20" alt="No available" title="No available" />';
+			} else {
+
+				$oneset->disposition = '<img src="'.$config['root_url'].'/modules/'.$mod->GetName().'/images/stop.gif" width="16" height="16" alt="No available" title="No available" />';	
+			}
 	      }
 	    else if ($thisField->IsRequired())
 	      {
@@ -1774,6 +1783,7 @@ function fast_add(field_type)
 	return $mod->ProcessTemplate('AddEditForm.tpl');
   }
 
+	// Add new field
     function &NewField(&$params)
       {
 	//$aefield = new fbFieldBase($this,$params);
@@ -1982,11 +1992,11 @@ function fast_add(field_type)
     $string = trim(htmlspecialchars($string));
     if ($isForm)
       {
-	return strtolower($string);
+		return strtolower($string);
       }
     else
       {
-	return 'fb'.strtolower($string);
+		return 'fb'.strtolower($string);
       }
   }
     
@@ -2066,10 +2076,11 @@ function fast_add(field_type)
   {
     for($i=0;$i<count($this->Fields);$i++)
       {
-	$this->Fields[$i]->ResetValue();
+		$this->Fields[$i]->ResetValue();
       }
   }
-    
+
+  // FormBroweiser >= 0.3 Response load method - Diffrenece between LoadResponseValues?
   function LoadResponse($response_id)
   {
 	$mod = $this->module_ptr;
@@ -2110,6 +2121,7 @@ function fast_add(field_type)
 	return true;
   }
 
+	// Check if FormBroweiser field exists
 	function GetFormBrowserField()
 	{
 		$fields = $this->GetFields();
@@ -2131,15 +2143,14 @@ function fast_add(field_type)
 
 
 
-
+  // FormBroweiser >= 0.3 Response load method
   function LoadResponseValues(&$params)
   {
 	$mod = $this->module_ptr;
 	$db = $this->module_ptr->dbHandle;
 	$oneset = new StdClass();
 	$form_id = -1;
-	$res = $db->Execute('SELECT response, form_id FROM '.cms_db_prefix().
-					'module_fb_formbrowser WHERE fbr_id=?', array($params['response_id']));
+	$res = $db->Execute('SELECT response, form_id FROM '.cms_db_prefix().'module_fb_formbrowser WHERE fbr_id=?', array($params['response_id']));
 
 	if ($res && $row=$res->FetchRow())
 		{
@@ -2180,6 +2191,7 @@ function fast_add(field_type)
 	return true;
   }
 
+  // FormBroweiser < 0.3 Response load method  
   function LoadResponseValuesOld(&$params)
   {
     $db = $this->module_ptr->dbHandle;
@@ -2220,6 +2232,7 @@ function fast_add(field_type)
       }
   }   
 
+  // Deletes response from database
   function DeleteResponse($response_id) // TODO: Remove this, totally useless function, check with SjG first
   {
     $db = $this->module_ptr->dbHandle;
@@ -2229,6 +2242,7 @@ function fast_add(field_type)
     $res = $db->Execute($sql, array($response_id));	
   }
 
+  // Validation stuff action.validate.php
   function CheckResponse($form_id, $response_id, $code)
   {
     $db = $this->module_ptr->dbHandle;
@@ -2244,6 +2258,7 @@ function fast_add(field_type)
   }
 
 
+  // Master response inputter
   function StoreResponse($response_id=-1,$approver='',&$formBuilderDisposition)
   {
 	$mod = $this->module_ptr;
@@ -2254,6 +2269,8 @@ function fast_add(field_type)
 	$crypt = false;
 	$hash_fields = false;
 	$sort_fields = array();
+	
+	// Check if form has Database fields, do intit
 	if (is_object($formBuilderDisposition) &&
       ($formBuilderDisposition->GetFieldType()=='DispositionFormBrowser' ||
        $formBuilderDisposition->GetFieldType()=='DispositionDatabase'))
@@ -2266,6 +2283,7 @@ function fast_add(field_type)
 			}
 		}
 
+	// If new field
 	if ($response_id == -1)
 		{
 		if (is_object($formBuilderDisposition) && $formBuilderDisposition->GetOption('feu_bind','0') == '1')
@@ -2299,8 +2317,10 @@ function fast_add(field_type)
 		$feu_id = $mod->getFEUIDFromResponseID($response_id);
 		}
 		
+	// Convert form to XML
 	$xml = $this->ResponseToXML();
 	
+	// Do the actual adding
 	if (! $crypt)
 		{
 		$output = $this->StoreResponseXML(
@@ -2356,7 +2376,8 @@ function fast_add(field_type)
 	//return array(true,''); Stikki replaced: instead of true, return actual data, didn't saw any side effects.
 	return $output;
   }
-    
+
+  // Converts form to XML
   function &ResponseToXML()
   {
   	$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
@@ -2369,6 +2390,7 @@ function fast_add(field_type)
    return $xml;
   }
 
+  // Inserts parsed XML data to database
   function StoreResponseXML($response_id=-1,$newrec=false,$approver='',$sortfield1,
    $sortfield2,$sortfield3,$sortfield4,$sortfield5, $feu_id,$xml)
   {
@@ -2410,12 +2432,13 @@ function fast_add(field_type)
     return array($response_id,$secret_code);
   }   
 
-
-  function clean_datetime($dt)
-  {
+	// Some stupid date function
+	function clean_datetime($dt)
+	{
     return substr($dt,1,strlen($dt)-2);
-  }
+	}
   
+  // When downloading form.
   function ExportXML($exportValues = false)
   {
 	$xmlstr = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
@@ -2428,7 +2451,7 @@ function fast_add(field_type)
 		}
 	foreach($this->Fields as $thisField)
 		{
-			$xmlstr .= $thisField->ExportXML($exportValues);
+		$xmlstr .= $thisField->ExportXML($exportValues);
 		}
 	$xmlstr .= "</form>\n";
 	return $xmlstr;
