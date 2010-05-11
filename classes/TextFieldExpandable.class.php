@@ -17,6 +17,7 @@ class fbTextFieldExpandable extends fbFieldBase {
 		$this->DisplayInForm = true;
 		$this->HasUserAddOp = true;
 		$this->HasUserDeleteOp = true;
+		$this->NonRequirableField = false;
 		$this->ValidationTypes = array(
             $mod->Lang('validation_none')=>'none',
             $mod->Lang('validation_numeric')=>'numeric',
@@ -25,133 +26,136 @@ class fbTextFieldExpandable extends fbFieldBase {
             $mod->Lang('validation_regex_match')=>'regex_match',
             $mod->Lang('validation_regex_nomatch')=>'regex_nomatch'
             );
-      $this->hasMultipleFormComponents = true;
+		$this->hasMultipleFormComponents = true;
 
 	}
 
-
 	function GetFieldInput($id, &$params, $returnid)
 	{
-	  $mod = $this->form_ptr->module_ptr;
-	 //debug_display($this->Value);
-	  $js = $this->GetOption('javascript','');
-	
+		$mod = $this->form_ptr->module_ptr;
+		$js = $this->GetOption('javascript','');
+		$sibling_id = $this->GetOption('siblings','');
+		$hidebuttons = $this->GetOption('hidebuttons','');
 
-     if (! is_array($this->Value))
-	      {
-	      $vals = 1;
-	      }
-	  else
-	      {
-	      $vals = count($this->Value);
-	      }
-      foreach ($params as $pKey=>$pVal)
-         {
-         if (substr($pKey,0,9) == 'fbrp_FeX_')
-            {
-            $pts = explode('_',$pKey);
-            if ($pts[2] == $this->Id)
-               {
-               // expand
-               $this->Value[$vals]='';
-               $vals++;
-               }
-            }
-         else if (substr($pKey,0,9) == 'fbrp_FeD_')
-            {
-            $pts = explode('_',$pKey);
-            if ($pts[2] == $this->Id)
-               {
-               // delete row
-               if (isset($this->Value[$pts[2]]))
-                  {
-                  array_splice($this->Value, $pts[2], 1);
-                  }
-               $vals--;
-               }
-            }
-         }
+		if (! is_array($this->Value)) {
 
-	  $ret = array();
-	  for ($i=0;$i<$vals;$i++)
-	    {
-	    $thisRow = new stdClass();
-        $thisRow->name = '';
-        $thisRow->title = '';
-	    $thisRow->input = $mod->fbCreateInputText($id, 'fbrp__'.$this->Id.'[]',
-				       $this->Value[$i],
-            $this->GetOption('length')<25?$this->GetOption('length'):25,
-            $this->GetOption('length'),$js.$this->GetCSSIdTag('_'.$i));
-        $thisRow->op = $mod->fbCreateInputSubmit($id, 'fbrp_FeD_'.$this->Id.'_'.$i, $this->GetOption('del_button','X'),
-			$this->GetCSSIdTag('_del_'.$i));
-        array_push($ret, $thisRow);
+			$vals = 1;
+	    } else {
+
+			$vals = count($this->Value);
+	    }
+		
+		foreach ($params as $pKey=>$pVal) {
+		
+			if (substr($pKey,0,9) == 'fbrp_FeX_') {
+				
+				$pts = explode('_',$pKey);
+				if ($pts[2] == $this->Id || $pts[2] == $sibling_id) {
+					
+					// add row
+					$this->Value[$vals]='';
+					$vals++;
+				}
+            }
+			
+			else if (substr($pKey,0,9) == 'fbrp_FeD_') {
+				
+				$pts = explode('_',$pKey);
+				if ($pts[2] == $this->Id || $pts[2] == $sibling_id) {
+				
+					// delete row
+					if (isset($this->Value[$pts[2]])) {
+					
+						array_splice($this->Value, $pts[2], 1);
+					}
+					$vals--;
+				}
+            }
         }
-      $thisRow = new stdClass();
-      $thisRow->name = '';
-      $thisRow->title = '';
-      $thisRow->input = '';
-      $thisRow->op = $mod->fbCreateInputSubmit($id, 'fbrp_FeX_'.$this->Id.'_'.$i, $this->GetOption('add_button','+'),
-			$this->GetCSSIdTag('_add_'.$i));
-      array_push($ret, $thisRow);
-      return $ret;
+
+		// Input fields
+		$ret = array();
+		for ($i=0;$i<$vals;$i++) {
+		
+			$thisRow = new stdClass();
+
+			//$thisRow->name = '';
+			//$thisRow->title = '';
+			$thisRow->input = $mod->fbCreateInputText($id, 'fbrp__'.$this->Id.'[]',$this->Value[$i],$this->GetOption('length')<25?$this->GetOption('length'):25,
+							$this->GetOption('length'),$js.$this->GetCSSIdTag('_'.$i));
+			
+			if(!$hidebuttons) $thisRow->op = $mod->fbCreateInputSubmit($id, 'fbrp_FeD_'.$this->Id.'_'.$i, $this->GetOption('del_button','X'), $this->GetCSSIdTag('_del_'.$i).($vals==1?' disabled="disabled"':''));
+
+			
+			array_push($ret, $thisRow);
+        }
+		
+		// Add button
+		$thisRow = new stdClass();
+		//$thisRow->name = '';
+		//$thisRow->title = '';
+		//$thisRow->input = '';
+		if(!$hidebuttons) $thisRow->op = $mod->fbCreateInputSubmit($id, 'fbrp_FeX_'.$this->Id.'_'.$i, $this->GetOption('add_button','+'), $this->GetCSSIdTag('_add_'.$i));
+		
+		array_push($ret, $thisRow);
+		
+		
+		return $ret;
 	}
 
 	function StatusInfo()
 	{
-	  $mod = $this->form_ptr->module_ptr;
-	  $ret = $mod->Lang('abbreviation_length',$this->GetOption('length','80'));
-		if (strlen($this->ValidationType)>0)
-		  {
-		  	$ret .= ", ".array_search($this->ValidationType,$this->ValidationTypes);
-		  }
-		 return $ret;
+		$mod = $this->form_ptr->module_ptr;
+		$ret = $mod->Lang('abbreviation_length',$this->GetOption('length','80'));
+		if (strlen($this->ValidationType)>0) {
+		
+			$ret .= ", ".array_search($this->ValidationType,$this->ValidationTypes);
+		}
+		
+		return $ret;
 	}
 
 	function GetHumanReadableValue($as_string = true)
 	{
 		$form = $this->form_ptr;
-      if (! is_array($this->Value))
-	      {
-	      $this->Value = array($this->Value);
-	      }
-	if ($as_string)
-		{
-		return join($form->GetAttr('list_delimiter',','),$this->Value);
-		}
-	else
-		{
-		return array($ret);
+		if (! is_array($this->Value)) {
+		
+			$this->Value = array($this->Value);
+	    }
+		
+		if ($as_string) {
+		
+			return join($form->GetAttr('list_delimiter',','),$this->Value);
+		} else {
+		
+			return array($ret);
 		}
 	}
-
-
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = $this->form_ptr->module_ptr;
+		
 		$main = array(
-			array($mod->Lang('title_maximum_length'),
-			      $mod->CreateInputText($formDescriptor, 
-						    'fbrp_opt_length',
-			         $this->GetOption('length','80'),25,25)),
-			array($mod->Lang('title_add_button_text'),
-			      $mod->CreateInputText($formDescriptor,
-						    'fbrp_opt_add_button',
-			         $this->GetOption('add_button','+'),15,25)),
-			array($mod->Lang('title_del_button_text'),
-			      $mod->CreateInputText($formDescriptor,
-						    'fbrp_opt_del_button',
-			         $this->GetOption('del_button','X'),15,25))
+			array($mod->Lang('title_maximum_length'),$mod->CreateInputText($formDescriptor,'fbrp_opt_length',$this->GetOption('length','80'),25,25)),
+			array($mod->Lang('title_add_button_text'),$mod->CreateInputText($formDescriptor,'fbrp_opt_add_button',$this->GetOption('add_button','+'),15,25)),
+			array($mod->Lang('title_del_button_text'),$mod->CreateInputText($formDescriptor,'fbrp_opt_del_button',$this->GetOption('del_button','X'),15,25))
 		);
+		
 		$adv = array(
-			array($mod->Lang('title_field_regex'),
-			      array($mod->CreateInputText($formDescriptor, 
-							  'fbrp_opt_regex',
-							  $this->GetOption('regex'),25,255),$mod->Lang('title_regex_help')))	
+			array($mod->Lang('title_field_regex'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_regex',$this->GetOption('regex'),25,255).'<br />'.$mod->Lang('title_regex_help')),
+			array($mod->Lang('title_field_siblings'),$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_siblings',$this->GetFieldSiblings(),-1,$this->GetOption('siblings','')).'<br />'.$mod->Lang('title_field_siblings_help')),
+			array($mod->Lang('title_field_hidebuttons'),$mod->CreateInputHidden($formDescriptor,'fbrp_opt_hidebuttons',0).
+						$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_hidebuttons',1,$this->GetOption('hidebuttons',0)).$mod->Lang('title_field_hidebuttons_help'))				
 		);
+		
 		return array('main'=>$main,'adv'=>$adv);
 	}
 
+	function LabelSubComponents()
+	{
+		return false;
+	}	
 
 	function Validate()
 	{
@@ -210,14 +214,41 @@ class fbTextFieldExpandable extends fbFieldBase {
                     }
 		  	   	   break;
 		  }
+		  
 		if ($this->GetOption('length',0) > 0 && strlen($thisVal) > $this->GetOption('length',0))
 			{
 			$this->validated = false;
 			$this->validationErrorText = $mod->Lang('please_enter_no_longer',$this->GetOption('length',0));
 			}
 		}
+		
 		return array($this->validated, $this->validationErrorText);
 	}
+	
+	// Gets all mirror fields of this field
+	function GetFieldSiblings() 
+	{
+		$mod = $this->form_ptr->module_ptr;
+		$form = $this->form_ptr;
+		$siblings = array();
+		
+		$siblings[$mod->Lang('select_one')] = '';
+	
+		for ($i=0; $i < count($form->Fields); $i++) {
+	
+			$thisField = &$form->Fields[$i];
+	
+			if ($thisField->GetFieldType() == 'TextFieldExpandable' && $thisField->GetId() != $this->GetId()) {
+		
+				$siblings[$thisField->GetName()] = $thisField->GetId();
+				
+			}
+		}
+		
+		return $siblings;
+	
+	}
+	
 }
 
 ?>
