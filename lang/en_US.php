@@ -881,20 +881,21 @@ that you use for pages that contain your form.</p>
 
 ".$lang['template_variable_help']."
 <h3>Credits</h3>
-<p>Many people have contributed code, bug reports, cash, and ideas to FormBuilder. Among them:
+<p>Many people have contributed code, bug reports, cash, and ideas to FormBuilder. Among them (alphabetically):
 <ul>
-<li>Robert Campbell - numerous code contributions</li>
-<li>Tyler Boespflug - funding and ideas</li>
-<li>Paul Noone - CSS and ideas</li>
-<li>Jeff Bosch - UDT Validation</li>
-<li>Nuno Costa - suggestions</li>
+<li><a href=\"http://www.bpti.eu\">Baltic institute of advanced technology</a> - funding </li>
 <li>Jeremy Bass - code and suggestions</li>
 <li>Alberto Benati - code</li>
-<li>Morten Poulsen - code</li>
+<li>Tyler Boespflug - funding and ideas</li>
+<li>Jeff Bosch - UDT Validation</li>
+<li>Robert Campbell - numerous code contributions</li>
+<li>Nuno Costa - suggestions</li>
 <li>Marc Geldon - code</li>
 <li>Kevin Grandon - code</li>
-<li>Simon Schaufelberger - code</li>
 <li>Ronny Krijt - code</li>
+<li>Paul Noone - CSS and ideas</li>
+<li>Morten Poulsen - code</li>
+<li>Simon Schaufelberger - code</li>
 </ul>
 <p>I apologize for any omissions - notify me, and I'll correct the omission!</p>
 <h3>Miscellaneous Notes</h3>
