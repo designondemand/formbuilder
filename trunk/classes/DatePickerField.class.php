@@ -59,7 +59,12 @@ class fbDatePickerField extends fbFieldBase {
          	$Days[$i]=$i;
          }
        $Year = array(''=>'');
-       for ($i=$this->GetOption('start_year',($today['year']-10));$i<$this->GetOption('end_year',($today['year']+10))+1;$i++)
+	   $sty = $this->GetOption('start_year',($today['year']-10));
+	   if ($sty == -1)
+			{
+			$sty = $today['year'];
+			}
+       for ($i=$sty;$i<$this->GetOption('end_year',($today['year']+10))+1;$i++)
          {
          	$Year[$i]=$i;
          }
