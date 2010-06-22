@@ -90,7 +90,11 @@ class fbComputedField extends fbFieldBase
                 if (isset($mapId[$tF]))
                     {
                     $ref = $mapId[$tF];
-                    $this->Value .= $others[$ref]->GetValue().' ';
+                    $this->Value .= $others[$ref]->GetValue();
+					if ($this->GetOption('string_or_number_eval','numeric') == 'string')
+						{
+						$this->Value .= ' ';
+						}
                     }
                 }
             }
@@ -102,7 +106,7 @@ class fbComputedField extends fbFieldBase
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$processType = array($mod->Lang('title_numeric')=>'numeric',
-		    $mod->Lang('title_string')=>'string');
+		    $mod->Lang('title_string')=>'string', $mod->Lang('title_string_unspaced')=>'unstring');
 		
 		$ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_computation').'</th></tr>';
         $ret .= '<tr><th>'.$mod->Lang('help_php_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';
