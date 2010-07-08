@@ -105,15 +105,20 @@ class fbDispositionFormBrowser extends fbFieldBase {
 				$fieldlist[$fields[$i]->GetName()] = $fields[$i]->GetId();
 				}
 			}
+		$current_indexes = array();
 		for ($i=1;$i<6;$i++)
 			{
 			$fname = array_search($this->GetOption('sortfield'.$i),$fieldlist);
-				array_push($main,
+			array_push($main,
 					array($mod->Lang('title_sortable_field',array($i)),
 						$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_sortfield'.$i, $fieldlist, -1,
 					$this->GetOption('sortfield'.$i,-1))
 					));
+			array_push($current_indexes,$this->GetOption('sortfield'.$i,-1));
 			}
+	  array_push($main,array($mod->Lang('title_note'),$mod->Lang('title_changing_triggers_reindex').
+		$mod->CreateInputHidden($formDescriptor,'fbrp_previous_indices',implode(':',$current_indexes))
+		));
 
 	  $feu = $mod->GetModuleInstance('FrontEndUsers');
 	  if ($feu == FALSE)
@@ -129,9 +134,7 @@ class fbDispositionFormBrowser extends fbFieldBase {
 			'1',$this->GetOption('feu_bind','0')).
 			$mod->Lang('title_feu_bind_help')));
 		}
-
-
-			
+		
 	  $openssl = $mod->GetModuleInstance('OpenSSL');
 	  if ($openssl == FALSE && !function_exists('mcrypt_encrypt'))
 		{
@@ -206,6 +209,26 @@ class fbDispositionFormBrowser extends fbFieldBase {
 		return array($res, $msg);
 	}
 
+
+  function PostFieldSaveProcess(&$params)
+  {
+	$reindex = false;
+	$prev_indices = explode(':',$params['fbrp_previous_indices']);
+	for ($i=1;$i<6;$i++)
+		{
+		if ($this->GetOption('sortfield'.$i) != $prev_indices[$i-1])
+			{
+			$reindex = true;
+			}
+		}
+	if (! $reindex)
+		{
+		return;
+		}
+	$form = $this->form_ptr;
+	$form->ReindexResponses();
+  }
+  
 
 	function getHashedSortFieldVal($sortFieldNumber)
    {

@@ -560,6 +560,12 @@ class fbFieldBase {
   {
   }
 
+  // override me as necessary
+  function PostFieldSaveProcess(&$params)
+  {
+  }
+
+
   // new method as of Oct 09 that should have been here all along...
   function RemoveAdminField(&$array, $fieldname)
   {
