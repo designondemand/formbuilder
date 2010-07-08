@@ -16,6 +16,7 @@ if ($val[0])
   {
     $aefield->PostAdminSubmitCleanup();
     $aefield->Store(true);
+	$aefield->PostFieldSaveProcess($params);
     $params['fbrp_message']=$params['fbrp_op'];
     $this->DoAction('admin_add_edit_form', $id, $params);
   }

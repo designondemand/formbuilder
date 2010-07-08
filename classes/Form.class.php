@@ -1321,8 +1321,12 @@ function unmy_htmlentities($val)
     }
 	
 	// Update field position
-	$order_list = explode(',',$params['fbrp_sort']);
-	
+	$order_list = false;
+	if (isset($params['fbrp_sort']))
+		{
+		$order_list = explode(',',$params['fbrp_sort']);
+		}
+		
 	if(is_array($order_list) && count($order_list) > 0) {
 		
 		$count = 1;
@@ -2080,14 +2084,15 @@ function fast_add(field_type)
       }
   }
 
-  // FormBroweiser >= 0.3 Response load method - Diffrenece between LoadResponseValues?
+  // FormBrowser >= 0.3 Response load method. This populates the Field values directly
+  // (as opposed to LoadResponseValues, which places the values into the $params array)
   function LoadResponse($response_id)
   {
 	$mod = $this->module_ptr;
 	$db = $this->module_ptr->dbHandle;
 		
 	$oneset = new StdClass();
-	$res = $db->GetOne('SELECT response, form_id FROM '.cms_db_prefix().
+	$res = $db->Execute('SELECT response, form_id FROM '.cms_db_prefix().
 					'module_fb_formbrowser WHERE fbr_id=?', array($response_id));
 
 	if ($res && $row=$res->FetchRow())
@@ -2142,8 +2147,30 @@ function fast_add(field_type)
 	}
 
 
+  function ReindexResponses()
+  {
+	@set_time_limit(0);
+	$mod = $this->module_ptr;
+	$db = $this->module_ptr->dbHandle;
+	$responses = array();
+	$res = $db->Execute('SELECT fbr_id FROM '.cms_db_prefix().'module_fb_formbrowser WHERE form_id=?', array($this->Id));
+	while ($res && $row=$res->FetchRow())
+		{
+		array_push($responses,$row['fbr_id']);
+		}
+	$fbr_field = $this->GetFormBrowserField();
+	foreach($responses as $this_resp)
+		{
+		if ($this->LoadResponse($this_resp))
+			{
+			$this->StoreResponse($this_resp,'',$fbr_field);
+			}
+		}
+  }
 
-  // FormBroweiser >= 0.3 Response load method
+
+  // FormBrowser >= 0.3 Response load method. This populates the $params array for later processing/combination
+  // (as opposed to LoadResponse, which places the values into the Field values directly)
   function LoadResponseValues(&$params)
   {
 	$mod = $this->module_ptr;
@@ -2191,7 +2218,7 @@ function fast_add(field_type)
 	return true;
   }
 
-  // FormBroweiser < 0.3 Response load method  
+  // FormBrowser < 0.3 Response load method  
   function LoadResponseValuesOld(&$params)
   {
     $db = $this->module_ptr->dbHandle;
@@ -2232,16 +2259,6 @@ function fast_add(field_type)
       }
   }   
 
-  // Deletes response from database
-  function DeleteResponse($response_id) // TODO: Remove this, totally useless function, check with SjG first
-  {
-    $db = $this->module_ptr->dbHandle;
-    $sql = 'DELETE FROM ' . cms_db_prefix(). 'module_fb_resp_val where resp_id=?';
-    $res = $db->Execute($sql, array($response_id));
-    $sql = 'DELETE FROM '.cms_db_prefix().'module_fb_resp where resp_id=?';
-    $res = $db->Execute($sql, array($response_id));	
-  }
-
   // Validation stuff action.validate.php
   function CheckResponse($form_id, $response_id, $code)
   {
@@ -2256,7 +2273,6 @@ function fast_add(field_type)
       }
     return false;
   }
-
 
   // Master response inputter
   function StoreResponse($response_id=-1,$approver='',&$formBuilderDisposition)

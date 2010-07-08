@@ -501,6 +501,8 @@ $lang['title_field_siblings']='Link this field to it\'s sibling';
 $lang['title_field_siblings_help']='Dropdown lists all siblings of this field and allows you to link this field to one of it\'s sibling. Makes possible controlling this field with selected sibling controls.';
 $lang['title_field_hidebuttons']='Hide control buttons';
 $lang['title_field_hidebuttons_help']='Hides frontend control buttons of this field.';
+$lang['title_note']='Note';
+$lang['title_changing_triggers_reindex']='Changing any of the above fields will trigger a reindex of *all* saved records, so it could take a while.';
 
 $lang['error_usertag_disposition'] = 'User defined tag returned an error';
 $lang['error_usertag'] = 'User defined tag %s returned an error.';
