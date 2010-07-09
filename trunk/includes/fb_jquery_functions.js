@@ -22,8 +22,6 @@ jQuery.fn.fb_delete_field = function(message) {
 					jQuery(".module_fb_table").find("tbody tr").removeClass();
 					jQuery(".module_fb_table").find("tbody tr:nth-child(2n+1)").addClass("row1");
 					jQuery(".module_fb_table").find("tbody tr:nth-child(2n)").addClass("row2");
-
-					
 				});			
 			}	
 		});
@@ -97,3 +95,6 @@ jQuery.fn.fb_admin_update_field_required = function() {
 		
 };
 
+jQuery(document).ready(function(){
+  jQuery(".updown").hide();
+});
