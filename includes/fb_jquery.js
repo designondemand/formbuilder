@@ -18,6 +18,7 @@ jQuery(document).ready(function($) {
 				}
 				
 				$('#fbrp_sort').val(sortstr);
+				$('.reordermessage').show();
 		}
 	});
 

@@ -1501,6 +1501,9 @@ function unmy_htmlentities($val)
 			 $mod->Lang('title_submit_action'));
     $mod->smarty->assign('title_submit_response',
 			 $mod->Lang('title_submit_response'));
+    $mod->smarty->assign('title_must_save_order',
+			 $mod->Lang('title_must_save_order'));
+
 
     $mod->smarty->assign('title_inline_form',
 			 $mod->Lang('title_inline_form'));
@@ -1593,6 +1596,25 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	    $oneset->field_status = $thisField->StatusInfo();
 	    $oneset->editlink = $mod->CreateLink($id, 'admin_add_edit_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/edit.gif',$mod->Lang('edit'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
 	    $oneset->deletelink = $mod->CreateLink($id, 'admin_delete_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif',$mod->Lang('delete'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),'', '', '', 'onclick="$(this).fb_delete_field(\''.$mod->Lang('are_you_sure_delete_field',htmlspecialchars($thisField->GetName())).'\'); return false;"');
+
+		/* Removed By Stikki, reinstated by SjG with Javascript to hide it if Javascript's enabled. */
+		if ($count > 1)
+			{
+			$oneset->up = $mod->CreateLink($id, 'admin_update_field_order', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/arrow-u.gif','up','','','systemicon'), array('form_id'=>$this->Id,'fbrp_dir'=>'up','field_id'=>$thisField->GetId()));
+			}
+		else
+			{
+			$oneset->up = '&nbsp;';
+			}
+		if ($count < $last)
+			{
+			$oneset->down=$mod->CreateLink($id, 'admin_update_field_order', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/arrow-d.gif','down','','','systemicon'), array('form_id'=>$this->Id,'fbrp_dir'=>'down','field_id'=>$thisField->GetId()));
+			}
+		else
+			{
+			$oneset->down = '&nbsp;';
+			}
+
 	    ($currow == "row1"?$currow="row2":$currow="row1");
 	    $count++;
 	    if ($thisField->GetOrder() >= $maxOrder)

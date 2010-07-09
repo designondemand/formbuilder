@@ -476,6 +476,7 @@ $lang['back_top'] = 'Back to FormBuilder Main Page';
 $lang['title_headers_to_modify'] = 'Which email headers should this input populate?';
 $lang['title_blank_invalid'] = 'Do not accept blank space as valid response';
 $lang['title_blank_invalid_long'] = 'If a field is required, checking this will require that people put in some alphanumeric characters, not just spaces';
+$lang['title_must_save_order'] = 'You must click one of the "save" buttons to make your new field order permanent.';
 $lang['error_CompanyDirectory_module_not_available'] = 'Company Directory module is not available!';
 $lang['option_never'] = 'Never';
 $lang['option_user_choice'] = 'Give user a choice (checkbox)';

@@ -54,8 +54,11 @@
                 	<th width="85">{$title_field_type}</th>
                 	<th width="20">{$title_field_required_abbrev}</th>
                 	<th>{$title_information}</th>
+ 					<th width="20" class="updown">&nbsp;</th>
+					<th width="20" class="updown">&nbsp;</th>
+                   <th width="20">&nbsp;</th>
                     <th width="20">&nbsp;</th>
-					<th width="20">&nbsp;</th></tr>
+					</tr>
 				</thead>
 				<tbody>
 				{foreach from=$fields item=entry}
@@ -70,12 +73,15 @@
 					<td>{$entry->type}</td>
 					<td>{$entry->disposition}</td>
 					<td>{$entry->field_status}</td>
+					<td class="updown">{$entry->up}</td>
+					<td class="updown">{$entry->down}</td>
 					<td>{$entry->editlink}</td>
 					<td>{$entry->deletelink}</td>
 					</tr>
 				{/foreach}
 				</tbody>
             </table>
+			<div class="reordermessage pagemcontainer" style="display:none"><p class="pagemessage">{$title_must_save_order}</p></div>
 			<br />
 			{$add_field_link}
         </div>
