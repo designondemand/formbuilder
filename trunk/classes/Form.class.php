@@ -1591,27 +1591,6 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	      }
 		  
 	    $oneset->field_status = $thisField->StatusInfo();
-
-		/* Removed By Stikki
-	    if ($count > 1)
-	      {
-		$oneset->up = $mod->CreateLink($id, 'admin_update_field_order', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/arrow-u.gif','up','','','systemicon'), array('form_id'=>$this->Id,'fbrp_dir'=>'up','field_id'=>$thisField->GetId()));
-	      }
-	    else
-	      {
-		$oneset->up = '&nbsp;';
-	      }
-	    if ($count < $last)
-	      {
-		$oneset->down=$mod->CreateLink($id, 'admin_update_field_order', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/arrow-d.gif','down','','','systemicon'), array('form_id'=>$this->Id,'fbrp_dir'=>'down','field_id'=>$thisField->GetId()));
-	      }
-	    else
-	      {
-		$oneset->down = '&nbsp;';
-	      }
-		*/
-		  
-		  
 	    $oneset->editlink = $mod->CreateLink($id, 'admin_add_edit_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/edit.gif',$mod->Lang('edit'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
 	    $oneset->deletelink = $mod->CreateLink($id, 'admin_delete_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif',$mod->Lang('delete'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),'', '', '', 'onclick="$(this).fb_delete_field(\''.$mod->Lang('are_you_sure_delete_field',htmlspecialchars($thisField->GetName())).'\'); return false;"');
 	    ($currow == "row1"?$currow="row2":$currow="row1");
@@ -1627,11 +1606,6 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	$mod->smarty->assign('add_field_link',
 			     $mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->cms->variables['admintheme']->DisplayImage('icons/system/newobject.gif',$mod->Lang('title_add_new_field'),'','','systemicon'),array('form_id'=>$this->Id, 'fbrp_order_by'=>$maxOrder), '', false) . $mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_add_new_field'),array('form_id'=>$this->Id, 'fbrp_order_by'=>$maxOrder), '', false));
 
-/*  Removed By Stikki
-	$mod->smarty->assign('order_field_link',
-			     $mod->CreateLink($id, 'admin_reorder_form', $returnid,$mod->cms->variables['admintheme']->DisplayImage('icons/system/reorder.gif',$mod->Lang('title_reorder_form'),'','','systemicon'),array('form_id'=>$this->Id), '', false) . $mod->CreateLink($id, 'admin_reorder_form', $returnid,$mod->Lang('title_reorder_form'),array('form_id'=>$this->Id), '', false));
-*/
-			     			     
 	if ($mod->GetPreference('enable_fastadd',1) == 1)
 	  {
 	    $mod->smarty->assign('fastadd',1);
@@ -2573,8 +2547,11 @@ function fast_add(field_type)
 	          				}
 
 	        			$uploads_destpage = $theFields[$i]->GetOption('uploads_destpage');
-	        			$url = $uploads->CreateLink (-1, 'getfile', $uploads_destpage, '',
-	             				array ('upload_id' => $row['upload_id']), '', true);
+						$url = $uploads->CreateLink ($parms['category_id'], 'getfile', $uploads_destpage, '',
+							array ('upload_id' => $res[1]), '', true);
+
+						$url = str_replace('admin/moduleinterface.php?','index.php?',$url);
+	
 						$theFields[$i]->ResetValue();
 	        			$theFields[$i]->SetValue($url);
 	      				}
