@@ -13,7 +13,14 @@ if (! $this->CheckAccess()) exit;
 $aeform = new fbForm($this, $params, true);
 $aeform->Store();
 
-// Check witch button was pressed
+if (FALSE == empty($params['active_tab']))
+  {
+    $tab = $params['active_tab'];
+  } else {
+  $tab = 'maintab';
+ }
+
+// Check which button was pressed
 if ($params['fbrp_submit'] == $this->Lang('save')) {
 
     $params['fbrp_message'] = $this->Lang('form',$params['fbrp_form_op']);
@@ -21,7 +28,7 @@ if ($params['fbrp_submit'] == $this->Lang('save')) {
 	
 } else {
 
-	echo $aeform->AddEditForm($id, $returnid,$this->Lang('form',$params['fbrp_form_op']));
+	echo $aeform->AddEditForm($id, $returnid, $tab, $this->Lang('form',$params['fbrp_form_op']));
 }
 
 ?>

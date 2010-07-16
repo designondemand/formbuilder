@@ -91,10 +91,10 @@ jQuery.fn.fb_admin_update_field_required = function() {
 			
 			
 		}
-	});
-		
+	});		
 };
 
-jQuery(document).ready(function(){
-  jQuery(".updown").hide();
-});
+jQuery.fn.fb_set_tab = function() {
+	var active = jQuery('#page_tabs > .active');
+	jQuery('#fbr_atab').val(active.attr('id'));
+}
