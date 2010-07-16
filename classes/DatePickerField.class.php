@@ -93,21 +93,27 @@ class fbDatePickerField extends fbFieldBase {
           $today['mday'], $js.$this->GetCSSIdTag('_day'));
  		$day->title = $mod->Lang('day');
  		$day->name = '<label for="'.$this->GetCSSId('_day').'">'.$mod->Lang('day').'</label>';
- 		array_push($ret, $day);
-
+ 
       $mon = new stdClass();
       $mon->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]', $this->Months, -1,
           $today['mon'], $js.$this->GetCSSIdTag('_month'));
  		$mon->title = $mod->Lang('mon');
  		$mon->name = '<label for="'.$this->GetCSSId('_month').'">'.$mod->Lang('mon').'</label>';
- 		array_push($ret, $mon);
-
+ 
       $yr = new stdClass();
       $yr->input = $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id.'[]', $Year, -1,
          $today['year'],$js.$this->GetCSSIdTag('_year'));
       $yr->name = '<label for="'.$this->GetCSSId('_year').'">'.$mod->Lang('year').'</label>';
       $yr->title = $mod->Lang('year');
-      array_push($ret,$yr);
+
+		$order = array("d" => $day, "m" => $mon, "y" => $yr);
+		$user_order = $this->GetOption('date_order','d-m-y');
+		$arrUserOrder = explode("-", $user_order);
+		foreach ($arrUserOrder as $key)
+			{
+			array_push($ret, $order[$key]);
+			}
+
       return $ret;
 	}
 
@@ -164,6 +170,10 @@ class fbDatePickerField extends fbFieldBase {
             		array($mod->CreateInputText($formDescriptor, 'fbrp_opt_date_format',
             		$this->GetOption('date_format','j F Y'),25,25),$mod->Lang('help_date_format'))
 		    ),
+			array($mod->Lang('title_date_order'),
+					array($mod->CreateInputText($formDescriptor, 'fbrp_opt_date_order',
+					$this->GetOption('date_order','d-m-y'),5,5),$mod->Lang('help_date_order'))
+			),
 		   array($mod->Lang('title_default_blank'),
             		$mod->CreateInputHidden($formDescriptor,'fbrp_opt_default_blank','0').
 					$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_default_blank',
