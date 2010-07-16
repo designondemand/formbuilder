@@ -1392,23 +1392,23 @@ function unmy_htmlentities($val)
     return ( 'fb'.$type );
   }
 
-  function AddEditForm($id, $returnid, $message='')
+  function AddEditForm($id, $returnid, $tab, $message='')
   {
     global $gCms;
     $mod = $this->module_ptr;
 	$config = $mod->GetConfig();
-	
+		
     $mod->smarty->assign('message',$message);
     $mod->smarty->assign('formstart', $mod->CreateFormStart($id, 'admin_store_form', $returnid));
     $mod->smarty->assign('formid', $mod->CreateInputHidden($id, 'form_id', $this->Id));
     $mod->smarty->assign('tab_start',$mod->StartTabHeaders().
-							$mod->SetTabHeader('maintab',$mod->Lang('tab_main')).
-							$mod->SetTabHeader('submittab',$mod->Lang('tab_submit')).
-							$mod->SetTabHeader('symboltab',$mod->Lang('tab_symbol')).
-							$mod->SetTabHeader('captchatab',$mod->Lang('tab_captcha')).
-							$mod->SetTabHeader('udttab',$mod->Lang('tab_udt')).
-							$mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout')).
-							$mod->SetTabHeader('submittemplate',$mod->Lang('tab_submissiontemplate')).
+							$mod->SetTabHeader('maintab',$mod->Lang('tab_main'),('maintab' == $tab)?true:false).
+							$mod->SetTabHeader('submittab',$mod->Lang('tab_submit'),('submittab' == $tab)?true:false).
+							$mod->SetTabHeader('symboltab',$mod->Lang('tab_symbol'),('symboltab' == $tab)?true:false).
+							$mod->SetTabHeader('captchatab',$mod->Lang('tab_captcha'),('captchatab' == $tab)?true:false).
+							$mod->SetTabHeader('udttab',$mod->Lang('tab_udt'),('udttab' == $tab)?true:false).
+							$mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout'),('templatelayout' == $tab)?true:false).
+							$mod->SetTabHeader('submittemplate',$mod->Lang('tab_submissiontemplate'),('submittemplate' == $tab)?true:false).
 							$mod->EndTabHeaders() . $mod->StartTabContent());
 	  
     $mod->smarty->assign('tabs_end',$mod->EndTabContent());
@@ -1424,14 +1424,9 @@ function unmy_htmlentities($val)
     $mod->smarty->assign('title_form_name',$mod->Lang('title_form_name'));
     $mod->smarty->assign('input_form_name', $mod->CreateInputText($id, 'fbrp_form_name', $this->Name, 50));
 	
-	// Removed by Stikki - Remaked whole template submit system with jQuery, so most of stuff is unneccery.
-	//$mod->smarty->assign('template_are_you_sure',$mod->Lang('template_are_you_sure'));
 	$mod->smarty->assign('title_load_template',$mod->Lang('title_load_template'));
 	$modLink = $mod->CreateLink($id, 'admin_get_template', $returnid, '', array(), '', true);
-	//list($mod_path, $mod_param) = explode('?',$modLink);
 	$mod->smarty->assign('security_key',CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY]);
-	//$mod->smarty->assign('mod_path',$mod_path);
-	//$mod->smarty->assign('mod_param',html_entity_decode($mod_param));
 	
 	$templateList = array(''=>'',$mod->Lang('default_template')=>'RenderFormDefault.tpl',
 		$mod->Lang('table_left_template')=>'RenderFormTableTitleLeft.tpl',
@@ -1555,7 +1550,8 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 									$mod->CreateInputHidden($id, 'fbrp_sort','','id="fbrp_sort"'));
 	$mod->smarty->assign('adding',0);
 	$mod->smarty->assign('save_button', $mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('save')));
-	$mod->smarty->assign('submit_button', $mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('save_and_continue')));
+	$mod->smarty->assign('submit_button', $mod->CreateInputHidden($id, 'active_tab', '', 'id="fbr_atab"').
+		$mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('save_and_continue'),'onclick="$(this).fb_set_tab()"'));
 	
 	$fieldList = array();
 	$currow = "row1";

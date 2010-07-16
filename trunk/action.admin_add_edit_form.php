@@ -13,7 +13,14 @@ if (! $this->CheckAccess()) exit;
 			{
 			$this->SetPreference('show_field_level',$params['fbrp_set_field_level']);
 			}
+			if (FALSE == empty($params['active_tab']))
+			  {
+			    $tab = $params['active_tab'];
+			  } else {
+			  $tab = 'maintab';
+			 }
 		$aeform = new fbForm($this, $params, true);
-		echo $aeform->AddEditForm($id, $returnid, isset($params['fbrp_message'])?$this->ShowMessage($params['fbrp_message']):'');
+		
+		echo $aeform->AddEditForm($id, $returnid, $tab, isset($params['fbrp_message'])?$this->ShowMessage($params['fbrp_message']):'');
 
 ?>

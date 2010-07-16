@@ -899,6 +899,7 @@ that you use for pages that contain your form.</p>
 <li>Paul Noone - CSS and ideas</li>
 <li>Morten Poulsen - code</li>
 <li>Simon Schaufelberger - code</li>
+<li>Prue Rowland - bug fixes</li>
 </ul>
 <p>I apologize for any omissions - notify me, and I'll correct the omission!</p>
 <h3>Miscellaneous Notes</h3>

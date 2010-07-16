@@ -21,5 +21,5 @@ jQuery(document).ready(function($) {
 				$('.reordermessage').show();
 		}
 	});
-
+    jQuery(".updown").hide();
 });
