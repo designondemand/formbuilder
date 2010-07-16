@@ -15,7 +15,7 @@ class fbCheckboxField extends fbFieldBase {
         $mod = $form_ptr->module_ptr;
 		$this->Type =  'CheckboxField';
 		$this->DisplayInForm = true;
-		$this->NonRequirableField = true;
+		$this->NonRequirableField = false;
 		$this->Required = false;
 		$this->ValidationTypes = array(
             $mod->Lang('validation_none')=>'none',
@@ -60,14 +60,6 @@ class fbCheckboxField extends fbFieldBase {
 			return array($ret);
 			}
 	}
-
-	function PostPopulateAdminForm(&$mainArray, &$advArray)
-	{
-		$mod = $this->form_ptr->module_ptr;
-		// remove the "required" field, since this can only be done via validation
-      $this->RemoveAdminField($mainArray, $mod->Lang('title_field_required'));
-	}
-
 
 
 	function StatusInfo()
