@@ -372,9 +372,10 @@ $lang['title_maps_to'] = 'Map field "%s" to form submission variable';
 $lang['title_additional'] = 'Additional submission';
 $lang['title_additional_help'] = 'Anything to be appended to the submission payload, in URL-encoded form (.e.g, "user=steve+jobs&employee_number=1)';
 $lang['title_include_in_submission'] = 'Include field in Submission';
+$lang['title_date_order']='Date component field order (for input)';
 $lang['title_data_stored_in_fbr'] = 'Data will be stored in an XML format in the [PREFIX]_module_fb_frombrowser database table.';
 $lang['error_has_no_fb_field'] = 'Error! Either the form has no form_builder disposition, or it failed to instantiate (due to memory issues?)';
-
+$lang['help_date_order']='Use "m" for Month, "d" for Day, and "y" for Year. Separate the items by hyphens.';
 $lang['restricted_to_group'] = 'Only in group %s';
 $lang['title_show_to_user'] = 'Display to user?';
 $lang['help_leaveempty'] = 'This field may be left empty';
@@ -409,7 +410,7 @@ $lang['title_file_header']='Template for the header of output file';
 $lang['title_file_footer']='Template for the footer of output file';
 $lang['title_confirmation_url']='URL to click for form confirmation';
 $lang['title_value'] = 'Value (see Advanced Tab if you use Smarty tags)';
-$lang['title_date_format']='Date Format (standard <a href="http://www.php.net/manual/en/function.date.php">PHP Date Formats</a>)';
+$lang['title_date_format']='Date Format for display (standard <a href="http://www.php.net/manual/en/function.date.php">PHP Date Formats</a>)';
 $lang['title_use_wysiwyg']='Use WYSIWYG editor for text Area (Admin side only)?';
 $lang['title_submit_actions'] = 'Form Submission Behavior';
 $lang['title_submit_labels'] = 'Submission Button Labels';
@@ -900,6 +901,7 @@ that you use for pages that contain your form.</p>
 <li>Morten Poulsen - code</li>
 <li>Simon Schaufelberger - code</li>
 <li>Prue Rowland - bug fixes</li>
+<li>Ryan Foster - code</li>
 </ul>
 <p>I apologize for any omissions - notify me, and I'll correct the omission!</p>
 <h3>Miscellaneous Notes</h3>
