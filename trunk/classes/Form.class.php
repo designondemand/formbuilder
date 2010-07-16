@@ -2576,9 +2576,10 @@ function fast_add(field_type)
 	    			else
 	      				{
 	        			// Handle the upload ourselves
-						$src = $thisFile['tmp_name'];
+						$src = $thisFile['tmp_name'];						
+						$dest_path = $theFields[$i]->GetOption('file_destination',$gCms->config['uploads_path']);						
 						// this is safe[?] since we validated in FileUploadField's validate method.
-						$dest = $gCms->config['uploads_path'].'/'.$thisFile['name'];
+						$dest = $dest_path.DIRECTORY_SEPARATOR.$thisFile['name'];
 						if (! move_uploaded_file($src,$dest))
 							{
 							audit(-1, $mod->GetName(), $mod->Lang('submit_error',''));
@@ -2586,7 +2587,7 @@ function fast_add(field_type)
 							}
 						else
 							{
-							$url = $gCms->config['uploads_url'].'/'.$thisFile['name'];
+							$url = $dest_path.DIRECTORY_SEPARATOR.$thisFile['name'];
 							$theFields[$i]->ResetValue();
 							$theFields[$i]->SetValue(array($dest,$url));
 							}

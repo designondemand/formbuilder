@@ -65,18 +65,28 @@ class fbFileUploadField extends fbFieldBase {
   function StatusInfo()
   {
     $mod = $this->form_ptr->module_ptr;
-    $ms = $this->GetOption('max_size');
-    $exts = $this->GetOption('permitted_extensions');
+    $ms = $this->GetOption('max_size','');
+    $exts = $this->GetOption('permitted_extensions','');
     $ret = '';
-    $ret .= $mod->Lang('maximum_size').': '.$ms.'kb';
-    $ret .= ', ';
-    $ret .= $mod->Lang('permitted_extensions') . ': '.$exts;
+	if ($ms != '')
+    	{
+		$ret .= $mod->Lang('maximum_size').': '.$ms.'kb, ';
+		}
+	if ($exts != '')
+		{
+ 		$ret .= $mod->Lang('permitted_extensions') . ': '.$exts.', ';
+		}
+	if ($this->GetOption('file_destination','') != '')
+		{
+		$ret .= $this->GetOption('file_destination','');
+		}
     return $ret;
   }
   
   
   function PrePopulateAdminForm($formDescriptor)
   {
+	global $gCms;
     $mod = $this->form_ptr->module_ptr;
     $ms = $this->GetOption('max_size');
     $exts = $this->GetOption('permitted_extensions');
@@ -131,6 +141,9 @@ class fbFileUploadField extends fbFieldBase {
 			$mod->CreateInputCheckbox($formDescriptor, 
 					  'fbrp_opt_remove_file', '1', 
 					  $this->GetOption('remove_file','0'))));
+		array_push($main, array($mod->Lang('title_file_destination'),
+			$mod->CreateInputText($formDescriptor,'fbrp_opt_file_destination',
+				$this->GetOption('file_destination',$gCms->config['uploads_path']),60,255)));
 		}
 
     return array('main'=>$main,'adv'=>$adv);
