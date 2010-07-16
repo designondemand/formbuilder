@@ -2578,7 +2578,41 @@ function fast_add(field_type)
 	        			// Handle the upload ourselves
 						$src = $thisFile['tmp_name'];						
 						$dest_path = $theFields[$i]->GetOption('file_destination',$gCms->config['uploads_path']);						
-						// this is safe[?] since we validated in FileUploadField's validate method.
+						
+						// validated message before, now do it for the file itself
+						$valid = true;
+					    $ms = $theFields[$i]->GetOption('max_size');
+					    $exts = $theFields[$i]->GetOption('permitted_extensions','');
+					    if ($ms != '' && $thisFile['size'] > ($ms * 1024))
+							{
+							$valid = false;
+							}
+					    else if ($exts != '')
+							{
+							$match = false;
+							$legalExts = explode(',',$exts);
+							foreach ($legalExts as $thisExt)
+								{
+								if (preg_match('/\.'.trim($thisExt).'$/i',$thisFile['name']))
+									{
+									$match = true;
+									}
+								else if (preg_match('/'.trim($thisExt).'/i',$thisFile['type']))
+									{
+									$match = true;
+									}
+								}
+							if (! $match)
+								{
+								$valid = false;
+								}
+							}
+						if (! $valid)
+							{
+							unlink($src);
+							audit(-1, $mod->GetName(), $mod->Lang('illegal_file',array($thisFile['name'],$_SERVER['REMOTE_ADDR'])));
+		      				return array(false, '');
+							}
 						$dest = $dest_path.DIRECTORY_SEPARATOR.$thisFile['name'];
 						if (! move_uploaded_file($src,$dest))
 							{

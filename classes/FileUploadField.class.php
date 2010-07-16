@@ -170,7 +170,7 @@ class fbFileUploadField extends fbFieldBase {
   	$this->validated = true;
   	$this->validationErrorText = '';
     $ms = $this->GetOption('max_size');
-    $exts = $this->GetOption('permitted_extensions');
+    $exts = $this->GetOption('permitted_extensions','');
     $mod = $this->form_ptr->module_ptr;
     //$fullAlias = $this->GetValue(); -- Stikki modifys: Now gets correct alias
     $fullAlias = $mod->module_id.'fbrp__'.$this->Id;
@@ -188,7 +188,7 @@ class fbFileUploadField extends fbFieldBase {
 	$this->validationErrorText = $mod->Lang('file_too_large'). ' '.($ms * 1024).'kb';
 	$this->validated = false;
       }
-    else if ($exts)
+    else if ($exts != '')
       {
 	$match = false;
 	$legalExts = explode(',',$exts);

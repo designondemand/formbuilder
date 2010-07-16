@@ -66,41 +66,50 @@ class fbComputedField extends fbFieldBase
                     }
                 }
             
-            $strToEval = "\$this->Value=$procstr;";
-            // see if we can trap an error
-            // this is all vulnerable to an evil form designer, but
-            // not an evil form user. 
-            ob_start();
-			if (eval('function testcfield'.rand().
-			    '() {'.$strToEval.'}') === FALSE)
-			    {
-			    $this->Value = $mod->Lang('title_bad_function',$procstr);
-			    }
-			else
-			    {
-			    eval($strToEval);
-			    } 
-			ob_end_clean();
             }
         else
             {
-            $thisValue = '';
+            $procstr = '';
             foreach ($flds[1] as $tF)
                 {
                 if (isset($mapId[$tF]))
                     {
                     $ref = $mapId[$tF];
-                    $this->Value .= $others[$ref]->GetValue();
+                    $procstr .= $this->sanitizeValue($others[$ref]->GetHumanReadableValue());
 					if ($this->GetOption('string_or_number_eval','numeric') == 'string')
 						{
-						$this->Value .= ' ';
+						$procstr .= ' ';
 						}
                     }
                 }
+
             }
-                
+
+          $strToEval = "\$this->Value=$procstr;";
+           // see if we can trap an error
+           // this is all vulnerable to an evil form designer, but
+           // not an evil form user. 
+           ob_start();
+		if (eval('function testcfield'.rand().
+		    '() {'.$strToEval.'}') === FALSE)
+		    {
+		    $this->Value = $mod->Lang('title_bad_function',$procstr);
+		    }
+		else
+		    {
+		    eval($strToEval);
+		    } 
+		ob_end_clean();                
     }
 
+	// strip any possible PHP function from submitted string
+	function sanitizeValue($val)
+	{
+		$arr = get_defined_functions(); // internal and user
+		$val = str_replace($arr['internal'],'',$val);
+		$val = str_replace($arr['user'],'',$val);
+		return $val;
+	}
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
