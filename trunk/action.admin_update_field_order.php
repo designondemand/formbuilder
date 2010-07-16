@@ -21,9 +21,10 @@ if (! $this->CheckAccess()) exit;
             }
         $aeform->SwapFieldsByIndex($srcIndex,$destIndex);
 
-// force reload of form, this is kinda hackish but cant think of anything else ;)
-$aeform = new fbForm($this, $params, true);
+		// force reload of form, this is kinda hackish but cant think of anything else ;)
+		$aeform = new fbForm($this, $params, true);
+		$tab = $this->GetActiveTab($params);
 
 
-        echo $aeform->AddEditForm($id, $returnid, $this->ShowMessage($this->Lang('field_order_updated')));
+        echo $aeform->AddEditForm($id, $returnid, $tab, $this->ShowMessage($this->Lang('field_order_updated')));
 ?>

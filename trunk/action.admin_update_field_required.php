@@ -19,5 +19,7 @@ if (! $this->CheckAccess()) exit;
 			$aefield->Store();
          $aeform = new fbForm($this, $params, true);
 			}
-		echo $aeform->AddEditForm($id, $returnid, $this->Lang('field_requirement_updated'));
+		$tab = $this->GetActiveTab($params);
+		
+		echo $aeform->AddEditForm($id, $returnid, $tab, $this->Lang('field_requirement_updated'));
 ?>
