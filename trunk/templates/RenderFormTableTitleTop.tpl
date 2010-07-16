@@ -106,7 +106,7 @@ function fbht(htid)
 			{/if}
 			{if $entry->valid == 0} &lt;--- {$entry->error}{/if}
 			{if $entry->helptext != ''}&nbsp;<a href="javascript:fbht('{$entry->field_helptext_id}')"><img src="modules/FormBuilder/images/info-small.gif" alt="Help" /></a>
-					<span id="{$entry->field_helptext_id}" style="display:none">{$entry->helptext}</span>{/if}
+					<span id="{$entry->field_helptext_id}" style="display:none" class="fbr_helptext">{$entry->helptext}</span>{/if}
 			
 			</td></tr>
 			{/strip}
