@@ -903,40 +903,17 @@ class FormBuilder extends CMSModule
 	return $val;
 	}
    
-/*   function fbencrypt($string,$key)
-      {
-      $key = substr(md5($key),0,24);
-      $td = mcrypt_module_open ('tripledes', '', 'cbc', '');
-	  $iv = '';
-	  for ($i=0;$i<mcrypt_enc_get_iv_size ($td);$i++)
+	function GetActiveTab(&$params)
 		{
-		$iv	.= chr($i);
-		}
-      mcrypt_generic_init ($td, $key, $iv);
-      $enc = base64_encode(mcrypt_generic ($td, $string));
-      mcrypt_generic_deinit ($td);
-      mcrypt_module_close ($td);
-      return $enc;
-      }
-
-   function fbdecrypt($crypt,$key)
-      {
-      $crypt = base64_decode($crypt);
-      $td = mcrypt_module_open ('tripledes', '', 'cbc', '');
-      $key = substr(md5($key),0,24);
-	  $iv = '';
-	  for ($i=0;$i<mcrypt_enc_get_iv_size ($td);$i++)
-		{
-		$iv	.= chr($i);
-		}
-      mcrypt_generic_init ($td, $key, $iv);
-      $plain = mdecrypt_generic ($td, $crypt);
-      mcrypt_generic_deinit ($td);
-      mcrypt_module_close ($td);
-      return $plain;
-      }
- 
-*/
+		if (FALSE == empty($params['active_tab']))
+			{
+		    return $params['active_tab'];
+		  	}
+		else
+			{
+			return 'maintab';
+			}
+	}
   
    function fbencrypt($string,$key)
       {

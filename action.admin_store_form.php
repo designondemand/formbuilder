@@ -13,12 +13,7 @@ if (! $this->CheckAccess()) exit;
 $aeform = new fbForm($this, $params, true);
 $aeform->Store();
 
-if (FALSE == empty($params['active_tab']))
-  {
-    $tab = $params['active_tab'];
-  } else {
-  $tab = 'maintab';
- }
+$tab = $this->GetActiveTab($params);
 
 // Check which button was pressed
 if ($params['fbrp_submit'] == $this->Lang('save')) {

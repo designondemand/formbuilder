@@ -254,14 +254,6 @@ class fbCheckboxGroupField extends fbFieldBase {
 		return array('main'=>$main,'adv'=>$adv);
 	}
 
-	// Modify field admin before showing it
-	function PostPopulateAdminForm(&$mainArray, &$advArray)
-	{
-		$mod = $this->form_ptr->module_ptr;
-		
-		// remove the "required" field, since this can only be done via validation
-		$this->RemoveAdminField($mainArray, $mod->Lang('title_field_required'));
-	}
 
 	// Before admin submit do cleanup
 	function PostAdminSubmitCleanup()
