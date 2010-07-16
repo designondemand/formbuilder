@@ -38,14 +38,14 @@ class fbLinkField extends fbFieldBase {
 			} 
 		$fieldDisp = array();
 		$thisBox = new stdClass();
-		$thisBox->name = '<label for="'.$id.'_'.$this->Id.'_1">'.$mod->Lang('link_destination').'</label>';
+		$thisBox->name = '<label for="'.$id.'fbrp__'.$this->Id.'_1">'.$mod->Lang('link_destination').'</label>';
 		$thisBox->title = $mod->Lang('link_destination');
-		$thisBox->input = $this->TextField($id, '_'.$this->Id.'[]', $val[0],'','',$js.$this->GetCSSIdTag('_1'));
+		$thisBox->input = $this->TextField($id, 'fbrp__'.$this->Id.'[]', $val[0],'','',$js.$this->GetCSSIdTag('_1'));
 		array_push($fieldDisp, $thisBox);
 		$thisBox = new stdClass();
-		$thisBox->name = '<label for="'.$id.'_'.$this->Id.'_2">'.$mod->Lang('link_label').'</label>';
+		$thisBox->name = '<label for="'.$id.'fbrp__'.$this->Id.'_2">'.$mod->Lang('link_label').'</label>';
 		$thisBox->title = $mod->Lang('link_label');
-		$thisBox->input = $this->TextField($id, '_'.$this->Id.'[]', $val[1],'','',$js.$this->GetCSSIdTag('_2'));
+		$thisBox->input = $this->TextField($id, 'fbrp__'.$this->Id.'[]', $val[1],'','',$js.$this->GetCSSIdTag('_2'));
 		array_push($fieldDisp, $thisBox);			
 		return $fieldDisp;
 		
