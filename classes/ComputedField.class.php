@@ -36,6 +36,7 @@ class fbComputedField extends fbFieldBase
         $others = $this->form_ptr->GetFields();
 
         $mapId = array();
+		$eval_string = false;
 
         for($i=0;$i<count($others);$i++)
             {
@@ -65,41 +66,54 @@ class fbComputedField extends fbFieldBase
                         }
                     }
                 }
-            
+            $eval_string = true;
             }
-        else
+        else if ($this->GetOption('string_or_number_eval','numeric') == 'compute')
             {
-            $procstr = '';
             foreach ($flds[1] as $tF)
                 {
                 if (isset($mapId[$tF]))
                     {
                     $ref = $mapId[$tF];
-                    $procstr .= $this->sanitizeValue($others[$ref]->GetHumanReadableValue());
-					if ($this->GetOption('string_or_number_eval','numeric') == 'string')
-						{
-						$procstr .= ' ';
-						}
+                    $procstr = str_replace('$fld_'.$tF,
+                         $this->sanitizeValue($others[$ref]->GetHumanReadableValue()),$procstr);
                     }
                 }
-
+			$eval_string = true;
             }
-
-          $strToEval = "\$this->Value=$procstr;";
-           // see if we can trap an error
-           // this is all vulnerable to an evil form designer, but
-           // not an evil form user. 
-           ob_start();
-		if (eval('function testcfield'.rand().
-		    '() {'.$strToEval.'}') === FALSE)
-		    {
-		    $this->Value = $mod->Lang('title_bad_function',$procstr);
-		    }
 		else
-		    {
-		    eval($strToEval);
-		    } 
-		ob_end_clean();                
+			{
+			$thisValue = '';
+			foreach ($flds[1] as $tF)
+				{
+				if (isset($mapId[$tF]))
+					{
+					$ref = $mapId[$tF];
+					$this->Value .= $others[$ref]->GetValue();
+					if ($this->GetOption('string_or_number_eval','numeric') != 'unstring')
+						{
+						$this->Value .= ' ';
+						}
+					}
+				}
+			}
+		if ($eval_string)
+			{
+			$strToEval = "\$this->Value=$procstr;";
+			// see if we can trap an error
+			// this is all vulnerable to an evil form designer, but
+			// not an evil form user. 
+			ob_start();
+			if (eval('function testcfield'.rand().'() {'.$strToEval.'}') === FALSE)
+				{
+				$this->Value = $mod->Lang('title_bad_function',$procstr);
+				}
+			else
+				{
+				eval($strToEval);
+				} 
+			ob_end_clean();                
+			}
     }
 
 	// strip any possible PHP function from submitted string
@@ -115,7 +129,7 @@ class fbComputedField extends fbFieldBase
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$processType = array($mod->Lang('title_numeric')=>'numeric',
-		    $mod->Lang('title_string')=>'string', $mod->Lang('title_string_unspaced')=>'unstring');
+		    $mod->Lang('title_string')=>'string', $mod->Lang('title_string_unspaced')=>'unstring', $mod->Lang('title_compute')=>'compute');
 		
 		$ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_computation').'</th></tr>';
         $ret .= '<tr><th>'.$mod->Lang('help_php_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';

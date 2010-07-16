@@ -444,6 +444,7 @@ $lang['title_order']='Interpretation Order';
 $lang['title_order_help']='If more than one Computed Field exists, they will be computed from lowest order number to highest order number';
 $lang['title_string_unspaced'] = 'String (no spaces between fields)?';
 $lang['title_compute_value'] = 'Value to compute';
+$lang['title_compute'] = 'Computed/PHP';
 $lang['title_string'] = 'String';
 $lang['title_numeric'] = 'Numeric';
 $lang['title_inline_form'] = 'Display form inline?';
@@ -526,7 +527,8 @@ $lang['validation_no_field_error']='Validation Response Error. No email validati
 $lang['upgrade03to04'] = 'Form Template was updated automatically as part of the version 0.3 to version 0.4 upgrade. You may need to make some fixes. If you\'re using the default form, simply replace this template with "default" using the pulldown above.';
 $lang['admindesc']='Add, edit and manage interactive Forms';
 
-$lang['operators_help'] = 'If you use String evaluation, the only operation available is concatenation (+), while if you use Number evaluation you have basic, very simple math (, +, -, *, /, ).'; 
+$lang['operators_help'] = 'If you use String evaluation, the only operation available is concatenation (+). If you use Number evaluation you have basic, very simple math (, +, -, *, /, ). If you use Computed/PHP evaluation, you can
+use any function you want, but you need to quote things (substitution occurs before evaluation), e.g., substr(\'$fld_22\',0,2).\'$fld_23\'.'; 
 $lang['help_module_interface']='Using Module Interface';
 $lang['help_module_interface_long']='<b>This field is used as a gateway to other modules!</b>
 Use it by creating your form elements in the templates of the other module(s) you wish to incorporate, and using the <strong>{$FBid}</strong> to tie it back to FormBuilder. For example, to include form options based on the Products module, create the following template in Products:<br/>
