@@ -20,6 +20,7 @@ class fbDispositionEmail extends fbDispositionEmailBase {
         $mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionEmail';
 		$this->DisplayInForm = false;
+		$this->DisplayInSubmission = false;
 		$this->NonRequirableField = true;
 		$this->IsDisposition = true;
 		$this->HasAddOp = true;
