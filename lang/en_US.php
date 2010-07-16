@@ -292,6 +292,7 @@ $lang['title_hide_errors_long']='Prevent debug / error messages from being seen 
 $lang['title_email_template']='Email Template';
 $lang['title_maximum_size']='Maximum upload file size (kilobytes)';
 $lang['title_maximum_size_long'] = 'This limitation is in addition to any limits set by the php or web server configuration';
+$lang['title_file_destination'] = 'Directory to save files into';
 $lang['title_permitted_extensions']='Permitted Extensions';
 $lang['title_permitted_extensions_long']='Enter a comma-separated list, excluding the dot (e.g., "jpg,gif,jpeg"). Spaces will be ignored. Leaving this blank means there will be no restrictions.';
 $lang['title_show_limitations']='Display restrictions?';
