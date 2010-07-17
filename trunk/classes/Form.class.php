@@ -829,14 +829,6 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
     if ($this->Page > 1)
       {
-
-/*	CHANGED DUE 1.7.1 CORE CHANGES
-
-	$mod->smarty->assign('prev',$mod->CreateInputSubmit($id, 'fbrp_prev',
-							    $this->GetAttr('prev_button_text'),
-							    'class="fbsubmit_prev" '.$js));
-*/
-							
 	$mod->smarty->assign('prev','<input class="cms_submit fbsubmit_prev" name="'.$id.'fbrp_prev" id="'.$id.'fbrp_prev" value="'.$this->GetAttr('prev_button_text').'" type="submit" '.$js.' />');						
       }
     else
@@ -848,14 +840,6 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
       {
 
 	$mod->smarty->assign('submit','<input class="cms_submit fbsubmit_next" name="'.$id.'fbrp_submit" id="'.$id.'fbrp_submit" value="'.$this->GetAttr('next_button_text').'" type="submit" '.$js.' />');  
-	  
-/*	CHANGED DUE 1.7.1 CORE CHANGES
-  
-	$mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'fbrp_submit',
-							      $this->GetAttr('next_button_text'),
-							      'class="fbsubmit_next" '.$js));
-								  
-*/								  
       }
     else
       {
@@ -874,14 +858,6 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		 
 		 
 		$mod->smarty->assign('submit','<input class="cms_submit fbsubmit" name="'.$id.'fbrp_submit" id="'.$id.'fbrp_submit" value="'.$this->GetAttr('submit_button_text').'" type="submit" '.$js.' />');  		 
-		
-/*		CHANGED DUE 1.7.1 CORE CHANGES
-		 
-		$mod->smarty->assign('submit',$jsStr . $mod->CreateInputSubmit($id, 'fbrp_submit',
-				$this->GetAttr('submit_button_text'),
-				'class="fbsubmit" '.$jsTrigger.' '.$js));
-				
-*/				
       }
 
 	  return $mod->ProcessTemplateFromDatabase('fb_'.$this->Id);
@@ -1766,7 +1742,8 @@ function fast_add(field_type)
 					      
     $mod->smarty->assign('input_submit_response',
 			 $mod->CreateTextArea(false, $id,
-				$this->GetAttr('submit_response',''), 'fbrp_forma_submit_response','module_fb_area_wide','',
+				$this->GetAttr('submit_response',$this->createSampleTemplate(true,false)),
+				'fbrp_forma_submit_response','module_fb_area_wide','',
 				'', '', '80', '15','','html'));
 
 	$parms = array();
