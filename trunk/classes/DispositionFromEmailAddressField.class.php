@@ -35,7 +35,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
  		if ($this->GetOption('send_user_copy','n') == 'c')
 			{
 			$retstr .= $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id.'[]', 1,
-					0,$this->GetCSSIdTag('_2'));
+					0,$this->GetCSSIdTag('_2'),'email');
 			$retstr .= '<label for="'.$this->GetCSSId('_2').'" class="label">'.$this->GetOption('send_user_label',
 				$mod->Lang('title_send_me_a_copy')).'</label>';
 			}

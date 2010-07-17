@@ -71,7 +71,7 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 	{
 		$mod = $this->form_ptr->module_ptr;
 		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,
-			htmlspecialchars($this->Value, ENT_QUOTES),25,80,$this->GetCSSIdTag());
+			htmlspecialchars($this->Value, ENT_QUOTES),25,80,$this->GetCSSIdTag(),'email');
 	}
 
 

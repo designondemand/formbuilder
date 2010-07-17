@@ -940,7 +940,7 @@ class FormBuilder extends CMSModule
       return $plain;
       }
 
-  function fbCreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+  function fbCreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $type='text')
 	{
   	$value = cms_htmlentities($value);
   	$id = cms_htmlentities($id);
@@ -950,7 +950,7 @@ class FormBuilder extends CMSModule
 
   	$value = str_replace('"', '&quot;', $value);
 
-  	$text = '<input type="text" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+  	$text = '<input type="'.$type.'" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
   	if ($addttext != '')
     	{
       	$text .= ' ' . $addttext;
