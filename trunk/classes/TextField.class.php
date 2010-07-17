@@ -37,8 +37,17 @@ class fbTextField extends fbFieldBase {
 			$ro = ' readonly="readonly"';
         }
 	
-		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,($this->Value?$this->Value:$this->GetOption('default')),$this->GetOption('length')<25?$this->GetOption('length'):25, $this->GetOption('length'),
+		if ($this->GetOption('html5','0') == '1')
+			{
+			return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,$this->Value,$this->GetOption('length')<25?$this->GetOption('length'):25,
+				$this->GetOption('length'),
+					' placeholder="'.$this->GetOption('default').'"'.$js.$ro.$this->GetCSSIdTag());
+			}
+		else
+			{
+			return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,($this->Value?$this->Value:$this->GetOption('default')),$this->GetOption('length')<25?$this->GetOption('length'):25, $this->GetOption('length'),
 				($this->GetOption('clear_default','0')==1?(' onfocus="if(this.value==this.defaultValue) this.value=\'\';" onblur="if(this.value==\'\') this.value=this.defaultValue;"'):' ').$js.$ro.$this->GetCSSIdTag());
+			}
 	}
 
 	function StatusInfo()
@@ -73,6 +82,8 @@ class fbTextField extends fbFieldBase {
 		$adv = array(
 			array($mod->Lang('title_field_regex'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_regex',$this->GetOption('regex'),25,1024).'<br />'.$mod->Lang('title_regex_help')),
 			array($mod->Lang('title_field_default_value'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_default',$this->GetOption('default'),25,1024)),
+			array($mod->Lang('title_html5'),$mod->CreateInputHidden($formDescriptor,'fbrp_opt_html5','0').
+						$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_html5','1',$this->GetOption('html5','0'))),
 			array($mod->Lang('title_clear_default'),$mod->CreateInputHidden($formDescriptor,'fbrp_opt_clear_default','0').
 						$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_clear_default','1',$this->GetOption('clear_default','0')).'<br />'.$mod->Lang('title_clear_default_help'))	
 		);
