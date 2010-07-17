@@ -38,7 +38,7 @@ class fbTextField extends fbFieldBase {
         }
 	
 		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,($this->Value?$this->Value:$this->GetOption('default')),$this->GetOption('length')<25?$this->GetOption('length'):25, $this->GetOption('length'),
-			($this->GetOption('clear_default','0')==1?(' onfocus="if(this.value==this.defaultValue) this.value=\'\';" onblur="if(this.value==\'\') this.value=this.defaultValue;"'):' ').$js.$ro.$this->GetCSSIdTag());
+				($this->GetOption('clear_default','0')==1?(' onfocus="if(this.value==this.defaultValue) this.value=\'\';" onblur="if(this.value==\'\') this.value=this.defaultValue;"'):' ').$js.$ro.$this->GetCSSIdTag());
 	}
 
 	function StatusInfo()
@@ -69,7 +69,7 @@ class fbTextField extends fbFieldBase {
 			array($mod->Lang('title_read_only'),$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_readonly','0').
 						$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_readonly','1',$this->GetOption('readonly','0')))
 		);
-		
+
 		$adv = array(
 			array($mod->Lang('title_field_regex'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_regex',$this->GetOption('regex'),25,1024).'<br />'.$mod->Lang('title_regex_help')),
 			array($mod->Lang('title_field_default_value'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_default',$this->GetOption('default'),25,1024)),

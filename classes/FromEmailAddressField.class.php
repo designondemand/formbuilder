@@ -29,7 +29,7 @@ class fbFromEmailAddressField extends fbFieldBase {
 		
 		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,
 			htmlspecialchars($this->Value, ENT_QUOTES),
-           25,128,$js.$this->GetCSSIdTag());
+           25,128,$js.$this->GetCSSIdTag(),'email');
 	}
 
 
