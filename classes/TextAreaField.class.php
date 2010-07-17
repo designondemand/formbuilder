@@ -29,7 +29,6 @@ class fbTextAreaField extends fbFieldBase {
 				   'fbrp__'.$this->Id,'',$this->GetCSSId(),'','',$this->GetOption('cols','80'),$this->GetOption('rows','15'));
 				   
 		if ($this->GetOption('clear_default','0')=='1') {
-		
 			$ret .= '<script type="text/javascript">';
 			$ret .= "\nvar f = document.getElementById('".$this->GetCSSId()."');\n";
 			$ret .= "if (f)\n{\nf.onfocus=function(){\nif (this.value==this.defaultValue) {this.value='';}\n}\n";
