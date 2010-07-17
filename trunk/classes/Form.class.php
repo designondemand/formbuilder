@@ -1443,7 +1443,7 @@ function unmy_htmlentities($val)
 		}
 	
 	$mod->smarty->assign('input_load_template',$mod->CreateInputDropdown($id,
-		'fbrp_fb_template_load', $templateList, -1, '', 'id="fb_template_load" onchange="$(this).fb_get_template(\''.$mod->Lang('template_are_you_sure').'\',\''.$modLink.'\');"'));
+		'fbrp_fb_template_load', $templateList, -1, '', 'id="fb_template_load" onchange="$jQuery(this).fb_get_template(\''.$mod->Lang('template_are_you_sure').'\',\''.$modLink.'\');"'));
 	$mod->smarty->assign('help_template_variables',$mod->Lang('template_variable_help'));
     $mod->smarty->assign('title_form_unspecified',$mod->Lang('title_form_unspecified'));
     $mod->smarty->assign('input_form_unspecified',
@@ -1551,7 +1551,7 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	$mod->smarty->assign('adding',0);
 	$mod->smarty->assign('save_button', $mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('save')));
 	$mod->smarty->assign('submit_button', $mod->CreateInputHidden($id, 'active_tab', '', 'id="fbr_atab"').
-		$mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('save_and_continue'),'onclick="$(this).fb_set_tab()"'));
+		$mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('save_and_continue'),'onclick="jQuery(this).fb_set_tab()"'));
 	
 	$fieldList = array();
 	$currow = "row1";
@@ -1582,16 +1582,16 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	      }
 	    else if ($thisField->IsRequired())
 	      {
-			$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/true.gif','true','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'off','field_id'=>$thisField->GetId()),'', '', '', 'class="true" onclick="$(this).fb_admin_update_field_required(); return false;"');
+			$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/true.gif','true','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'off','field_id'=>$thisField->GetId()),'', '', '', 'class="true" onclick="jQuery(this).fb_admin_update_field_required(); return false;"');
 	      }
 	    else
 	      {
-			$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/false.gif','false','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'on','field_id'=>$thisField->GetId()),'', '', '', 'class="false" onclick="$(this).fb_admin_update_field_required(); return false;"');
+			$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/false.gif','false','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'on','field_id'=>$thisField->GetId()),'', '', '', 'class="false" onclick="jQuery(this).fb_admin_update_field_required(); return false;"');
 	      }
 		  
 	    $oneset->field_status = $thisField->StatusInfo();
 	    $oneset->editlink = $mod->CreateLink($id, 'admin_add_edit_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/edit.gif',$mod->Lang('edit'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
-	    $oneset->deletelink = $mod->CreateLink($id, 'admin_delete_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif',$mod->Lang('delete'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),'', '', '', 'onclick="$(this).fb_delete_field(\''.$mod->Lang('are_you_sure_delete_field',htmlspecialchars($thisField->GetName())).'\'); return false;"');
+	    $oneset->deletelink = $mod->CreateLink($id, 'admin_delete_field', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/delete.gif',$mod->Lang('delete'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),'', '', '', 'onclick="jQuery(this).fb_delete_field(\''.$mod->Lang('are_you_sure_delete_field',htmlspecialchars($thisField->GetName())).'\'); return false;"');
 
 		/* Removed By Stikki, reinstated by SjG with Javascript to hide it if Javascript's enabled. */
 		if ($count > 1)
