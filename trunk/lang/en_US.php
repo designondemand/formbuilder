@@ -281,6 +281,7 @@ $lang['title_field_required']='Required';
 $lang['title_field_required_long']='Require a response for this Field';
 $lang['title_hide_label']='Hide Label';
 $lang['title_hide_label_long']='Hide this field\'s name on Form';
+$lang['title_textarea_length']='Maximum length of field content (0 or blank means no limit)';
 $lang['title_text']='Static text to display';
 $lang['title_field_regex']='Validation Regex';
 $lang['title_lines_to_show'] = 'Number of Lines to display';

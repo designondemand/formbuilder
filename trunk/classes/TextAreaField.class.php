@@ -16,8 +16,9 @@ class fbTextAreaField extends fbFieldBase {
 		$this->Type = 'TextAreaField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
-			$mod->Lang('validation_none')=>'none'
-			);
+            $mod->Lang('validation_none')=>'none',
+			$mod->Lang('validation_length')=>'length'
+            );
 
 	}
 
@@ -38,6 +39,20 @@ class fbTextAreaField extends fbFieldBase {
 		}
 
 		return $ret;
+   }
+	function Validate(){
+		$this->validated = true;
+		$this->validationErrorText = '';
+		$mod = $this->form_ptr->module_ptr;
+		$length = $this->GetOption('length','');
+		if(is_numeric($length) && $length > 0){
+			if((strlen($this->Value)-1) > $length){
+				$this->validated = false;
+				$this->validationErrorText = $mod->Lang('please_enter_no_longer', $length);
+			}
+			$this->Value = substr($this->Value, 0, $length+1);
+		}
+		return array($this->validated, $this->validationErrorText);
 	}
 
 	function StatusInfo()
@@ -72,8 +87,14 @@ class fbTextAreaField extends fbFieldBase {
          	array($mod->Lang('title_use_wysiwyg'),$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_wysiwyg','0').
 						$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_wysiwyg','1',$this->GetOption('wysiwyg','0'))),
 			array($mod->Lang('title_textarea_rows'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_rows',$this->GetOption('rows','15'),5,5)),
-			array($mod->Lang('title_textarea_cols'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_cols',$this->GetOption('cols','80'),5,5))
-        );
+			array($mod->Lang('title_textarea_cols'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_cols',$this->GetOption('cols','80'),5,5)),
+			array($mod->Lang('title_textarea_length'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_length',$this->GetOption('length',''), 5, 5))
+            );
+	   $adv = array(array($mod->Lang('title_field_default_value'),
+				  $mod->CreateTextArea(false,
+								   $formDescriptor, $this->GetOption('default'),
+								   'fbrp_opt_default'
+				               )),        );
 		
 	   $adv = array(
 			array($mod->Lang('title_field_default_value'),$mod->CreateTextArea(false,$formDescriptor, $this->GetOption('default'),'fbrp_opt_default')),
