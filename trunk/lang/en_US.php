@@ -514,6 +514,8 @@ $lang['title_field_hidebuttons_help']='Hides frontend control buttons of this fi
 $lang['title_note']='Note';
 $lang['title_changing_triggers_reindex']='Changing any of the above fields will trigger a reindex of *all* saved records, so it could take a while.';
 $lang['illegal_file']='Attempted upload of illegal file type (%s) from %s';
+$lang['title_searchable']='Make records accessible to Search Module';
+$lang['title_searchable_help']='Checking this will make all submitted data accessible to the Search Module. It will not work with encrypted storage. Also, DO NOT use this if you require approvals for your data -- the information gets exposed to search whether or not it is approved!';
 
 $lang['error_usertag_disposition'] = 'User defined tag returned an error';
 $lang['error_usertag'] = 'User defined tag %s returned an error.';

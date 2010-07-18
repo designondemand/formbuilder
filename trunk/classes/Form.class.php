@@ -2442,6 +2442,71 @@ function fast_add(field_type)
 	return $xmlstr;
   }
   
+  function GetFormBrowsersForForm()
+	{
+		$db = $this->module_ptr->dbHandle;
+		$fbr = $this->module_ptr->GetModuleInstance('FormBrowser');
+		$browsers = array();
+		if ($fbr != FALSE)
+			{
+			$res = $db->Execute('SELECT browser_id from '. cms_db_prefix(). 'module_fbr_browser where form_id=?',
+				array($this->GetId()));
+			while ($res && $row=$res->FetchRow())
+				{
+				array_push($browsers, $row['browser_id']);
+				}
+	      	}
+		return $browsers;
+	}
+
+  function AddToSearchIndex($response_id)
+	{	
+	// find browsers keyed to this
+	$browsers = $this->GetFormBrowsersForForm();
+	if (count($browsers) < 1)
+		{
+		return;
+		}
+	
+	$module =& $this->module_ptr->GetModuleInstance('Search');
+    if ($module != FALSE)
+      {
+		$submitstring = '';
+		foreach ($this->Fields as $thisField)
+			{
+			if ($thisField->DisplayInSubmission())
+				{
+				$submitstring .= ' '.$thisField->GetHumanReadableValue($as_string=true);
+				}
+			}
+		foreach ($browsers as $thisBrowser)
+			{
+			$module->AddWords( 'FormBrowser', $response_id, 'sub_'.$thisBrowser, $submitstring, null);	
+			}
+      }
+	}
+
+
+  function DeleteFromSearchIndex($response_id)
+	{
+		// find browsers keyed to this
+		$browsers = $this->GetFormBrowsersForForm();
+		if (count($browsers) < 1)
+			{
+			return;
+			}
+
+		$module =& $this->module_ptr->GetModuleInstance('Search');
+	    if ($module != FALSE)
+	      {
+			foreach ($browsers as $thisBrowser)
+				{
+				$module->DeleteWords( 'FormBrowser', $response_id, 'sub_'.$thisBrowser);	
+				}
+	      }		
+	}
+
+
   function setFinishedFormSmarty($htmlemail=false)
 	{
 		$mod = $this->module_ptr;
