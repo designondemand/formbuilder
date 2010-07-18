@@ -120,6 +120,12 @@ class fbDispositionFormBrowser extends fbFieldBase {
 		$mod->CreateInputHidden($formDescriptor,'fbrp_previous_indices',implode(':',$current_indexes))
 		));
 
+	array_push($adv,array($mod->Lang('title_searchable'),
+		$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_searchable','0').
+		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_searchable',
+		'1',$this->GetOption('searchable','0')).
+		$mod->Lang('title_searchable_help')));
+
 	  $feu = $mod->GetModuleInstance('FrontEndUsers');
 	  if ($feu == FALSE)
 		{
@@ -206,6 +212,10 @@ class fbDispositionFormBrowser extends fbFieldBase {
 	{
 		$form = $this->form_ptr;
 		list($res,$msg) = $form->StoreResponse(($this->Value?$this->Value:-1),$this->approvedBy,$this);
+		if ($this->GetOption('searchable','0') == '1')
+			{
+			$form->AddToSearchIndex($this->Value);
+			}
 		return array($res, $msg);
 	}
 
