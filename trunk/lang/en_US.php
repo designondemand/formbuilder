@@ -516,6 +516,7 @@ $lang['title_changing_triggers_reindex']='Changing any of the above fields will 
 $lang['illegal_file']='Attempted upload of illegal file type (%s) from %s';
 $lang['title_searchable']='Make records accessible to Search Module';
 $lang['title_searchable_help']='Checking this will make all submitted data accessible to the Search Module. It will not work with encrypted storage. Also, DO NOT use this if you require approvals for your data -- the information gets exposed to search whether or not it is approved!';
+$lang['uploaded_outside_webroot']='%s (outside web root)';
 
 $lang['error_usertag_disposition'] = 'User defined tag returned an error';
 $lang['error_usertag'] = 'User defined tag %s returned an error.';
