@@ -2663,7 +2663,14 @@ function fast_add(field_type)
 							}
 						else
 							{
-							$url = $dest_path.DIRECTORY_SEPARATOR.$thisFile['name'];
+							if (strpos($dest_path,$gCms->config['root_path']) !== FALSE)
+								{
+								$url = str_replace($gCms->config['root_path'],'',$dest_path).'/'.$thisFile['name'];
+								}
+							else
+								{
+								$url = $mod->Lang('uploaded_outside_webroot',$thisFile['name']);
+								}
 							$theFields[$i]->ResetValue();
 							$theFields[$i]->SetValue(array($dest,$url));
 							}
