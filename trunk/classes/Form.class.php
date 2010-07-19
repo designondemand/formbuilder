@@ -2486,27 +2486,6 @@ function fast_add(field_type)
       }
 	}
 
-
-  function DeleteFromSearchIndex($response_id)
-	{
-		// find browsers keyed to this
-		$browsers = $this->GetFormBrowsersForForm();
-		if (count($browsers) < 1)
-			{
-			return;
-			}
-
-		$module =& $this->module_ptr->GetModuleInstance('Search');
-	    if ($module != FALSE)
-	      {
-			foreach ($browsers as $thisBrowser)
-				{
-				$module->DeleteWords( 'FormBrowser', $response_id, 'sub_'.$thisBrowser);	
-				}
-	      }		
-	}
-
-
   function setFinishedFormSmarty($htmlemail=false)
 	{
 		$mod = $this->module_ptr;

@@ -990,6 +990,30 @@ class FormBuilder extends CMSModule
 	}
 
 
+  function DeleteFromSearchIndex(&$params)
+	{
+		$aeform = new fbForm($this, $params, true);
+		
+		// find browsers keyed to this
+		$browsers = $aeform->GetFormBrowsersForForm();
+		if (count($browsers) < 1)
+			{
+			return;
+			}
+
+		$module =& $this->module_ptr->GetModuleInstance('Search');
+	    if ($module != FALSE)
+	      {
+			foreach ($browsers as $thisBrowser)
+				{
+				$module->DeleteWords( 'FormBrowser', $params['response_id'], 'sub_'.$thisBrowser);	
+				}
+	      }		
+	}
+
+
+
+
 } // End of Class
 
 # vim:ts=4 sw=4 noet
