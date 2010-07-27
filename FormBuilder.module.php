@@ -325,6 +325,9 @@ class FormBuilder extends CMSModule
 			$oneset->user_approved = (empty($row['user_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['user_approved']))); 
 			$oneset->admin_approved = (empty($row['admin_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['admin_approved'])));
 			$oneset->submitted = date($dateFmt,$db->UnixTimeStamp($row['submitted']));
+			$oneset->user_approved_date = (empty($row['user_approved'])?'':$db->UnixTimeStamp($row['user_approved'])); 
+			$oneset->admin_approved_date = (empty($row['admin_approved'])?'':$db->UnixTimeStamp($row['admin_approved']));
+			$oneset->submitted_date = $db->UnixTimeStamp($row['submitted']);
 			$oneset->xml = $row['response'];
 			$oneset->fields = array();
 			$oneset->names = array();
@@ -334,6 +337,7 @@ class FormBuilder extends CMSModule
 		$populate_names = true;
 		$this->HandleResponseFromXML($fbField, $oneset);
 		list($fnames, $aliases, $vals) = $this->ParseResponseXML($oneset->xml);
+
 		foreach ($fnames as $id=>$name)
 			{
 			if (isset($field_list[$id]) && $field_list[$id] > -1)
@@ -525,6 +529,10 @@ class FormBuilder extends CMSModule
 			$oneset->user_approved = (empty($row['user_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['user_approved']))); 
 			$oneset->admin_approved = (empty($row['admin_approved'])?'':date($dateFmt,$db->UnixTimeStamp($row['admin_approved']))); 
 			$oneset->submitted = date($dateFmt,$db->UnixTimeStamp($row['submitted']));
+			$oneset->user_approved_date = (empty($row['user_approved'])?'':$db->UnixTimeStamp($row['user_approved'])); 
+			$oneset->admin_approved_date = (empty($row['admin_approved'])?'':$db->UnixTimeStamp($row['admin_approved'])); 
+			$oneset->submitted_date = $db->UnixTimeStamp($row['submitted']);
+
 			$oneset->xml = $row['response'];
 			$oneset->fields = array();
 			$oneset->fieldsbyalias = array();
