@@ -577,7 +577,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
   // return an array: element 0 is true for success, false for failure
   // element 1 is an array of reasons, in the event of failure.
-  function Dispose($returnid)
+  function Dispose($returnid,$suppress_email=false)
   {
     // first, we run all field methods that will modify other fields
     $computes = array();
@@ -606,12 +606,15 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
       {
 	if ($this->Fields[$i]->IsDisposition() && $this->Fields[$i]->DispositionIsPermitted())
 	  {
-	    $res = $this->Fields[$i]->DisposeForm($returnid);
-	    if ($res[0] == false)
-	      {
-		$retCode = false;
-		array_push($resArray,$res[1]);
-	      }
+		if (! ($suppress_email && $this->Fields[$i]->IsEmailDisposition()))
+			{
+		    $res = $this->Fields[$i]->DisposeForm($returnid);
+		    if ($res[0] == false)
+		      {
+			$retCode = false;
+			array_push($resArray,$res[1]);
+		      }
+			}
 	  }
       }
 

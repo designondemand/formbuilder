@@ -15,6 +15,7 @@ class fbDispositionEmailBase extends fbFieldBase
     $this->fbFieldBase($form_ptr, $params);
     $mod = $form_ptr->module_ptr;
     $this->IsDisposition = true;
+	$this->IsEmailDisposition = true;
     $this->ValidationTypes = array();
 
   }

@@ -53,6 +53,7 @@ class fbFieldBase {
     $this->DisplayInForm = true;
     $this->DisplayInSubmission = true;
     $this->IsDisposition = false;
+    $this->IsEmailDisposition = false;
     $this->ValidationTypes = array($mod->Lang('validation_none')=>'none');
     $this->loaded = false;
     $this->NonRequirableField = false;
@@ -369,6 +370,11 @@ class fbFieldBase {
   function IsDisposition()
   {
     return $this->IsDisposition;
+  }
+
+  function IsEmailDisposition()
+  {
+    return $this->IsEmailDisposition;
   }
 
   function HasLabel()
