@@ -1,11 +1,21 @@
 <ul>
+<li>Version 0.6.3.
+	<ul>
+		<li>Security patch for Upload field type.</li>
+		<li>Numerous bugs fixes. Thanks to everyone who reported.</li>
+		<li>Numerous fixes and improvements for use with FormBrowser v0.3.x.</li>
+		<li>Improvements to the ComputedField type to allow much more computation.</li>
+		<li>Vilkis' fixes for localizing CountryPicker</li>
+		<li>Ryan Foster's patch for re-ordering date inputs on DatePicker</li>
+	</ul>
+</li>
 <li>Version 0.6.2.
 	<ul>
-		<li>Alot of small and big bugs fixes. Thanks to everyone who reported.</li>
+		<li>A lot of small and big bugs fixes. Thanks to everyone who reported.</li>
 		<li>Introducing dynamic field management.</li>
 		<li>New "YearPullDown" field type added</li>
 		<li>Compatible with CMSMS 1.7.1 and further.</li>
-		<li>Added jQuery. Prototype removed completly.</li>
+		<li>Added jQuery. Prototype removed completely.</li>
 		<li>Added some styling.</li>
 	</ul>
 </li>
