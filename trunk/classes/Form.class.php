@@ -2013,6 +2013,44 @@ function fast_add(field_type)
 	return $ret;
     }
 
+
+  function &GetFieldByAlias($field_alias)
+    {
+	$index = -1;
+	$ret = false;
+	for ($i=0;$i<count($this->Fields);$i++)
+		{
+		if ($this->Fields[$i]->GetAlias() == $field_alias)
+	    	{
+			$index = $i;
+			}
+		}
+	if ($index != -1)
+		{
+	  	$ret = $this->Fields[$index];
+		}
+	return $ret;
+    }
+
+  function &GetFieldByName($field_name)
+    {
+	$index = -1;
+	$ret = false;
+	for ($i=0;$i<count($this->Fields);$i++)
+		{
+		if ($this->Fields[$i]->GetName() == $field_name)
+	    	{
+			$index = $i;
+			}
+		}
+	if ($index != -1)
+		{
+	  	$ret = $this->Fields[$index];
+		}
+	return $ret;
+    }
+
+
   function &GetFieldByIndex($field_index)
     {
       return $this->Fields[$field_index];
@@ -2258,7 +2296,7 @@ function fast_add(field_type)
 	$hash_fields = false;
 	$sort_fields = array();
 	
-	// Check if form has Database fields, do intit
+	// Check if form has Database fields, do init
 	if (is_object($formBuilderDisposition) &&
       ($formBuilderDisposition->GetFieldType()=='DispositionFormBrowser' ||
        $formBuilderDisposition->GetFieldType()=='DispositionDatabase'))
