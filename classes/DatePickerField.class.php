@@ -70,9 +70,12 @@ class fbDatePickerField extends fbFieldBase {
          }
 		if ($this->HasValue())
 			{
-			$today['mday'] = $this->GetArrayValue(0);
-			$today['mon'] = $this->GetArrayValue(1);
-			$today['year'] = $this->GetArrayValue(2);			
+			$user_order = $this->GetOption('date_order','d-m-y');
+			$arrUserOrder = explode("-", $user_order);
+			
+			$today['mday'] = $this->GetArrayValue(array_search("d", $arrUserOrder));
+			$today['mon'] = $this->GetArrayValue(array_search("m", $arrUserOrder));
+			$today['year'] = $this->GetArrayValue(array_search("y", $arrUserOrder));
 			}
 		else if ($this->GetOption('default_blank','0') == '1')
 			{
@@ -144,7 +147,16 @@ class fbDatePickerField extends fbFieldBase {
 		$mod = $this->form_ptr->module_ptr;
 		if ($this->HasValue())
 			{
-			$theDate = mktime ( 1, 1, 1, $this->GetArrayValue(1),  $this->GetArrayValue(0), $this->GetArrayValue(2) );
+			// Original:  Day, Month, Year
+			//$theDate = mktime ( 1, 1, 1, $this->GetArrayValue(1),  $this->GetArrayValue(0), $this->GetArrayValue(2) );
+			// Month, Day, Year
+			//$theDate = mktime ( 1, 1, 1, $this->GetArrayValue(0),  $this->GetArrayValue(1), $this->GetArrayValue(2) );
+			$user_order = $this->GetOption('date_order','d-m-y');
+			$arrUserOrder = explode("-", $user_order);
+			$theDate = mktime ( 1, 1, 1,
+				$this->GetArrayValue(array_search("m", $arrUserOrder)),
+				$this->GetArrayValue(array_search("d", $arrUserOrder)),
+				$this->GetArrayValue(array_search("y", $arrUserOrder)) );
 			$ret = date($this->GetOption('date_format','j F Y'), $theDate);
 			}
 		else
