@@ -1422,7 +1422,7 @@ function unmy_htmlentities($val)
 		}
 	
 	$mod->smarty->assign('input_load_template',$mod->CreateInputDropdown($id,
-		'fbrp_fb_template_load', $templateList, -1, '', 'id="fb_template_load" onchange="$jQuery(this).fb_get_template(\''.$mod->Lang('template_are_you_sure').'\',\''.$modLink.'\');"'));
+		'fbrp_fb_template_load', $templateList, -1, '', 'id="fb_template_load" onchange="jQuery(this).fb_get_template(\''.$mod->Lang('template_are_you_sure').'\',\''.$modLink.'\');"'));
 	$mod->smarty->assign('help_template_variables',$mod->Lang('template_variable_help'));
     $mod->smarty->assign('title_form_unspecified',$mod->Lang('title_form_unspecified'));
     $mod->smarty->assign('input_form_unspecified',
