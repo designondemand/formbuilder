@@ -17,7 +17,7 @@ jQuery(document).ready(function($) {
 					sortstr += ","+rows[i].id;
 				}
 				
-				$('#fbrp_sort').val(sortstr);
+				$('.fbrp_sort').val(sortstr);
 				$('.reordermessage').show();
 		}
 	});
