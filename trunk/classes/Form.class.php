@@ -2617,6 +2617,10 @@ function fast_add(field_type)
 	        			$parms['input_summary'] = $mod->Lang('title_uploadmodule_summary');
 	        			$parms['category_id'] = $theFields[$i]->GetOption('uploads_category');
 	        			$parms['field_name'] = $_id;
+								if ($theFields[$i]->GetOption('allow_overwrite','0') == '1')
+									{
+									$parms['input_replace'] = 1;	
+									}
 	        			$res = $uploads->AttemptUpload(-1,$parms,-1);
 	        			
 	        			if( $res[0] == false )
@@ -2676,6 +2680,11 @@ function fast_add(field_type)
 		      				return array(false, '');
 							}
 						$dest = $dest_path.DIRECTORY_SEPARATOR.$thisFile['name'];
+						if (file_exists($dest) && $theFields[$i]->GetOption('allow_overwrite','0')=='0')
+							{
+							unlink($src);
+							return array(false,$mod->Lang('file_already_exists', array($thisFile['name'])));
+							}
 						if (! move_uploaded_file($src,$dest))
 							{
 							audit(-1, $mod->GetName(), $mod->Lang('submit_error',''));
