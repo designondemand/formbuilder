@@ -80,6 +80,14 @@ class fbFileUploadField extends fbFieldBase {
 		{
 		$ret .= $this->GetOption('file_destination','');
 		}
+	if ($this->GetOption('allow_overwrite','0') != '0')
+		{
+		$ret .= ' '.$mod->Lang('overwrite');
+		}
+	else
+		{
+		$ret .= ' '.$mod->Lang('nooverwrite');	
+		}
     return $ret;
   }
   
@@ -109,7 +117,12 @@ class fbFileUploadField extends fbFieldBase {
 			$mod->CreateInputHidden($formDescriptor,'fbrp_opt_show_details','0').
 			$mod->CreateInputCheckbox($formDescriptor, 
 						  'fbrp_opt_show_details', '1', $show).
-			' '.$mod->Lang('title_show_limitations_long'))
+			' '.$mod->Lang('title_show_limitations_long')),
+		  array($mod->Lang('title_allow_overwrite'),
+			$mod->CreateInputHidden($formDescriptor,'fbrp_opt_allow_overwrite','0').
+			$mod->CreateInputCheckbox($formDescriptor, 
+						  'fbrp_opt_allow_overwrite', '1', $this->GetOption('allow_overwrite','0')).
+			' '.$mod->Lang('title_allow_overwrite_long'))
 		 );
 
     $uploads = $mod->GetModuleInstance('Uploads');
