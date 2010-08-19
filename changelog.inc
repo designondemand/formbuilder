@@ -1,4 +1,11 @@
 <ul>
+	<li>Version 0.6.4.
+		<ul>
+			<li>Bugs fixes for Field Sorting. Thanks to everyone who reported and Stikki for fixing it!</li>
+			<li>Improvements FileUpload field: overwrite flag, file renaming, and hiding filename in output.</li>
+			<li>Additional patches from Ryan Foster for DatePicker.</li>
+		</ul>
+	</li>
 <li>Version 0.6.3.
 	<ul>
 		<li>Security patch for Upload field type.</li>
