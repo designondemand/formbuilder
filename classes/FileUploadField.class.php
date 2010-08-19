@@ -51,7 +51,11 @@ class fbFileUploadField extends fbFieldBase {
 
   function GetHumanReadableValue($as_string=true)
 	{
-	    $mod = $this->form_ptr->module_ptr;
+		if ($this->GetOption('suppress_filename','0') != '0')
+			{
+			return '';
+			}
+	  $mod = $this->form_ptr->module_ptr;
 		if ($as_string && is_array($this->Value) && isset($this->Value[1]))
 			{
 			return $this->Value[1];
@@ -128,27 +132,40 @@ class fbFileUploadField extends fbFieldBase {
     $uploads = $mod->GetModuleInstance('Uploads');
     $sendto_uploads_list = array($mod->Lang('no')=>0,
 				 $mod->Lang('yes')=>1);
+		$adv = array();
+		
+		$file_rename_help = $mod->Lang('file_rename_help'). $this->form_ptr->fieldValueTemplate().
+		'<tr><td>$ext</td><td>'.$mod->Lang('original_file_extension').'</td></tr></table>';
+		
+		array_push($adv,array($mod->Lang('title_file_rename'),
+			$mod->CreateInputText($formDescriptor,'fbrp_opt_file_rename',
+				$this->GetOption('file_rename',''),60,255).
+			$file_rename_help));
+		array_push($adv, array($mod->Lang('title_suppress_filename'),
+			$mod->CreateInputHidden($formDescriptor,'fbrp_opt_suppress_filename','0').
+			$mod->CreateInputCheckbox($formDescriptor, 
+					  'fbrp_opt_suppress_filename', '1', 
+					  $this->GetOption('suppress_filename','0'))));
+		
+		
     if( $uploads )
       {
 		$categorylist = $uploads->getCategoryList();
-		$adv = array(
-		     array($mod->Lang('title_sendto_uploads'),
+		array_push($adv,array($mod->Lang('title_sendto_uploads'),
 			   $mod->CreateInputDropdown($formDescriptor,
 						     'fbrp_opt_sendto_uploads',$sendto_uploads_list,
-						     $sendto_uploads)),
-		     array($mod->Lang('title_uploads_category'),
+						     $sendto_uploads)));
+						
+		array_push($adv,array($mod->Lang('title_uploads_category'),
 			   $mod->CreateInputDropdown($formDescriptor,
 						     'fbrp_opt_uploads_category',$categorylist,
-						     $uploads_category)),
-		     array($mod->Lang('title_uploads_destpage'),
+						     $uploads_category)));
+		array_push($adv,array($mod->Lang('title_uploads_destpage'),
 			   $mod->CreatePageDropdown($formDescriptor,
-						    'fbrp_opt_uploads_destpage',$uploads_destpage))
-						  
-		     );
+						    'fbrp_opt_uploads_destpage',$uploads_destpage)));
       }
 	else
 		{
-		$adv = array();
 		array_push($main, array($mod->Lang('title_remove_file_from_server'),
 			$mod->CreateInputHidden($formDescriptor,'fbrp_opt_remove_file','0').
 			$mod->CreateInputCheckbox($formDescriptor, 

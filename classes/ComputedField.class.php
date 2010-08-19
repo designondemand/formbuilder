@@ -131,22 +131,7 @@ class fbComputedField extends fbFieldBase
 		$processType = array($mod->Lang('title_numeric')=>'numeric',
 		    $mod->Lang('title_string')=>'string', $mod->Lang('title_string_unspaced')=>'unstring', $mod->Lang('title_compute')=>'compute');
 		
-		$ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_computation').'</th></tr>';
-        $ret .= '<tr><th>'.$mod->Lang('help_php_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';
-        $odd = false;
-
-        $others = $this->form_ptr->GetFields();
-        for($i=0;$i<count($others);$i++)
-            {
-            if (! $others[$i]->HasMultipleFormComponents())
-                {
-	            $ret .= '<tr><td class="'.($odd?'odd':'even').
-	                '">$fld_'.$others[$i]->GetId().
-	                '</td><td class="'.($odd?'odd':'even').
-	                '">' .$others[$i]->GetName() . '</td></tr>';
-	            }
-	  	    $odd = ! $odd;
-	        }
+		$ret = $this->form_ptr->fieldValueTemplate();
 	    $ret .= '<tr><td colspan="2">'.$mod->Lang('operators_help') .
 	        '</td></tr></table>';
 		
