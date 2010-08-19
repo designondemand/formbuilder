@@ -796,12 +796,6 @@ class fbFieldBase {
       }
   }
 
-  // override me, as necessary
-  function CompareTo($val)
-  {
-    return strcmp($val->GetHumanReadableValue(), $this->GetHumanReadableValue());
-  }
-
   function RequiresValidation()
   {
     if ($this->ValidationType == 'none')
