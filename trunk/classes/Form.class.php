@@ -280,6 +280,27 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
   }
 
 
+	function fieldValueTemplate()
+	{
+		$mod = $this->module_ptr;
+		$ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_computation').'</th></tr>';
+		$ret .= '<tr><th>'.$mod->Lang('help_php_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';
+		$odd = false;
+		$others = $this->GetFields();
+		for($i=0;$i<count($others);$i++)
+			{
+			if (! $others[$i]->HasMultipleFormComponents())
+				{
+				$ret .= '<tr><td class="'.($odd?'odd':'even').
+	      	'">$fld_'.$others[$i]->GetId().
+	        '</td><td class="'.($odd?'odd':'even').
+	        '">' .$others[$i]->GetName() . '</td></tr>';
+				}
+			$odd = ! $odd;
+			}
+		return $ret;
+	}
+
   function createSampleTemplate($htmlish=false,$email=true, $oneline=false,$header=false,$footer=false)
   {
     $mod = $this->module_ptr;
@@ -2577,12 +2598,20 @@ function fast_add(field_type)
 	    $mod->smarty->assign('fb_version',$mod->GetVersion());
 	    $mod->smarty->assign('TAB',"\t");
 	} 
-
+	
 	function manageFileUploads()
 	{
 		global $gCms;
 		$theFields = $this->GetFields();
 		$mod = $this->module_ptr;
+    
+		// build rename map
+		$mapId = array();
+		$eval_string = false;
+		for($j=0;$j<count($theFields);$j++)
+			{
+	    $mapId[$theFields[$j]->GetId()] = $j;
+      }
 
 	    for($i=0;$i<count($theFields);$i++)
 	      {
@@ -2594,13 +2623,34 @@ function fast_add(field_type)
 			      // and a link is added to the results
 			      // if the option is not checked, then the file is merely uploaded to
 				  // the "uploads" directory
-			      //
-				  
-	      		//$_id = $theFields[$i]->GetValue(); -- Stikki modifys: now gets correct id
+
 	      		$_id = $mod->module_id.'fbrp__'.$theFields[$i]->Id;
 	      		if( isset( $_FILES[$_id] ) && $_FILES[$_id]['size'] > 0 )
 	        		{
 	    			$thisFile =& $_FILES[$_id];
+						$thisExt = substr($thisFile['name'],strrpos($thisFile['name'],'.'));
+	
+						if ($theFields[$i]->GetOption('file_rename','') == '')
+							{
+							$destination_name = $thisFile['name'];
+							}
+						else
+							{
+				    	$flds = array();
+				    	$destination_name = $theFields[$i]->GetOption('file_rename');
+				    	preg_match_all('/\$fld_(\d+)/', $destination_name, $flds);
+							foreach ($flds[1] as $tF)
+	                {
+	                if (isset($mapId[$tF]))
+	                    {
+	                    $ref = $mapId[$tF];
+	                    $destination_name = str_replace('$fld_'.$tF,
+	                         $theFields[$ref]->GetHumanReadableValue(),$destination_name);
+	                    }
+	                }
+							$destination_name = str_replace('$ext',$thisExt,$destination_name);
+							}
+	
 	    			if( $theFields[$i]->GetOption('sendto_uploads') )
 	      				{
 	        			// we have a file we can send to the uploads
@@ -2617,6 +2667,7 @@ function fast_add(field_type)
 	        			$parms['input_summary'] = $mod->Lang('title_uploadmodule_summary');
 	        			$parms['category_id'] = $theFields[$i]->GetOption('uploads_category');
 	        			$parms['field_name'] = $_id;
+							  $parms['input_destname'] = $destination_name;
 								if ($theFields[$i]->GetOption('allow_overwrite','0') == '1')
 									{
 									$parms['input_replace'] = 1;	
@@ -2679,11 +2730,11 @@ function fast_add(field_type)
 							audit(-1, $mod->GetName(), $mod->Lang('illegal_file',array($thisFile['name'],$_SERVER['REMOTE_ADDR'])));
 		      				return array(false, '');
 							}
-						$dest = $dest_path.DIRECTORY_SEPARATOR.$thisFile['name'];
+						$dest = $dest_path.DIRECTORY_SEPARATOR.$destination_name;
 						if (file_exists($dest) && $theFields[$i]->GetOption('allow_overwrite','0')=='0')
 							{
 							unlink($src);
-							return array(false,$mod->Lang('file_already_exists', array($thisFile['name'])));
+							return array(false,$mod->Lang('file_already_exists', array($destination_name)));
 							}
 						if (! move_uploaded_file($src,$dest))
 							{
@@ -2694,11 +2745,11 @@ function fast_add(field_type)
 							{
 							if (strpos($dest_path,$gCms->config['root_path']) !== FALSE)
 								{
-								$url = str_replace($gCms->config['root_path'],'',$dest_path).'/'.$thisFile['name'];
+								$url = str_replace($gCms->config['root_path'],'',$dest_path).'/'.$destination_name;
 								}
 							else
 								{
-								$url = $mod->Lang('uploaded_outside_webroot',$thisFile['name']);
+								$url = $mod->Lang('uploaded_outside_webroot',$destination_name);
 								}
 							$theFields[$i]->ResetValue();
 							$theFields[$i]->SetValue(array($dest,$url));
