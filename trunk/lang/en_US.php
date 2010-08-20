@@ -402,6 +402,7 @@ $lang['help_sub_source_ip']='IP address of person using form';
 $lang['help_sub_url']='URL of page containing form';
 $lang['help_fb_version']='FormBuilder version';
 $lang['help_tab']='Tab Character';
+$lang['help_ignored_if_upload']='(This field ignored if you use the Uploads module to manage files)';
 $lang['help_other_fields']='Alternate field names can be used interchangeably (especially useful if Smarty is choking on characters outside of ASCII 32-126). <br />Other fields will be available as you add them to the form.';
 $lang['help_array_fields']='Yet another way of accessing field values is via $fieldname_obj, $alias_obj, or $fld_#_obj, where each field is an object containging:<br /><table>
 <tr><td class="odd">name</td><td class="odd">Field Name</td></tr>

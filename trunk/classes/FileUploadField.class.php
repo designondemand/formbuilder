@@ -146,7 +146,17 @@ class fbFileUploadField extends fbFieldBase {
 			$mod->CreateInputCheckbox($formDescriptor, 
 					  'fbrp_opt_suppress_filename', '1', 
 					  $this->GetOption('suppress_filename','0'))));
-		
+					
+		array_push($main, array($mod->Lang('title_remove_file_from_server'),
+						$mod->CreateInputHidden($formDescriptor,'fbrp_opt_remove_file','0').
+						$mod->CreateInputCheckbox($formDescriptor, 
+								  'fbrp_opt_remove_file', '1', 
+								  $this->GetOption('remove_file','0')).
+								$mod->Lang('help_ignored_if_upload')));
+		array_push($main, array($mod->Lang('title_file_destination'),
+						$mod->CreateInputText($formDescriptor,'fbrp_opt_file_destination',
+							$this->GetOption('file_destination',$gCms->config['uploads_path']),60,255).
+						$mod->Lang('help_ignored_if_upload')));		
 		
     if( $uploads )
       {
@@ -164,17 +174,7 @@ class fbFileUploadField extends fbFieldBase {
 			   $mod->CreatePageDropdown($formDescriptor,
 						    'fbrp_opt_uploads_destpage',$uploads_destpage)));
       }
-	else
-		{
-		array_push($main, array($mod->Lang('title_remove_file_from_server'),
-			$mod->CreateInputHidden($formDescriptor,'fbrp_opt_remove_file','0').
-			$mod->CreateInputCheckbox($formDescriptor, 
-					  'fbrp_opt_remove_file', '1', 
-					  $this->GetOption('remove_file','0'))));
-		array_push($main, array($mod->Lang('title_file_destination'),
-			$mod->CreateInputText($formDescriptor,'fbrp_opt_file_destination',
-				$this->GetOption('file_destination',$gCms->config['uploads_path']),60,255)));
-		}
+
 
     return array('main'=>$main,'adv'=>$adv);
   }
