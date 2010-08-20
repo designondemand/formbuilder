@@ -776,7 +776,7 @@ class fbFieldBase {
          }
       else
          {
-         while ($this->Value != $fm->unmy_htmlentities($valStr))
+         while ($this->Value !== $fm->unmy_htmlentities($valStr))
             {
 	         $this->Value = $fm->unmy_htmlentities($valStr);
 	         }

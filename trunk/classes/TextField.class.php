@@ -45,7 +45,7 @@ class fbTextField extends fbFieldBase {
 			}
 		else
 			{
-			return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,($this->Value?$this->Value:$this->GetOption('default')),$this->GetOption('length')<25?$this->GetOption('length'):25, $this->GetOption('length'),
+			return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,($this->HasValue()?$this->Value:$this->GetOption('default')),$this->GetOption('length')<25?$this->GetOption('length'):25, $this->GetOption('length'),
 				($this->GetOption('clear_default','0')==1?(' onfocus="if(this.value==this.defaultValue) this.value=\'\';" onblur="if(this.value==\'\') this.value=this.defaultValue;"'):' ').$js.$ro.$this->GetCSSIdTag());
 			}
 	}
