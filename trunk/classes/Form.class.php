@@ -812,6 +812,11 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	if ($thisField->GetAlias() != '')
 		{
 		$mod->smarty->assign($thisField->GetAlias(),$oneset);
+		$oneset->alias = $thisField->GetAlias();
+		}
+	else
+		{
+		$oneset->alias = $name_alias;
 		}
 
 	$fields[$oneset->input_id] = $oneset;
