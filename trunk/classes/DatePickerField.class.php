@@ -13,8 +13,9 @@ class fbDatePickerField extends fbFieldBase {
 	
 	function fbDatePickerField(&$form_ptr, &$params)
 	{
+        $mod = $this->form_ptr->module_ptr;	
+	
         $this->fbFieldBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
 		$this->Type = 'DatePickerField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(

@@ -25,6 +25,7 @@ class fbModuleInterfaceField extends fbFieldBase
     $this->NeedsDiv = 0; 
     $this->sortable = false;
 	$this->DisplayInSubmission = true;
+    //$this->hasMultipleFormComponents = true;	
   }
 
 
@@ -32,23 +33,26 @@ class fbModuleInterfaceField extends fbFieldBase
     $mod = &$this->form_ptr->module_ptr;
 	
 	$v = $this->GetOption('value','');
+
+	/* REMOVED BY Stikki - totally useless that i can see.
 	$val = array();
 	if( $this->Value !== false ){
+		
 		$val = $this->Value;
+		
 		if( !is_array( $this->Value ) ){
 			$val = array($this->Value);
 		}
 	}
-		
+	*/
+	
 	global $gCms;
 	$gCms->smarty->assign('FBid',$id.'fbrp__'.$this->Id);
 	// for selected... what to do here  
 	// for things like checked="checked" on the back page
-	$gCms->smarty->assign('FBvalue',$val);
+	$gCms->smarty->assign('FBvalue',$this->Value);
 	
-	$v =  $mod->ProcessTemplateFromData($v);
-
-    return $v;
+    return $mod->ProcessTemplateFromData($v);;
   }
 
 	function PrePopulateAdminForm($formDescriptor)
@@ -68,33 +72,30 @@ function GetHumanReadableValue($as_string=true)
   {
     $mod = $this->form_ptr->module_ptr;
     $form = $this->form_ptr;
-    if ($this->HasValue())
-      {
-	$fieldRet = array();
-	if (! is_array($this->Value))
-	  {
-	    $this->Value = array($this->Value);
-	  }
-	if ($as_string)
-	  {
-	    return join($form->GetAttr('list_delimiter',','),$this->Value);
-	  }
-	else
-	  {
-	    return array($this->Value);
-	  }			
-      }
-    else
-      {
-	if ($as_string)
-	  {
-	    return $mod->Lang('unspecified');
-	  }
-	else
-	  {
-	    return array($mod->Lang('unspecified'));
-	  }
-      }
+	
+    if ($this->HasValue()) {
+		
+		$fieldRet = array();
+		if (!is_array($this->Value)) {
+		
+			$this->Value = array($this->Value);
+		}
+		
+		if ($as_string) {
+			return join($form->GetAttr('list_delimiter',','),$this->Value);
+		} else {
+			return array($this->Value);
+		}
+		
+    } else {
+		
+		if ($as_string) {
+			return $mod->Lang('unspecified');
+		} else {
+		
+			return array($mod->Lang('unspecified'));
+		}
+    }
 	
   }
 
