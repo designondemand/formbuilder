@@ -28,7 +28,7 @@ class fbFromEmailAddressAgainField extends fbFieldBase {
 
 		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,
 			htmlspecialchars($this->Value, ENT_QUOTES),
-			25,128,$js.$this->GetCSSIdTag(),'email');
+			25,128,$js.$this->GetCSSIdTag(),'text');
 	}
 
 	function StatusInfo()
