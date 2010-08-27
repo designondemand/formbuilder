@@ -53,6 +53,7 @@ class fbHiddenField extends fbFieldBase
 		);
 		$adv = array(
 				array($mod->Lang('title_smarty_eval'),
+				$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_smarty_eval','0').
 				$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_smarty_eval',
             		'1',$this->GetOption('smarty_eval','0')))
 		);
