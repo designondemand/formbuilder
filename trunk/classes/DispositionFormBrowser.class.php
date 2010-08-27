@@ -18,7 +18,7 @@ class fbDispositionFormBrowser extends fbFieldBase {
 		$this->Type = 'DispositionFormBrowser';
 		$this->IsDisposition = true;
 		$this->NonRequirableField = true;
-		$this->DisplayInForm = true;
+		$this->DisplayInForm = false;
 		$this->DisplayInSubmission = false;
 		$this->HideLabel = 1;
 		$this->NeedsDiv = 0;
