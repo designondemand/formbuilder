@@ -783,7 +783,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	$oneset->valid = $thisField->validated?1:0;
 	$oneset->error = $thisField->GetOption('is_valid',true)?'':$thisField->validationErrorText;
 	$oneset->hide_name = 0;
-	if( (!$thisField->HasLabel()) || $thisField->HideLabel() )
+	if( ((!$thisField->HasLabel()) || $thisField->HideLabel()) && ($thisField->GetOption('fbr_edit','0') == '0' || $params['in_admin'] != 1) )
 	  {
 	    $oneset->hide_name = 1;
 	  }
