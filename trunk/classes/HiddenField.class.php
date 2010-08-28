@@ -41,7 +41,17 @@ class fbHiddenField extends fbFieldBase
       {
       $v =  $mod->ProcessTemplateFromData($v);
       }
-    return '<input type="hidden" name="'.$id.'fbrp__'.$this->Id.'" value="'.$v.'"'.$this->GetCSSIdTag().' />';
+		
+		if ($this->GetOption('fbr_edit','0') == '1' && $params['in_admin'] == 1)
+			{
+			$type = "text";
+			}
+		else
+			{
+			$type = "hidden";
+			}
+		
+    return '<input type="'.$type.'" name="'.$id.'fbrp__'.$this->Id.'" value="'.$v.'"'.$this->GetCSSIdTag().' />';
   }
 
 	function PrePopulateAdminForm($formDescriptor)
@@ -55,7 +65,11 @@ class fbHiddenField extends fbFieldBase
 				array($mod->Lang('title_smarty_eval'),
 				$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_smarty_eval','0').
 				$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_smarty_eval',
-            		'1',$this->GetOption('smarty_eval','0')))
+            		'1',$this->GetOption('smarty_eval','0'))),
+				array($mod->Lang('title_fbr_edit'),
+				$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_fbr_edit','0').
+				$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_fbr_edit',
+					'1', $this->GetOption('fbr_edit','0')))
 		);
 		return array('main'=>$main,'adv'=>$adv);
 	}

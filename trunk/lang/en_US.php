@@ -527,6 +527,7 @@ $lang['illegal_file']='Attempted upload of illegal file type (%s) from %s';
 $lang['title_searchable']='Make records accessible to Search Module';
 $lang['title_searchable_help']='Checking this will make all submitted data accessible to the Search Module. DO NOT use this if you encrypt your data -- the information gets exposed to search whether or not it is encrypted!';
 $lang['uploaded_outside_webroot']='%s (outside web root)';
+$lang['title_fbr_edit']='Editable in FormBrowser Admin?';
 
 $lang['error_usertag_disposition'] = 'User defined tag returned an error';
 $lang['error_usertag'] = 'User defined tag %s returned an error.';
