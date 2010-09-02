@@ -42,6 +42,29 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		return $retstr;
 	}
 
+	function GetCSSId($suffix='')
+	{
+		$alias = $this->GetAlias();
+		if (empty($alias))
+			{
+			$cssid = 'fbrp__'.$this->Id;
+			}
+		else
+			{
+			$cssid = $alias;
+			}
+
+		if (empty($suffix))
+			{
+			$cssid .= '_1';
+			}
+		else
+			{
+			$cssid .= $suffix;
+			}
+		return $cssid;
+	}
+
    function HasValue($deny_blank_responses=false)
    {
    return ($this->Value[0] !== false && !empty($this->Value[0]));
