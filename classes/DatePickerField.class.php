@@ -137,6 +137,25 @@ class fbDatePickerField extends fbFieldBase {
 				$this->GetArrayValue(array_search("d", $arrUserOrder)),
 				$this->GetArrayValue(array_search("y", $arrUserOrder)) );
 			$ret = date($this->GetOption('date_format','j F Y'), $theDate);
+			
+			$ret = str_replace(array("January","February","March","April","May","June","July","August","September","October","November","December"),
+				array(
+					$mod->Lang('date_january'),
+					$mod->Lang('date_february'),
+					$mod->Lang('date_march'),
+					$mod->Lang('date_april'),
+					$mod->Lang('date_may'),
+					$mod->Lang('date_june'),
+					$mod->Lang('date_july'),
+					$mod->Lang('date_august'),
+					$mod->Lang('date_september'),
+					$mod->Lang('date_october'),
+					$mod->Lang('date_november'),
+					$mod->Lang('date_december')
+					),
+				$ret);
+				
+				$ret = html_entity_decode($ret, ENT_QUOTES, 'UTF-8');
 			}
 		else
 			{
