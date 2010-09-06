@@ -159,7 +159,7 @@ class fbDatePickerField extends fbFieldBase {
 			}
 		else
 			{
-			$ret = $mod->Lang('unspecified');
+			$ret = $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
 			}
 		if ($as_string)
 			{
