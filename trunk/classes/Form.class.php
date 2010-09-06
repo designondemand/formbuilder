@@ -736,6 +736,20 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	if ($formPageCount != $this->Page)
 	  {
 	    $testIndex = 'fbrp__'.$this->Fields[$i]->GetId();
+			
+			// Ryan's ugly fix for Bug 4307
+			// We should figure out why this field wasn't populating its Smarty variable
+			if ($thisField->GetFieldType() == 'FileUploadField')
+				{
+				$mod->smarty->assign('fld_'.$thisField->GetId(),$thisField->GetHumanReadableValue());
+				$hidden .= $mod->CreateInputHidden($id,
+					$testIndex,
+					$this->unmy_htmlentities($thisField->GetHumanReadableValue()));
+				$thisAtt = $thisField->GetHumanReadableValue(false);
+				$mod->smarty->assign('test_'.$thisField->GetId(), $thisAtt);
+				$mod->smarty->assign('value_fld'.$thisField->GetId(), $thisAtt[0]);
+				}
+			
 	    if (!isset($params[$testIndex]))
 	      {
 			// do we need to write something?
