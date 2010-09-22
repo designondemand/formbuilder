@@ -20,7 +20,7 @@ class fbCountryPickerField extends fbFieldBase {
             );
 
         $this->Countries = array($mod->Lang('no_default')=>'',
-		       $mod->Lang('AF') =>'AF',$mod->Lang('AX') =>'AX',$mod->Lang('AL') =>'AL',
+		        $mod->Lang('AF') =>'AF',$mod->Lang('AX') =>'AX',$mod->Lang('AL') =>'AL',
 				$mod->Lang('DZ') =>'DZ',$mod->Lang('AS') =>'AS',$mod->Lang('AD') =>'AD',
 				$mod->Lang('AO') =>'AO',$mod->Lang('AI') =>'AI',$mod->Lang('AQ') =>'AQ',
 				$mod->Lang('AG') =>'AG',$mod->Lang('AR') =>'AR',$mod->Lang('AM') =>'AM',
@@ -40,7 +40,7 @@ class fbCountryPickerField extends fbFieldBase {
 				$mod->Lang('CK') =>'CK',$mod->Lang('CR') =>'CR',$mod->Lang('CI') =>'CI',
 				$mod->Lang('HR') =>'HR',$mod->Lang('CU') =>'CU',$mod->Lang('CY') =>'CY',
 				$mod->Lang('CZ') =>'CZ',$mod->Lang('DK') =>'DK',$mod->Lang('DJ') =>'DJ',
-				$mod->Lang('DM ') =>'DM ',$mod->Lang('DO') =>'DO',$mod->Lang('TP') =>'TP',
+				$mod->Lang('DM') =>'DM',$mod->Lang('DO') =>'DO',$mod->Lang('TP') =>'TP',
 				$mod->Lang('EC') =>'EC',$mod->Lang('EG') =>'EG',$mod->Lang('SV') =>'SV',
 				$mod->Lang('GQ') =>'GQ',$mod->Lang('ER') =>'ER',$mod->Lang('EE') =>'EE',
 				$mod->Lang('ET') =>'ET',$mod->Lang('FK') =>'FK',$mod->Lang('FO') =>'FO',
