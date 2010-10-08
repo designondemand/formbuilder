@@ -76,17 +76,14 @@ class fbUniqueIntegerField extends fbFieldBase
 	
 	private function generate_numbers($min, $max, $times)
 	{
-		$output = array();
+		$output = '';
 		$array = range($min, $max);
 		srand ((double)microtime()*10000);
 		for($x = 0; $x < $times; $x++) {
 		
 			$i = rand(1, count($array))-1;
-			$output[] = $array[$i];
-			array_splice($array, $i, 1);
+			$output .= $array[$i];
 		}
-
-		$output = implode('', $output);
 		
 		return $output;
 	}	
