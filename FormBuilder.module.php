@@ -470,6 +470,7 @@ class FormBuilder extends CMSModule
 		$values = array();
 		$sql = 'FROM '.cms_db_prefix().
 				'module_fb_formbrowser WHERE form_id=?';
+		$sqlparms = array($form_id);
 		if ($user_approved)
 		{
 			$sql .= ' and user_approved is not null';
@@ -482,6 +483,12 @@ class FormBuilder extends CMSModule
 		{
 			$sql .= ' AND resp_id IN ('. implode(',', $params['fbrp_response_search']) .')';
 		}
+		if (isset($params['filter_field']) && substr($params['filter_field'],0,5) =='index')
+			{
+			$idxfld = intval(substr($params['filter_field'],5));
+			$sql .= ' AND index_key_'.$idxfld.'=?';
+			array_push($sqlparms,$params['filter_value']);
+			}
 		if (! isset($params['fbrp_sort_field']) || $params['fbrp_sort_field']=='submitdate' || empty($params['fbrp_sort_field']))
 		{
 			if (isset($params['fbrp_sort_dir']) && $params['fbrp_sort_dir'] == 'd')
@@ -505,7 +512,7 @@ class FormBuilder extends CMSModule
 				}
 			}
 
-		$dbcount = $db->Execute('SELECT COUNT(*) as num '.$sql,array($form_id));
+		$dbcount = $db->Execute('SELECT COUNT(*) as num '.$sql,$sqlparms);
 
 		$records = 0;
 		if ($dbcount && $row = $dbcount->FetchRow())
@@ -515,11 +522,11 @@ class FormBuilder extends CMSModule
 
 		if ($number > -1)
 			{
-			$dbresult = $db->SelectLimit('SELECT * '.$sql, $number, $start_point, array($form_id));
+			$dbresult = $db->SelectLimit('SELECT * '.$sql, $number, $start_point, $sqlparms);
 			}
 		else
 			{
-			$dbresult = $db->Execute('SELECT * '.$sql, array($form_id));	
+			$dbresult = $db->Execute('SELECT * '.$sql, $sqlparms);	
 			}
 			
 		while ($dbresult && $row = $dbresult->FetchRow())
