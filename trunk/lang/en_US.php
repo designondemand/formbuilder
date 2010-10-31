@@ -94,6 +94,7 @@ $lang['are_you_sure_delete_field']='Are you sure you want to delete the field %s
 $lang['notice_select_type']='Advanced options are not available until the field type has been set.';
 $lang['field_name_in_use']='The field name "%s" is already in use. Please use unique field names, or disable unique field names in the Form Builder configuration.';
 $lang['field_no_name'] = 'Fields must be named, unless you disable this in the Form Builder configuration.';
+$lang['no_field_assigned'] = 'No field assigned for %s';
 
 // abbreviations, verbs, and other general terms
 $lang['anonymous'] = 'Anonymous';
@@ -112,6 +113,7 @@ $lang['to']='To';
 $lang['yes']='Yes';
 $lang['no']='No';
 $lang['recipients']='recipients';
+$lang['fields']='fields';
 $lang['file_count'] = '%s possible files';
 $lang['destination_count'] = '%s destinations';
 $lang['save']='Save';

@@ -6,7 +6,7 @@
 		<div class="pageoverflow">
 			<p class="pagetext">{$entry->title}:</p>
 			<div class="pageinput">{$entry->input}</div>
-			{if $entry->help != ''}{$entry->help}{/if}
+			{if $entry->help != ''}<div class="inputhelp">{$entry->help}</div>{/if}
 		</div>
 	{/foreach}
 {$tab_end}
@@ -15,7 +15,7 @@
 		<div class="pageoverflow">
 			<p class="pagetext">{$entry->title}:</p>
 			<div class="pageinput">{$entry->input}</div>
-			{if $entry->help != ''}{$entry->help}{/if}
+			{if $entry->help != ''}<div class="inputhelp">{$entry->help}</div>{/if}
 		</div>
 	{/foreach}
 {$tab_end}
