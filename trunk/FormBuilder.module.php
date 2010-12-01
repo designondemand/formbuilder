@@ -1029,6 +1029,53 @@ class FormBuilder extends CMSModule
 
 
 
+  function RegisterTinyMCEPlugin() {
+    
+    $config=$this->GetConfig();
+    $plugin = "
+	tinymce.create('tinymce.plugins.formpicker', {
+        createControl: function(n, cm) {
+            switch (n) {
+                 case 'formpicker':
+                    var c = cm.createMenuButton('formpicker', {
+                        title : '" . $this->GetFriendlyName() . "',
+                        image : '" . $config["root_url"] . "/modules/FormBuilder/images/info-small.gif',
+                        icons : false
+                        });
+
+                        c.onRenderMenu.add(function(c, m) {
+                ";
+    $forms = $this->GetForms();
+    
+    foreach ($forms as $form) {     
+        $plugin .= "
+            m.add({
+                title : '" . $form['name'] . "',
+                onclick : function() {
+                  tinyMCE.activeEditor.execCommand('mceInsertContent', false, '&#123;FormBuilder form=\"".$form["alias"]."\"&#125;');
+                }
+      });
+      ";
+    }
+
+
+
+    $plugin .= "
+                });
+              // Return the new menu button instance
+              return c;
+            }
+
+          return null;
+       }
+});
+";
+ return array(array('formpicker', $plugin, $this->GetFriendlyName()));
+  }
+
+
+
+
 } // End of Class
 
 # vim:ts=4 sw=4 noet
