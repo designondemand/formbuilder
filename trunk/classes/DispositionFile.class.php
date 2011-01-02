@@ -45,7 +45,7 @@ class fbDispositionFile extends fbFieldBase
 	return array(false, $mod->Lang('submission_error_file_lock'));
       }
 
-    $filespec = $this->GetOption('fileroot',$options['uploads_root']).'/'.
+    $filespec = $this->GetOption('fileroot',$options['uploads_path']).'/'.
       preg_replace("/[^\w\d\.]|\.\./", "_", $this->GetOption('filespec','form_submissions.txt'));
 
     $form->setFinishedFormSmarty();
