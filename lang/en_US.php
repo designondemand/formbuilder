@@ -35,6 +35,7 @@ $lang['field_type_DispositionEmail']='*Email Results to set Address(es)';
 $lang['field_type_DispositionEmailConfirmation']='*Validate-via-Email Address';
 $lang['field_type_DispositionFromEmailAddressField']='*Email "From Address" Field, and send copy';
 $lang['field_type_DispositionFile']='*Write Results to Flat File';
+$lang['field_type_DispositionUniqueFile']='*Write Results to a Unique Flat File for each submission';
 $lang['field_type_DispositionDatabase']='*Store Results in Database';
 $lang['field_type_DispositionFormBrowser']='*Store Results for FormBrowser Module v.0.3';
 $lang['field_type_DispositionUserTag']='*Call A User Defined Tag With the Form Results';
@@ -389,7 +390,7 @@ $lang['title_additional'] = 'Additional submission';
 $lang['title_additional_help'] = 'Anything to be appended to the submission payload, in URL-encoded form (.e.g, "user=steve+jobs&employee_number=1)';
 $lang['title_include_in_submission'] = 'Include field in Submission';
 $lang['title_date_order']='Date component field order (for input)';
-$lang['title_data_stored_in_fbr'] = 'Data will be stored in an XML format in the [PREFIX]_module_fb_frombrowser database table.';
+$lang['title_data_stored_in_fbr'] = 'Data will be stored in an XML format in the [PREFIX]_module_fb_formbrowser database table.';
 $lang['error_has_no_fb_field'] = 'Error! Either the form has no form_builder disposition, or it failed to instantiate (due to memory issues?)';
 $lang['help_date_order']='Use "m" for Month, "d" for Day, and "y" for Year. Separate the items by hyphens.';
 $lang['restricted_to_group'] = 'Only in group %s';
@@ -408,7 +409,7 @@ $lang['help_fb_version']='FormBuilder version';
 $lang['help_tab']='Tab Character';
 $lang['help_ignored_if_upload']='(This field ignored if you use the Uploads module to manage files)';
 $lang['help_other_fields']='Alternate field names can be used interchangeably (especially useful if Smarty is choking on characters outside of ASCII 32-126). <br />Other fields will be available as you add them to the form.';
-$lang['help_array_fields']='Yet another way of accessing field values is via $fieldname_obj, $alias_obj, or $fld_#_obj, where each field is an object containging:<br /><table>
+$lang['help_array_fields']='Yet another way of accessing field values is via $fieldname_obj, $alias_obj, or $fld_#_obj, where each field is an object containing:<br /><table>
 <tr><td class="odd">name</td><td class="odd">Field Name</td></tr>
 <tr><td>type</td><td>Field Type</td></tr>
 <tr><td class="odd">id</td><td class="odd">Internal Field ID</td></tr>
@@ -417,6 +418,15 @@ $lang['help_array_fields']='Yet another way of accessing field values is via $fi
 $lang['help_date_format']='See <a href="http://www.php.net/manual/en/function.date.php" target=_NEW>the PHP Manual</a> for formatting help.';
 $lang['help_variable_name']='Variable';
 $lang['help_form_field']='Field Represented';
+$lang['help_rtf_file_template']='Specify a file located in the FormBuilder/templates/ folder. This field is ignored if you use TXT as your file type.';
+$lang['help_rtf_template_type']='Basic: Use the textarea below to layout the field names/values in a single block.<br />
+Advanced: Specify Smarty variables in the RTF Template File as you would below, but arrange them however you like and add formatting.<br />
+&nbsp;You can still use the %%HEADER%% and %%FOOTER%% sections in the RTF file.';
+$lang['help_unique_file_template']='For TXT, this will be immediately after the Header Template.<br />
+For RTF, this will replace the %%FIELDS%% string in the template file if RTF Template Type is set to "Basic".<br />
+This field will be ignored if using "RTF" as File Type and "Advanced" as RTF Template Type.';
+$lang['help_file_header_template']='For TXT, this will be placed at the top of the file. For RTF, this will replace the %%HEADER%% string in the template file.';
+$lang['help_file_footer_template']='For TXT, this will be placed at the bottom of the file. For RTF, this will replace the %%FOOTER%% string in the template file.';
 $lang['link_back_to_form']='&#171; Back to Form';
 $lang['title_create_sample_template']='Create Sample Template';
 $lang['title_create_sample_html_template']='Create Sample HTML Template';
@@ -427,6 +437,10 @@ $lang['help_tab_symbol']='a tab character';
 $lang['title_file_template']='Template for one line of output file';
 $lang['title_file_header']='Template for the header of output file';
 $lang['title_file_footer']='Template for the footer of output file';
+$lang['title_rtf_file_template']='Template RTF file to use';
+$lang['title_unique_file_template']='Template for output';
+$lang['title_file_type']='Choose a file type to use';
+$lang['title_rtf_template_type']='Choose an RTF template type';
 $lang['title_confirmation_url']='URL to click for form confirmation';
 $lang['title_value'] = 'Value (see Advanced Tab if you use Smarty tags)';
 $lang['title_date_format']='Date Format for display (standard <a href="http://www.php.net/manual/en/function.date.php">PHP Date Formats</a>)';
@@ -481,7 +495,10 @@ $lang['title_switch_basic']='Too many confusing field types? ';
 $lang['title_switch_advanced_link']='Switch to Advanced Mode';
 $lang['title_switch_basic_link']='Switch to Simple Mode';
 $lang['title_file_root']='Directory to save file in';
-$lang['title_file_root_help'] = 'This needs to be a directory that your web server has permissions to write in.<br />Chmod it 777 if you have problems/doubts.<br />Also, check to see that you do not have PHP directory restrictions.';
+$lang['title_file_root_help'] = 'This needs to be a directory that your web server has permissions to write in.<br />
+Chmod it 777 if you have problems/doubts.<br />
+Also, check to see that you do not have PHP directory restrictions.<br />
+If left blank, this will default to your default uploads directory ($config[\'uploads_path\']).';
 $lang['title_newline_replacement']='Newline/Carriage Return replacement character';
 $lang['title_newline_replacement_help']='Leave blank to allow newlines and carriage returns in output';
 $lang['title_send_usercopy'] = 'Send User a Copy of Submission?';
@@ -1077,6 +1094,8 @@ are they embedded in the HTML.</li>
 <li>*Write Results to Flat File. This takes the form results and writes them into a text file. You may
 select the name of the file, and set its format. These files are written to the \"output\" directory under the
 module's installation directory, assuming the web server has permission to write there.</li>
+<li>*Write Results to a Unique Flat File for each submission. This takes the form results and writes them to a unique text file for each form submission.
+You can specify a filename pattern using values from form fields, set its format, and set the directory where the files will be stored.</li>
 <li>*Save Results to File Based on Pulldown. Like the Flat File disposition, except the value of a pull-down determines which file results get written to.</li>
 <li>*Save Results to File(s) Based on Multiple Selections. Like the Flat File disposition, except the value(s) of checkboxes  determines which file(s) results get written to.</li>
 <li>*Email to CMS Admin User. Provides a pull-down of CMS Admin users, and directs the results as an email to the selected admin.</li>
@@ -1178,6 +1197,7 @@ that you use for pages that contain your form.</p>
 <li>Morten Poulsen - code</li>
 <li>Prue Rowland - bug fixes</li>
 <li>Simon Schaufelberger - code</li>
+<li>Adam Shaw-Vardi - funding and ideas</li>
 </ul>
 <p>I apologize for any omissions - notify me, and I'll correct the omission!</p>
 <h3>Miscellaneous Notes</h3>
