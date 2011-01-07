@@ -998,7 +998,8 @@ function unmy_htmlentities($val)
 					}
 				if (!isset($_COOKIE['cms_admin_user_id']))
 					{
-					$response_id = $mod->GetResponseIDFromFEUID($feu->LoggedInId());
+					// Fix for Bug 5422. Adapted from Mike Hughesdon's code.
+					$response_id = $mod->GetResponseIDFromFEUID($feu->LoggedInId(), $formId);
 					if ($response_id !== false)
 						{
 						$check = $this->module_ptr->dbHandle->GetOne('select count(*) from '.cms_db_prefix().

@@ -171,7 +171,7 @@ class FormBuilder extends CMSModule
 
 	function GetHeaderHTML()
 	{
-		global $gCms;	
+		global $gCms;
 		$tmpl = '';
 		
 		$tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/jquery-1.4.2.min.js"></script>';
@@ -181,7 +181,7 @@ class FormBuilder extends CMSModule
 		
         return $this->ProcessTemplateFromData($tmpl);
 		
-	}		
+	}
 	
 	function SetParameters()
 	{
@@ -333,7 +333,7 @@ class FormBuilder extends CMSModule
 			$oneset->names = array();
 			$oneset->fieldsbyalias = array();
 		}
-		
+
 		$populate_names = true;
 		$this->HandleResponseFromXML($fbField, $oneset);
 		list($fnames, $aliases, $vals) = $this->ParseResponseXML($oneset->xml);
@@ -349,7 +349,7 @@ class FormBuilder extends CMSModule
 				{
 				$oneset->fieldsbyalias[$aliases[$id]] = $vals[$id];
 				}
-			}			
+			}
 		return $oneset;
 	}
 
@@ -526,7 +526,7 @@ class FormBuilder extends CMSModule
 			}
 		else
 			{
-			$dbresult = $db->Execute('SELECT * '.$sql, $sqlparms);	
+			$dbresult = $db->Execute('SELECT * '.$sql, $sqlparms);
 			}
 			
 		while ($dbresult && $row = $dbresult->FetchRow())
@@ -638,8 +638,8 @@ class FormBuilder extends CMSModule
 			return false;
 			}
 
-		$dbresult = $db->Execute('SELECT * '.$sql, array($form_id));	
-			
+		$dbresult = $db->Execute('SELECT * '.$sql, array($form_id));
+
 		$populate_names = true;
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
@@ -679,7 +679,7 @@ class FormBuilder extends CMSModule
 				fputs ($fh,"\t");
 				}
 			fputs($fh,"\n");
-		}					
+		}
 		fclose($fh);
 		return true;
 	}
@@ -695,12 +695,12 @@ class FormBuilder extends CMSModule
 		if ($fbField == false)
 			{
 			// error handling goes here.
-			return $ret;	
+			return $ret;
 			}
 		return $fbField->getSortFieldList();
 	}
 
-  function getFEUIDFromResponseID($response_id)
+  function GetFEUIDFromResponseID($response_id)
 	{
 	$db = $this->GetDb();
     $sql = 'SELECT feuid FROM ' . cms_db_prefix().
@@ -712,11 +712,18 @@ class FormBuilder extends CMSModule
     return -1;
 	}
 
-  function getResponseIDFromFEUID($feu_id)
+  function GetResponseIDFromFEUID($feu_id, $form_id=-1)
 	{
 	$db = $this->GetDb();
-    $sql = 'SELECT fbr_id FROM ' . cms_db_prefix().
-      'module_fb_formbrowser where feuid=?';
+
+	// Fix for Bug 5422. Adapted from Mike Hughesdon's code.
+	$sql = 'SELECT fbr_id FROM ' . cms_db_prefix().
+			'module_fb_formbrowser where feuid=?';
+	if ($form_id != -1)
+	{
+		$sql .= ' and form_id = '.$form_id.' ORDER BY submitted DESC';
+	}
+
     if($result = $db->GetRow($sql, array($feu_id)))
       {
 	    return $result['fbr_id'];
@@ -1023,7 +1030,7 @@ class FormBuilder extends CMSModule
 				{
 				$module->DeleteWords( 'FormBrowser', $params['response_id'], 'sub_'.$thisBrowser);	
 				}
-	      }		
+	      }
 	}
 
 
