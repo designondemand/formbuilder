@@ -401,6 +401,18 @@ class FormBuilder extends CMSModule
 		return array($names, $aliases, $vals);
 	}
 
+	// New function as part of fix for Bug 5702 from Mike Hughesdon.
+	function ParseResponseXMLType($xmlstr)
+	{
+		$types = array();
+		$xml = new SimpleXMLElement($xmlstr);
+		foreach ($xml->field as $xmlfield)
+		{
+			$id = (int)$xmlfield['id'];
+			$types['fbrp__'.$id] = (string)$xmlfield['type'];
+		}
+		return $types;
+	}
 
 	function GetFormBrowserField($form_id)
 	{

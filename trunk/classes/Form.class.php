@@ -976,7 +976,7 @@ function unmy_htmlentities($val)
 	$loadDeep = true;
 	$loadResp = true;
       }
-			
+
     if ($loadDeep)
       {
 	  if ($loadResp)
@@ -1015,12 +1015,20 @@ function unmy_htmlentities($val)
 	if (isset($params['response_id']))
 	  {
 	    $loadParams = array('response_id'=>$params['response_id']);
-	    $this->LoadResponseValues($loadParams);
+			$loadTypes = array();
+	    $this->LoadResponseValues($loadParams, $loadTypes);
 	    foreach ($loadParams as $thisParamKey=>$thisParamValue)
 	      {
 		if (! isset($params[$thisParamKey]))
 		  {
-		    $params[$thisParamKey] = $thisParamValue;
+				if ($this->GetFormState() == 'update' && $loadTypes[$thisParamKey] == 'CheckboxField')
+				{
+					$params[$thisParamKey] = '';
+				}
+				else
+				{
+					$params[$thisParamKey] = $thisParamValue;
+				}
 		  }
 	      }
 	  }
@@ -2222,7 +2230,7 @@ function fast_add(field_type)
 
   // FormBrowser >= 0.3 Response load method. This populates the $params array for later processing/combination
   // (as opposed to LoadResponse, which places the values into the Field values directly)
-  function LoadResponseValues(&$params)
+  function LoadResponseValues(&$params, &$types)
   {
 	$mod = $this->module_ptr;
 	$db = $this->module_ptr->dbHandle;
@@ -2249,6 +2257,7 @@ function fast_add(field_type)
 		}
 	$mod->HandleResponseFromXML($fbField, $oneset);
 	list($fnames, $aliases, $vals) = $mod->ParseResponseXML($oneset->xml, false);
+	$types = $mod->ParseResponseXMLType($oneset->xml);
 	foreach ($vals as $id=>$val)
 		{
 		if (isset($params['fbrp__'.$id]) &&
