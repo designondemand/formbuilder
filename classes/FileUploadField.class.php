@@ -90,7 +90,7 @@ class fbFileUploadField extends fbFieldBase {
 		}
 	else
 		{
-		$ret .= ' '.$mod->Lang('nooverwrite');	
+		$ret .= ' '.$mod->Lang('nooverwrite');
 		}
     return $ret;
   }
@@ -156,8 +156,8 @@ class fbFileUploadField extends fbFieldBase {
 		array_push($main, array($mod->Lang('title_file_destination'),
 						$mod->CreateInputText($formDescriptor,'fbrp_opt_file_destination',
 							$this->GetOption('file_destination',$gCms->config['uploads_path']),60,255).
-						$mod->Lang('help_ignored_if_upload')));		
-		
+						$mod->Lang('help_ignored_if_upload')));
+
     if( $uploads )
       {
 		$categorylist = $uploads->getCategoryList();
@@ -165,14 +165,14 @@ class fbFileUploadField extends fbFieldBase {
 			   $mod->CreateInputDropdown($formDescriptor,
 						     'fbrp_opt_sendto_uploads',$sendto_uploads_list,
 						     $sendto_uploads)));
-						
+
 		array_push($adv,array($mod->Lang('title_uploads_category'),
 			   $mod->CreateInputDropdown($formDescriptor,
-						     'fbrp_opt_uploads_category',$categorylist,
+						     'fbrp_opt_uploads_category',$categorylist,'',
 						     $uploads_category)));
 		array_push($adv,array($mod->Lang('title_uploads_destpage'),
 			   $mod->CreatePageDropdown($formDescriptor,
-						    'fbrp_opt_uploads_destpage',$uploads_destpage)));
+						    'opt_uploads_destpage',$uploads_destpage)));
       }
 
 
