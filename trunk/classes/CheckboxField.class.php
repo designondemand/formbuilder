@@ -16,7 +16,6 @@ class fbCheckboxField extends fbFieldBase {
 		$this->Type =  'CheckboxField';
 		$this->DisplayInForm = true;
 		$this->NonRequirableField = false;
-		$this->Required = false;
 		$this->ValidationTypes = array(
             $mod->Lang('validation_none')=>'none',
             $mod->Lang('validation_must_check')=>'checked'
