@@ -503,20 +503,20 @@ class FormBuilder extends CMSModule
 			}
 		if (! isset($params['fbrp_sort_field']) || $params['fbrp_sort_field']=='submitdate' || empty($params['fbrp_sort_field']))
 		{
-			if (isset($params['fbrp_sort_dir']) && $params['fbrp_sort_dir'] == 'd')
+			if (isset($params['fbrp_sort_dir']) && $params['fbrp_sort_dir'] == 'a')
 			{
-				$sql .= ' order by submitted desc';	
+				$sql .= ' order by submitted asc';
 			}
 			else
 			{
-				$sql .= ' order by submitted asc';
+				$sql .= ' order by submitted desc';
 			}
 		}
 		else if (isset($params['fbrp_sort_field']))
 			{
 			if (isset($params['fbrp_sort_dir']) && $params['fbrp_sort_dir'] == 'd')
 				{
-					$sql .= ' order by index_key_'.(int)$params['fbrp_sort_field'].' desc';	
+					$sql .= ' order by index_key_'.(int)$params['fbrp_sort_field'].' desc';
 				}
 				else
 				{
