@@ -1088,6 +1088,7 @@ are they embedded in the HTML.</li>
 <li>*Email Results to set Address(es). This simply sends the form results to one or more email addresses that you enter when you create or edit this type of field. This field and its name are not visible in the
 form that the user sees. The email addresses are not made visible nor
 are they embedded in the HTML.</li>
+<li>*Email results based on frontend fields. This field is an email disposition that allows form fields' user input to specify the Email Subject, \"From Name\", \"From Address\", and Destination Email Address.</li>
 <li>*Email to User-Supplied Address. This puts an input field in the form for the user to populate with an email address. The form results get sent to that address. Beware of Spam abuse! Active the primitive anti-spam features in the FormBuilder configuration screen.</li>
 <li>*Store Results in Database. <strong>Deprecated.</strong> Use Store Results for FormBrowser Module instead! This will store the form contents in an internal database. You will always use this disposition if you use the form with FormBrowser.</li>
 <li>*Redirect to Page Based on Pulldown. This allows you to redirect the form to a different site page depending on its value. If you have multiple dispositions, make sure this is used last.</li>

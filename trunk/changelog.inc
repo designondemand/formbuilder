@@ -1,4 +1,24 @@
 <ul>
+	<li>Version 0.7.
+		<ul>
+			<li>Fixed a bug which caused the Date Submitted sorting in Form Browser to be inconsistent across pages at first.</li>
+			<li>Fixed a bug which caused a Checkbox Field to be unable to be required. Checkbox Fields can now be made required.</li>
+			<li>Fixed Bug #5610: File Upload Field advanced options now save correctly.</li>
+			<li>Fixed Bug #5702: When using the "Frontend User binding" advanced option on the FormBrowser Disposition, checkboxes can now be saved in the "unchecked" state. Thanks Mike Hughesdon!</li>
+			<li>Fixed Bug #5422: Multiple forms using the "Frontend User binding" advanced option on the FormBrowser Disposition now correctly load previously submitted data. Thanks Mike Hughesdon!</li>
+			<li>Added: New Disposition - DispositionUniqueFile. Write form results to a unique file for each form submission.</li>
+			<li>Added: TinyMCE integrated.</li>
+			<li>Added: New Disposition - DispositionEmailBasedFrontendFields. Send form results via email with frontend-user-specified Subject, "From Name", "From Address", and Destination Address.</li>
+			<li>Added: Random number generator to UniqueIntegerField.</li>
+			<li>Fixed Bug #5555/#5453: Dominica (DM) is now properly selectable in the Country Picker Field.</li>
+			<li>Fixed Bug #4307: Files uploaded on earlier pages of a multi-page form are now attached to Email Dispositions on later pages.</li>
+			<li>Fixed Bug #3605: Dates are now translated in Email Dispositions.</li>
+			<li>Fixed Bug #5358: DispositionFromEmailAddressField now creates a correct label for its input field.</li>
+			<li>Fixed Bug #1822: Hidden Fields can now be edited in an Admin Form Browser.</li>
+			<li>Added Feature Request #5277: Allow DispositionFormBrowser to be hidden.</li>
+			<li>Several other cleanups and minor fixes.</li>
+		</ul>
+	</li>
 	<li>Version 0.6.4.
 		<ul>
 			<li>Bugs fixes for Field Sorting. Thanks to everyone who reported and Stikki for fixing it!</li>
