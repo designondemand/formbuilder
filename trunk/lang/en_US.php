@@ -42,6 +42,7 @@ $lang['field_type_DispositionUserTag']='*Call A User Defined Tag With the Form R
 $lang['field_type_DispositionForm'] = '*Submit to an arbitrary form action';
 $lang['field_type_DispositionDeliverToEmailAddressField']='*Email to User-Supplied Email Address';
 $lang['field_type_DispositionEmailSiteAdmin']='*Email to CMS Admin User';
+$lang['field_type_DispositionEmailBasedFrontendFields']='*Email results based on frontend fields';
 $lang['field_type_PageBreakField']='-Page Break';
 $lang['field_type_FileUploadField']='File Upload';
 $lang['field_type_FromEmailAddressField']='Email "From Address" Field';
