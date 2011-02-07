@@ -201,14 +201,17 @@ if (! $this->CheckAccess()) exit;
 			$sqlarray = $dict->DropColumnSQL(cms_db_prefix()."module_fb_formbrowser", "resnew");
         	$dict->ExecuteSQLArray($sqlarray);
         	// whew. that was lame.
-		   $path = cms_join_path(dirname(__FILE__),'includes');
-       	$params['fbrp_xml_file'] = cms_join_path($path,'Advanced_Contact_Form.xml');
-       	$aeform = new fbForm($this, $params, true);
-		   $res = $aeform->ImportXML($params);
-      case "0.6":
-	  case "0.6.1":
-
+			$path = cms_join_path(dirname(__FILE__),'includes');
+			$params['fbrp_xml_file'] = cms_join_path($path,'Advanced_Contact_Form.xml');
+			$aeform = new fbForm($this, $params, true);
+			$res = $aeform->ImportXML($params);
+		case "0.6":
+		case "0.6.1":
+		case "0.6.2":
+		case "0.6.3":
+		case "0.6.4":
 		}
+		
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('upgraded',$this->GetVersion()));
 
 ?>
