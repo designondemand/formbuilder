@@ -289,13 +289,11 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		$others = $this->GetFields();
 		for($i=0;$i<count($others);$i++)
 			{
-			if (! $others[$i]->HasMultipleFormComponents())
-				{
-				$ret .= '<tr><td class="'.($odd?'odd':'even').
-	      	'">$fld_'.$others[$i]->GetId().
-	        '</td><td class="'.($odd?'odd':'even').
-	        '">' .$others[$i]->GetName() . '</td></tr>';
-				}
+			// Removed by Stikki: BUT WHY?
+			//if (!$others[$i]->HasMultipleFormComponents())
+				//{
+				$ret .= '<tr><td class="'.($odd?'odd':'even').'">$fld_'.$others[$i]->GetId().'</td><td class="'.($odd?'odd':'even').'">' .$others[$i]->GetName() . '</td></tr>';
+				//}
 			$odd = ! $odd;
 			}
 		return $ret;
