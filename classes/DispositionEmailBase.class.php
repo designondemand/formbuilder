@@ -270,7 +270,9 @@ class fbDispositionEmailBase extends fbFieldBase
     $dbresult = $db->Execute($query, array($rec_id, $_SERVER['REMOTE_ADDR'],
                trim($db->DBTimeStamp(time()),"'")));
     }
-    return array($res, $mail->GetErrorInfo());
+	$toReturn = array($res, $mail->GetErrorInfo());
+	$mail->reset();
+	return $toReturn;
   }
 
   function PrePopulateAdminFormBase($formDescriptor)
