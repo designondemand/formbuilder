@@ -63,6 +63,7 @@ class FormBuilder extends CMSModule
 		$this->field_types = array();
 		while($filespec=readdir($dir))
 		{
+		  if( !endswith($filespec,'.php') ) continue;
 			if(strpos($filespec,'Field') === false && strpos($filespec,'Disposition') === false)
 			{
 				continue;
@@ -120,7 +121,7 @@ class FormBuilder extends CMSModule
 
 	function GetVersion()
 	{
-		return '0.7';
+		return '0.7.1';
 	}
 
 	function GetAuthor()
@@ -173,11 +174,11 @@ class FormBuilder extends CMSModule
 	{
 		global $gCms;
 		$tmpl = '';
-		
-		if ($GLOBALS['CMS_VERSION'] < 1.9) {	
-		
-			$tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/jquery-1.4.2.min.js"></script>';
-		}
+
+		if( version_compare($GLOBALS['CMS_VERSION'],'1.9') < 0 )
+		  {
+		    $tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/jquery-1.4.2.min.js"></script>';
+		  }
 		$tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/jquery.tablednd.js"></script>';		
 		$tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/fb_jquery_functions.js"></script>';
 		$tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/fb_jquery.js"></script>';

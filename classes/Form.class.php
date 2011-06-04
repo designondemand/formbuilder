@@ -1598,21 +1598,22 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 
 	    if (!$thisField->DisplayInForm() || $thisField->IsNonRequirableField())
 	      {
-			if($mod->cms->variables['admintheme']->themeName == 'NCleanGrey') {
+		$no_avail = $mod->Lang('not_available');
+		if($mod->cms->variables['admintheme']->themeName == 'NCleanGrey') {
 
-				$oneset->disposition = '<img src="'.$config['root_url'].'/modules/'.$mod->GetName().'/images/stop.gif" width="20" height="20" alt="No available" title="No available" />';
-			} else {
-
-				$oneset->disposition = '<img src="'.$config['root_url'].'/modules/'.$mod->GetName().'/images/stop.gif" width="16" height="16" alt="No available" title="No available" />';	
-			}
+		  $oneset->disposition = '<img src="'.$config['root_url'].'/modules/'.$mod->GetName().'/images/stop.gif" width="20" height="20" alt="'.$no_avail.'" title="'.$no_avail.'" />';
+		} else {
+		  
+		  $oneset->disposition = '<img src="'.$config['root_url'].'/modules/'.$mod->GetName().'/images/stop.gif" width="16" height="16" alt="'.$no_avail.'" title="'.$no_avail.'" />';
+		}
 	      }
 	    else if ($thisField->IsRequired())
 	      {
-			$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/true.gif','true','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'off','field_id'=>$thisField->GetId()),'', '', '', 'class="true" onclick="jQuery(this).fb_admin_update_field_required(); return false;"');
+		$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/true.gif','true','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'off','field_id'=>$thisField->GetId()),'', '', '', 'class="true" onclick="jQuery(this).fb_admin_update_field_required(); return false;"');
 	      }
 	    else
 	      {
-			$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/false.gif','false','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'on','field_id'=>$thisField->GetId()),'', '', '', 'class="false" onclick="jQuery(this).fb_admin_update_field_required(); return false;"');
+		$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', $mod->cms->variables['admintheme']->DisplayImage('icons/system/false.gif','false','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'on','field_id'=>$thisField->GetId()),'', '', '', 'class="false" onclick="jQuery(this).fb_admin_update_field_required(); return false;"');
 	      }
 		  
 	    $oneset->field_status = $thisField->StatusInfo();
