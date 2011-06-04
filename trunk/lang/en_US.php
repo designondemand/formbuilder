@@ -3,6 +3,7 @@
 $lang['friendlyname'] = 'Form Builder';
 
 // field types
+$lang['field_type_DispositionEmailFromFEUProperty'] = '*Email users matching an FEU property';
 $lang['field_type_']='Field Type Not Set';
 $lang['field_type_CatalogerItemsField'] = 'Select one (or more) cataloger items';
 $lang['field_type_FieldsetEnd'] = '-Fieldset End';
@@ -70,6 +71,12 @@ $lang['validation_regex_match']='Match Regular Expression';
 $lang['validation_regex_nomatch']='Doesn\'t match Regular Expression';
 
 // validation error messages and other alerts
+$lang['required'] = 'Required';
+$lang['not_required'] = 'Not Required';
+$lang['not_available'] = 'Not Available';
+$lang['error_emailfromfeuprop'] = 'Error in Field Setup';
+$lang['error_nofeu'] = 'The FrontEndUsers module could not be found.  This field will not function.';
+$lang['error_nofeudefns'] = 'No suitable FEU property could be found.  This field will not function.';
 $lang['required_field_missing'] = 'A value was not supplied for a required field';
 $lang['please_enter_a_value']='Please enter a value for "%s"';
 $lang['please_enter_a_number']='Please enter a number for "%s"';
@@ -174,7 +181,8 @@ $lang['tab_templatelayout'] = 'Form Template';
 $lang['tab_submissiontemplate'] = 'Submission Template';
 $lang['tab_udt'] = 'UDT Integration';
 
-
+$lang['title_feu_property'] = 'FrontEndUsers Property';
+$lang['info_feu_property'] = 'Only certain property types can be used for matching (dropdowns, multiselect fields, etc).';
 $lang['canuse_smarty'] = '<em>Smarty variables are valid in this field.</em>';
 $lang['add_options'] = 'Add More Options';
 $lang['delete_options'] = 'Delete Marked Options';

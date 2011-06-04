@@ -1,4 +1,11 @@
 <ul>
+<li>Version 0.7.1 - (calguy1000)
+  <ul>
+    <li>Fixes the search for fields to not show backup files etc.</li>
+    <li>Fixes a CMS Version comparison.</li>
+    <li>Adds a disposition to allow selecting users to email based on an FEU property.   Also assigns smarty variables with info about matching usess.</li>
+  </ul>
+</li>
 	<li>Version 0.7.
 		<ul>
 			<li>Fixed a bug which caused the Date Submitted sorting in Form Browser to be inconsistent across pages at first.</li>
