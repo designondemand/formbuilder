@@ -210,6 +210,7 @@ if (! $this->CheckAccess()) exit;
 		case "0.6.2":
 		case "0.6.3":
 		case "0.6.4":
+		case "0.7":
 		}
 		
 		$this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('upgraded',$this->GetVersion()));
