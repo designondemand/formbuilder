@@ -1048,26 +1048,13 @@ function unmy_htmlentities($val)
 
 		$className = $this->MakeClassName($thisRes['type'], '');
 		// create the field object
-		if (
-		    ( 
-		     isset($thisRes['field_id']) &&
-		      (
-		       isset($params['fbrp__'.$thisRes['field_id']]) ||
-		       isset($params['fbrp___'.$thisRes['field_id']])
-		       )
-		      ) ||
-		    (isset($thisRes['field_id']) &&
-		     isset($params['value_'.$thisRes['name']])) ||
-		    (isset($thisRes['field_id']) &&
-		     isset($params['value_fld'.$thisRes['field_id']])) ||
-		    (
-		     isset($params['field_id']) && isset($thisRes['field_id']) &&
-		     $params['field_id'] == $thisRes['field_id']
-		     )
-		    )
-		  {
-		    $thisRes = array_merge($thisRes,$params);
-		  }
+		if ((isset($thisRes['field_id']) && (isset($params['fbrp__'.$thisRes['field_id']]) || isset($params['fbrp___'.$thisRes['field_id']]))) ||
+		    (isset($thisRes['field_id']) && isset($params['value_'.$thisRes['name']])) || (isset($thisRes['field_id']) && isset($params['value_fld'.$thisRes['field_id']])) ||
+		    (isset($params['field_id']) && isset($thisRes['field_id']) && $params['field_id'] == $thisRes['field_id'])) {
+		    
+			$thisRes = array_merge($thisRes,$params);
+		}
+		
 		$this->Fields[$fieldCount] = $this->NewField($thisRes);
 		$fieldCount++;
 	      }
