@@ -59,6 +59,7 @@ $lang['field_type_UniqueIntegerField']='-Unique Integer (Serial)';
 $lang['field_type_UserTagField'] = '-User Defined Tag Call';
 $lang['field_type_CompanyDirectoryField'] = 'Company Directory Field';
 $lang['field_type_ModuleInterfaceField'] = '-Module Interface Field';
+$lang['field_type_CheckboxExtendedField'] = 'Checkbox extended'; // Need to remove
 
 // validation types
 $lang['validation_none']='No Validation';
@@ -69,6 +70,7 @@ $lang['validation_usphone']='Phone Number (US)';
 $lang['validation_must_check']='Must Be Checked';
 $lang['validation_regex_match']='Match Regular Expression';
 $lang['validation_regex_nomatch']='Doesn\'t match Regular Expression';
+$lang['validation_empty']='Can\'t be empty';
 
 // validation error messages and other alerts
 $lang['required'] = 'Required';
@@ -212,6 +214,8 @@ To specify multiple values for an attribute use the syntax &quot;multi: value1|v
 To specify a value from a hidden field use the syntax {\$fld_id}<br/>
 <br/>
 EOT;
+$lang['title_textfield_label'] = 'Textfield label'; // Remove?
+$lang['title_show_textfield'] = 'Show textfield?'; // Remove?
 $lang['help_name_regex'] = 'A regular expression to allow filtering cataloger items by name';
 $lang['help_field_height'] = 'The height of the multiselect field';
 $lang['title_name_regex'] = 'Cataloger Item Name Regular Expression';
