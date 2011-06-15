@@ -215,7 +215,7 @@ class fbFileUploadField extends fbFieldBase {
       }
     else if ($ms != '' && $_FILES[$fullAlias]['size'] > ($ms * 1024))
       {
-	$this->validationErrorText = $mod->Lang('file_too_large'). ' '.($ms * 1024).'kb';
+	$this->validationErrorText = $mod->Lang('file_too_large'). ' '.$ms.'kb';//($ms * 1024).'kb'; // Stikki mods
 	$this->validated = false;
       }
     else if ($exts != '')
