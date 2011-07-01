@@ -234,6 +234,7 @@ $lang['file_already_exists']='File %s already exists, and cannot be overwritten.
 $lang['title_file_rename']='Filename template';
 $lang['original_file_extension']='Original file extension (includes the ".")';
 $lang['title_suppress_filename']='Suppress filename in emails and forms the end user will see';
+$lang['title_suppress_attachment']='Deny file to be attached with emails';
 $lang['file_rename_help']='To rename a file upon uploading, create the template here. Leave blank to preserve original filename';
 $lang['title_legend'] = 'Legend';
 $lang['title_maximum_length']='Maximum Length';

@@ -146,6 +146,10 @@ class fbFileUploadField extends fbFieldBase {
 			$mod->CreateInputCheckbox($formDescriptor, 
 					  'fbrp_opt_suppress_filename', '1', 
 					  $this->GetOption('suppress_filename','0'))));
+					  
+		array_push($adv, array($mod->Lang('title_suppress_attachment'),
+			$mod->CreateInputHidden($formDescriptor,'fbrp_opt_suppress_attachment',0).
+			$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_suppress_attachment', 1, $this->GetOption('suppress_attachment',1))));					  
 					
 		array_push($main, array($mod->Lang('title_remove_file_from_server'),
 						$mod->CreateInputHidden($formDescriptor,'fbrp_opt_remove_file','0').
