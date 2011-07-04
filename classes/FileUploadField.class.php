@@ -20,7 +20,12 @@ class fbFileUploadField extends fbFieldBase {
   {
     $mod = $this->form_ptr->module_ptr;
 	$js = $this->GetOption('javascript','');
-    $txt = $mod->CreateFileUploadInput($id,'fbrp__'.$this->Id,$js.$this->GetCSSIdTag());
+    $txt = '';
+	if($this->Value != '') $txt .= $this->GetHumanReadableValue()."<br />";	// Value line
+	$txt .= $mod->CreateFileUploadInput($id,'fbrp__'.$this->Id,$js.$this->GetCSSIdTag()); // Input line
+	if($this->Value != '') $txt .= $mod->CreateInputCheckbox($id, 'fbrp_delete__'.$this->Id, -1).'&nbsp;'.$mod->Lang('delete')."<br />"; // Delete line
+	
+	// Extras
 	if ($this->GetOption('show_details','0') == '1')
 		{
 		 $ms = $this->GetOption('max_size');
@@ -181,9 +186,8 @@ class fbFileUploadField extends fbFieldBase {
 
 
     return array('main'=>$main,'adv'=>$adv);
-  }
-
-
+  } 
+  
   function PostDispositionAction()
   {
 	if ($this->GetOption('remove_file','0') == '1')
