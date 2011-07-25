@@ -170,7 +170,7 @@ class fbDispositionEmailFromFEUProperty extends fbDispositionEmailBase
 	  }
 	else
 	  {
-	    $rec['email'] = $this->GetEmail($rec['id']);
+	    $rec['email'] = $feu->GetEmail($rec['id']);
 	    $destinations[] = $rec['email'];
 	  }
 	$smarty_users[$rec['username']] = $rec;
