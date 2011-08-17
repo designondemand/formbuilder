@@ -30,7 +30,7 @@ class fbDispositionEmailBase extends fbFieldBase
     $mod = $this->form_ptr->module_ptr;
     if ($this->GetOption('email_template','') == '')
       {
-  return $mod->Lang('email_template_not_set');
+  		return $mod->Lang('email_template_not_set');
       }
   }
 
@@ -120,6 +120,22 @@ class fbDispositionEmailBase extends fbFieldBase
       {
       $mail->SetFromName($this->GetOption('email_from_name'));
       }
+
+
+	$cc = $this->GetOption('email_cc_address','');
+	if (!empty($cc))
+		{
+		$usebcc = $this->GetOption('use_bcc',0);
+		if ($usebcc == 1)
+			{
+			$mail->AddBCC($cc);	
+			}
+		else
+			{
+			$mail->AddCC($cc);	
+			}
+		}
+	
     $mail->SetCharSet($this->GetOption('email_encoding','utf-8'));
 
     $message = $this->GetOption('email_template','');
@@ -299,6 +315,10 @@ class fbDispositionEmailBase extends fbFieldBase
            array($mod->Lang('title_email_from_name'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_from_name',$this->GetOption('email_from_name',$mod->Lang('friendlyname')),25,128)),
            array($mod->Lang('title_email_from_address'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_from_address',$this->GetOption('email_from_address',''),25,128).'<br />'.
 		$mod->Lang('email_from_addr_help',array($_SERVER['SERVER_NAME']))),
+        array($mod->Lang('title_email_cc_address'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_cc_address',$this->GetOption('email_cc_address',''),25,128)),
+        array($mod->Lang('title_use_bcc'),
+          $mod->CreateInputHidden($formDescriptor,'fbrp_opt_use_bcc','0').$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_use_bcc',
+              '1',$this->GetOption('use_bcc','0'))),
            ),
      array(
           array($mod->Lang('title_html_email'),
