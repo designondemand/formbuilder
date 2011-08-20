@@ -265,19 +265,29 @@ class fbDispositionEmailBase extends fbFieldBase
 			$sub_ads = explode(',',$thisDest);
 			foreach ($sub_ads as $this_ad)
 				{
-				$mail->AddAddress(trim($this_ad));	
+				if ($this->GetOption('send_using','to') == 'to')
+					$mail->AddAddress(trim($this_ad));
+				else if ($this->GetOption('send_using') == 'cc')
+					$mail->AddCC(trim($this_ad));
+				else
+					$mail->AddBCC(trim($this_ad));
 				}
 			}
 		else
 			{
-  			$mail->AddAddress($thisDest);
+			if ($this->GetOption('send_using','to') == 'to')
+				$mail->AddAddress(trim($thisDest));
+			else if ($this->GetOption('send_using') == 'cc')
+				$mail->AddCC(trim($thisDest));
+			else
+				$mail->AddBCC(trim($thisDest));
 			}
       }
 
     $res = $mail->Send();
     if ($res === false)
       {
-  audit(-1, (isset($name)?$name:""), $mod->Lang('submit_error',$mail->GetErrorInfo()));
+  		audit(-1, (isset($name)?$name:""), $mod->Lang('submit_error',$mail->GetErrorInfo()));
       }
     else if ($mod->GetPreference('enable_antispam',1))
      {
@@ -312,12 +322,14 @@ class fbDispositionEmailBase extends fbFieldBase
     return array(
      array(
            array($mod->Lang('title_email_subject'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_subject',$this->GetOption('email_subject',''),50).'<br/>'.$mod->Lang('canuse_smarty')),
-           array($mod->Lang('title_email_from_name'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_from_name',$this->GetOption('email_from_name',$mod->Lang('friendlyname')),25,128)),
+           array($mod->Lang('title_send_using'),$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_send_using',
+			array($mod->Lang('to_field')=>'to',$mod->Lang('cc_field')=>'cc',$mod->Lang('bcc_field')=>'bcc'), -1, $this->getOption('send_using'))),
+		   array($mod->Lang('title_email_from_name'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_from_name',$this->GetOption('email_from_name',$mod->Lang('friendlyname')),25,128)),
            array($mod->Lang('title_email_from_address'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_from_address',$this->GetOption('email_from_address',''),25,128).'<br />'.
-		$mod->Lang('email_from_addr_help',array($_SERVER['SERVER_NAME']))),
-        array($mod->Lang('title_email_cc_address'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_cc_address',$this->GetOption('email_cc_address',''),25,128)),
-        array($mod->Lang('title_use_bcc'),
-          $mod->CreateInputHidden($formDescriptor,'fbrp_opt_use_bcc','0').$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_use_bcc',
+			$mod->Lang('email_from_addr_help',array($_SERVER['SERVER_NAME']))),
+        	array($mod->Lang('title_email_cc_address'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_cc_address',$this->GetOption('email_cc_address',''),25,128)),
+        	array($mod->Lang('title_use_bcc'),
+          	$mod->CreateInputHidden($formDescriptor,'fbrp_opt_use_bcc','0').$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_use_bcc',
               '1',$this->GetOption('use_bcc','0'))),
            ),
      array(
