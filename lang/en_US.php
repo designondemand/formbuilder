@@ -533,6 +533,13 @@ $lang['title_must_save_order'] = 'You must click one of the "save" buttons to ma
 $lang['title_html5'] = 'Use HTML5 placeholder text instead of Javascript';
 $lang['title_email_cc_address'] = 'Address to email as Carbon copy (CC)';
 $lang['title_use_bcc']='Use Blind carbon copy (BCC instead of CC)';
+$lang['title_send_using']='Mail Addressing';
+$lang['bcc_field']='"BCC" recipients';
+$lang['cc_field']='"CC" recipients';
+$lang['to_field']='Normal ("To" recipients)';
+$lang['bcc']='BCC';
+$lang['cc']='CC';
+
 $lang['error_CompanyDirectory_module_not_available'] = 'Company Directory module is not available!';
 $lang['option_never'] = 'Never';
 $lang['option_user_choice'] = 'Give user a choice (checkbox)';
