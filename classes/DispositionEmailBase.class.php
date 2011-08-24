@@ -126,13 +126,20 @@ class fbDispositionEmailBase extends fbFieldBase
 	if (!empty($cc))
 		{
 		$usebcc = $this->GetOption('use_bcc',0);
-		if ($usebcc == 1)
+		$sub_ads = explode(',',$cc.',');
+		foreach ($sub_ads as $this_ad)
 			{
-			$mail->AddBCC($cc);	
-			}
-		else
-			{
-			$mail->AddCC($cc);	
+			if (!empty($this_ad))
+				{
+				if ($usebcc == 1)
+					{
+					$mail->AddBCC(trim($this_ad));	
+					}
+				else
+					{
+					$mail->AddCC(trim($this_ad));	
+					}
+				}
 			}
 		}
 	
