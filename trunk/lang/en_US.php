@@ -12,6 +12,7 @@ $lang['field_type_TextField']='Text Input';
 $lang['field_type_HTML5NumberField']='HTML5 Number Input';
 $lang['field_type_HTML5EmailField']='HTML5 Email Input';
 $lang['field_type_HTML5URLField']='HTML5 URL Input';
+$lang['field_type_SiteAdminField']='Site Admin';
 $lang['field_type_PasswordField']='Password';
 $lang['field_type_PasswordAgainField']='Password Again (verify)';
 $lang['field_type_TextFieldExpandable']='Text Input (Multiple)';
@@ -572,6 +573,7 @@ $lang['title_searchable']='Make records accessible to Search Module';
 $lang['title_searchable_help']='Checking this will make all submitted data accessible to the Search Module. DO NOT use this if you encrypt your data -- the information gets exposed to search whether or not it is encrypted!';
 $lang['uploaded_outside_webroot']='%s (outside web root)';
 $lang['title_fbr_edit']='Editable in FormBrowser Admin?';
+$lang['title_active_only']='Only include active users?';
 
 $lang['error_usertag_disposition'] = 'User defined tag returned an error';
 $lang['error_usertag'] = 'User defined tag %s returned an error.';
@@ -589,6 +591,8 @@ $lang['validation_response_error']='Validation Response Error. Please make sure 
 $lang['validation_no_field_error']='Validation Response Error. No email validation field in this form!';
 $lang['upgrade03to04'] = 'Form Template was updated automatically as part of the version 0.3 to version 0.4 upgrade. You may need to make some fixes. If you\'re using the default form, simply replace this template with "default" using the pulldown above.';
 $lang['admindesc']='Add, edit and manage interactive Forms';
+$lang['must_specify_one_admin']='Must specify an Admin';
+
 
 $lang['operators_help'] = 'If you use String evaluation, the only operation available is concatenation (+). If you use Number evaluation you have basic, very simple math (, +, -, *, /, ). If you use Computed/PHP evaluation, you can
 use any function you want, but you need to quote things (substitution occurs before evaluation), e.g., substr(\'$fld_22\',0,2).\'$fld_23\'.'; 
