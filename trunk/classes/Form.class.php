@@ -690,6 +690,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
     $mod->smarty->assign('this_page',$this->Page);
     $mod->smarty->assign('form_name',$this->Name);
     $mod->smarty->assign('form_id',$this->Id);
+    $mod->smarty->assign('actionid',$id);
 
 	// Build hidden
     $hidden = $mod->CreateInputHidden($id, 'form_id', $this->Id);
