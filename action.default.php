@@ -153,7 +153,7 @@ else
          {
          $message = $aeform->GetAttr('submit_response','');
 
-		 $aeform->setFinishedFormSmarty();
+		 $aeform->setFinishedFormSmarty(true);
          echo $this->ProcessTemplateFromData( $message );
          return;
          }
