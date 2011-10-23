@@ -1,4 +1,4 @@
-{if $message != ''}<div class="pagemcontainer"><p class="pagemessage">{$message}</p></div>{/if}
+{if $message != ''}{$message}{/if}
 {$backtoform_nav}<br />
 {$start_form}{$fb_hidden}{$op}{$tab_start}
 {$maintab_start}

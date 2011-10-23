@@ -40,6 +40,6 @@ if (! $this->CheckAccess()) exit;
 			// new field, or implicit aef_add.
 			// again, reserving the space for future endeavors
 			}
-		echo $aeform->AddEditField($id, $aefield, (isset($params['fbrp_dispose_only'])?$params['fbrp_dispose_only']:0), $returnid, isset($params['fbrp_message'])?$params['fbrp_message']:'');
+		echo $aeform->AddEditField($id, $aefield, (isset($params['fbrp_dispose_only'])?$params['fbrp_dispose_only']:0), $returnid, isset($params['fbrp_message'])?$this->ShowMessage($params['fbrp_message']):'');
 		
 ?>
