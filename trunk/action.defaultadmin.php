@@ -39,7 +39,7 @@ if (!isset($gCms)) exit;
 			$oneset->name = $this->CreateLink($id,
 				'admin_add_edit_form', '',
 				$thisForm['name'], array('form_id'=>$thisForm['form_id']));
-			$oneset->xml = $this->CreateLink($id,'exportxml','',"<img src=\"".$conf['root_url']."/images/cms/xml_rss.gif\" class=\"systemicon\" alt=\"Export Form as XML\" />",array('form_id'=>$thisForm['form_id']));
+			$oneset->xml = $this->CreateLink($id,'exportxml','',"<img src=\"".$conf['root_url']."/modules/".$this->GetName()."/images/xml_rss.gif\" class=\"systemicon\" alt=\"Export Form as XML\" />",array('form_id'=>$thisForm['form_id']));
 			$oneset->editlink = $this->CreateLink($id,
 				'admin_add_edit_form', '',
 				$gCms->variables['admintheme']->DisplayImage('icons/system/edit.gif',$this->Lang('edit'),'','','systemicon'),

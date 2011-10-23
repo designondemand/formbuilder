@@ -1,4 +1,4 @@
-{if $message != ''}<div class="pagemcontainer"><p class="pagemessage">{$message}</p></div>{/if}
+{if $message != ''}{$message}{/if}
 
 {$formstart}
 {$formid}{$fb_hidden}
@@ -52,12 +52,13 @@
     				<th width="60">{$title_field_alias}</th>
 		{/if}
                 	<th width="85">{$title_field_type}</th>
-                	<th width="20">{$title_field_required_abbrev}</th>
+                	{*<th width="20">{$title_field_required_abbrev}</th>*}
                 	<th>{$title_information}</th>
  					<th width="20" class="updown">&nbsp;</th>
 					<th width="20" class="updown">&nbsp;</th>
-                   <th width="20">&nbsp;</th>
-                    <th width="20">&nbsp;</th>
+					<th class="pageicon">&nbsp;</th>
+					<th class="pageicon">&nbsp;</th>
+                    <th class="pageicon">&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -71,10 +72,10 @@
 						<td>{$entry->alias}</td>
 					{/if}
 					<td>{$entry->type}</td>
-					<td>{$entry->disposition}</td>
-					<td>{$entry->field_status}</td>
+					<td>{$entry->field_status}</td>						
 					<td class="updown">{$entry->up}</td>
-					<td class="updown">{$entry->down}</td>
+					<td class="updown">{$entry->down}</td>				
+					<td>{$entry->disposition}</td>					
 					<td>{$entry->editlink}</td>
 					<td>{$entry->deletelink}</td>
 					</tr>
