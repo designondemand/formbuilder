@@ -41,10 +41,9 @@ class FormBuilder extends CMSModule
 	var $email_regex_relaxed;
 	var $dbHandle;
 
-	function FormBuilder()
+	function __construct()
 	{
-		global $gCms;
-		$this->CMSModule();
+		parent::__construct();
 
 		$this->module_ptr = &$this;
 		$this->dbHandle =  $this->GetDb();
@@ -160,6 +159,11 @@ class FormBuilder extends CMSModule
 		return $this->CheckPermission('Modify Forms');
 	}
 
+	function LazyLoadAdmin()
+	{
+	  return false;
+	}
+	
 	function AdminStyle()
 	{
 		$output = '';
@@ -227,7 +231,7 @@ class FormBuilder extends CMSModule
 	// may be too stringent, but better safe than sorry.
 	function MinimumCMSVersion()
 	{
-		return '1.1';
+		return '1.10';
 	}
 
 	function InstallPostMessage()

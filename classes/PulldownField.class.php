@@ -151,20 +151,21 @@ class fbPulldownField extends fbFieldBase {
 			$this->optionCount += $this->optionAdd;
 			$this->optionAdd = 0;
 			}
-		$dests = '<table class="module_fb_table"><tr><th>'.$mod->Lang('title_option_name').'</th><th>'.
+		$dests = '<table class="pagetable module_fb_table"><tr><th>'.$mod->Lang('title_option_name').'</th><th>'.
 			$mod->Lang('title_option_value').'</th><th>'.
 			$mod->Lang('title_delete').'</th></tr>';
 
-
+		$odd = false;
 		for ($i=0;$i<($this->optionCount>1?$this->optionCount:1);$i++)
 			{
-			$dests .=  '<tr><td>'.
+			$dests .=  '<tr class="'.($odd?'row1':'row2').'"><td>'.
             		$mod->CreateInputText($formDescriptor, 'fbrp_opt_option_name[]',$this->GetOptionElement('option_name',$i),25,128).
             		'</td><td>'.
             		$mod->CreateInputText($formDescriptor, 'fbrp_opt_option_value[]',$this->GetOptionElement('option_value',$i),25,128).
             		'</td><td>'.
             		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_del_'.$i, $i,-1).
              		'</td></tr>';
+					$odd = !$odd;
 			}
 		$dests .= '</table>';
 		$main = array();

@@ -1411,8 +1411,8 @@ function unmy_htmlentities($val)
     global $gCms;
     $mod = $this->module_ptr;
 	$config = $mod->GetConfig();
-		
-    $mod->smarty->assign('message',$message);
+	
+	if(!empty($message)) $mod->smarty->assign('message',$mod->ShowMessage($message));
     $mod->smarty->assign('formstart', $mod->CreateFormStart($id, 'admin_store_form', $returnid));
     $mod->smarty->assign('formid', $mod->CreateInputHidden($id, 'form_id', $this->Id));
     $mod->smarty->assign('tab_start',$mod->StartTabHeaders().
@@ -1839,7 +1839,7 @@ function fast_add(field_type)
   {
     $mod = $this->module_ptr;
 		
-    $mod->smarty->assign('message',$message);
+    if(!empty($message)) $mod->smarty->assign('message',$mod->ShowMessage($message));
     $mod->smarty->assign('backtoform_nav',$mod->CreateLink($id, 'admin_add_edit_form', $returnid, $mod->Lang('link_back_to_form'), array('form_id'=>$this->Id)));
     $mainList = array();
     $advList = array();
