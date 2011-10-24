@@ -164,16 +164,16 @@ class fbRadioGroupField extends fbFieldBase
 	$this->optionCount += $this->optionAdd;
 	$this->optionAdd = 0;
       }
-    $boxes = '<table class="module_fb_table"><tr><th>'.$mod->Lang('title_radio_label').'</th><th>'.
+    $boxes = '<table class="pagetable module_fb_table"><tr><th>'.$mod->Lang('title_radio_label').'</th><th>'.
       $mod->Lang('title_checked_value').'</th><th>'.
       $mod->Lang('title_default_set').'</th><th>'.
       $mod->Lang('title_delete').
       '</th></tr>';
 
-
+	$odd = false;
     for ($i=0;$i<($this->optionCount>1?$this->optionCount:1);$i++)
       {
-	$boxes .= '<tr><td>'.
+	$boxes .= '<tr class="'.($odd?'row1':'row2').'"><td>'.
 	  $mod->CreateInputText($formDescriptor, 'fbrp_opt_button_name[]',$this->GetOptionElement('button_name',$i),25,128).
 	  '</td><td>'.
 	  $mod->CreateInputText($formDescriptor, 'fbrp_opt_button_checked[]',$this->GetOptionElement('button_checked',$i),25,128).
@@ -182,6 +182,8 @@ class fbRadioGroupField extends fbFieldBase
 	  '</td><td>'.
 	  $mod->CreateInputCheckbox($formDescriptor, 'fbrp_del_'.$i, $i,-1).
 	  '</td></tr>';
+	  
+	  $odd = !$odd;
       }
     $boxes .= '</table>';
     $main = array(

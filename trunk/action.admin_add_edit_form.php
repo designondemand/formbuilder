@@ -18,6 +18,6 @@ if (! $this->CheckAccess()) exit;
 		
 		$aeform = new fbForm($this, $params, true);
 		
-		echo $aeform->AddEditForm($id, $returnid, $tab, isset($params['fbrp_message'])?$this->ShowMessage($params['fbrp_message']):'');
+		echo $aeform->AddEditForm($id, $returnid, $tab, isset($params['fbrp_message'])?$params['fbrp_message']:'');
 
 ?>

@@ -1,4 +1,4 @@
-{if $message != ''}{$message}{/if}
+{if isset($message)}{$message}{/if}
 
 {$formstart}
 {$formid}{$fb_hidden}
@@ -51,7 +51,7 @@
         {if isset($title_field_alias)}
     				<th width="60">{$title_field_alias}</th>
 		{/if}
-                	<th width="85">{$title_field_type}</th>
+                	<th width="150">{$title_field_type}</th>
                 	{*<th width="20">{$title_field_required_abbrev}</th>*}
                 	<th>{$title_information}</th>
  					<th width="20" class="updown">&nbsp;</th>
@@ -192,13 +192,13 @@
 {$submittemplatetab_start}
 	<fieldset>
 	<div class="pageoverflow">
-		<p class="pageinput">{$title_submit_response_help}</p>
+		<div class="pageinput">{$title_submit_response_help}</div>
 	</div>
 	</fieldset>
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_submit_response}:</p>
 		<p class="pageinput">{$input_submit_response}</p>
-		{$help_submit_response}
+		<div class="pageinput">{$help_submit_response}</div>
 	</div>
 {$tab_end}
 {$tabs_end}
