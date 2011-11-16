@@ -92,6 +92,7 @@ class fbDispositionFormBrowser extends fbFieldBase {
 	
 	function PrePopulateAdminForm($formDescriptor)
 	{
+	
 		$mod = $this->form_ptr->module_ptr;
 		$form = $this->form_ptr;
 		$fields = $form->GetFields();
@@ -126,8 +127,8 @@ class fbDispositionFormBrowser extends fbFieldBase {
 		'1',$this->GetOption('searchable','0')).
 		$mod->Lang('title_searchable_help')));
 
-	  $feu = $mod->GetModuleInstance('FrontEndUsers');
-	  if ($feu == FALSE)
+	  $feu = cmsms()->GetModuleInstance('FrontEndUsers');
+	  if ($feu === null)
 		{
 		array_push($adv,array($mod->Lang('title_feu_binding'),
 			$mod->Lang('title_install_feu')));	
@@ -141,8 +142,8 @@ class fbDispositionFormBrowser extends fbFieldBase {
 			$mod->Lang('title_feu_bind_help')));
 		}
 		
-	  $openssl = $mod->GetModuleInstance('OpenSSL');
-	  if ($openssl == FALSE && !function_exists('mcrypt_encrypt'))
+	  $openssl = cmsms()->GetModuleInstance('OpenSSL');
+	  if ($openssl === null && !function_exists('mcrypt_encrypt'))
 		{
 		array_push($adv,array($mod->Lang('title_encryption_functions'),
             $mod->Lang('title_install_crypto')));
@@ -150,7 +151,7 @@ class fbDispositionFormBrowser extends fbFieldBase {
 		}
 	else
 		{
-		if ($openssl !== FALSE)
+		if ($openssl !== null)
          {
 		    $keys = $openssl->getKeyList();
 		    $certs = $openssl->getCertList();
@@ -170,7 +171,7 @@ class fbDispositionFormBrowser extends fbFieldBase {
             		$this->GetOption('keyfile',''),40,255)));
 
       $cryptlibs = array();
-      if ($openssl !== FALSE)
+      if ($openssl !== null)
          {
          $cryptlibs[$mod->Lang('openssl')]='openssl';
          }
@@ -185,7 +186,7 @@ class fbDispositionFormBrowser extends fbFieldBase {
 
 
 
-      if ($openssl !== FALSE)
+      if ($openssl !== null)
          {
          array_push($adv,array($mod->Lang('choose_crypt'),$mod->Lang('choose_crypt_long')));
 
