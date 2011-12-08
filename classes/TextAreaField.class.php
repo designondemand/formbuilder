@@ -25,8 +25,14 @@ class fbTextAreaField extends fbFieldBase {
 	function GetFieldInput($id, &$params, $returnid)
 	{            
 		$mod = $this->form_ptr->module_ptr;	
-		$ret = $mod->CreateTextArea(($this->GetOption('wysiwyg','0') == '1'?true:false),$id,($this->Value?$this->Value:$this->GetOption('default')),
-				   'fbrp__'.$this->Id,'',$this->GetCSSId(),'','',$this->GetOption('cols','80'),$this->GetOption('rows','15'));
+		if ($this->GetOption('html5','0') == '1'){
+			$ret = $mod->CreateTextArea(($this->GetOption('wysiwyg','0') == '1'?true:false),$id,$this->Value,
+					'fbrp__'.$this->Id,'',$this->GetCSSId(),'','',$this->GetOption('cols','80'),$this->GetOption('rows','15'),
+					'', '', ' placeholder="'.$this->GetOption('default').'"');
+		} else {
+			$ret = $mod->CreateTextArea(($this->GetOption('wysiwyg','0') == '1'?true:false),$id,($this->Value?$this->Value:$this->GetOption('default')),
+					'fbrp__'.$this->Id,'',$this->GetCSSId(),'','',$this->GetOption('cols','80'),$this->GetOption('rows','15'));
+		}
 				   
 		if ($this->GetOption('clear_default','0')=='1') {
 			$ret .= '<script type="text/javascript">';
@@ -97,6 +103,8 @@ class fbTextAreaField extends fbFieldBase {
 		
 	   $adv = array(
 			array($mod->Lang('title_field_default_value'),$mod->CreateTextArea(false,$formDescriptor, $this->GetOption('default'),'fbrp_opt_default')),
+			array($mod->Lang('title_html5'),$mod->CreateInputHidden($formDescriptor,'fbrp_opt_html5','0').
+						$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_html5','1',$this->GetOption('html5','0'))),
 			array($mod->Lang('title_clear_default'),$mod->CreateInputHidden($formDescriptor,'fbrp_opt_clear_default','0').
 						$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_clear_default','1',$this->GetOption('clear_default','0')).'<br />'.$mod->Lang('title_clear_default_help'))
 		);
