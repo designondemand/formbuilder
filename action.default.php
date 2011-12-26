@@ -8,6 +8,8 @@
 */
 if (!isset($gCms)) exit;
 
+print_r($params);
+
 //debug_display($params);
 
 if (! isset($params['form_id']) && isset($params['form']))
@@ -68,47 +70,45 @@ foreach($params as $pKey=>$pVal)
       }
    }
 
-if ( !$fieldExpandOp &&
-    (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber() > 0) ||
-     (isset($params['fbrp_done'])&& $params['fbrp_done']==1)))
-    {
-    $res = $aeform->Validate();
+if ( !$fieldExpandOp && (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber() > 0) || (isset($params['fbrp_done'])&& $params['fbrp_done']==1))) {
     
-	// handle uploads
-    $res2 = $aeform->manageFileUploads();
+	// Validate form
+	$res = $aeform->Validate();
+    
+	// We have validate errors
+    if ($res[0] === false) {
 
-    if ($res[0] === false || $res2[0] === false)
-      {
-	  if (isset($res2[1]) && !empty($res2[1]))
-		{
-		array_push($res[1],$res2[1]);
+		$this->smarty->assign('fb_form_validation_errors',$res[1]);
+		$this->smarty->assign('fb_form_has_validation_errors',1);
+
+		$aeform->PageBack();
+	
+	// No validate errors, proceed
+    } else if (isset($params['fbrp_done']) && $params['fbrp_done']==1) {
+      
+		// Check captcha, if installed
+		$ok = true;
+		$captcha = $this->getModuleInstance('Captcha');
+		if ($aeform->GetAttr('use_captcha','0')== '1' && $captcha != null) {
+		
+			if (! $captcha->CheckCaptcha($params['fbrp_captcha_phrase'])) {
+			
+				$this->smarty->assign('captcha_error',$aeform->GetAttr('captcha_wrong',$this->Lang('wrong_captcha')));
+
+				$aeform->PageBack();
+				$ok = false;
+			}
 		}
-	  $this->smarty->assign('fb_form_validation_errors',$res[1]);
-	  $this->smarty->assign('fb_form_has_validation_errors',1);
-	  
-	  $aeform->PageBack();
-      }
-    else if (isset($params['fbrp_done']) && $params['fbrp_done']==1)
-      {
-      $ok = true;
-      $captcha = $this->getModuleInstance('Captcha');
-      if ($aeform->GetAttr('use_captcha','0')== '1' && $captcha != null)
-         {
-  	      if (! $captcha->CheckCaptcha($params['fbrp_captcha_phrase']))
-  	         {
-  	         $this->smarty->assign('captcha_error',$aeform->GetAttr('captcha_wrong',$this->Lang('wrong_captcha')));
-  	         
-  	         $aeform->PageBack();
-            $ok = false;
-            }
-         }
-      if ($ok)
-         {
-         $finished = true;
-	      $results = $aeform->Dispose($returnid);
-	      }
-      }
-  }
+		
+		// All ok, dispose form and manage fileuploads
+		if ($ok) {
+
+			$finished = true;
+			$aeform->manageFileUploads();
+			$results = $aeform->Dispose($returnid);
+		}
+	}
+}
 
 if (! $finished)
    {
