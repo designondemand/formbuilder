@@ -47,89 +47,93 @@ class fbFieldBase {
   function fbFieldBase(&$form_ptr, &$params)
   {
 
-    $this->form_ptr = $form_ptr;
-    $mod = $form_ptr->module_ptr;
-    $this->Options = array();
-    $this->DisplayInForm = true;
-    $this->DisplayInSubmission = true;
-    $this->IsDisposition = false;
-    $this->IsEmailDisposition = false;
-    $this->ValidationTypes = array($mod->Lang('validation_none')=>'none');
-    $this->loaded = false;
-    $this->NonRequirableField = false;
-    $this->HasAddOp = false;
-    $this->HasDeleteOp = false;
-    $this->HasUserAddOp = false;
-    $this->HasUserDeleteOp = false;
-    $this->modifiesOtherFields = false;
-    $this->hasMultipleFormComponents = false;
-    $this->DispositionPermitted = true;
-    $this->SmartyEval = false;
-    $this->labelSubComponents = true;
-    $this->sortable = true;
-    $this->IsComputedOnSubmission = false;
+	$this->form_ptr = $form_ptr;
+	$mod = $form_ptr->module_ptr;
+	$this->Options = array();
+	$this->DisplayInForm = true;
+	$this->DisplayInSubmission = true;
+	$this->IsDisposition = false;
+	$this->IsEmailDisposition = false;
+	$this->ValidationTypes = array($mod->Lang('validation_none')=>'none');
+	$this->loaded = false;
+	$this->NonRequirableField = false;
+	$this->HasAddOp = false;
+	$this->HasDeleteOp = false;
+	$this->HasUserAddOp = false;
+	$this->HasUserDeleteOp = false;
+	$this->modifiesOtherFields = false;
+	$this->hasMultipleFormComponents = false;
+	$this->DispositionPermitted = true;
+	$this->SmartyEval = false;
+	$this->labelSubComponents = true;
+	$this->sortable = true;
+	$this->IsComputedOnSubmission = false;
 
-    if (isset($params['form_id']))
-      {
-	$this->FormId = $params['form_id'];
-      }
-    if (isset($params['field_id']))
-      {
-	$this->Id = $params['field_id'];
-      }
-    if (isset($params['fbrp_field_name']))
-      {
-	$this->Name = $params['fbrp_field_name'];
-      }
-    if (isset($params['fbrp_field_type']))
-      {
-	$this->Type = $params['fbrp_field_type'];
-      }
-    else
-      {
-	$this->Type = '';
-      }
-    if (isset($params['fbrp_order_by']))
-      {
-	$this->OrderBy = $params['fbrp_order_by'];
-      }
-    if (isset($params['fbrp_hide_label']))
-      {
-	$this->HideLabel = $params['fbrp_hide_label'];
-      }
-    else if (isset($params['fbrp_set_from_form']))
-      {
-	$this->HideLabel = 0;
-      }
-    if (isset($params['fbrp_required']))
-      {
-	$this->Required = $params['fbrp_required'];
-      }
-    else if (isset($params['fbrp_set_from_form']))
-      {
-	$this->Required = 0;
-      }
-    if (isset($params['fbrp_validation_type']))
-      {
-	$this->ValidationType = $params['fbrp_validation_type'];
-      }
+    if (isset($params['form_id'])) {
+	
+		$this->FormId = $params['form_id'];
+    }
+	
+    if (isset($params['field_id'])) {
+	
+		$this->Id = $params['field_id'];
+    }
+	
+    if (isset($params['fbrp_field_name'])) {
+	
+		$this->Name = $params['fbrp_field_name'];
+    }
+	
+    if (isset($params['fbrp_field_type'])) {
+	
+		$this->Type = $params['fbrp_field_type'];
+    } else {
+	
+		$this->Type = '';
+    }
+	
+    if (isset($params['fbrp_order_by'])) {
 
-    foreach ($params as $thisParamKey=>$thisParamVal)
-      {
-	if (substr($thisParamKey,0,9) == 'fbrp_opt_')
-	  {
-	    $thisParamKey = substr($thisParamKey,9);
-	    $this->Options[$thisParamKey] = $thisParamVal;
-	  }
-      }
+		$this->OrderBy = $params['fbrp_order_by'];
+    }
+	
+    if (isset($params['fbrp_hide_label'])) {
+	
+		$this->HideLabel = $params['fbrp_hide_label'];
+    } elseif (isset($params['fbrp_set_from_form'])) {
+	
+		$this->HideLabel = 0;
+    }
+	
+    if (isset($params['fbrp_required'])) {
+	
+		$this->Required = $params['fbrp_required'];
+    } elseif (isset($params['fbrp_set_from_form'])) {
+	
+		$this->Required = 0;
+    }
+	
+    if (isset($params['fbrp_validation_type'])) {
+	
+		$this->ValidationType = $params['fbrp_validation_type'];
+    }
 
-    if (isset($params['fbrp__'.$this->Id]) &&
-	(is_array($params['fbrp__'.$this->Id]) ||
-	 strlen($params['fbrp__'.$this->Id]) > 0))
-      {
+    foreach ($params as $thisParamKey=>$thisParamVal) {
+	
+		if (substr($thisParamKey,0,9) == 'fbrp_opt_') {
+		
+			$thisParamKey = substr($thisParamKey,9);
+			$this->Options[$thisParamKey] = $thisParamVal;
+		}
+    }
+
+	// Check value setup against $params
+    if (isset($params['fbrp__'.$this->Id]) && (is_array($params['fbrp__'.$this->Id]) || strlen($params['fbrp__'.$this->Id]) > 0)) {
+	
 	   $this->SetValue($params['fbrp__'.$this->Id]);
-      }
-  }
+    }
+		
+  } // end of __construct()
 
   function HasMultipleFormComponents()
   {
@@ -145,8 +149,7 @@ class fbFieldBase {
   {
     return $this->IsComputedOnSubmission;
   }
-
-
+  
   // override me 
   function ComputeOrder()
   {

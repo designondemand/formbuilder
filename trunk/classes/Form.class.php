@@ -30,7 +30,7 @@ class fbForm {
     $this->Fields = array();
     $this->Attrs = array();
     $this->formState = 'new';
-	
+		
 	// Stikki adding: $id overwrite possible with $param
     if ((!isset($this->module_ptr->module_id) || empty($this->module_ptr->module_id)) && isset($params['module_id'])) {
 	
@@ -53,73 +53,74 @@ class fbForm {
     }
 
    $fieldExpandOp = false;
+   foreach($params as $pKey=>$pVal) {
+   
+		if (substr($pKey,0,9) == 'fbrp_FeX_' || substr($pKey,0,9) == 'fbrp_FeD_') {
+		
+			// expanding or shrinking a field
+			$fieldExpandOp = true;
+		}
+    }
 
-   foreach($params as $pKey=>$pVal)
-      {
-      if (substr($pKey,0,9) == 'fbrp_FeX_' || substr($pKey,0,9) == 'fbrp_FeD_')
-         {
-         // expanding or shrinking a field
-         $fieldExpandOp = true;
-         }
-      }
+    if ($fieldExpandOp) {
+	
+		$params['fbrp_done'] = 0;
+		if (isset($params['fbrp_continue'])) {
+		
+			$this->Page = $params['fbrp_continue'] - 1;
+		} else {
 
-    if ($fieldExpandOp)
-      {
-      $params['fbrp_done'] = 0;
-      if (isset($params['fbrp_continue']))
-         {
-	      $this->Page = $params['fbrp_continue'] - 1;
-         }
-      else
-         {
-	      $this->Page = 1;
-         }
-      }
-    else
-      {
-      if (isset($params['fbrp_continue']))
-         {
-	      $this->Page = $params['fbrp_continue'];
-         }
-      else
-         {
-	      $this->Page = 1;
-         }
-      if (isset($params['fbrp_prev']) && isset($params['fbrp_previous']))
-         {
-	      $this->Page = $params['fbrp_previous'];
-	      $params['fbrp_done'] = 0;
-         }
-      }
+			$this->Page = 1;
+		}
+	} else {
+	
+		if (isset($params['fbrp_continue'])) {
+		
+			$this->Page = $params['fbrp_continue'];
+		} else {
+		
+			$this->Page = 1;
+		}
+		
+		if (isset($params['fbrp_prev']) && isset($params['fbrp_previous'])) {
+		
+			$this->Page = $params['fbrp_previous'];
+			$params['fbrp_done'] = 0;
+		}
+	}
+	  	  
     $this->formTotalPages = 1;
-    if (isset($params['fbrp_done'])&& $params['fbrp_done']==1)
-      {
-	$this->formState = 'submit';
-      }
-    if (isset($params['fbrp_user_form_validate']) && $params['fbrp_user_form_validate']==true)
-      {
-	$this->formState = 'confirm';
-      }
-    if ($this->Id != -1)
-      {
-	if (isset($params['response_id']) && $this->formState == 'submit')
-	  {
-	    $this->formState = 'update';
-	  }
-	$this->Load($this->Id, $params, $loadDeep, $loadResp);
-      }
-    foreach ($params as $thisParamKey=>$thisParamVal)
-      {
-	if (substr($thisParamKey,0,11) == 'fbrp_forma_')
-	  {
-	    $thisParamKey = substr($thisParamKey,11);
-	    $this->Attrs[$thisParamKey] = $thisParamVal;
-	  }
-	else if ($thisParamKey == 'fbrp_form_template' && $this->Id != -1)
-	  {
-	    $this->module_ptr->SetTemplate('fb_'.$this->Id,$thisParamVal);
-	  }
-      }
+    if (isset($params['fbrp_done'])&& $params['fbrp_done']==1) {
+	
+		$this->formState = 'submit';
+    }
+	
+    if (isset($params['fbrp_user_form_validate']) && $params['fbrp_user_form_validate']==true) {
+	
+		$this->formState = 'confirm';
+    }
+	
+    if ($this->Id != -1) {
+	
+		if (isset($params['response_id']) && $this->formState == 'submit') {
+			
+			$this->formState = 'update';
+		}
+		
+		$this->Load($this->Id, $params, $loadDeep, $loadResp);
+    }
+	
+    foreach ($params as $thisParamKey=>$thisParamVal) {
+	
+		if (substr($thisParamKey,0,11) == 'fbrp_forma_') {
+		
+			$thisParamKey = substr($thisParamKey,11);
+			$this->Attrs[$thisParamKey] = $thisParamVal;
+		} else if ($thisParamKey == 'fbrp_form_template' && $this->Id != -1) {
+		
+			$this->module_ptr->SetTemplate('fb_'.$this->Id,$thisParamVal);
+		}
+    }	
 
     $this->templateVariables = Array(
 		'{$sub_form_name}'=>$this->module_ptr->Lang('title_form_name'),
@@ -130,7 +131,7 @@ class fbForm {
 		'{$fb_version}'=>$this->module_ptr->Lang('help_fb_version'),
 		'{$TAB}'=>$this->module_ptr->Lang('help_tab'),
 	);
-  }
+  } // end of __construct()
 
   function SetAttributes($attrArray)
   {
@@ -940,7 +941,7 @@ function unmy_htmlentities($val)
 
     $mod = $this->module_ptr;
 
-//error_log("entering Form Load with usage ".memory_get_usage());
+	//error_log("entering Form Load with usage ".memory_get_usage());
     $sql = 'SELECT * FROM '.cms_db_prefix().'module_fb_form WHERE form_id=?';
     $rs = $this->module_ptr->dbHandle->Execute($sql, array($formId));
     if($rs && $rs->RecordCount() > 0)
@@ -1032,20 +1033,20 @@ function unmy_htmlentities($val)
 	      }
 	  }
 	}
-	$sql = 'SELECT * FROM ' . cms_db_prefix().
-	  'module_fb_field WHERE form_id=? ORDER BY order_by';
-	$rs = $this->module_ptr->dbHandle->Execute($sql, array($formId));
-	$result = array();
+	$sql = 'SELECT * FROM '.cms_db_prefix().'module_fb_field WHERE form_id=? ORDER BY order_by';
+	$result = $this->module_ptr->dbHandle->GetArray($sql, array($formId));
+	/*$result = array();
 	if ($rs && $rs->RecordCount() > 0)
 	  {
 	    $result = $rs->GetArray();
 	  }
+	*/
 	$fieldCount = 0;
 	if (count($result) > 0)
 	  {
 	    foreach($result as $thisRes)
 	      {
-//error_log("Instantiating Field. usage ".memory_get_usage());
+		//error_log("Instantiating Field. usage ".memory_get_usage());
 
 		$className = $this->MakeClassName($thisRes['type'], '');
 		// create the field object
@@ -2767,8 +2768,8 @@ function fast_add(field_type)
 								{
 								$url = $mod->Lang('uploaded_outside_webroot',$destination_name);
 								}
-							$theFields[$i]->ResetValue();
-							$theFields[$i]->SetValue(array($dest,$url));
+							//$theFields[$i]->ResetValue();
+							//$theFields[$i]->SetValue(array($dest,$url));
 							}
 	      				}
 	        		}
