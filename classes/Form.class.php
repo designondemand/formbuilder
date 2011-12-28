@@ -2158,8 +2158,7 @@ function fast_add(field_type)
 	$db = $this->module_ptr->dbHandle;
 		
 	$oneset = new StdClass();
-	$res = $db->Execute('SELECT response, form_id FROM '.cms_db_prefix().
-					'module_fb_formbrowser WHERE fbr_id=?', array($response_id));
+	$res = $db->Execute('SELECT response, form_id FROM '.cms_db_prefix().'module_fb_formbrowser WHERE fbr_id=?', array($response_id));
 
 	if ($res && $row=$res->FetchRow())
 		{
