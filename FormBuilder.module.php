@@ -213,8 +213,13 @@ class FormBuilder extends CMSModule
 	function DoAction($name,$id,$params,$returnid='')
 	{
 		$smarty = cmsms()->GetSmarty();
+
+		$smarty->assign_by_ref('mod',$this);
+		$smarty->assign('actionid',$id);
+		$smarty->assign('returnid',$returnid);		
 		
-		$this->module_id = $id;
+		$this->module_id = $id; // deprecated
+		
 		parent::DoAction($name,$id,$params,$returnid);
 
 	}
@@ -222,10 +227,10 @@ class FormBuilder extends CMSModule
 	#---------------------
 	# Search module methods
 	#--------------------- 
-	
+/*	
 	function DeleteFromSearchIndex(&$params)
 	{
-		$aeform = new fbForm($this, $params, true);
+		$aeform = new fbForm($params, true);
 		
 		// find browsers keyed to this
 		$browsers = $aeform->GetFormBrowsersForForm();
@@ -243,7 +248,7 @@ class FormBuilder extends CMSModule
 				}
 		  }
 	}	
-	
+*/	
 	#---------------------
 	# Module methods
 	#--------------------- 	
@@ -290,7 +295,7 @@ class FormBuilder extends CMSModule
 		ksort($this->std_field_types);
 	}
 
-	// Module API method???
+	// Module API method??? Is this really needed?
 	function CheckAccess($permission='Modify Forms')
 	{
 		$access = $this->CheckPermission($permission);
@@ -303,12 +308,13 @@ class FormBuilder extends CMSModule
 
 	function GetForms($order_by='name')
 	{
-		$db = $this->GetDb();
-		$sql = "SELECT * FROM ".cms_db_prefix().'module_fb_form ORDER BY '.$order_by;
+		$db = cmsms()->GetDb();
+		
+		$sql = "SELECT * FROM ".cms_db_prefix().'module_fb_form ORDER BY ?';
+		$rs = $db->Execute($sql, array($order_by));
+		
 		$result = array();
-		$rs = $db->Execute($sql);
-		if($rs && $rs->RecordCount() > 0)
-		{
+		if($rs && $rs->RecordCount() > 0) {
 			$result = $rs->GetArray();
 		}
 		return $result;
