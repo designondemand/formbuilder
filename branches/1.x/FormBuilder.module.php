@@ -1,7 +1,7 @@
 <?php
 #-------------------------------------------------------------------------
 # Module: FormBuilder
-# Version: 0.6, released 2008
+# Version: 1.0, released 2012
 #
 # Copyright (c) 2007, Samuel Goldstein <sjg@cmsmodules.com>
 # For Information, Support, Bug Reports, etc, please visit the
