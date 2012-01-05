@@ -35,15 +35,13 @@ if (!$this->CheckAccess()) exit; // deprecate
 // Store data
 $form = new fbForm($params, true);
 
-// Figure this shit out
-$tab = $this->GetActiveTab($params);
+//$tab = $this->GetActiveTab($params);
 
 if (isset($params['fbrp_submit'])) {
 
-	$form->Store($params);
+	$parms['form_id'] = $form->Store($params);
 	$parms['tab_message'] = 'updated';
-	$parms['active_tab'] = $tab;
-	$parms['form_id'] = $form->getId();
+	$parms['active_tab'] = $params['active_tab'];
 	$this->Redirect($id, 'admin_add_edit_form', $returnid, $parms);
 
 } else if(isset($params['fbrp_save'])) {

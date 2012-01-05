@@ -39,7 +39,8 @@ if (isset($params['fbrp_set_field_level'])) {
 }
 
 // Set active tab			
-$tab = $this->GetActiveTab($params);
+//$tab = $this->GetActiveTab($params);
+$tab = $params['active_tab'];
 		
 // Load form
 $form = new fbForm($params, true);
