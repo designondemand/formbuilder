@@ -1,7 +1,5 @@
-{if isset($message)}{$message}{/if}
-
 {$formstart}
-{$formid}{$fb_hidden}
+{$fb_hidden}
 {$tab_start}
 
 {$maintab_start}
@@ -29,8 +27,10 @@
 		<p class="pageinput">{$input_inline_form}</p>
 	</div>
 </fieldset>
-{if $adding==0}
+
+{if $formid > 0}
 <fieldset><legend>{$title_form_fields}</legend>
+
 	{if $fastadd==1}
 		<div class="pageoverflow">
 			<p class="pagetext">{$title_fastadd}</p>
@@ -39,6 +39,7 @@
 			</div>
 		</div>
 	{/if}
+	
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_fields}</p>
 		<div class="pageinput">
@@ -88,7 +89,7 @@
         </div>
      </div>
 </fieldset>
-{/if}
+{/if} {* end of formid check *}
 {$tab_end}{$submittab_start}
 	<fieldset>
 	<div class="pageoverflow">
@@ -204,7 +205,7 @@
 {$tabs_end}
 	<div class="pageoverflow">
 		<p class="pagetext">&nbsp;</p>
-		<p class="pageinput">{$save_button}{$submit_button}</p>
+		<p class="pageinput">{$save_button}{$submit_button}{$cancel_button}</p>
 	</div>
 {$form_end}
-{$back}
+{*$back*}

@@ -37,7 +37,6 @@ $forms = $this->GetForms();
 $num_forms = count($forms);
 
 $formArray = array();
-$currow = "row1";
 foreach ($forms as $thisForm) {
 
 	$oneset = new stdClass();
@@ -79,8 +78,8 @@ $this->smarty->assign('tabheaders', $this->StartTabHeaders() .
 				$this->SetTabHeader('config',$this->Lang('configuration')) .
 				$this->EndTabHeaders().
 				$this->StartTabContent());
-$this->smarty->assign('start_formtab',$this->StartTab("forms"));
-$this->smarty->assign('start_configtab',$this->StartTab("config"));
+$this->smarty->assign('start_formtab',$this->StartTab("forms", $params));
+$this->smarty->assign('start_configtab',$this->StartTab("config", $params));
 $this->smarty->assign('end_tab',$this->EndTab());
 $this->smarty->assign('end_tabs',$this->EndTabContent());
 

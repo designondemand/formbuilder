@@ -46,9 +46,9 @@ $form = new fbForm($params, true);
 $contentops = cmsms()->GetContentOperations();
 
 // Start smarty assigns....
-if(!empty($message)) $smarty->assign('message',$this->ShowMessage($message));
-$smarty->assign('formstart', $this->CreateFormStart($id, 'admin_store_form', $returnid));
-$smarty->assign('formid', $this->CreateInputHidden($id, 'form_id', $form->getId()));
+//if(!empty($message)) $smarty->assign('message',$this->ShowMessage($message));
+$smarty->assign('formstart', $this->CreateFormStart($id, 'admin_store_form', $returnid, 'multipart/form-data', '', false, '', array('form_id'=>$form->getId())));
+$smarty->assign('formid', $form->getId());
 $smarty->assign('tab_start',$this->StartTabHeaders().
 						$this->SetTabHeader('maintab',$this->Lang('tab_main'),('maintab' == $tab)?true:false).
 						$this->SetTabHeader('submittab',$this->Lang('tab_submit'),('submittab' == $tab)?true:false).
@@ -60,13 +60,13 @@ $smarty->assign('tab_start',$this->StartTabHeaders().
 						$this->EndTabHeaders() . $this->StartTabContent());
   
 $smarty->assign('tabs_end',$this->EndTabContent());
-$smarty->assign('maintab_start',$this->StartTab("maintab"));
-$smarty->assign('submittab_start',$this->StartTab("submittab"));
-$smarty->assign('symboltab_start',$this->StartTab("symboltab"));
-$smarty->assign('udttab_start',$this->StartTab("udttab"));
-$smarty->assign('templatetab_start',$this->StartTab("templatelayout"));
-$smarty->assign('submittemplatetab_start',$this->StartTab("submittemplate"));
-$smarty->assign('captchatab_start',$this->StartTab("captchatab"));
+$smarty->assign('maintab_start',$this->StartTab("maintab", $params));
+$smarty->assign('submittab_start',$this->StartTab("submittab", $params));
+$smarty->assign('symboltab_start',$this->StartTab("symboltab", $params));
+$smarty->assign('udttab_start',$this->StartTab("udttab", $params));
+$smarty->assign('templatetab_start',$this->StartTab("templatelayout", $params));
+$smarty->assign('submittemplatetab_start',$this->StartTab("submittemplate", $params));
+$smarty->assign('captchatab_start',$this->StartTab("captchatab", $params));
 $smarty->assign('tab_end',$this->EndTab());
 $smarty->assign('form_end',$this->CreateFormEnd());
 $smarty->assign('title_form_name',$this->Lang('title_form_name'));
@@ -158,9 +158,9 @@ $maxOrder = 1;
 if($form->getId() > 0) {
   
 	$smarty->assign('fb_hidden', $this->CreateInputHidden($id, 'fbrp_form_op',$this->Lang('updated')). $this->CreateInputHidden($id, 'fbrp_sort','','class="fbrp_sort"'));
-	$smarty->assign('adding',0);
-	$smarty->assign('save_button', $this->CreateInputSubmit($id, 'fbrp_submit', $this->Lang('save')));
-	$smarty->assign('submit_button', $this->CreateInputHidden($id, 'active_tab', '', 'id="fbr_atab"'). $this->CreateInputSubmit($id, 'fbrp_submit', $this->Lang('save_and_continue'),'onclick="jQuery(this).fb_set_tab()"'));
+	$smarty->assign('save_button', $this->CreateInputSubmit($id, 'fbrp_save', $this->Lang('save')));
+	$smarty->assign('submit_button', $this->CreateInputHidden($id, 'active_tab','','class="fbr_atab"'). 
+								$this->CreateInputSubmit($id, 'fbrp_submit', $this->Lang('save_and_continue'),'onclick="jQuery(this).fb_set_tab()"'));
 
 	$fieldList = array();
 	$currow = "row1";
@@ -269,8 +269,9 @@ if($form->getId() > 0) {
 	$smarty->assign('save_button','');
 	$smarty->assign('submit_button', $this->CreateInputSubmit($id, 'fbrp_submit', $this->Lang('add')));
 	$smarty->assign('fb_hidden', $this->CreateInputHidden($id, 'fbrp_form_op',$this->Lang('added')).$this->CreateInputHidden($id, 'fbrp_sort','','id="fbrp_sort"'));
-	$smarty->assign('adding',1);
 }
+
+$smarty->assign('cancel_button', $this->CreateInputSubmit($id, 'fbrp_cancel', $this->Lang('cancel')));
 
 $smarty->assign('link_notready',"<strong>".$this->Lang('title_not_ready1')."</strong> ".$this->Lang('title_not_ready2')." ".$this->CreateLink($id, 'admin_add_edit_field', $returnid,$this->Lang('title_not_ready_link'),array('form_id'=>$this->Id, 'fbrp_order_by'=>$maxOrder,'fbrp_dispose_only'=>1), '', false, false,'class="module_fb_link"')." ".$this->Lang('title_not_ready3'));
 $smarty->assign('input_inline_form',$this->CreateInputHidden($id,'fbrp_forma_inline','0'). $this->CreateInputCheckbox($id,'fbrp_forma_inline','1',$form->GetAttr('inline','0')). $this->Lang('title_inline_form_help'));

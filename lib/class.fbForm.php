@@ -1296,11 +1296,11 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
 	// Change to method name to Save
 	// storeDeep also stores all fields and options for a form
-	function Store($storeDeep=false)
+	function Store($params, $storeDeep=false)
 	{
 
 		$db = cmsms()->GetDb();
-		$params = $this->module_params;
+		//$params = $this->module_params;
 
 		// Check if new or old form
 		if ($this->Id == -1) {
@@ -1353,7 +1353,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		// Reload everything
 		$this->Load($this->Id,$params,true);
 
-		return $res;
+		return true;
 	}
 
 	/**

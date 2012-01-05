@@ -28,6 +28,7 @@
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #
 #-------------------------------------------------------------------------
+
 class FormBuilder extends CMSModule
 {
 	#---------------------
@@ -58,9 +59,6 @@ class FormBuilder extends CMSModule
 		$this->email_regex = "/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i"; // at wrong place?
 		$this->email_regex_relaxed="/^([\w\d\.\-\_])+\@([\w\d\.\-\_])+$/i"; // at wrong place?
 		
-		// Move these to lib dir and use autoloader
-		//require_once dirname(__FILE__).'/classes/Form.class.php';
-		//require_once dirname(__FILE__).'/classes/FieldBase.class.php';
 	}
 
 	#---------------------
@@ -219,6 +217,11 @@ class FormBuilder extends CMSModule
 		$smarty->assign('returnid',$returnid);		
 		
 		$this->module_id = $id; // deprecated
+		
+		if(isset($params['fbrp_message'])) {
+		
+			$this->ShowMessage($params['fbrp_message']);
+		}
 		
 		parent::DoAction($name,$id,$params,$returnid);
 
@@ -582,14 +585,13 @@ class FormBuilder extends CMSModule
 	// Part of moudle API?
 	function GetActiveTab(&$params)
 	{
-		if (FALSE == empty($params['active_tab']))
-			{
+		if (FALSE == empty($params['active_tab'])) {
+		
 		    return $params['active_tab'];
-		  	}
-		else
-			{
+		} else {
+		
 			return 'maintab';
-			}
+		}
 	}
   
 	// Check if this should go to Form class
