@@ -1137,10 +1137,10 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	* Loads form, sets all given parameters, etc.
 	*
 	* @final
-	* @access public
+	* @access private
 	* @return boolean
 	*/
-	public final function Load($formId, &$params, $loadDeep=false, $loadResp=false)
+	private final function Load($formId, &$params, $loadDeep=false, $loadResp=false)
 	{
 
 		$db = cmsms()->GetDb();
@@ -1178,61 +1178,6 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
 		if ($loadDeep) {
 
-			  /*if ($loadResp)
-				{
-			// if it's a stored form, load the results -- but we need to manually merge them,
-			// since $params[] should override the database value (say we're resubmitting a form)
-				$fbf = $mod->GetFormBrowserField($formId);
-				if ($fbf != false)
-					{
-					// if we're binding to FEU, get the FEU ID, see if there's a response for
-					// that user. If so, load it. Otherwise, bring up an empty form.
-					if ($fbf->GetOption('feu_bind','0')=='1')
-						{
-						$feu = $mod->GetModuleInstance('FrontEndUsers');
-						if ($feu == false)
-							{
-							debug_display("FAILED to instatiate FEU!");
-							return;
-							}
-						if (!isset($_COOKIE['cms_admin_user_id']))
-							{
-							// Fix for Bug 5422. Adapted from Mike Hughesdon's code.
-							$response_id = $mod->GetResponseIDFromFEUID($feu->LoggedInId(), $formId);
-							if ($response_id !== false)
-								{
-								$check = $this->module_ptr->dbHandle->GetOne('select count(*) from '.cms_db_prefix().
-									'module_fb_formbrowser where fbr_id=?',array($response_id));
-								if ($check == 1)
-									{
-									$params['response_id'] = $response_id;
-									}
-								}
-							}
-						}
-					}
-			if (isset($params['response_id']))
-			  {
-				$loadParams = array('response_id'=>$params['response_id']);
-					$loadTypes = array();
-				$this->LoadResponseValues($loadParams, $loadTypes);
-				foreach ($loadParams as $thisParamKey=>$thisParamValue)
-				  {
-				if (! isset($params[$thisParamKey]))
-				  {
-						if ($this->GetFormState() == 'update' && $loadTypes[$thisParamKey] == 'CheckboxField')
-						{
-							$params[$thisParamKey] = '';
-						}
-						else
-						{
-							$params[$thisParamKey] = $thisParamValue;
-						}
-				  }
-				  }
-			  }
-			}*/
-		
 			$sql = 'SELECT * FROM '.cms_db_prefix().'module_fb_field WHERE form_id = ? ORDER BY order_by';
 			$result = $db->GetArray($sql, array($formId));
 
@@ -1307,11 +1252,11 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
 			$this->Id = $db->GenID(cms_db_prefix().'module_fb_form_seq');
 			$sql = "INSERT INTO ".cms_db_prefix()."module_fb_form (form_id, name, alias) VALUES (?, ?, ?)";
-			$res = $db->Execute($sql, array($this->Id, $this->Name, $this->Alias));
+			$db->Execute($sql, array($this->Id, $this->Name, $this->Alias));
 		} else {
 			
 			$sql = "UPDATE ".cms_db_prefix()."module_fb_form set name=?, alias=? where form_id=?";
-			$res = $db->Execute($sql, array($this->Name, $this->Alias, $this->Id));
+			$db->Execute($sql, array($this->Name, $this->Alias, $this->Id));
 		}
 		  
 		// Save out the attrs
@@ -1322,7 +1267,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
 			$formAttrId = $db->GenID(cms_db_prefix().'module_fb_form_attr_seq');
 			$sql = "INSERT INTO ".cms_db_prefix()."module_fb_form_attr (form_attr_id, form_id, name, value) VALUES (?, ?, ?, ?)";
-			$res = $db->Execute($sql, array($formAttrId, $this->Id, $thisAttrKey, $thisAttrValue));
+			$db->Execute($sql, array($formAttrId, $this->Id, $thisAttrKey, $thisAttrValue));
 
 			if ($thisAttrKey == 'form_template') {
 			
@@ -1332,10 +1277,10 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
 		// Update field position
 		$order_list = false;
-		if (isset($params['fbrp_sort']))
-			{
+		if (isset($params['fbrp_sort'])) {
+		
 			$order_list = explode(',',$params['fbrp_sort']);
-			}
+		}
 			
 		if(is_array($order_list) && count($order_list) > 0) {
 			
@@ -1353,7 +1298,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		// Reload everything
 		$this->Load($this->Id,$params,true);
 
-		return true;
+		return $this->Id;
 	}
 
 	/**
