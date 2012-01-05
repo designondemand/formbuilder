@@ -172,7 +172,7 @@ class fbForm {
 				$this->Attrs[$thisParamKey] = $thisParamVal;
 			} else if ($thisParamKey == 'fbrp_form_template' && $this->Id != -1) {
 			
-				$this->module_ptr->SetTemplate('fb_'.$this->Id,$thisParamVal);
+				$this->ModuleInstance->SetTemplate('fb_'.$this->Id,$thisParamVal);
 			}
 		}	
 
@@ -265,7 +265,7 @@ class fbForm {
 	public final function setTemplate($template)
 	{
 		$this->Attrs['form_template'] = $template;
-		$this->module_ptr->SetTemplate('fb_'.$this->Id,$template);
+		$this->ModuleInstance->SetTemplate('fb_'.$this->Id,$template);
 	}
 
 	public final function setAttr($attrname, $val)
@@ -287,7 +287,86 @@ class fbForm {
 	public final function getFieldCount()
 	{
 		return count($this->Fields);
-	}	
+	}
+	
+	public final function &GetFields()
+	{
+		return $this->Fields;
+	}
+
+	public final function &GetFieldById($field_id)
+	{
+		$index = -1;
+		$ret = false;
+		for ($i=0;$i<count($this->Fields);$i++)
+		{
+		if ($this->Fields[$i]->GetId() == $field_id)
+		{
+		$index = $i;
+		}
+		}
+		if ($index != -1)
+		{
+		$ret = $this->Fields[$index];
+		}
+		return $ret;
+	}
+
+
+	public final function &GetFieldByAlias($field_alias)
+	{
+		$index = -1;
+		$ret = false;
+		for ($i=0;$i<count($this->Fields);$i++)
+		{
+		if ($this->Fields[$i]->GetAlias() == $field_alias)
+		{
+		$index = $i;
+		}
+		}
+		if ($index != -1)
+		{
+		$ret = $this->Fields[$index];
+		}
+		return $ret;
+	}
+
+	public final function &GetFieldByName($field_name)
+	{
+		$index = -1;
+		$ret = false;
+		for ($i=0;$i<count($this->Fields);$i++)
+		{
+		if ($this->Fields[$i]->GetName() == $field_name)
+		{
+		$index = $i;
+		}
+		}
+		if ($index != -1)
+		{
+		$ret = $this->Fields[$index];
+		}
+		return $ret;
+	}
+
+	public final function &GetFieldByIndex($field_index)
+	{
+		return $this->Fields[$field_index];
+	}
+
+	public final function GetFieldIndexFromId($field_id)
+	{
+		$index = -1;
+		for ($i=0;$i<count($this->Fields);$i++)
+		{
+		if ($this->Fields[$i]->GetId() == $field_id)
+		{
+		$index = $i;
+		}
+		}
+		return $index;
+	}
+	
 
 	#---------------------
 	# Test methods
@@ -298,9 +377,9 @@ class fbForm {
 		$ret = -1;
 		foreach($this->Fields as $fld)
 			{
-			if ($fld->GetName() == $name)
+			if ($fld->getName() == $name)
 				{
-				$ret = $fld->GetId();
+				$ret = $fld->getId();
 				}
 			}
 		return $ret;
@@ -1193,210 +1272,6 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		
 	} // end of Load method
 
-	
-	
-	/* notable params:
-	  fbrp_xml_file -- source file for the XML
-	  xml_string -- source string for the XML
-	*/
-
-  function ImportXML(&$params)
-  {
-  	// xml_parser_create, xml_parse_into_struct
-  	$parser = xml_parser_create('');
-   xml_parser_set_option( $parser, XML_OPTION_CASE_FOLDING, 0 );
-   xml_parser_set_option( $parser, XML_OPTION_SKIP_WHITE, 0 ); // was 1
-    if (isset($params['fbrp_xml_file']) && ! empty($params['fbrp_xml_file']))
-		{
-		xml_parse_into_struct($parser, file_get_contents($params['fbrp_xml_file']), $values);
-		}
-	elseif (isset($params['xml_string']) && ! empty($params['xml_string']))
-		{
-		xml_parse_into_struct($parser, $params['xml_string'], $values);
-		}
-	else
-		{
-		return false;
-		}
-	xml_parser_free($parser);
-	$elements = array();
-	$stack = array();
-	$fieldMap = array();
-	foreach ( $values as $tag )
-		{
-		$index = count( $elements );
-		if ( $tag['type'] == "complete" || $tag['type'] == "open" )
-			{
-			$elements[$index] = array();
-			$elements[$index]['name'] = $tag['tag'];
-			$elements[$index]['attributes'] = empty($tag['attributes']) ? "" : $tag['attributes'];
-			$elements[$index]['content']    = empty($tag['value']) ? "" : $tag['value'];
-			if ( $tag['type'] == "open" )
-				{
-				# push
-				$elements[$index]['children'] = array();
-				$stack[count($stack)] = &$elements;
-				$elements = &$elements[$index]['children'];
-				}
-        }
-		if ( $tag['type'] == "close" )
-			{    # pop
-			$elements = &$stack[count($stack) - 1];
-			unset($stack[count($stack) - 1]);
-			}
-		}
-//debug_display($elements);
-	if (!isset($elements[0]) || !isset($elements[0]) || !isset($elements[0]['attributes']))
-		{
-		//parsing failed, or invalid file.
-		return false;
-		}
-	$params['form_id'] = -1; // override any form_id values that may be around
-	$formAttrs = &$elements[0]['attributes'];
-
-   if (isset($params['fbrp_import_formalias']) && !empty($params['fbrp_import_formalias']))
-      {
-      $this->SetAlias($params['fbrp_import_formalias']);
-      }
-   else if ($this->inXML($formAttrs['alias']))
-		{
-		$this->SetAlias($formAttrs['alias']);
-		}
-   if (isset($params['fbrp_import_formname']) && !empty($params['fbrp_import_formname']))
-      {
-      $this->SetName($params['fbrp_import_formname']);
-      }
-	$foundfields = false;
-	// populate the attributes and field name first. When we see a field, we save the form and then start adding the fields to it.
-
-	foreach ($elements[0]['children'] as $thisChild)
-		{
-		if ($thisChild['name'] == 'form_name')
-			{
-			$curname =  $this->GetName();
-			if (empty($curname))
-            {
-			   $this->SetName($thisChild['content']);
-			   }
-			}
-		elseif ($thisChild['name'] == 'attribute')
-			{
-			$this->SetAttr($thisChild['attributes']['key'], $thisChild['content']);
-			}
-		else
-			{
-			// we got us a field
-			if (! $foundfields)
-				{
-				// first field
-				$foundfields = true;
-				if( isset($params['fbrp_import_formname']) && 
-				    trim($params['fbrp_import_formname']) != '')
-				  {
-				    $this->SetName(trim($params['fbrp_import_formname']));
-				  }
-				if( isset($params['fbrp_import_formalias']) &&
-				    trim($params['fbrp_import_formname']) != '')
-				  {
-				    $this->SetAlias(trim($params['fbrp_import_formalias']));
-				  }
-				$this->Store();
-				$params['form_id'] = $this->GetId();
-				}
-				//debug_display($thisChild);
-			$fieldAttrs = &$thisChild['attributes'];
-			$className = $this->MakeClassName($fieldAttrs['type'], '');
-			//debug_display($className);
-		    $newField = new $className($this, $params);
-			$oldId = $fieldAttrs['id'];
-
-			if ($this->inXML($fieldAttrs['alias']))
-				{
-				$newField->SetAlias($fieldAttrs['alias']);
-				}
-			$newField->SetValidationType($fieldAttrs['validation_type']);
-			if ($this->inXML($fieldAttrs['order_by']))
-				{
-				$newField->SetOrder($fieldAttrs['order_by']);
-				}
-			if ($this->inXML($fieldAttrs['required']))
-				{
-				$newField->SetRequired($fieldAttrs['required']);
-				}
-			if ($this->inXML($fieldAttrs['hide_label']))
-				{
-				$newField->SetHideLabel($fieldAttrs['hide_label']);
-				}
-			foreach ($thisChild['children'] as $thisOpt)
-				{	
-				if ($thisOpt['name'] == 'field_name')
-					{
-					$newField->SetName($thisOpt['content']);
-					}
-				if ($thisOpt['name'] == 'options')
-					{
-					foreach ($thisOpt['children'] as $thisOption)
-							{
-							$newField->OptionFromXML($thisOption);
-							}
-					}
-				}
-			$newField->Store(true);
-         array_push($this->Fields,$newField);
-			$fieldMap[$oldId] = $newField->GetId();
-			}
-		}
-
-   // clean up references
-   
-	if (isset($params['fbrp_xml_file']) && ! empty($params['fbrp_xml_file']))
-		{
-		// need to update mappings in templates.
-		$tmp = $this->updateRefs($this->GetAttr('form_template',''), $fieldMap);
-		$this->SetAttr('form_template',$tmp);
-		$tmp = $this->updateRefs($this->GetAttr('submit_response',''), $fieldMap);
-		$this->SetAttr('submit_response',$tmp);
-
-		// need to update mappings in field templates.
-      $options = array('email_template','file_template');
-		foreach($this->Fields as $fid=>$thisField)
-         {
-         $changes = false;
-         foreach ($options as $to)
-            {
-            $templ = $thisField->GetOption($to,'');
-            if (!empty($templ))
-               {
-               $tmp = $this->updateRefs($templ, $fieldMap);
-               $thisField->SetOption($to,$tmp);
-               $changes = true;
-               }
-            }
-		   // need to update mappings in FormBrowser sort fields
-         if ($thisField->GetFieldType() == 'DispositionFormBrowser')
-            {
-            for ($i=1;$i<6;$i++)
-               {
-               $old = $thisField->GetOption('sortfield'.$i);
-               if (isset($fieldMap[$old]))
-                  {
-                  $thisField->SetOption('sortfield'.$i,$fieldMap[$old]);
-                  $changes = true;
-                  }
-               }
-            }
-         if ($changes)
-            {
-            $thisField->Store(true);
-            }
-         }
-         
-      $this->Store();
-   	}
-	
-	return true;	
-  }
-
 
   function updateRefs($text, &$fieldMap)
    {
@@ -1419,12 +1294,12 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 			}
   }
 
-	// FBR store method, move to correct Disposition field, dosen't belong here.
+	// Change to method name to Save
 	// storeDeep also stores all fields and options for a form
 	function Store($storeDeep=false)
 	{
 
-		$db = $this->module_ptr->dbHandle;
+		$db = cmsms()->GetDb();
 		$params = $this->module_params;
 
 		// Check if new or old form
@@ -1451,7 +1326,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
 			if ($thisAttrKey == 'form_template') {
 			
-				$this->module_ptr->SetTemplate('fb_'.$this->Id,$thisAttrValue);
+				$this->ModuleInstance->SetTemplate('fb_'.$this->Id,$thisAttrValue);
 			}
 		}
 
@@ -1489,7 +1364,9 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	* @return boolean
 	*/	
 	public final function Delete()
-	{	
+	{
+		$db = cmsms()->GetDb();
+	
 		if ($this->Id == -1) {
 		
 			return false;
@@ -1504,11 +1381,9 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		
 			$field->Delete();
 		}
-	
-		$db = cmsms()->GetDb();
-	
+		
 		// Remove from templates
-		$this->DeleteTemplate('fb_'.$this->Id);
+		$this->ModuleInstance->DeleteTemplate('fb_'.$this->Id);
 		
 		// Remove form itself
 		$sql = 'DELETE FROM '.cms_db_prefix().'module_fb_form where form_id = ?';		
@@ -1554,12 +1429,13 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
 	/**
 	* Makes field type class object
+	* NOTE: Public for now, action.admin_add_edit_field.php requires, change visibility to private when you can.
 	*
 	* @final
-	* @access private
+	* @access public
 	* @return object
 	*/	
-    private final function &NewField(&$params)
+    public final function &NewField(&$params)
     {
 
 		$db = cmsms()->GetDb();
@@ -1597,407 +1473,22 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		  }
 		}
 		return $aefield;
-    }	
-	
-	/**
-	* Method to show form add/edit stuff. 
-	* NOTE: Move this to action.addedit.php and deprecate whole method, just too heavy.
-	*
-	* @final
-	* @access private
-	* @return string
-	*/	
-/*	
-	function AddEditForm($id, $returnid, $tab, $message='')
+    }
+
+	// Not in use atm?????
+	function MakeAlias($string, $isForm=false)
 	{
-		$gCms = cmsms();
-		$mod = $this->module_ptr;
-		$smarty = cmsms()->GetSmarty();
-		$config = cmsms()->GetConfig();
-
-		if(!empty($message)) $smarty->assign('message',$mod->ShowMessage($message));
-		$smarty->assign('formstart', $mod->CreateFormStart($id, 'admin_store_form', $returnid));
-		$smarty->assign('formid', $mod->CreateInputHidden($id, 'form_id', $this->Id));
-		$smarty->assign('tab_start',$mod->StartTabHeaders().
-								$mod->SetTabHeader('maintab',$mod->Lang('tab_main'),('maintab' == $tab)?true:false).
-								$mod->SetTabHeader('submittab',$mod->Lang('tab_submit'),('submittab' == $tab)?true:false).
-								$mod->SetTabHeader('symboltab',$mod->Lang('tab_symbol'),('symboltab' == $tab)?true:false).
-								$mod->SetTabHeader('captchatab',$mod->Lang('tab_captcha'),('captchatab' == $tab)?true:false).
-								$mod->SetTabHeader('udttab',$mod->Lang('tab_udt'),('udttab' == $tab)?true:false).
-								$mod->SetTabHeader('templatelayout',$mod->Lang('tab_templatelayout'),('templatelayout' == $tab)?true:false).
-								$mod->SetTabHeader('submittemplate',$mod->Lang('tab_submissiontemplate'),('submittemplate' == $tab)?true:false).
-								$mod->EndTabHeaders() . $mod->StartTabContent());
-		  
-		$smarty->assign('tabs_end',$mod->EndTabContent());
-		$smarty->assign('maintab_start',$mod->StartTab("maintab"));
-		$smarty->assign('submittab_start',$mod->StartTab("submittab"));
-		$smarty->assign('symboltab_start',$mod->StartTab("symboltab"));
-		$smarty->assign('udttab_start',$mod->StartTab("udttab"));
-		$smarty->assign('templatetab_start',$mod->StartTab("templatelayout"));
-		$smarty->assign('submittemplatetab_start',$mod->StartTab("submittemplate"));
-		$smarty->assign('captchatab_start',$mod->StartTab("captchatab"));
-		$smarty->assign('tab_end',$mod->EndTab());
-		$smarty->assign('form_end',$mod->CreateFormEnd());
-		$smarty->assign('title_form_name',$mod->Lang('title_form_name'));
-		$smarty->assign('input_form_name', $mod->CreateInputText($id, 'fbrp_form_name', $this->Name, 50));
-
-		$smarty->assign('title_load_template',$mod->Lang('title_load_template'));
-		$modLink = $mod->CreateLink($id, 'admin_get_template', $returnid, '', array(), '', true);
-		$smarty->assign('security_key',CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY]);
-
-		$templateList = array(''=>'',$mod->Lang('default_template')=>'RenderFormDefault.tpl',
-			$mod->Lang('table_left_template')=>'RenderFormTableTitleLeft.tpl',
-			$mod->Lang('table_top_template')=>'RenderFormTableTitleTop.tpl');
-			
-		$allForms = $mod->GetForms();
-		foreach ($allForms as $thisForm)
-			{
-			if ($thisForm['form_id'] != $this->Id)
-				{
-				$templateList[$mod->Lang('form_template_name',$thisForm['name'])] =
-					$thisForm['form_id'];
-				}
-			}
-
-		$smarty->assign('input_load_template',$mod->CreateInputDropdown($id,
-			'fbrp_fb_template_load', $templateList, -1, '', 'id="fb_template_load" onchange="jQuery(this).fb_get_template(\''.$mod->Lang('template_are_you_sure').'\',\''.$modLink.'\');"'));
-		$smarty->assign('help_template_variables',$mod->Lang('template_variable_help'));
-		$smarty->assign('title_form_unspecified',$mod->Lang('title_form_unspecified'));
-		$smarty->assign('input_form_unspecified',
-				 $mod->CreateInputText($id, 'fbrp_forma_unspecified',
-							   $this->GetAttr('unspecified',$mod->Lang('unspecified')), 50));
-		$smarty->assign('title_form_status',
-				 $mod->Lang('title_form_status'));
-		$smarty->assign('text_ready',
-				 $mod->Lang('title_ready_for_deployment'));
-		$smarty->assign('title_form_alias',$mod->Lang('title_form_alias'));
-		$smarty->assign('input_form_alias',
-				 $mod->CreateInputText($id, 'fbrp_form_alias',
-							   $this->Alias, 50));
-		$smarty->assign('title_form_css_class',
-				 $mod->Lang('title_form_css_class'));
-		$smarty->assign('input_form_css_class',
-				 $mod->CreateInputText($id, 'fbrp_forma_css_class',
-							   $this->GetAttr('css_class','formbuilderform'), 50,50));
-		$smarty->assign('title_form_fields',
-				 $mod->Lang('title_form_fields'));
-		$smarty->assign('title_form_main',
-				 $mod->Lang('title_form_main'));
-		if( $mod->GetPreference('show_fieldids',0) != 0 )
-		  {
-		  $smarty->assign('title_field_id',
-					 $mod->Lang('title_field_id'));
-		  }
-		if( $mod->GetPreference('show_fieldaliases',1) != 0 )
-		  {
-		  $smarty->assign('title_field_alias',
-					 $mod->Lang('title_field_alias_short'));
-		  }
-
-		$smarty->assign('back', $mod->CreateLink($id, 'defaultadmin', '', $mod->Lang('back_top'), array()));
-
-		$smarty->assign('title_field_name',
-				 $mod->Lang('title_field_name'));
-		$smarty->assign('title_field_type',
-				 $mod->Lang('title_field_type'));
-		$smarty->assign('title_field_type',
-				 $mod->Lang('title_field_type'));
-		$smarty->assign('title_form_template',
-				 $mod->Lang('title_form_template'));
-		$smarty->assign('title_list_delimiter',
-				 $mod->Lang('title_list_delimiter'));
-		$smarty->assign('title_redirect_page',
-				 $mod->Lang('title_redirect_page'));
-				 
-		$smarty->assign('title_submit_action',
-				 $mod->Lang('title_submit_action'));
-		$smarty->assign('title_submit_response',
-				 $mod->Lang('title_submit_response'));
-		$smarty->assign('title_must_save_order',
-				 $mod->Lang('title_must_save_order'));
-
-
-		$smarty->assign('title_inline_form',
-				 $mod->Lang('title_inline_form'));
-
-		$smarty->assign('title_submit_actions',
-				 $mod->Lang('title_submit_actions'));
-		$smarty->assign('title_submit_labels',
-				 $mod->Lang('title_submit_labels'));
-			$smarty->assign('title_submit_javascript',
-					 $mod->Lang('title_submit_javascript'));
-		$smarty->assign('title_submit_help',
-		AdminTheme::DisplayImage('icons/system/info.gif','true','','','systemicon').$mod->Lang('title_submit_help'));
-		$smarty->assign('title_submit_response_help',
-		AdminTheme::DisplayImage('icons/system/info.gif','true','','','systemicon').$mod->Lang('title_submit_response_help'));
-
-		$submitActions = array($mod->Lang('display_text')=>'text',
-			 $mod->Lang('redirect_to_page')=>'redir');
-		$smarty->assign('input_submit_action',
-			  $mod->CreateInputRadioGroup($id, 'fbrp_forma_submit_action', $submitActions, $this->GetAttr('submit_action','text')));
-
-		$captcha = $mod->getModuleInstance('Captcha');
-		if ($captcha == null)
-			 {
-			 $smarty->assign('title_install_captcha',
-				   $mod->Lang('title_captcha_not_installed'));
-			 $smarty->assign('captcha_installed',0);
-			 }
-		else
-			 {
-			 $smarty->assign('title_use_captcha',
-				   $mod->Lang('title_use_captcha'));
-			 $smarty->assign('captcha_installed',1);
-
-			 $smarty->assign('input_use_captcha',$mod->CreateInputHidden($id,'fbrp_forma_use_captcha','0').
-				   $mod->CreateInputCheckbox($id,'fbrp_forma_use_captcha','1',$this->GetAttr('use_captcha','0')).
-				   $mod->Lang('title_use_captcha_help'));
-				}
-		$smarty->assign('title_information',$mod->Lang('information'));
-		$smarty->assign('title_order',$mod->Lang('order'));
-		$smarty->assign('title_field_required_abbrev',$mod->Lang('title_field_required_abbrev'));
-		$smarty->assign('hasdisposition',$this->HasDisposition()?1:0);
-		$maxOrder = 1;
-		if($this->Id > 0)
-		  {
-		  
-		$smarty->assign('fb_hidden', $mod->CreateInputHidden($id, 'fbrp_form_op',$mod->Lang('updated')).
-										$mod->CreateInputHidden($id, 'fbrp_sort','','class="fbrp_sort"'));
-		$smarty->assign('adding',0);
-		$smarty->assign('save_button', $mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('save')));
-		$smarty->assign('submit_button', $mod->CreateInputHidden($id, 'active_tab', '', 'id="fbr_atab"').
-			$mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('save_and_continue'),'onclick="jQuery(this).fb_set_tab()"'));
-
-		$fieldList = array();
-		$currow = "row1";
-		$count = 1;
-		$last = $this->GetFieldCount();
-		foreach ($this->Fields as $thisField)
-		  {
-			$oneset = new stdClass();
-			$oneset->rowclass = $currow;
-			$oneset->name = $mod->CreateLink($id, 'admin_add_edit_field', '', $thisField->GetName(), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
-			if( $mod->GetPreference('show_fieldids',0) != 0 )
-			  {
-				$oneset->id = $mod->CreateLink($id, 'admin_add_edit_field', '', $thisField->GetId(), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
-			  }
-			$oneset->type = $thisField->GetDisplayFriendlyType();
-			$oneset->alias = $thisField->GetAlias();
-			$oneset->id = $thisField->GetID();
-
-			if (!$thisField->DisplayInForm() || $thisField->IsNonRequirableField())
-			  {
-			$no_avail = $mod->Lang('not_available');
-			if($mod->cms->variables['admintheme']->themeName == 'NCleanGrey') {
-
-			  $oneset->disposition = '<img src="'.$config['root_url'].'/modules/'.$mod->GetName().'/images/stop.gif" width="20" height="20" alt="'.$no_avail.'" title="'.$no_avail.'" />';
-			} else {
-			  
-			  $oneset->disposition = '<img src="'.$config['root_url'].'/modules/'.$mod->GetName().'/images/stop.gif" width="16" height="16" alt="'.$no_avail.'" title="'.$no_avail.'" />';
-			}
-			  }
-			else if ($thisField->IsRequired())
-			  {
-			$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', AdminTheme::DisplayImage('icons/system/true.gif','true','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'off','field_id'=>$thisField->GetId()),'', '', '', 'class="true" onclick="jQuery(this).fb_admin_update_field_required(); return false;"');
-			  }
-			else
-			  {
-			$oneset->disposition = $mod->CreateLink($id, 'admin_update_field_required', '', AdminTheme::DisplayImage('icons/system/false.gif','false','','','systemicon'), array('form_id'=>$this->Id,'fbrp_active'=>'on','field_id'=>$thisField->GetId()),'', '', '', 'class="false" onclick="jQuery(this).fb_admin_update_field_required(); return false;"');
-			  }
-			  
-			$oneset->field_status = $thisField->StatusInfo();
-			$oneset->editlink = $mod->CreateLink($id, 'admin_add_edit_field', '', AdminTheme::DisplayImage('icons/system/edit.gif',$mod->Lang('edit'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
-			$oneset->deletelink = $mod->CreateLink($id, 'admin_delete_field', '', AdminTheme::DisplayImage('icons/system/delete.gif',$mod->Lang('delete'),'','','systemicon'), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id),'', '', '', 'onclick="jQuery(this).fb_delete_field(\''.$mod->Lang('are_you_sure_delete_field',htmlspecialchars($thisField->GetName())).'\'); return false;"');
-
-			/* Removed By Stikki, reinstated by SjG with Javascript to hide it if Javascript's enabled. */
-			/*if ($count > 1)
-				{
-				$oneset->up = $mod->CreateLink($id, 'admin_update_field_order', '', AdminTheme::DisplayImage('icons/system/arrow-u.gif','up','','','systemicon'), array('form_id'=>$this->Id,'fbrp_dir'=>'up','field_id'=>$thisField->GetId()));
-				}
-			else
-				{
-				$oneset->up = '&nbsp;';
-				}
-			if ($count < $last)
-				{
-				$oneset->down=$mod->CreateLink($id, 'admin_update_field_order', '', AdminTheme::DisplayImage('icons/system/arrow-d.gif','down','','','systemicon'), array('form_id'=>$this->Id,'fbrp_dir'=>'down','field_id'=>$thisField->GetId()));
-				}
-			else
-				{
-				$oneset->down = '&nbsp;';
-				}
-
-			($currow == "row1"?$currow="row2":$currow="row1");
-			$count++;
-			if ($thisField->GetOrder() >= $maxOrder)
-			  {
-				$maxOrder = $thisField->GetOrder() + 1;
-			  }
-			array_push($fieldList, $oneset);
-		  }
-		  
-		$smarty->assign('fields',$fieldList);
-		$smarty->assign('add_field_link',
-					 $mod->CreateLink($id, 'admin_add_edit_field', $returnid, AdminTheme::DisplayImage('icons/system/newobject.gif',$mod->Lang('title_add_new_field'),'','','systemicon'),array('form_id'=>$this->Id, 'fbrp_order_by'=>$maxOrder), '', false) . $mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_add_new_field'),array('form_id'=>$this->Id, 'fbrp_order_by'=>$maxOrder), '', false));
-
-		if ($mod->GetPreference('enable_fastadd',1) == 1)
-		  {
-			$smarty->assign('fastadd',1);
-			$smarty->assign('title_fastadd',$mod->Lang('title_fastadd'));
-			$typeInput = "<script type=\"text/javascript\">
-		/* <![CDATA[ */
-		/*function fast_add(field_type)
-		{
-		var type=field_type.options[field_type.selectedIndex].value;
-		var link = '".$mod->CreateLink($id, 'admin_add_edit_field', $returnid,'',array('form_id'=>$this->Id, 'fbrp_order_by'=>$maxOrder), '', true,true)."&".$id."fbrp_field_type='+type;
-		this.location=link;
-		return true;
+		$string = trim(htmlspecialchars($string));
+		if ($isForm) {
+		
+			return strtolower($string);
+		} else {
+		
+			return 'fb'.strtolower($string);
 		}
-		/* ]]> */
-		/*</script>";
-			$typeInput = str_replace('&amp;','&',$typeInput); 
-			$mod->initialize();
-			if ($mod->GetPreference('show_field_level','basic') == 'basic')
-				{
-				$smarty->assign('input_fastadd',$typeInput.$mod->CreateInputDropdown($id, 'fbrp_field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->std_field_types), -1,'', 'onchange="fast_add(this)"').
-					$mod->Lang('title_switch_advanced').
-					$mod->CreateLink($id, 'admin_add_edit_form', $returnid,$mod->Lang('title_switch_advanced_link'),array('form_id'=>$this->Id, 'fbrp_set_field_level'=>'advanced')));
-				}
-			else
-				{
-				$smarty->assign('input_fastadd',$typeInput.$mod->CreateInputDropdown($id, 'fbrp_field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->field_types), -1,'', 'onchange="fast_add(this)"').
-				$mod->Lang('title_switch_basic').
-				$mod->CreateLink($id, 'admin_add_edit_form', $returnid,$mod->Lang('title_switch_basic_link'),array('form_id'=>$this->Id, 'fbrp_set_field_level'=>'basic')));
-				}
-		  }							
-		  }
-		else
-		  {
-		$smarty->assign('save_button','');
-		$smarty->assign('submit_button',
-					 $mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('add')));
-		$smarty->assign('fb_hidden',
-					 $mod->CreateInputHidden($id, 'fbrp_form_op',$mod->Lang('added')).$mod->CreateInputHidden($id, 'fbrp_sort','','id="fbrp_sort"'));
-		$smarty->assign('adding',1);
-		  }
-		$smarty->assign('link_notready',"<strong>".$mod->Lang('title_not_ready1')."</strong> ".$mod->Lang('title_not_ready2')." ".$mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_not_ready_link'),array('form_id'=>$this->Id, 'fbrp_order_by'=>$maxOrder,'fbrp_dispose_only'=>1), '', false, false,'class="module_fb_link"')." ".$mod->Lang('title_not_ready3')
-				 );
-
-
-		$smarty->assign('input_inline_form',$mod->CreateInputHidden($id,'fbrp_forma_inline','0').
-				   $mod->CreateInputCheckbox($id,'fbrp_forma_inline','1',$this->GetAttr('inline','0')).
-				   $mod->Lang('title_inline_form_help'));
-
-		$smarty->assign('title_form_submit_button',
-				 $mod->Lang('title_form_submit_button'));
-		$smarty->assign('input_form_submit_button',
-				 $mod->CreateInputText($id, 'fbrp_forma_submit_button_text',
-							   $this->GetAttr('submit_button_text',$mod->Lang('button_submit')), 35, 35));
-		$smarty->assign('title_submit_button_safety',
-				 $mod->Lang('title_submit_button_safety_help'));
-		$smarty->assign('input_submit_button_safety',$mod->CreateInputHidden($id,'fbrp_forma_input_button_safety','0').
-				 $mod->CreateInputCheckbox($id,'fbrp_forma_input_button_safety','1',$this->GetAttr('input_button_safety','0')).
-				 $mod->Lang('title_submit_button_safety'));
-		$smarty->assign('title_form_prev_button',
-				 $mod->Lang('title_form_prev_button'));
-		$smarty->assign('input_form_prev_button',
-				 $mod->CreateInputText($id, 'fbrp_forma_prev_button_text',
-							   $this->GetAttr('prev_button_text',$mod->Lang('button_previous')), 35, 35));
-
-		$smarty->assign('input_title_user_captcha',
-				 $mod->CreateInputText($id, 'fbrp_forma_title_user_captcha',
-						  $this->GetAttr('title_user_captcha',$mod->Lang('title_user_captcha')),35,80));
-		$smarty->assign('title_title_user_captcha',$mod->Lang('title_title_user_captcha'));
-
-		$smarty->assign('input_title_user_captcha_error',
-				 $mod->CreateInputText($id, 'fbrp_forma_captcha_wrong',
-						  $this->GetAttr('captcha_wrong',$mod->Lang('wrong_captcha')),35,80));
-		$smarty->assign('title_user_captcha_error',$mod->Lang('title_user_captcha_error'));
-
-		$smarty->assign('title_form_next_button',
-				 $mod->Lang('title_form_next_button'));
-		$smarty->assign('input_form_next_button',
-				 $mod->CreateInputText($id, 'fbrp_forma_next_button_text',
-							   $this->GetAttr('next_button_text',$mod->Lang('button_continue')), 35, 35));
-		$smarty->assign('title_form_predisplay_udt',
-							 $mod->Lang('title_form_predisplay_udt'));
-		$smarty->assign('title_form_predisplay_each_udt',
-							 $mod->Lang('title_form_predisplay_each_udt'));
-		{
-		  $usertagops = $gCms->GetUserTagOperations();
-		  $usertags = $usertagops->ListUserTags();
-		  $usertaglist = array();
-		  $usertaglist[$mod->lang('none')] = -1;
-		  foreach( $usertags as $key => $value )
-			{
-		  $usertaglist[$value] = $key;
-			}
-		  $smarty->assign('input_form_predisplay_udt',
-				$mod->CreateInputDropdown($id,'fbrp_forma_predisplay_udt',$usertaglist,-1,
-										  $this->GetAttr('predisplay_udt',-1)));
-		  $smarty->assign('input_form_predisplay_each_udt',
-				$mod->CreateInputDropdown($id,'fbrp_forma_predisplay_each_udt',$usertaglist,-1,
-										  $this->GetAttr('predisplay_each_udt',-1)));
-
-		}
-		$smarty->assign('title_form_validate_udt',
-							 $mod->Lang('title_form_validate_udt'));
-		{
-		  $usertagops = $gCms->GetUserTagOperations();
-		  $usertags = $usertagops->ListUserTags();
-		  $usertaglist = array();
-		  $usertaglist[$mod->lang('none')] = -1;
-		  foreach( $usertags as $key => $value )
-			{
-		  $usertaglist[$value] = $key;
-			}
-		  $smarty->assign('input_form_validate_udt',
-				$mod->CreateInputDropdown($id,'fbrp_forma_validate_udt',$usertaglist,-1,
-										  $this->GetAttr('validate_udt',-1)));
-		}
-
-		$smarty->assign('title_form_required_symbol',
-				 $mod->Lang('title_form_required_symbol'));
-		$smarty->assign('input_form_required_symbol',
-				 $mod->CreateInputText($id, 'fbrp_forma_required_field_symbol',
-							   $this->GetAttr('required_field_symbol','*'), 50));
-		$smarty->assign('input_list_delimiter',
-				 $mod->CreateInputText($id, 'fbrp_forma_list_delimiter',
-							   $this->GetAttr('list_delimiter',','), 50));
-
-		$contentops = $gCms->GetContentOperations();
-		$smarty->assign('input_redirect_page',$contentops->CreateHierarchyDropdown('',$this->GetAttr('redirect_page','0'), $id.'fbrp_forma_redirect_page'));
-
-		$smarty->assign('input_form_template',
-				 $mod->CreateTextArea(false, $id,
-					$this->GetAttr('form_template',$this->DefaultTemplate()), 'fbrp_forma_form_template','','fb_form_template',
-					'', '', '80', '15','','html'));
-
-		$smarty->assign('input_submit_javascript',
-			$mod->CreateTextArea(false, $id,
-					$this->GetAttr('submit_javascript',''), 'fbrp_forma_submit_javascript','module_fb_area_short','fb_submit_javascript',
-					'', '', '80', '15','','js').
-					'<br />'.$mod->Lang('title_submit_javascript_long'));
-
-							  
-		$smarty->assign('input_submit_response',
-				 $mod->CreateTextArea(false, $id,
-					$this->GetAttr('submit_response',$this->createSampleTemplate(true,false)),
-					'fbrp_forma_submit_response','module_fb_area_wide','',
-					'', '', '80', '15','','html'));
-
-		$parms = array();
-		$parms['forma_submit_response']['html_button'] = true;
-		$parms['forma_submit_response']['txt_button'] = false;
-		$parms['forma_submit_response']['is_one_line'] = false;
-		$parms['forma_submit_response']['is_email'] = false;
-		$smarty->assign('help_submit_response', $this->AdminTemplateHelp($id,$parms));
-
-		$fb = FormBuilder::getInstance();
-		return $fb->ProcessTemplate('AddEditForm.tpl');
-	}
-*/
-
+	}	
+	
+	
   function AddEditField($id, &$aefield, $dispose_only, $returnid, $message='')
   {
     $mod = $this->module_ptr;
@@ -2162,19 +1653,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
     return $mod->ProcessTemplate('AddEditField.tpl');
   }
 
-  function MakeAlias($string, $isForm=false)
-  {
-    $string = trim(htmlspecialchars($string));
-    if ($isForm)
-      {
-		return strtolower($string);
-      }
-    else
-      {
-		return 'fb'.strtolower($string);
-      }
-  }
-    
+   
   function SwapFieldsByIndex($src_field_index, $dest_field_index)
   {
     $srcField = $this->GetFieldByIndex($src_field_index);
@@ -2188,87 +1667,6 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
     $srcField->Store();
     $destField->Store();
   }
-
-  function &GetFields()
-    {
-      return $this->Fields;
-    }
-
-  function &GetFieldById($field_id)
-    {
-	$index = -1;
-	$ret = false;
-	for ($i=0;$i<count($this->Fields);$i++)
-		{
-		if ($this->Fields[$i]->GetId() == $field_id)
-	    	{
-			$index = $i;
-			}
-		}
-	if ($index != -1)
-		{
-	  	$ret = $this->Fields[$index];
-		}
-	return $ret;
-    }
-
-
-  function &GetFieldByAlias($field_alias)
-    {
-	$index = -1;
-	$ret = false;
-	for ($i=0;$i<count($this->Fields);$i++)
-		{
-		if ($this->Fields[$i]->GetAlias() == $field_alias)
-	    	{
-			$index = $i;
-			}
-		}
-	if ($index != -1)
-		{
-	  	$ret = $this->Fields[$index];
-		}
-	return $ret;
-    }
-
-  function &GetFieldByName($field_name)
-    {
-	$index = -1;
-	$ret = false;
-	for ($i=0;$i<count($this->Fields);$i++)
-		{
-		if ($this->Fields[$i]->GetName() == $field_name)
-	    	{
-			$index = $i;
-			}
-		}
-	if ($index != -1)
-		{
-	  	$ret = $this->Fields[$index];
-		}
-	return $ret;
-    }
-
-
-  function &GetFieldByIndex($field_index)
-    {
-      return $this->Fields[$field_index];
-    }
-
-
-  function GetFieldIndexFromId($field_id)
-  {
-    $index = -1;
-    for ($i=0;$i<count($this->Fields);$i++)
-      {
-	if ($this->Fields[$i]->GetId() == $field_id)
-	  {
-	    $index = $i;
-	  }
-      }
-    return $index;
-  }
-
 
   function DefaultTemplate()
   {
@@ -2334,6 +1732,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	return true;
   }
 
+	// FBR methods, find other way.
 	// Check if FormBroweiser field exists
 	function GetFormBrowserField()
 	{
@@ -2354,9 +1753,9 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		return $fbField;		
 	}
 
-
-  function ReindexResponses()
-  {
+	// FBR methods
+	function ReindexResponses()
+	{
 	@set_time_limit(0);
 	$mod = $this->module_ptr;
 	$db = $this->module_ptr->dbHandle;
@@ -2374,7 +1773,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 			$this->StoreResponse($this_resp,'',$fbr_field);
 			}
 		}
-  }
+	}
 
 
   // FormBrowser >= 0.3 Response load method. This populates the $params array for later processing/combination
@@ -2468,6 +1867,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
       }
   }   
 
+  // FBR methods, or atleast should be.
   // Validation stuff action.validate.php
   function CheckResponse($form_id, $response_id, $code)
   {
@@ -2483,6 +1883,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
     return false;
   }
 
+  // FBR methods
   // Master response inputter
   function StoreResponse($response_id=-1,$approver='',&$formBuilderDisposition)
   {
@@ -2615,6 +2016,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
    return $xml;
   }
 
+  // FBR methods
   // Inserts parsed XML data to database
   function StoreResponseXML($response_id=-1,$newrec=false,$approver='',$sortfield1,
    $sortfield2,$sortfield3,$sortfield4,$sortfield5, $feu_id,$xml)
@@ -2660,28 +2062,246 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	// Some stupid date function
 	function clean_datetime($dt)
 	{
-    return substr($dt,1,strlen($dt)-2);
+		return substr($dt,1,strlen($dt)-2);
 	}
   
-  // When downloading form.
-  function ExportXML($exportValues = false)
-  {
-	$xmlstr = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
-	$xmlstr .= "<form id=\"".$this->Id."\"\n";
-	$xmlstr .= "\talias=\"".$this->Alias."\">\n";
-	$xmlstr .= "\t\t<form_name><![CDATA[".$this->Name."]]></form_name>\n";
-   foreach ($this->Attrs as $thisAttrKey=>$thisAttrValue)
-      {
-		$xmlstr .= "\t\t<attribute key=\"$thisAttrKey\"><![CDATA[$thisAttrValue]]></attribute>\n";
-		}
-	foreach($this->Fields as $thisField)
-		{
-		$xmlstr .= $thisField->ExportXML($exportValues);
-		}
-	$xmlstr .= "</form>\n";
-	return $xmlstr;
-  }
   
+	/**
+	* Form XML import method
+	* NOTE: Check WTF this actually does.
+	* NOTE: fbrp_xml_file -- source file for the XML
+	* NOTE: xml_string -- source string for the XML
+	*
+	* @final
+	* @access public
+	* @return boolean
+	*/	  
+	public final function ImportXML(&$params)
+	{
+		// xml_parser_create, xml_parse_into_struct
+		$parser = xml_parser_create('');
+		xml_parser_set_option( $parser, XML_OPTION_CASE_FOLDING, 0 );
+		xml_parser_set_option( $parser, XML_OPTION_SKIP_WHITE, 0 ); // was 1
+		if (isset($params['fbrp_xml_file']) && ! empty($params['fbrp_xml_file']))
+		{
+		xml_parse_into_struct($parser, file_get_contents($params['fbrp_xml_file']), $values);
+		}
+		elseif (isset($params['xml_string']) && ! empty($params['xml_string']))
+		{
+		xml_parse_into_struct($parser, $params['xml_string'], $values);
+		}
+		else
+		{
+		return false;
+		}
+		xml_parser_free($parser);
+		$elements = array();
+		$stack = array();
+		$fieldMap = array();
+		foreach ( $values as $tag )
+		{
+		$index = count( $elements );
+		if ( $tag['type'] == "complete" || $tag['type'] == "open" )
+		{
+		$elements[$index] = array();
+		$elements[$index]['name'] = $tag['tag'];
+		$elements[$index]['attributes'] = empty($tag['attributes']) ? "" : $tag['attributes'];
+		$elements[$index]['content']    = empty($tag['value']) ? "" : $tag['value'];
+		if ( $tag['type'] == "open" )
+		{
+		# push
+		$elements[$index]['children'] = array();
+		$stack[count($stack)] = &$elements;
+		$elements = &$elements[$index]['children'];
+		}
+		}
+		if ( $tag['type'] == "close" )
+		{    # pop
+		$elements = &$stack[count($stack) - 1];
+		unset($stack[count($stack) - 1]);
+		}
+		}
+		//debug_display($elements);
+		if (!isset($elements[0]) || !isset($elements[0]) || !isset($elements[0]['attributes']))
+		{
+		//parsing failed, or invalid file.
+		return false;
+		}
+		$params['form_id'] = -1; // override any form_id values that may be around
+		$formAttrs = &$elements[0]['attributes'];
+
+		if (isset($params['fbrp_import_formalias']) && !empty($params['fbrp_import_formalias']))
+		{
+		$this->SetAlias($params['fbrp_import_formalias']);
+		}
+		else if ($this->inXML($formAttrs['alias']))
+		{
+		$this->SetAlias($formAttrs['alias']);
+		}
+		if (isset($params['fbrp_import_formname']) && !empty($params['fbrp_import_formname']))
+		{
+		$this->SetName($params['fbrp_import_formname']);
+		}
+		$foundfields = false;
+		// populate the attributes and field name first. When we see a field, we save the form and then start adding the fields to it.
+
+		foreach ($elements[0]['children'] as $thisChild)
+		{
+			if ($thisChild['name'] == 'form_name')
+			{
+			$curname =  $this->GetName();
+			if (empty($curname))
+			{
+			$this->SetName($thisChild['content']);
+			}
+			}
+			elseif ($thisChild['name'] == 'attribute')
+			{
+			$this->SetAttr($thisChild['attributes']['key'], $thisChild['content']);
+			}
+			else
+			{
+			// we got us a field
+			if (! $foundfields)
+			{
+			// first field
+			$foundfields = true;
+			if( isset($params['fbrp_import_formname']) && 
+			trim($params['fbrp_import_formname']) != '')
+			{
+			$this->SetName(trim($params['fbrp_import_formname']));
+			}
+			if( isset($params['fbrp_import_formalias']) &&
+			trim($params['fbrp_import_formname']) != '')
+			{
+			$this->SetAlias(trim($params['fbrp_import_formalias']));
+			}
+			$this->Store();
+			$params['form_id'] = $this->GetId();
+			}
+			//debug_display($thisChild);
+			$fieldAttrs = &$thisChild['attributes'];
+			$className = $this->MakeClassName($fieldAttrs['type'], '');
+			//debug_display($className);
+			$newField = new $className($this, $params);
+			$oldId = $fieldAttrs['id'];
+
+			if ($this->inXML($fieldAttrs['alias']))
+			{
+			$newField->SetAlias($fieldAttrs['alias']);
+			}
+			$newField->SetValidationType($fieldAttrs['validation_type']);
+			if ($this->inXML($fieldAttrs['order_by']))
+			{
+			$newField->SetOrder($fieldAttrs['order_by']);
+			}
+			if ($this->inXML($fieldAttrs['required']))
+			{
+			$newField->SetRequired($fieldAttrs['required']);
+			}
+			if ($this->inXML($fieldAttrs['hide_label']))
+			{
+			$newField->SetHideLabel($fieldAttrs['hide_label']);
+			}
+			foreach ($thisChild['children'] as $thisOpt)
+			{	
+			if ($thisOpt['name'] == 'field_name')
+			{
+			$newField->SetName($thisOpt['content']);
+			}
+			if ($thisOpt['name'] == 'options')
+			{
+			foreach ($thisOpt['children'] as $thisOption)
+			{
+			$newField->OptionFromXML($thisOption);
+			}
+			}
+			}
+			$newField->Store(true);
+			array_push($this->Fields,$newField);
+			$fieldMap[$oldId] = $newField->GetId();
+			}
+		}
+
+		// clean up references
+		if (isset($params['fbrp_xml_file']) && ! empty($params['fbrp_xml_file'])) {
+		
+			// need to update mappings in templates.
+			$tmp = $this->updateRefs($this->GetAttr('form_template',''), $fieldMap);
+			$this->SetAttr('form_template',$tmp);
+			$tmp = $this->updateRefs($this->GetAttr('submit_response',''), $fieldMap);
+			$this->SetAttr('submit_response',$tmp);
+
+			// need to update mappings in field templates.
+			$options = array('email_template','file_template');
+			foreach($this->Fields as $fid=>$thisField)
+			{
+				$changes = false;
+				foreach ($options as $to) {
+				
+					$templ = $thisField->GetOption($to,'');
+					if (!empty($templ))
+					{
+					$tmp = $this->updateRefs($templ, $fieldMap);
+					$thisField->SetOption($to,$tmp);
+					$changes = true;
+					}
+				}
+				
+				// need to update mappings in FormBrowser sort fields
+				if ($thisField->GetFieldType() == 'DispositionFormBrowser') {
+				
+					for ($i=1;$i<6;$i++)
+					{
+						$old = $thisField->GetOption('sortfield'.$i);
+						if (isset($fieldMap[$old])) {
+						
+							$thisField->SetOption('sortfield'.$i,$fieldMap[$old]);
+							$changes = true;
+						}
+					}
+				}
+				
+				if ($changes) {
+				
+					$thisField->Store(true);
+				}
+			}
+
+			$this->Store();
+		}
+
+		return true;	
+	}  
+  
+	/**
+	* Form XML export method
+	*
+	* @final
+	* @access public
+	* @return string
+	*/
+	public final function ExportXML($exportValues = false)
+	{
+		$xmlstr = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+		$xmlstr .= "<form id=\"".$this->getId()."\"\n";
+		$xmlstr .= "\talias=\"".$this->getAlias()."\">\n";
+		$xmlstr .= "\t\t<form_name><![CDATA[".$this->getName()."]]></form_name>\n";
+		foreach ($this->Attrs as $thisAttrKey=>$thisAttrValue) {
+		
+			$xmlstr .= "\t\t<attribute key=\"$thisAttrKey\"><![CDATA[$thisAttrValue]]></attribute>\n";
+		}
+		
+		foreach($this->Fields as $thisField) {
+		
+			$xmlstr .= $thisField->ExportXML($exportValues);
+		}
+		$xmlstr .= "</form>\n";
+		
+		return $xmlstr;
+	}
+  
+  // deprecate
   function GetFormBrowsersForForm()
 	{
 		$db = $this->module_ptr->dbHandle;
