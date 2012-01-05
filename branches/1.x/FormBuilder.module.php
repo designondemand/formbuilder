@@ -38,31 +38,35 @@ class FormBuilder extends CMSModule
 	var $disp_field_types;
 	var $std_field_types;
 	var $all_validation_types;
-	var $module_ptr;
-	var $module_id;
+	var $module_ptr; // deprecate
+	var $module_id; // deprecate
 	var $email_regex;
 	var $email_regex_relaxed;
-	var $dbHandle;
+	var $dbHandle; // deprecate
 
 	#---------------------
-	# Module api methods
-	#---------------------		
+	# Magic methods
+	#---------------------
 	
 	function __construct()
 	{
 		parent::__construct();
 
-		$this->module_ptr = &$this;
-		$this->dbHandle =  $this->GetDb();
-		$this->module_id = '';
-		$this->email_regex = "/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i";
-		$this->email_regex_relaxed="/^([\w\d\.\-\_])+\@([\w\d\.\-\_])+$/i";
+		$this->module_ptr = &$this; // needed?
+		$this->dbHandle =  $this->GetDb(); // needed?
+		$this->module_id = ''; // needed?
+		$this->email_regex = "/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i"; // at wrong place?
+		$this->email_regex_relaxed="/^([\w\d\.\-\_])+\@([\w\d\.\-\_])+$/i"; // at wrong place?
 		
-		require_once dirname(__FILE__).'/classes/Form.class.php';
-		require_once dirname(__FILE__).'/classes/FieldBase.class.php';		
-		
+		// Move these to lib dir and use autoloader
+		//require_once dirname(__FILE__).'/classes/Form.class.php';
+		//require_once dirname(__FILE__).'/classes/FieldBase.class.php';
 	}
 
+	#---------------------
+	# Module api methods
+	#---------------------	
+	
 	function AllowAutoInstall()
 	{
 		return FALSE;
@@ -208,9 +212,7 @@ class FormBuilder extends CMSModule
 
 	function DoAction($name,$id,$params,$returnid='')
 	{
-	
-		global $gCms;
-		$smarty =& $gCms->GetSmarty();
+		$smarty = cmsms()->GetSmarty();
 		
 		$this->module_id = $id;
 		parent::DoAction($name,$id,$params,$returnid);
@@ -248,7 +250,7 @@ class FormBuilder extends CMSModule
 	
 	function initialize()
 	{
-		$dir=opendir(dirname(__FILE__).'/classes');
+		$dir=opendir(dirname(__FILE__).'/lib/fields');
 		$this->field_types = array();
 		while($filespec=readdir($dir))
 		{

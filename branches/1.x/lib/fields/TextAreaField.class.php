@@ -12,19 +12,17 @@ class fbTextAreaField extends fbFieldBase {
 	function fbTextAreaField(&$form_ptr, &$params)
 	{
 		$this->fbFieldBase($form_ptr, $params);
-		$mod = $form_ptr->module_ptr;
 		$this->Type = 'TextAreaField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
-            $mod->Lang('validation_none')=>'none',
-			$mod->Lang('validation_length')=>'length'
+            $this->Lang('validation_none')=>'none',
+			$this->Lang('validation_length')=>'length'
             );
-
 	}
 
 	function GetFieldInput($id, &$params, $returnid)
 	{            
-		$mod = $this->form_ptr->module_ptr;	
+		$mod = &$this;	
 		if ($this->GetOption('html5','0') == '1'){
 			$ret = $mod->CreateTextArea(($this->GetOption('wysiwyg','0') == '1'?true:false),$id,$this->Value,
 					'fbrp__'.$this->Id,'',$this->GetCSSId(),'','',$this->GetOption('cols','80'),$this->GetOption('rows','15'),
@@ -48,7 +46,7 @@ class fbTextAreaField extends fbFieldBase {
 	function Validate(){
 		$this->validated = true;
 		$this->validationErrorText = '';
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
 		$length = $this->GetOption('length','');
 		if(is_numeric($length) && $length > 0){
 			if((strlen($this->Value)-1) > $length){
@@ -62,7 +60,7 @@ class fbTextAreaField extends fbFieldBase {
 
 	function StatusInfo()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
 		$ret = '';
 
 		if (strlen($this->ValidationType)>0) {
@@ -87,7 +85,7 @@ class fbTextAreaField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-	   $mod = $this->form_ptr->module_ptr;
+	   $mod = &$this;
 	   $main = array(
          	array($mod->Lang('title_use_wysiwyg'),$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_wysiwyg','0').
 						$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_wysiwyg','1',$this->GetOption('wysiwyg','0'))),
@@ -114,7 +112,7 @@ class fbTextAreaField extends fbFieldBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
 		
 		// hide "javascript"
 		$this->RemoveAdminField($advArray, $mod->Lang('title_field_javascript'));

@@ -11,21 +11,20 @@ class fbCheckboxField extends fbFieldBase {
 
 	function fbCheckboxField(&$form_ptr, &$params)
 	{
-        $this->fbFieldBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
+        parent::fbFieldBase($form_ptr, $params);
 		$this->Type =  'CheckboxField';
 		$this->DisplayInForm = true;
 		$this->NonRequirableField = false;
 		$this->ValidationTypes = array(
-            $mod->Lang('validation_none')=>'none',
-            $mod->Lang('validation_must_check')=>'checked'
+            $this->Lang('validation_none')=>'none',
+            $this->Lang('validation_must_check')=>'checked'
             );
       $this->sortable = false;
 	}
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;
 		$label = '';
 		if (strlen($this->GetOption('label','')) > 0)
 			{
@@ -41,7 +40,7 @@ class fbCheckboxField extends fbFieldBase {
 
 	function GetHumanReadableValue($as_string=true)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;
 		if ($this->Value === false)
 			{
 			$ret = $this->GetOption('unchecked_value',$mod->Lang('value_unchecked'));
@@ -63,7 +62,7 @@ class fbCheckboxField extends fbFieldBase {
 
 	function StatusInfo()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;
 		$ret =  ($this->GetOption('is_checked','0')=='1'?$mod->Lang('checked_by_default'):$mod->Lang('unchecked_by_default'));
 		if (strlen($this->ValidationType)>0)
 		  {
@@ -74,7 +73,7 @@ class fbCheckboxField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;
 		$main = array(
 			array($mod->Lang('title_checkbox_label'),
             		$mod->CreateInputText($formDescriptor, 'fbrp_opt_label',
@@ -95,7 +94,7 @@ class fbCheckboxField extends fbFieldBase {
 
 	function Validate()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;
 		$this->validated = true;
 		$this->validationErrorText = '';
 

@@ -12,22 +12,21 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 
 	function fbDispositionFromEmailAddressField(&$form_ptr, &$params)
 	{
-      $this->fbDispositionEmailBase($form_ptr, $params);
-      $mod = $form_ptr->module_ptr;
+		$this->fbDispositionEmailBase($form_ptr, $params);
 		$this->Type = 'DispositionFromEmailAddressField';
-      $this->IsDisposition = true;
+		$this->IsDisposition = true;
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
-			$mod->Lang('validation_none')=>'none',
-            $mod->Lang('validation_email_address')=>'email',
-            );
-	$this->modifiesOtherFields = true;
-	$this->NonRequirableField = false;	
+				$this->Lang('validation_none')=>'none',
+				$this->Lang('validation_email_address')=>'email',
+				);
+		$this->modifiesOtherFields = true;
+		$this->NonRequirableField = false;	
 	}
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;
 		$js = $this->GetOption('javascript','');
 		$retstr = '<input type="text" name="'.$id.'fbrp__'.$this->Id.'[]" '.
 			$this->GetCSSIdTag('_1').' value="'.htmlspecialchars($this->Value[0], ENT_QUOTES).
@@ -125,7 +124,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;
 		list($main,$adv) = $this->PrePopulateAdminFormBase($formDescriptor);
 		$opts = array($mod->Lang('option_never')=>'n',$mod->Lang('option_user_choice')=>'c',$mod->Lang('option_always')=>'a');
 		array_push($main,array($mod->Lang('title_send_usercopy'),
@@ -141,14 +140,14 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;
 		$this->RemoveAdminField($mainArray, $mod->Lang('title_email_from_address'));
 	}
 
 
 	function ModifyOtherFields()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;
 		$others = $this->form_ptr->GetFields();
 		$htm = $this->GetOption('headers_to_modify','f');
 		if ($this->Value !== false)

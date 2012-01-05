@@ -13,28 +13,26 @@ class fbDatePickerField extends fbFieldBase {
 	
 	function fbDatePickerField(&$form_ptr, &$params)
 	{
-        $mod = $form_ptr->module_ptr;	
-	
         $this->fbFieldBase($form_ptr, $params);
 		$this->Type = 'DatePickerField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
-            $mod->Lang('validation_none')=>'none',
+            $this->Lang('validation_none')=>'none',
             );
         $this->Months = array(
 			''=>'',
-            $mod->Lang('date_january')=>1,
-            $mod->Lang('date_february')=>2,
-            $mod->Lang('date_march')=>3,
-            $mod->Lang('date_april')=>4,
-            $mod->Lang('date_may')=>5,
-            $mod->Lang('date_june')=>6,
-            $mod->Lang('date_july')=>7,
-            $mod->Lang('date_august')=>8,
-            $mod->Lang('date_september')=>9,
-            $mod->Lang('date_october')=>10,
-            $mod->Lang('date_november')=>11,
-            $mod->Lang('date_december')=>12);
+            $this->Lang('date_january')=>1,
+            $this->Lang('date_february')=>2,
+            $this->Lang('date_march')=>3,
+            $this->Lang('date_april')=>4,
+            $this->Lang('date_may')=>5,
+            $this->Lang('date_june')=>6,
+            $this->Lang('date_july')=>7,
+            $this->Lang('date_august')=>8,
+            $this->Lang('date_september')=>9,
+            $this->Lang('date_october')=>10,
+            $this->Lang('date_november')=>11,
+            $this->Lang('date_december')=>12);
     $this->hasMultipleFormComponents = true;
     $this->labelSubComponents = false;
 	}
@@ -42,7 +40,7 @@ class fbDatePickerField extends fbFieldBase {
 
     function StatusInfo()
 	{
-      $mod = $this->form_ptr->module_ptr;
+      $mod = &$this;	
       $today = getdate();
 		return $mod->Lang("date_range",array($this->GetOption('start_year',($today['year']-10)) ,
          $this->GetOption('end_year',($today['year']+10)))).
@@ -52,7 +50,7 @@ class fbDatePickerField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
        $today = getdate();
        $Days = array(''=>'');
        for ($i=1;$i<32;$i++)
@@ -123,7 +121,7 @@ class fbDatePickerField extends fbFieldBase {
 
 	function GetHumanReadableValue($as_string=true)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
 		if ($this->HasValue())
 			{
 			// Original:  Day, Month, Year
@@ -173,7 +171,7 @@ class fbDatePickerField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
       $today = getdate();
 		$main = array(
 			array($mod->Lang('title_date_format'),

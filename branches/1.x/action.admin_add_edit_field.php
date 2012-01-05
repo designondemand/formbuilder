@@ -11,7 +11,7 @@ if (! $this->CheckAccess()) exit;
 
 		$this->initialize();
 		
-		$aeform = new fbForm($this, $params,true);
+		$aeform = new fbForm($params,true);
 		$aefield = $aeform->NewField($params);
 		if (isset($params['fbrp_aef_upd']) ||
 			(isset($params['fbrp_aef_add']) && $aefield->GetFieldType() != ''))
