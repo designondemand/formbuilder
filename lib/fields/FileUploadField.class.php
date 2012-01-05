@@ -8,17 +8,14 @@ class fbFileUploadField extends fbFieldBase {
 	function fbFileUploadField(&$form_ptr, &$params)
 	{
 		$this->fbFieldBase($form_ptr, $params);
-		$mod = $form_ptr->module_ptr;
 		$this->Type = 'FileUploadField';
-		$this->ValidationTypes = array(
-					   $mod->Lang('validation_none')=>'none');
 		$this->sortable = false;
 		$this->IsFileUpload = true;	 
 	}
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
 		$js = $this->GetOption('javascript','');
 		$txt = '';
 		if($this->Value != '') $txt .= $this->GetHumanReadableValue()."<br />";	// Value line
@@ -44,7 +41,7 @@ class fbFileUploadField extends fbFieldBase {
 
 	function Load($id, &$params, $loadDeep=false)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
 		parent::Load($id,$params,$loadDeep);
 
 		if(isset($_FILES) && isset($_FILES[$mod->module_id.'fbrp__'.$this->Id]) && $_FILES[$mod->module_id.'fbrp__'.$this->Id]['size'] > 0) {
@@ -60,7 +57,7 @@ class fbFileUploadField extends fbFieldBase {
 			return '';
 		}
 		
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
 		if ($as_string && is_array($this->Value) && isset($this->Value[1])) {
 		
 			return $this->Value[1];
@@ -72,7 +69,7 @@ class fbFileUploadField extends fbFieldBase {
 
 	function StatusInfo()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
 		$ms = $this->GetOption('max_size','');
 		$exts = $this->GetOption('permitted_extensions','');
 		$ret = '';
@@ -105,8 +102,8 @@ class fbFileUploadField extends fbFieldBase {
   
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		global $gCms;
-		$mod = $this->form_ptr->module_ptr;
+		$gCms = cmsms();
+		$mod = &$this;	
 		$ms = $this->GetOption('max_size');
 		$exts = $this->GetOption('permitted_extensions');
 		$show = $this->GetOption('show_details','0');
@@ -211,7 +208,7 @@ class fbFileUploadField extends fbFieldBase {
 		$this->validationErrorText = '';
 		$ms = $this->GetOption('max_size');
 		$exts = $this->GetOption('permitted_extensions','');
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
 		//$fullAlias = $this->GetValue(); -- Stikki modifys: Now gets correct alias
 		$fullAlias = $mod->module_id.'fbrp__'.$this->Id;
 		if ($_FILES[$fullAlias]['size'] < 1 && ! $this->Required)
@@ -255,7 +252,7 @@ class fbFileUploadField extends fbFieldBase {
 	function HandleFileUpload()
 	{
 
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
 		$_id = $mod->module_id.'fbrp__'.$this->Id;
 		
 		if(isset($_FILES[$_id]) && $_FILES[$_id]['size'] > 0) {

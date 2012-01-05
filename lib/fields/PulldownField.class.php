@@ -7,41 +7,52 @@
   This project's homepage is: http://www.cmsmadesimple.org
 */
 
-class fbMultiselectField extends fbFieldBase {
+class fbPulldownField extends fbFieldBase {
 
 	var $optionCount;
 	var $optionAdd;
 
-	function fbMultiselectField(&$form_ptr, &$params)
+    function array_sort_by_key($input)
 	{
-       $this->fbFieldBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
-		$this->Type = 'MultiselectField';
+		if( !is_array($input) ) return;
+		$a1 = array();
+		foreach( $input as $k => $v ) {
+			$a1[$v] = $k;
+		}
+		asort($a1);
+		$a2 = array();
+		foreach( $a1 as $k => $v ) {
+			$a2[$v] = $k;
+		}
+		return $a2;
+	}
+
+	function fbPulldownField(&$form_ptr, &$params)
+	{
+		parent::fbFieldBase($form_ptr, $params);
+		$this->Type = 'PulldownField';
 		$this->DisplayInForm = true;
-		$this->NonRequirableField = false;
 		$this->HasAddOp = true;
 		$this->HasDeleteOp = true;
-		$this->ValidationTypes = array(
-            );
+		$this->ValidationTypes = array();
         $this->optionAdd = 0;
-        $this->sortable = false;
 	}
 
 	function GetOptionAddButton()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;
 		return $mod->Lang('add_options');
 	}
 
 	function GetOptionDeleteButton()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;
 		return $mod->Lang('delete_options');
 	}
 
 	function DoOptionAdd(&$params)
 	{
-		$this->optionAdd = 2;
+		$this->optionAdd = 1;
 	}
 
 	function DoOptionDelete(&$params)
@@ -77,46 +88,39 @@ class fbMultiselectField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;
 		$js = $this->GetOption('javascript','');
 
 		// why all this? Associative arrays are not guaranteed to preserve
 		// order, except in "chronological" creation order.
 		$sorted =array();
 		$subjects = $this->GetOptionRef('option_name');
-
-		if (count($subjects) > 1)
-			{
-			for($i=0;$i<count($subjects);$i++)
-				{
+		if (count($subjects) > 1) {
+			for($i=0;$i<count($subjects);$i++) {
 				$sorted[$subjects[$i]]=($i+1);
-				}
 			}
-		else
-			{
+			if( $this->GetOption('sort') == '1' ) {
+				ksort($sorted);
+			}
+		}
+		else {
 			$sorted[$subjects] = '1';
-			}
-		if ($this->Value === false)
-			{
-			$val = array();
-			}
-		elseif (!is_array($this->Value))
-			{
-			$val = array($this->Value);
-			}
-		else
-			{
-			$val = $this->Value;
-			}
-		return $mod->CreateInputSelectList($id, 'fbrp__'.$this->Id.'[]', $sorted,$val, $this->GetOption('lines','3'),
-         $js.$this->GetCSSIdTag());
+		}
+
+		if ($this->GetOption('select_one','') != '') {
+			$sorted = array(' '.$this->GetOption('select_one','')=>'') + $sorted;
+		}
+		else {
+			$sorted = array(' '.$mod->Lang('select_one')=>'') + $sorted;
+		}
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value,$js.$this->GetCSSIdTag());
 	}
 
 
 
     function StatusInfo()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;
 		$opt = $this->GetOption('option_name','');
 		
 		if (is_array($opt))
@@ -137,7 +141,7 @@ class fbMultiselectField extends fbFieldBase {
 	
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;
 
 		$this->countItems();
 		if ($this->optionAdd > 0)
@@ -145,66 +149,58 @@ class fbMultiselectField extends fbFieldBase {
 			$this->optionCount += $this->optionAdd;
 			$this->optionAdd = 0;
 			}
-		$dests = '<table class="module_fb_table"><tr><th>'.$mod->Lang('title_option_name').'</th><th>'.
+		$dests = '<table class="pagetable module_fb_table"><tr><th>'.$mod->Lang('title_option_name').'</th><th>'.
 			$mod->Lang('title_option_value').'</th><th>'.
 			$mod->Lang('title_delete').'</th></tr>';
 
-
+		$odd = false;
 		for ($i=0;$i<($this->optionCount>1?$this->optionCount:1);$i++)
 			{
-			$dests .=  '<tr><td>'.
+			$dests .=  '<tr class="'.($odd?'row1':'row2').'"><td>'.
             		$mod->CreateInputText($formDescriptor, 'fbrp_opt_option_name[]',$this->GetOptionElement('option_name',$i),25,128).
             		'</td><td>'.
             		$mod->CreateInputText($formDescriptor, 'fbrp_opt_option_value[]',$this->GetOptionElement('option_value',$i),25,128).
             		'</td><td>'.
             		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_del_'.$i, $i,-1).
              		'</td></tr>';
+					$odd = !$odd;
 			}
 		$dests .= '</table>';
 		$main = array();
 		$adv = array();
-		array_push($main,array($mod->Lang('title_lines_to_show'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_lines',$this->GetOption('lines','3'),10,10)));
-		array_push($main,array($mod->Lang('title_multiselect_details'),$dests));
+		$main[] = array($mod->Lang('title_select_one_message'),
+						$mod->CreateInputText($formDescriptor, 'fbrp_opt_select_one',
+											  $this->GetOption('select_one',$mod->Lang('select_one')),25,128));
+		$main[] = array($mod->Lang('sort_options'),
+						$mod->CreateInputDropdown($formDescriptor,'fbrp_opt_sort',
+												  array('Yes'=>1,'No'=>0),-1,
+												  $this->GetOption('sort',0)));
+		array_push($main,array($mod->Lang('title_pulldown_details'),$dests));
 		return array('main'=>$main,'adv'=>$adv);
 	}
 
+
 	function GetHumanReadableValue($as_string=true)
 	{
-		$mod = $this->form_ptr->module_ptr;
-		$form = $this->form_ptr;
-		$vals = $this->GetOptionRef('option_value');
+		$mod = &$this;
 		if ($this->HasValue())
 			{
-			$fieldRet = array();
-			if (! is_array($this->Value))
-				{
-				$this->Value = array($this->Value);
-				}
-			foreach ($this->Value as $thisOne)
-				{
-				array_push($fieldRet,$vals[$thisOne - 1]);
-				}
-			if ($as_string)
-				{
-				return join($form->GetAttr('list_delimiter',','),$fieldRet);
-				}
-			else
-				{
-				return array($fieldRet);
-				}			
+			$ret = $this->GetOptionElement('option_value',($this->Value-1));
 			}
 		else
 			{
-			if ($as_string)
-				{
-				return $mod->Lang('unspecified');
-				}
-			else
-				{
-				return array($mod->Lang('unspecified'));
-				}
+			//$ret = $mod->Lang('unspecified');
+			$ret = $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
 			}
-	
-	}	
+		if ($as_string)
+			{
+			return $ret;
+			}
+		else
+			{
+			return array($ret);
+			}
+	}
+
 }
 ?>

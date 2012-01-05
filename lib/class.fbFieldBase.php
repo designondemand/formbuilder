@@ -1,11 +1,33 @@
 <?php
-/* 
-   FormBuilder. Copyright (c) 2005-2006 Samuel Goldstein <sjg@cmsmodules.com>
-   More info at http://dev.cmsmadesimple.org/projects/formbuilder
-   
-   A Module for CMS Made Simple, Copyright (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
-  This project's homepage is: http://www.cmsmadesimple.org
-*/
+#-------------------------------------------------------------------------
+# Module: FormBuilder
+# Version: 1.0, released 2012
+#
+# Copyright (c) 2007, Samuel Goldstein <sjg@cmsmodules.com>
+# For Information, Support, Bug Reports, etc, please visit the
+# CMS Made Simple Forge:
+# http://dev.cmsmadesimple.org/projects/formbuilder/
+#
+#-------------------------------------------------------------------------
+# CMS - CMS Made Simple is (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
+# This project's homepage is: http://www.cmsmadesimple.org
+#-------------------------------------------------------------------------
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+# Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
+#
+#-------------------------------------------------------------------------
 
 abstract class fbFieldBase {
 
@@ -45,18 +67,29 @@ abstract class fbFieldBase {
   var $Options;
   var $loaded;
   var $sortable;
+  private static $ModuleInstance;
 
   function fbFieldBase(&$form_ptr, &$params)
   {
+	
+    if (!isset($this->ModuleInstance)) {
 
-	$this->form_ptr = $form_ptr;
-	$mod = $form_ptr->module_ptr;
+		$mod = cmsms()->GetModuleinstance('FormBuilder');
+		
+		if(is_object($mod)) {
+		
+			$this->ModuleInstance = &$mod;
+		}
+    }	
+	
+	$this->form_ptr = &$this;
+	//$mod = $form_ptr->module_ptr;
 	$this->Options = array();
 	$this->DisplayInForm = true;
 	$this->DisplayInSubmission = true;
 	$this->IsDisposition = false;
 	$this->IsEmailDisposition = false;
-	$this->ValidationTypes = array($mod->Lang('validation_none')=>'none');
+	$this->ValidationTypes = array($this->Lang('validation_none')=>'none');
 	$this->loaded = false;
 	$this->NonRequirableField = false;
 	$this->HasAddOp = false;
@@ -138,6 +171,26 @@ abstract class fbFieldBase {
 		
   } // end of __construct()
 
+	#---------------------
+	# Shadow module methods
+	#---------------------  
+  
+	public function Lang() {
+	
+		$mod = $this->ModuleInstance;
+		
+		if(is_object($mod)) {
+				
+			$mod->LoadLangMethods();
+
+			$args = func_get_args();
+			array_unshift($args,'');
+			$args[0] = &$mod;
+
+			return call_user_func_array('cms_module_Lang', $args);
+		}
+	}
+  
   function HasMultipleFormComponents()
   {
     return $this->hasMultipleFormComponents;
@@ -476,7 +529,7 @@ abstract class fbFieldBase {
   // override me with a displayable type
   function GetDisplayFriendlyType()
   {
-    return $this->form_ptr->module_ptr->Lang('field_type_'.$this->Type);
+    return $this->Lang('field_type_'.$this->Type);
   }
   
 
@@ -1089,8 +1142,10 @@ abstract class fbFieldBase {
   // loadDeep also loads all options for a field.
   function Load($id, &$params, $loadDeep=false)
   {
+	$db = cmsms()->GetDb();  
+  
     $sql = 'SELECT * FROM ' . cms_db_prefix() . 'module_fb_field WHERE field_id=?';
-    if($result = $this->form_ptr->module_ptr->dbHandle->GetRow($sql, array($this->Id)))
+    if($result = $db->GetRow($sql, array($this->Id)))
       {
 	if (strlen($this->Name) < 1)
 	  {
@@ -1118,10 +1173,9 @@ abstract class fbFieldBase {
     $this->loaded = true;
     if ($loadDeep)
       {
-	$sql = 'SELECT name, value FROM ' . cms_db_prefix() .
-	  'module_fb_field_opt WHERE field_id=? ORDER BY option_id';
-	$rs = $this->form_ptr->module_ptr->dbHandle->Execute($sql,
-							     array($this->Id));
+	$sql = 'SELECT name, value FROM ' . cms_db_prefix() .'module_fb_field_opt WHERE field_id=? ORDER BY option_id';
+	$rs = $db->Execute($sql, array($this->Id));
+	
 	$tmpOpts = array();
 	while ($rs && $results = $rs->FetchRow())
 	  {

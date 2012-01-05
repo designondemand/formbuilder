@@ -27,7 +27,7 @@ if( (isset($params['inline'])) && preg_match('/t(rue)*|y(yes)*|1/i',$params['inl
 
 
 $fbrp_callcount = 0;
-$aeform = new fbForm($this,$params,true,true);
+$aeform = new fbForm($params,true,true);
 
 $fld = $aeform->GetFormBrowserField();
 if ($fld !== false && $fld->GetOption('feu_bind','0')=='1')

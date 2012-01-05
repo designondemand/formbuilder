@@ -14,15 +14,14 @@ class fbTimePickerField extends fbFieldBase {
 	function fbTimePickerField(&$form_ptr, &$params)
 	{
         $this->fbFieldBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
 		$this->Type = 'TimePickerField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
-            $mod->Lang('validation_none')=>'none',
+            $this->Lang('validation_none')=>'none',
             );
       $this->flag12hour = array(
-		  	$mod->Lang('title_before_noon')=>$mod->Lang('title_before_noon'),
-        	$mod->Lang('title_after_noon')=>$mod->Lang('title_after_noon'));
+		  	$this->Lang('title_before_noon')=>$this->Lang('title_before_noon'),
+        	$this->Lang('title_after_noon')=>$this->Lang('title_after_noon'));
     $this->hasMultipleFormComponents = true;
     $this->labelSubComponents = false;
 	}
@@ -30,14 +29,14 @@ class fbTimePickerField extends fbFieldBase {
 
     function StatusInfo()
 	{
-      $mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
 		return ($this->GetOption('24_hour','0') == '0'?$mod->Lang('12_hour'):$mod->Lang('24_hour'));
 	}
 
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
 		$js = $this->GetOption('javascript','');
 		
        $now = localtime(time(),true);
@@ -133,7 +132,7 @@ class fbTimePickerField extends fbFieldBase {
 
 	function GetHumanReadableValue($as_string=true)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
 		if ($this->HasValue())
 			{
 			if ($this->GetOption('24_hour','0') == '0')
@@ -164,7 +163,7 @@ class fbTimePickerField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = &$this;	
 		$main = array(
 			array($mod->Lang('title_24_hour'),
             		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_24_hour',

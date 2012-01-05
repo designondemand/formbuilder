@@ -7,13 +7,12 @@
   This project's homepage is: http://www.cmsmadesimple.org
 */
 
-class fbFieldsetEnd extends fbFieldBase {
+class fbFieldsetStart extends fbFieldBase {
 
-  function fbFieldsetEnd(&$form_ptr, &$params)
+  function fbFieldsetStart(&$form_ptr, &$params)
   {
-    $this->fbFieldBase($form_ptr, $params);
-    $mod = $form_ptr->module_ptr;
-    $this->Type = 'FieldsetEnd';
+    parent::fbFieldBase($form_ptr, $params);
+    $this->Type = 'FieldsetStart';
     $this->DisplayInForm = true;
     $this->DisplayInSubmission = false;
     $this->NonRequirableField = true;
@@ -25,7 +24,25 @@ class fbFieldsetEnd extends fbFieldBase {
 
   function GetFieldInput($id, &$params, $returnid)
   {
-    return '</fieldset>';
+    $js = $this->GetOption('javascript','');
+    $str = '<fieldset';
+    $class = $this->GetOption('css_class');
+    $legend = $this->GetOption('legend');
+	$str .= $this->GetCSSIdTag();
+    if( $class != '' )
+      {
+	$str .= " class=\"$class\"";
+      }
+    if ($js != '')
+		{
+		$str .= ' '.$js;
+		}
+    $str .= '>';
+    if( $legend != '' )
+      {
+	$str .= '<legend>'.$legend.'</legend>';
+      }
+    return $str;
   }
 
   function StatusInfo()
@@ -36,7 +53,7 @@ class fbFieldsetEnd extends fbFieldBase {
   function GetHumanReadableValue($as_string=true)
   {
     // there's nothing human readable about a fieldset.
-    $ret = '[End Fieldset: '.$this->Value.']';
+    $ret = '[Begin Fieldset: '.$this->Value.']';
 	if ($as_string)
 		{
 		return $ret;
@@ -49,19 +66,14 @@ class fbFieldsetEnd extends fbFieldBase {
 	
   function PrePopulateAdminForm($formDescriptor)
   {
-    $mod = $this->form_ptr->module_ptr;
-    $main = array();
+	$mod = &$this;	
+    $main = array(
+		  array($mod->Lang('title_legend'),
+            		$mod->CreateInputText($formDescriptor,'fbrp_opt_legend',
+					      $this->GetOption('legend',''), 50)));
     $adv = array();
     return array('main'=>$main,'adv'=>$adv);
   }
-
-	function PostPopulateAdminForm(&$mainArray, &$advArray)
-	{
-		$mod = $this->form_ptr->module_ptr;
-      $this->RemoveAdminField($advArray, $mod->Lang('title_field_javascript'));
-    $this->CheckForAdvancedTab($advArray);
-	}
-
 
 }
 
