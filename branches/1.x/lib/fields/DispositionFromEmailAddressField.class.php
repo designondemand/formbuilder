@@ -6,7 +6,7 @@
    A Module for CMS Made Simple, Copyright (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
   This project's homepage is: http://www.cmsmadesimple.org
 */
-require_once(dirname(__FILE__).'/DispositionEmailBase.class.php');
+//require_once(dirname(__FILE__).'/DispositionEmailBase.class.php'); // autoloader handling this.
 
 class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 

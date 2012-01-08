@@ -35,7 +35,6 @@ if (! $this->CheckAccess()) exit;
 $form = new fbForm($params, true);
 $form->Delete();
 
-// Change to Redirect method
-$params['fbrp_message'] = $this->Lang('form_deleted');
-$this->DoAction('defaultadmin', $id, $params);
+$parms['fb_message'] = $this->Lang('form_deleted');
+$this->Redirect($id, 'defaultadmin', $returnid, $parms);
 ?>

@@ -35,31 +35,57 @@ class FormBuilder extends CMSModule
 	# Attributes
 	#---------------------	
 
-	var $field_types;
-	var $disp_field_types;
-	var $std_field_types;
-	var $all_validation_types;
+	var $disp_field_types; // deprecate
 	var $module_ptr; // deprecate
 	var $module_id; // deprecate
-	var $email_regex;
-	var $email_regex_relaxed;
 	var $dbHandle; // deprecate
+	
+	public $field_types;
+	public $std_field_types;
+	public $all_validation_types;
+	public $email_regex;
+	public $email_regex_relaxed;
+	private $_initialized;
 
 	#---------------------
 	# Magic methods
 	#---------------------
 	
-	function __construct()
+	public function __construct()
 	{
+		spl_autoload_register(array(&$this,'autoload'));	
 		parent::__construct();
 
 		$this->module_ptr = &$this; // needed?
 		$this->dbHandle =  $this->GetDb(); // needed?
-		$this->module_id = ''; // needed?
+		$this->field_types = array();
+		$this->std_field_types = array();
+		$this->all_validation_types = array();
+		$this->_initialized = false;
 		$this->email_regex = "/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i"; // at wrong place?
 		$this->email_regex_relaxed="/^([\w\d\.\-\_])+\@([\w\d\.\-\_])+$/i"; // at wrong place?
 		
+		if(!$this->_initialized) {
+			
+			$this->Initialize();
+		}
 	}
+	
+	protected final function autoload($classname)
+	{
+		if(!is_object($this)) return FALSE;
+
+		$classname = substr($classname, 2);
+		
+		$fn = $this->GetModulePath()."/lib/fields/{$classname}.class.php";
+		if( file_exists($fn) )
+		{
+			require_once($fn);
+			return TRUE;
+		}
+		
+		return FALSE;
+	}	
 
 	#---------------------
 	# Module api methods
@@ -163,10 +189,8 @@ class FormBuilder extends CMSModule
 	
 	function AdminStyle()
 	{
-		$output = '';
-		
-		$fn = dirname(__FILE__).'/includes/admin.css';
-		$output .= @file_get_contents($fn);
+		$fn = dirname(__FILE__).'/css/admin.css';
+		$output = @file_get_contents($fn);
 		
 		return $output;
 	}
@@ -175,13 +199,14 @@ class FormBuilder extends CMSModule
 	{
 		$tmpl = '';
 
-		if( version_compare($GLOBALS['CMS_VERSION'],'1.9') < 0 )
-		  {
-		    $tmpl .= '<script type="text/javascript" src="'.cmsms()->config['root_url'].'/modules/'.$this->GetName().'/includes/jquery-1.4.2.min.js"></script>';
-		  }
-		$tmpl .= '<script type="text/javascript" src="'.cmsms()->config['root_url'].'/modules/'.$this->GetName().'/includes/jquery.tablednd.js"></script>';		
-		$tmpl .= '<script type="text/javascript" src="'.cmsms()->config['root_url'].'/modules/'.$this->GetName().'/includes/fb_jquery_functions.js"></script>';
-		$tmpl .= '<script type="text/javascript" src="'.cmsms()->config['root_url'].'/modules/'.$this->GetName().'/includes/fb_jquery.js"></script>';
+		if( version_compare($GLOBALS['CMS_VERSION'],'1.9') < 0 ) {
+		
+		    $tmpl .= '<script type="text/javascript" src="'.$this->GetModuleURLPath().'/lib/jquery/jquery-1.4.2.min.js"></script>';
+		}
+		
+		$tmpl .= '<script type="text/javascript" src="'.$this->GetModuleURLPath().'/lib/jquery/jquery.tablednd.js"></script>';		
+		$tmpl .= '<script type="text/javascript" src="'.$this->GetModuleURLPath().'/lib/jquery/fb_jquery_functions.js"></script>';
+		$tmpl .= '<script type="text/javascript" src="'.$this->GetModuleURLPath().'/lib/jquery/fb_jquery.js"></script>';
 		
         return $this->ProcessTemplateFromData($tmpl);
 		
@@ -191,10 +216,13 @@ class FormBuilder extends CMSModule
 	{
 		$this->RegisterModulePlugin();
 		$this->RestrictUnknownParams();
+		
 		$this->CreateParameter('fbrp_*','null',$this->Lang('formbuilder_params_general'));
 		$this->SetParameterType(CLEAN_REGEXP.'/fbrp_.*/',CLEAN_STRING);
-		$this->CreateParameter('form_id','null',$this->Lang('formbuilder_params_form_id'));
+		
+		$this->CreateParameter('form_id',-1,$this->Lang('formbuilder_params_form_id'));
 		$this->SetParameterType('form_id',CLEAN_INT);
+		
 		$this->CreateParameter('form','null',$this->Lang('formbuilder_params_form_name'));
 		$this->SetParameterType('form',CLEAN_STRING);
 		
@@ -212,16 +240,21 @@ class FormBuilder extends CMSModule
 	{
 		$smarty = cmsms()->GetSmarty();
 
-		$smarty->assign_by_ref('mod',$this);
+		$smarty->assign_by_ref('mod',&$this);
 		$smarty->assign('actionid',$id);
 		$smarty->assign('returnid',$returnid);		
 		
-		$this->module_id = $id; // deprecated
+		$this->module_id = $id; // deprecate
 		
-		if(isset($params['fbrp_message'])) {
+		if(isset($params['fb_message'])) {
 		
-			$this->ShowMessage($params['fbrp_message']);
+			echo $this->ShowMessage($params['fb_message']);
 		}
+		
+		if(isset($params['fb_error'])) {
+		
+			echo $this->ShowError($params['fb_error']);
+		}		
 		
 		parent::DoAction($name,$id,$params,$returnid);
 
@@ -256,49 +289,49 @@ class FormBuilder extends CMSModule
 	# Module methods
 	#--------------------- 	
 	
-	function initialize()
+	private final function Initialize()
 	{
-		$dir=opendir(dirname(__FILE__).'/lib/fields');
-		$this->field_types = array();
-		while($filespec=readdir($dir))
-		{
-		  if( !endswith($filespec,'.php') ) continue;
-			if(strpos($filespec,'Field') === false && strpos($filespec,'Disposition') === false)
-			{
-				continue;
-			}
-			$shortname = substr($filespec,0,strpos($filespec,'.'));
-			if (substr($shortname,-4) == 'Base')
-			{
-				continue;
-			}
-			$this->field_types[$this->Lang('field_type_'.$shortname)] = $shortname;
-		}
+		$dir = opendir(dirname(__FILE__).'/lib/fields');
 		
-		foreach ($this->field_types as $tName=>$tType)
-		{
-			if (substr($tType,0,11) == 'Disposition')
-			{
-				$this->disp_field_types[$tName]=$tType;
+		while($filespec = readdir($dir)) {
+
+			// We handling php file at all?
+			if(!endswith($filespec,'.php') ) {
+			
+				continue;
 			}
+			
+			// Do we have field or disposition at all?
+			if(strpos($filespec,'Field') === false && strpos($filespec,'Disposition') === false) {
+			
+				continue;
+			}
+			
+			$type = substr($filespec,0,strpos($filespec,'.'));
+			$this->field_types[$this->Lang('field_type_'.$type)] = $type;
 		}
-		$this->all_validation_types = array();
+
 		ksort($this->field_types);
+		
 		$this->std_field_types = array(
-			$this->Lang('field_type_TextField')=>'TextField',
-			$this->Lang('field_type_TextAreaField')=>'TextAreaField',
-			$this->Lang('field_type_CheckboxField')=>'CheckboxField',
-			$this->Lang('field_type_CheckboxGroupField')=>'CheckboxGroupField',
-			$this->Lang('field_type_PulldownField')=>'PulldownField',
-			$this->Lang('field_type_RadioGroupField')=>'RadioGroupField',
-			$this->Lang('field_type_DispositionEmail')=>'DispositionEmail',
-			$this->Lang('field_type_DispositionFile')=>'DispositionFile',
-			$this->Lang('field_type_PageBreakField')=>'PageBreakField',
-			$this->Lang('field_type_StaticTextField')=>'StaticTextField');
+				$this->Lang('field_type_TextField')=>'TextField',
+				$this->Lang('field_type_TextAreaField')=>'TextAreaField',
+				$this->Lang('field_type_CheckboxField')=>'CheckboxField',
+				$this->Lang('field_type_CheckboxGroupField')=>'CheckboxGroupField',
+				$this->Lang('field_type_PulldownField')=>'PulldownField',
+				$this->Lang('field_type_RadioGroupField')=>'RadioGroupField',
+				$this->Lang('field_type_DispositionEmail')=>'DispositionEmail',
+				$this->Lang('field_type_DispositionFile')=>'DispositionFile',
+				$this->Lang('field_type_PageBreakField')=>'PageBreakField',
+				$this->Lang('field_type_StaticTextField')=>'StaticTextField'
+				);
+				
 		ksort($this->std_field_types);
+		
+		$this->_initialized = true;
 	}
 
-	// Module API method??? Is this really needed?
+	// deprecate
 	function CheckAccess($permission='Modify Forms')
 	{
 		$access = $this->CheckPermission($permission);
@@ -309,7 +342,7 @@ class FormBuilder extends CMSModule
 		else return true;
 	}
 
-	function GetForms($order_by='name')
+	public final function GetForms($order_by='name')
 	{
 		$db = cmsms()->GetDb();
 		
@@ -323,20 +356,22 @@ class FormBuilder extends CMSModule
 		return $result;
 	}
 
-	function GetFormIDFromAlias($form_alias)
+	public final function GetFormIDFromAlias($form_alias)
 	{
 		$db = $this->GetDb();
+		
 		$sql = 'SELECT form_id from '.cms_db_prefix().'module_fb_form WHERE alias = ?';
-		$rs = $db->Execute($sql, array($form_alias));
-		if($rs && $rs->RecordCount() > 0)
-		{
-			$result = $rs->FetchRow();
-			return $result['form_id'];
+		$formid = $db->GetOne($sql, array($form_alias));
+		
+		if($formid) {
+		
+			return $formid;
 		}
+		
 		return -1;
 	}
 
-	function GetFormNameFromID($form_id)
+	public final function GetFormNameFromID($form_id)
 	{
 		$db = $this->GetDb();
 		$sql = 'SELECT name from '.cms_db_prefix().'module_fb_form WHERE form_id = ?';
@@ -348,11 +383,32 @@ class FormBuilder extends CMSModule
 		return $result['name'];
 	}
 
-	function GetFormByID($form_id, $loadDeep=false)
+	public final function GetFormByID($form_id, $loadDeep=false)
 	{
 		$params = array('form_id'=>$form_id);
-		return new fbForm($this, $params, $loadDeep);
+		$obj = new fbForm($params, $loadDeep);
+		
+		if(is_object($obj)) {
+			
+			return $obj;
+		}
+		
+		return false;
 	}
+	
+	public final function GetFormByAlias($form_alias, $loadDeep=false)
+	{
+		$form_id = $this->GetFormIDFromAlias($form_alias);
+		$params = array('form_id'=>$form_id);
+		$obj = new fbForm($params, $loadDeep);
+		
+		if(is_object($obj)) {
+			
+			return $obj;
+		}
+		
+		return false;
+	}	
 
 	// WTF????
 	function GetFormByParams(&$params, $loadDeep=false)
@@ -481,7 +537,7 @@ class FormBuilder extends CMSModule
 	}
 
 	// I honesty don't have any idea what this does, but let's leave it there for now.
-	function CreatePageDropdown($id,$name,$current='', $addtext='',$markdefault =true)
+/*	function CreatePageDropdown($id,$name,$current='', $addtext='',$markdefault =true)
 	{
       global $gCms;
 		// we get here (hopefully) when the template is changed
@@ -524,7 +580,7 @@ class FormBuilder extends CMSModule
 		}
 		return $this->CreateInputDropdown($id,'fbrp_'.$name,$mypages,-1,$current,$addtext);
 	}
-
+*/
 	// Ryan did this? May i ask what this does?
 	function SuppressAdminOutput(&$request)
 	{
@@ -583,6 +639,7 @@ class FormBuilder extends CMSModule
 	}
    
 	// Part of moudle API?
+/*	
 	function GetActiveTab(&$params)
 	{
 		if (FALSE == empty($params['active_tab'])) {
@@ -593,7 +650,7 @@ class FormBuilder extends CMSModule
 			return 'maintab';
 		}
 	}
-  
+*/  
 	// Check if this should go to Form class
 	function fbencrypt($string,$key)
 	{

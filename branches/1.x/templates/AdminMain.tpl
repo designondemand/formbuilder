@@ -1,5 +1,3 @@
-{if $message != ''}<div class="pagemcontainer"><p class="pagemessage">{$message}</p></div>{/if}
-
 {$tabheaders}
 {$start_formtab}
 <table cellspacing="0" class="pagetable" width="80%">

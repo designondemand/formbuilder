@@ -72,9 +72,10 @@ abstract class fbFieldBase {
   function fbFieldBase(&$form_ptr, &$params)
   {
 	
+	// Initiate class with module instance
     if (!isset($this->ModuleInstance)) {
 
-		$mod = cmsms()->GetModuleinstance('FormBuilder');
+		$mod = cmsms()->GetModuleInstance('FormBuilder');
 		
 		if(is_object($mod)) {
 		
@@ -532,82 +533,85 @@ abstract class fbFieldBase {
     return $this->Lang('field_type_'.$this->Type);
   }
   
+	/**
+	* Makes field type class object
+	*
+	* @final
+	* @access public
+	* @return object
+	*/	
+	function PrePopulateBaseAdminForm($formDescriptor,$disposeOnly=0)
+	{
+	
+		$mod = $this->ModuleInstance;
 
-  // Base backended fields configuration
-  function PrePopulateBaseAdminForm($formDescriptor,$disposeOnly=0)
-  {
-    $mod = $this->form_ptr->module_ptr;
-	
 	// Do the field type check
-    if ($this->Type == '') {
-		if ($disposeOnly == 1) {
-		
-			$typeInput = $mod->CreateInputDropdown($formDescriptor, 'fbrp_field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->disp_field_types), -1,'', 'onchange="this.form.submit()"');
-		} else {
-		
-			$typeInput = $mod->CreateInputDropdown($formDescriptor, 'fbrp_field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->field_types), -1,'', 'onchange="this.form.submit()"');
-		}
-    } else {
+	if ($this->Type == '') {
+
+
+	$typeInput = $mod->CreateInputDropdown($formDescriptor, 'fbrp_field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->field_types), -1,'', 'onchange="this.form.submit()"');
 	
-		$typeInput = $this->GetDisplayType().$mod->CreateInputHidden($formDescriptor, 'fbrp_field_type', $this->Type);
-    }
-		
+	} else {
+
+	$typeInput = $this->GetDisplayType().$mod->CreateInputHidden($formDescriptor, 'fbrp_field_type', $this->Type);
+	}
+
 	// Init main tab	
-    $main = array(
-				array($mod->Lang('title_field_name'),$mod->CreateInputText($formDescriptor, 'fbrp_field_name', $this->GetName(), 50)),
-				array($mod->Lang('title_field_type'),$typeInput)
-			);
+	$main = array(
+	array($mod->Lang('title_field_name'),$mod->CreateInputText($formDescriptor, 'fbrp_field_name', $this->GetName(), 50)),
+	array($mod->Lang('title_field_type'),$typeInput)
+	);
 
 	// Init advanced tab
-    $adv = array();
+	$adv = array();
 
-    // if we know our type, we can load up with additional options
-    if ($this->Type != '') {
-			
-		// validation types?
-		if (count($this->GetValidationTypes()) > 1) {
-		
-			$validInput = $mod->CreateInputDropdown($formDescriptor, 'fbrp_validation_type', $this->GetValidationTypes(), -1, $this->GetValidationType());
-		} else {
-		
-			$validInput = $mod->Lang('automatic');
-		}
-				
-		if (!$this->IsNonRequirableField()) {
-			array_push($main, array($mod->Lang('title_field_required'),$mod->CreateInputCheckbox($formDescriptor, 'fbrp_required', 1, $this->IsRequired()).$mod->Lang('title_field_required_long')));
-		}
-				
-		array_push($main, array($mod->Lang('title_field_validation'),$validInput));
+	// if we know our type, we can load up with additional options
+	if ($this->Type != '') {
 
-		if( $this->HasLabel == 1 ) {
-			
-			array_push($adv, array($mod->Lang('title_hide_label'),$mod->CreateInputCheckbox($formDescriptor, 'fbrp_hide_label', 1, $this->HideLabel()).$mod->Lang('title_hide_label_long')));
-		}
+	// validation types?
+	if (count($this->GetValidationTypes()) > 1) {
 
-		$alias = $this->GetOption('field_alias','');
-		if ($alias == '') {
-			$alias = 'fld'.$this->GetId();
-		}
-		
-		array_push($adv, array($mod->Lang('title_field_alias'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_field_alias', $this->GetOption('field_alias'), 50)));			
+	$validInput = $mod->CreateInputDropdown($formDescriptor, 'fbrp_validation_type', $this->GetValidationTypes(), -1, $this->GetValidationType());
+	} else {
 
-		if ($this->DisplayInForm()) {
-			array_push($adv,array($mod->Lang('title_field_css_class'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_css_class', $this->GetOption('css_class'), 50)));
-			array_push($adv,array($mod->Lang('title_field_helptext'),$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('helptext',''), 'fbrp_opt_helptext','module_fb_area_short')));
-			array_push($adv,array($mod->Lang('title_field_javascript'),$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('javascript',''), 
-								'fbrp_opt_javascript','module_fb_area_short','','', '', '80', '15','','js').'<br />'.$mod->Lang('title_field_javascript_long')));
-			array_push($adv,array($mod->Lang('title_field_logic'),$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('field_logic',''), 
-								'fbrp_opt_field_logic','module_fb_area_short','','', '', '80', '15').'<br />'.$mod->Lang('title_field_logic_long')));
-		}
-	
-    } else {
-	
-		// no advanced options until we know our type
-		array_push($adv,array($mod->Lang('tab_advanced'),$mod->Lang('notice_select_type')));
-    }
-				
-    return array('main'=>$main, 'adv'=>$adv);
-  }
+	$validInput = $mod->Lang('automatic');
+	}
+
+	if (!$this->IsNonRequirableField()) {
+	array_push($main, array($mod->Lang('title_field_required'),$mod->CreateInputCheckbox($formDescriptor, 'fbrp_required', 1, $this->IsRequired()).$mod->Lang('title_field_required_long')));
+	}
+
+	array_push($main, array($mod->Lang('title_field_validation'),$validInput));
+
+	if( $this->HasLabel == 1 ) {
+
+	array_push($adv, array($mod->Lang('title_hide_label'),$mod->CreateInputCheckbox($formDescriptor, 'fbrp_hide_label', 1, $this->HideLabel()).$mod->Lang('title_hide_label_long')));
+	}
+
+	$alias = $this->GetOption('field_alias','');
+	if ($alias == '') {
+	$alias = 'fld'.$this->GetId();
+	}
+
+	array_push($adv, array($mod->Lang('title_field_alias'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_field_alias', $this->GetOption('field_alias'), 50)));			
+
+	if ($this->DisplayInForm()) {
+	array_push($adv,array($mod->Lang('title_field_css_class'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_css_class', $this->GetOption('css_class'), 50)));
+	array_push($adv,array($mod->Lang('title_field_helptext'),$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('helptext',''), 'fbrp_opt_helptext','module_fb_area_short')));
+	array_push($adv,array($mod->Lang('title_field_javascript'),$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('javascript',''), 
+	'fbrp_opt_javascript','module_fb_area_short','','', '', '80', '15','','js').'<br />'.$mod->Lang('title_field_javascript_long')));
+	array_push($adv,array($mod->Lang('title_field_logic'),$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('field_logic',''), 
+	'fbrp_opt_field_logic','module_fb_area_short','','', '', '80', '15').'<br />'.$mod->Lang('title_field_logic_long')));
+	}
+
+	} else {
+
+	// no advanced options until we know our type
+	array_push($adv,array($mod->Lang('tab_advanced'),$mod->Lang('notice_select_type')));
+	}
+
+	return array('main'=>$main, 'adv'=>$adv);
+	}
 	
 	
   // override me.
@@ -1110,6 +1114,7 @@ abstract class fbFieldBase {
   		}
   }
 
+  // deprecate
   function LoadField(&$params)
   {
     if ($this->Id > 0)

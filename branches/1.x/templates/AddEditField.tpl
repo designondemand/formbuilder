@@ -1,6 +1,3 @@
-{if isset($message)}{$message}{/if}
-
-{$backtoform_nav}<br />
 {$start_form}{$fb_hidden}{$op}{$tab_start}
 {$maintab_start}
 	{foreach from=$mainList item=entry}

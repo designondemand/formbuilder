@@ -1,7 +1,21 @@
+{literal}
+<script type="text/javascript">
+
+	function fast_add(field_type) {
+	
+		var type=field_type.options[field_type.selectedIndex].value;
+		var link = "{/literal}{$aefield_url}&{$actionid}{literal}fbrp_field_type="+type;
+		this.location=link;
+		return true;
+	}
+
+</script>
+{/literal}
+
 {$formstart}
 {$fb_hidden}
-{$tab_start}
 
+{$tab_start}
 {$maintab_start}
 <fieldset class="module_fb_fieldset"><legend>{$title_form_main}</legend>
 	<div class="pageoverflow">
@@ -31,12 +45,10 @@
 {if $formid > 0}
 <fieldset><legend>{$title_form_fields}</legend>
 
-	{if $fastadd==1}
+	{if $mod->GetPreference('enable_fastadd')}
 		<div class="pageoverflow">
-			<p class="pagetext">{$title_fastadd}</p>
-			<div class="pageinput">
-				{$input_fastadd}
-			</div>
+			<p class="pagetext">{$mod->Lang('title_fastadd')}</p>
+			<div class="pageinput">{$input_fastadd}</div>
 		</div>
 	{/if}
 	
@@ -44,41 +56,42 @@
 		<p class="pagetext">{$title_form_fields}</p>
 		<div class="pageinput">
 			<table class="module_fb_table pagetable" cellpadding="0" cellspacing="0">
-				<thead><tr>
-	       	{if isset($title_field_id)}
-                <th width="20">{$title_field_id}</th>
-		{/if}
-    				<th width="120">{$title_field_name}</th>
-        {if isset($title_field_alias)}
-    				<th width="60">{$title_field_alias}</th>
-		{/if}
-                	<th width="150">{$title_field_type}</th>
-                	{*<th width="20">{$title_field_required_abbrev}</th>*}
-                	<th>{$title_information}</th>
- 					<th width="20" class="updown">&nbsp;</th>
-					<th width="20" class="updown">&nbsp;</th>
-					<th class="pageicon">&nbsp;</th>
-					<th class="pageicon">&nbsp;</th>
-                    <th class="pageicon">&nbsp;</th>
+				<thead>
+					<tr>
+						{if isset($title_field_id)}
+							<th width="20">{$title_field_id}</th>
+						{/if}
+						<th width="120">{$title_field_name}</th>
+						{if isset($title_field_alias)}
+							<th width="60">{$title_field_alias}</th>
+						{/if}
+						<th width="150">{$title_field_type}</th>
+						{*<th width="20">{$title_field_required_abbrev}</th>*}
+						<th>{$title_information}</th>
+						<th width="20" class="updown">&nbsp;</th>
+						<th width="20" class="updown">&nbsp;</th>
+						<th class="pageicon">&nbsp;</th>
+						<th class="pageicon">&nbsp;</th>
+						<th class="pageicon">&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody>
 				{foreach from=$fields item=entry}
-					<tr id="fbrp_{$entry->id}" class="{$entry->rowclass}">
-				{if isset($title_field_id)}
-					<td>{$entry->id}</td>
-				{/if}
-					<td>{$entry->name}</td>
-					{if isset($title_field_alias)}
-						<td>{$entry->alias}</td>
-					{/if}
-					<td>{$entry->type}</td>
-					<td>{$entry->field_status}</td>						
-					<td class="updown">{$entry->up}</td>
-					<td class="updown">{$entry->down}</td>				
-					<td>{$entry->disposition}</td>					
-					<td>{$entry->editlink}</td>
-					<td>{$entry->deletelink}</td>
+					<tr id="fbrp_{$entry->id}" class="{cycle values='row1,row2'}">
+						{if isset($title_field_id)}
+							<td>{$entry->id}</td>
+						{/if}
+						<td>{$entry->name}</td>
+						{if isset($title_field_alias)}
+							<td>{$entry->alias}</td>
+						{/if}
+						<td>{$entry->type}</td>
+						<td>{$entry->field_status}</td>						
+						<td class="updown">{$entry->up}</td>
+						<td class="updown">{$entry->down}</td>				
+						<td>{$entry->disposition}</td>					
+						<td>{$entry->editlink}</td>
+						<td>{$entry->deletelink}</td>
 					</tr>
 				{/foreach}
 				</tbody>
@@ -90,7 +103,9 @@
      </div>
 </fieldset>
 {/if} {* end of formid check *}
-{$tab_end}{$submittab_start}
+{$tab_end}
+
+{$submittab_start}
 	<fieldset>
 	<div class="pageoverflow">
 		<p class="pageinput">{$title_submit_help}</p>
@@ -177,6 +192,7 @@
 	</div>
 {/if}
 {$tab_end}
+
 {$templatetab_start}
 	<div class="pageoverflow">
 		<p class="pagetext">{$title_load_template}:</p>

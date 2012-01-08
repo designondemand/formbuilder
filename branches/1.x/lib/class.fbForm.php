@@ -46,26 +46,27 @@ class fbForm {
 	private $formTotalPages = 0;
 	private $Page;
 	public $formState; // deprecate
-	private $sampleTemplateCode;
-	private $templateVariables;
+	private $sampleTemplateCode; // deprecate, drive to method
+	private $templateVariables; 
 	private static $ModuleInstance;
 
 	#---------------------
 	# Magic methods
 	#---------------------		
-											//Deprecate		 // Deprecate
+														   // Deprecate
 	public function __construct(&$params, $loadDeep=false, $loadResp=false)
 	{
 	
+		// Initiate class with module instance
 		if (!isset($this->ModuleInstance)) {
 
-			$mod = cmsms()->GetModuleinstance('FormBuilder');
+			$mod = cmsms()->GetModuleInstance('FormBuilder');
 			
 			if(is_object($mod)) {
 			
 				$this->ModuleInstance = &$mod;
 			}
-		}	
+		}		
 	
 		//$this->module_ptr = &$this; // deprecate
 		$this->module_params = $params; // deprecate
@@ -186,10 +187,10 @@ class fbForm {
 			'{$fb_version}'=>$this->Lang('help_fb_version'),
 			'{$TAB}'=>$this->Lang('help_tab'),
 		);
-	} // end of __construct()
-
+	} // end of __construct()	
+	
 	#---------------------
-	# Shadow module methods
+	# Module shadow methods
 	#---------------------	
 
 	public function Lang() {
@@ -401,37 +402,37 @@ class fbForm {
 	#---------------------
 	# General methods
 	#---------------------	
-	
+
 	function PageBack()
 	{
 		$this->Page--;
 	}	
 	
-// dump params
-  function DebugDisplay($params=array())
-  {
-    $tmp = $this->module_ptr;
-    $this->module_ptr = '[mdptr]';
+	// dump params
+	function DebugDisplay($params=array())
+	{
+		$tmp = $this->module_ptr;
+		$this->module_ptr = '[mdptr]';
 
-   if (isset($params['FORM']))
+		if (isset($params['FORM']))
 		{
 		$fpt = $params['FORM'];
 		$params['FORM'] = '[form_pointer]';
 		}
 
-    $template_tmp = $this->GetAttr('form_template','');
-    $this->SetAttr('form_template',strlen($template_tmp).' characters');
-    $field_tmp = $this->Fields;
-    $this->Fields = 'Field Array: '.count($field_tmp);
-    debug_display($this);
-    $this->SetAttr('form_template',$template_tmp);
-    $this->Fields = $field_tmp;
-    foreach($this->Fields as $fld)
-      {
+		$template_tmp = $this->GetAttr('form_template','');
+		$this->SetAttr('form_template',strlen($template_tmp).' characters');
+		$field_tmp = $this->Fields;
+		$this->Fields = 'Field Array: '.count($field_tmp);
+		debug_display($this);
+		$this->SetAttr('form_template',$template_tmp);
+		$this->Fields = $field_tmp;
+		foreach($this->Fields as $fld)
+		{
 		$fld->DebugDisplay();
-      }
-    $this->module_ptr = $tmp;
-  }
+		}
+		$this->module_ptr = $tmp;
+	}
 
    
   function AddTemplateVariable($name,$def)
@@ -1107,11 +1108,14 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		return $this->ProcessTemplateFromDatabase('fb_'.$this->Id);
 	}
 
+/*	
   function LoadForm($loadDeep=false)
   {
     return $this->Load($this->Id, array(), $loadDeep);
   }
+*/
 
+	// make own help class for this kind of things, or something.
 	function unmy_htmlentities($val)
 	{
 		if ($val == "")
@@ -1137,10 +1141,10 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	* Loads form, sets all given parameters, etc.
 	*
 	* @final
-	* @access private
+	* @access public
 	* @return boolean
 	*/
-	private final function Load($formId, &$params, $loadDeep=false, $loadResp=false)
+	public final function Load($formId, &$params, $loadDeep=false, $loadResp=false)
 	{
 
 		$db = cmsms()->GetDb();
@@ -1217,7 +1221,8 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		
 	} // end of Load method
 
-
+	// Actually no idea what this does
+	// help function, move to help class
   function updateRefs($text, &$fieldMap)
    {
       foreach ($fieldMap as $k=>$v)
@@ -1227,6 +1232,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
       return $text;
    }
 
+   // Definetly help function.
   function inXML(&$var)
   {
   		if (isset($var) && strlen($var) > 0)
@@ -1302,7 +1308,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	}
 
 	/**
-	* Deletes from from database.
+	* Deletes form from database.
 	*
 	* @final
 	* @access public
@@ -1345,10 +1351,11 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	* Makes class name as it says
 	* NOTE: Merge this into NewField method, dosen't need to be separated, or figure something smarter. 
 	*
-	* @final
+	* @deprecated
 	* @access private
 	* @return string
 	*/	
+/*	
 	private final function MakeClassName($type, $classDirPrefix)
 	{
 		// perform rudimentary security, since Type could come in from a form
@@ -1371,10 +1378,11 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		// class names are prepended with "fb" to prevent namespace clash.
 		return ( 'fb'.$type );
 	}
-
+*/
 	/**
 	* Makes field type class object
 	* NOTE: Public for now, action.admin_add_edit_field.php requires, change visibility to private when you can.
+	* NOTE: Autoloader handling this now, see module class.
 	*
 	* @final
 	* @access public
@@ -1382,45 +1390,38 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	*/	
     public final function &NewField(&$params)
     {
-
+		if(!is_object($this)) return FALSE;
+	
 		$db = cmsms()->GetDb();
+		$field = null;
+		$className = 'fb'; // add fb secure prefix, to avoid namespace collapse.
 		
-		//$aefield = new fbFieldBase($this,$params);
-		$aefield = false;
-		if (isset($params['field_id']) && $params['field_id'] != -1 )
-		{
-			// we're loading an extant field
-		$sql = 'SELECT type FROM ' . cms_db_prefix() . 'module_fb_field WHERE field_id=?';
-		$rs = $db->Execute($sql, array( $params['field_id']));
-		if($rs && $result = $rs->FetchRow())
-		  {				
-		if ($result['type'] != '')
-		  {
-			$className = $this->MakeClassName($result['type'] , '');
-			$aefield = new $className($this, $params);
-			$aefield->LoadField($params);
-		  }
-		  }
+		// Try to get type by id first.
+		if (isset($params['field_id']) && $params['field_id'] != -1 ) {
+		
+			$sql = 'SELECT type FROM '.cms_db_prefix().'module_fb_field WHERE field_id=?';
+			$type = $db->GetOne($sql, array($params['field_id']));
+			
+			if($type) {				
+
+				$className .= $type;
+				$field = new $className($this, $params);
+				$field->LoadField($params);  
+			}
 		}
-		if ($aefield === false)
-		{
-		// new field
-		if (! isset($params['fbrp_field_type']))
-		  {
-		// unknown field type
-		$aefield = new fbFieldBase($this,$params);
-		  }
-		else
-		  {
-		// specified field type via params
-				$className = $this->MakeClassName($params['fbrp_field_type'], '');
-				$aefield = new $className($this, $params);
-		  }
+		
+		// No luck, check if we have type.
+		if (!is_object($field) && isset($params['field_type'])) {
+		
+			$className .= $params['field_type'];
+			$field = new $className($this, $params);
 		}
-		return $aefield;
+		
+		return $field;
     }
 
 	// Not in use atm?????
+/*	
 	function MakeAlias($string, $isForm=false)
 	{
 		$string = trim(htmlspecialchars($string));
@@ -1432,8 +1433,8 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 			return 'fb'.strtolower($string);
 		}
 	}	
-	
-	
+*/	
+/*	
   function AddEditField($id, &$aefield, $dispose_only, $returnid, $message='')
   {
     $mod = $this->module_ptr;
@@ -1498,8 +1499,8 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
     $mod->smarty->assign('fb_hidden', $mod->CreateInputHidden($id, 'form_id', $this->Id) . $mod->CreateInputHidden($id, 'field_id', $aefield->GetId()) . $mod->CreateInputHidden($id, 'fbrp_order_by', $aefield->GetOrder()).
 			 $mod->CreateInputHidden($id,'fbrp_set_from_form','1'));
 
-    if (/*!$aefield->IsDisposition() && */ !$aefield->IsNonRequirableField())
-      {
+    if (/*!$aefield->IsDisposition() && */ /*!$aefield->IsNonRequirableField())
+     /* {
 	$mod->smarty->assign('requirable',1);
       }
     else
@@ -1597,7 +1598,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
     $mod->smarty->assign('advList',$advList);
     return $mod->ProcessTemplate('AddEditField.tpl');
   }
-
+*/
    
   function SwapFieldsByIndex($src_field_index, $dest_field_index)
   {
@@ -2121,12 +2122,13 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 			{
 			$this->SetAlias(trim($params['fbrp_import_formalias']));
 			}
-			$this->Store();
+			$this->Store($params);
 			$params['form_id'] = $this->GetId();
 			}
 			//debug_display($thisChild);
 			$fieldAttrs = &$thisChild['attributes'];
-			$className = $this->MakeClassName($fieldAttrs['type'], '');
+			//$className = $this->MakeClassName($fieldAttrs['type'], '');
+			$className = 'fb'.$fieldAttrs['type'];
 			//debug_display($className);
 			$newField = new $className($this, $params);
 			$oldId = $fieldAttrs['id'];
@@ -2213,7 +2215,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 				}
 			}
 
-			$this->Store();
+			$this->Store($params);
 		}
 
 		return true;	
@@ -2291,6 +2293,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
       }
 	}
 
+	// Move to action.add_edit_form.php
   function setFinishedFormSmarty($htmlemail=false)
 	{
 		$mod = $this->module_ptr;
