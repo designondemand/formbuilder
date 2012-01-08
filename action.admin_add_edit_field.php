@@ -32,198 +32,263 @@
 if (!isset($gCms)) exit;
 if (!$this->CheckPermission('Modify Forms')) exit;
 
-		$aeform = new fbForm($params,true); // Useless memory eater
-		//$aefield = $aeform->NewField($params);
-		$aefield = fbForm::NewField($params);
-		if (isset($params['fbrp_aef_upd']) ||
-			(isset($params['fbrp_aef_add']) && $aefield->GetFieldType() != ''))
-			{
-			// save the field.
-			$this->DoAction('admin_store_field', $id, $params);
-			return;
-			}
-		elseif (isset($params['fbrp_aef_add']))
-			{
-			// should have got a field type definition, so give rest of the field options
-			// reserve this space for special ops :)
-			}
-		elseif (isset($params['fbrp_aef_optadd']))
-			{
-			// call the field's option add method, with all available parameters
-			$aefield->DoOptionAdd($params);
-			}
-		elseif (isset($params['fbrp_aef_optdel']))
-			{
-			// call the field's option delete method, with all available parameters
-			$aefield->DoOptionDelete($params);
-			}
-		else
-			{
-			// new field, or implicit aef_add.
-			// again, reserving the space for future endeavors
-			}
-		//echo $aeform->AddEditField($id, $aefield, (isset($params['fbrp_dispose_only'])?$params['fbrp_dispose_only']:0), $returnid, isset($params['fbrp_message'])?$this->ShowMessage($params['fbrp_message']):'');
+#---------------------
+# Check params
+#---------------------	
 
+$formid = -1;
+if (isset($params['form_id'])) {
 
-/* UUTTA PASKAA!!! */
+	$formid = $params['form_id'];
+}
 
+$fieldid = -1;
+if (isset($params['field_id'])) {
 
- 
+	$fieldid = $params['field_id'];
+}
+
+$fieldtype = '';
+if (isset($params['field_type'])) {
+
+	$fieldtype = $params['field_type'];
+}
+
+$tab = '';
+if (isset($params['active_tab'])) {
+
+	$tab = $params['active_tab'];
+}
+
+$opt_num = 1;
+if (isset($params['fbrp_opt_num'])) {
+
+	$opt_num = $params['fbrp_opt_num'];
+}
+
+/*
+if (isset($params['fbrp_set_field_level'])) {
+
+	$this->SetPreference('show_field_level',$params['fbrp_set_field_level']);
+}
+*/
+#---------------------
+# Load objects
+#---------------------	
+
+$form = new fbForm($params, true);
+$field = $form->LoadField($params);
+
+$parms = array();
+$parms['form_id'] = $formid;
+
+#---------------------
+# Submit
+#---------------------	
+
+if (isset($params['cancel'])) {
+
+	$this->Redirect($id, 'admin_add_edit_form', $returnid, $parms);
+}
+
+if(is_object($field)) {
+
+	if (isset($params['fbrp_aef_submit'])) {
+
+		//$val = $aefield->AdminValidate();	// Not in use atm, make this work when you have time.
+		$field->PostAdminSubmitCleanup();
+		$field->Store(true);
+		$field->PostFieldSaveProcess($params);	
+		$parms['fb_message'] = ($fieldid != -1 ? $this->Lang('update') : $this->Lang('added'));
+		$this->Redirect($id, 'admin_add_edit_form', $returnid, $parms);
+		
+	} 
 	
-//$smarty->assign('backtoform_nav',$this->CreateLink($id, 'admin_add_edit_form', $returnid, $this->Lang('link_back_to_form'), array('form_id'=>$this->Id)));
+	if (isset($params['fbrp_aef_optadd'])) {
+
+		$field->DoOptionAdd($params);
+	}
+	
+	if (isset($params['fbrp_aef_optdel'])) {
+
+		$field->DoOptionDelete($params);
+	} 
+}
+
+#---------------------
+# Smarty assigns
+#---------------------	
+
+// Initiate arrays
 $mainList = array();
 $advList = array();
+$parms['field_id'] = $fieldid;
 
-$baseList = $aefield->PrePopulateBaseAdminForm($id);
-if ($aefield->GetFieldType() == '')
-  {
-// still need type
-$smarty->assign('start_form',$this->CreateFormStart($id, 'admin_add_edit_field', $returnid));			
-$fieldList = array('main'=>array(),'adv'=>array());
-  }
-else
-  {
-// we have our type
-$smarty->assign('start_form',$this->CreateFormStart($id, 'admin_add_edit_field', $returnid));	
-$fieldList = $aefield->PrePopulateAdminForm($id);
-  }
+// Check if we need fields dropdown
+if(!is_object($field) || $field->GetId() == -1) {
+
+	$smarty->assign('field_type', $this->CreateInputDropdown($id, 'field_type',array_merge(array($this->Lang('select_type')=>''), $this->field_types), -1, $fieldtype, 'onchange="this.form.submit()"'));	
+	
+} else {	
+
+	$smarty->assign('field_type', $field->GetDisplayFriendlyType() . $this->CreateInputHidden($id, 'field_type', $field->getFieldType()));
+}
+
+// Populate form
+if(is_object($field)) {
+
+	// Set parms for form
+	$parms['fbrp_order_by'] = $field->GetOrder();
+
+	// Change to use list when you have time.
+	$baselist = $field->PrePopulateBaseAdminForm($id);
+	$fieldlist = $field->PrePopulateAdminForm($id);
+	
+	if($field->GetId() != -1) {
+	
+		$smarty->assign('submit',$this->CreateInputSubmit($id, 'fbrp_aef_submit', $this->Lang('update')));
+	} else {
+	
+		$smarty->assign('submit',$this->CreateInputSubmit($id, 'fbrp_aef_submit', $this->Lang('add')));
+	}
+
+	if ($field->HasAddOp()) {
+	
+		$smarty->assign('add',$this->CreateInputSubmit($id,'fbrp_aef_optadd',$field->GetOptionAddButton()));
+	}
+
+	if ($field->HasDeleteOp()) {
+	
+		$smarty->assign('del',$this->CreateInputSubmit($id,'fbrp_aef_optdel',$field->GetOptionDeleteButton()));
+	}
+
+
+/*
+	$smarty->assign('fb_hidden', $this->CreateInputHidden($id, 'form_id', $formid) . 
+								$this->CreateInputHidden($id, 'field_id', $fieldid) . 
+								$this->CreateInputHidden($id, 'fbrp_order_by', $field->GetOrder()).
+								$this->CreateInputHidden($id,'fbrp_set_from_form',1)); //?????
+
+*/
+
+	// Base list main tab
+	if (isset($baselist['main'])) {
+	
+		foreach ($baselist['main'] as $item) {
+		
+			$titleStr=$item[0];
+			$inputStr=$item[1];
+			$oneset = new stdClass();
+			$oneset->title = $titleStr;
+			if (is_array($inputStr)) {
+			
+				$oneset->input = $inputStr[0];
+				$oneset->help = $inputStr[1];
+			} else {
+			
+				$oneset->input = $inputStr;
+				$oneset->help='';
+			}
+			
+			$mainList[] = $oneset;
+		}
+	}	
+	
+	// Base list advanced tab
+	if (isset($baselist['adv'])) {
+	
+		foreach ($baselist['adv'] as $item)
+		{
+			$titleStr = $item[0];
+			$inputStr = $item[1];
+			$oneset = new stdClass();
+			$oneset->title = $titleStr;
+			if (is_array($inputStr)) {
+			
+				$oneset->input = $inputStr[0];
+				$oneset->help = $inputStr[1];
+			} else {
+			
+				$oneset->input = $inputStr;
+				$oneset->help='';
+			}
+			
+			$advList[] = $oneset;
+		}
+	}	
+	
+	// Field list main tab
+	if (isset($fieldlist['main'])) {
+	
+		foreach ($fieldlist['main'] as $item) {
+		
+			$titleStr=$item[0];
+			$inputStr=$item[1];
+			$oneset = new stdClass();
+			$oneset->title = $titleStr;
+			if (is_array($inputStr)) {
+			
+				$oneset->input = $inputStr[0];
+				$oneset->help = $inputStr[1];
+			} else {
+			
+				$oneset->input = $inputStr;
+				$oneset->help='';
+			}
+			
+			$mainList[] = $oneset;
+		}
+	}
+	
+	// Field list advanced tab
+	if (isset($fieldlist['adv'])) {
+	
+		foreach ($fieldlist['adv'] as $item) {
+		
+			$titleStr=$item[0];
+			$inputStr=$item[1];
+			$oneset = new stdClass();
+			$oneset->title = $titleStr;
+			if (is_array($inputStr)) {
+			
+				$oneset->input = $inputStr[0];
+				$oneset->help = $inputStr[1];
+			} else {
+			
+				$oneset->input = $inputStr;
+				$oneset->help='';
+			}
+			
+			$advList[] = $oneset;
+		}
+	}
+
+	// Clean up some fields if neccery
+	$field->PostPopulateAdminForm($mainList, $advList);
+
+}
+
+$smarty->assign('start_form',$this->CreateFormStart($id, 'admin_add_edit_field', $returnid, 'post', '', false, '', $parms));		
 $smarty->assign('end_form', $this->CreateFormEnd());
 $smarty->assign('tab_start',$this->StartTabHeaders().
-		 $this->SetTabHeader('maintab',$this->Lang('tab_main')).
-		 $this->SetTabHeader('advancedtab',$this->Lang('tab_advanced')).
-		 $this->EndTabHeaders() . $this->StartTabContent());
+							$this->SetTabHeader('maintab',$this->Lang('tab_main')).
+							$this->SetTabHeader('advancedtab',$this->Lang('tab_advanced')).
+							$this->EndTabHeaders() . $this->StartTabContent());
 $smarty->assign('tabs_end',$this->EndTabContent());
 $smarty->assign('maintab_start',$this->StartTab("maintab"));
 $smarty->assign('advancedtab_start',$this->StartTab("advancedtab"));
 $smarty->assign('tab_end',$this->EndTab());
 $smarty->assign('notice_select_type',$this->Lang('notice_select_type'));
+$smarty->assign('cancel',$this->CreateInputSubmit($id, 'cancel', $this->Lang('cancel')));
+$smarty->assign('opt_num',$this->CreateInputText($id, 'fbrp_opt_num', $opt_num, 1, 2));
 
-if($aefield->GetId() != -1)
-  {
-$smarty->assign('op',$this->CreateInputHidden($id, 'fbrp_op',$this->Lang('updated')));
-$smarty->assign('submit',$this->CreateInputSubmit($id, 'fbrp_aef_upd', $this->Lang('update')));
-  }
-else
-  {
-$smarty->assign('op',$this->CreateInputHidden($id, 'fbrp_op', $this->Lang('added')));
-$smarty->assign('submit',$this->CreateInputSubmit($id, 'fbrp_aef_add', $this->Lang('add')));
-  }
-
-if ($aefield->HasAddOp())
-  {
-$smarty->assign('add',$this->CreateInputSubmit($id,'fbrp_aef_optadd',$aefield->GetOptionAddButton()));
-  }
-
-  
-if ($aefield->HasDeleteOp())
-  {
-$smarty->assign('del',$this->CreateInputSubmit($id,'fbrp_aef_optdel',$aefield->GetOptionDeleteButton()));
-  }
-
-
-
-$smarty->assign('fb_hidden', $this->CreateInputHidden($id, 'form_id', $this->Id) . $this->CreateInputHidden($id, 'field_id', $aefield->GetId()) . $this->CreateInputHidden($id, 'fbrp_order_by', $aefield->GetOrder()).
-		 $this->CreateInputHidden($id,'fbrp_set_from_form','1'));
-
-if (/*!$aefield->IsDisposition() && */ !$aefield->IsNonRequirableField())
-  {
-$smarty->assign('requirable',1);
-  }
-else
-  {
-$smarty->assign('requirable',0);
-  }
-		
-if (isset($baseList['main']))
-  {
-foreach ($baseList['main'] as $item)
-  {
-	$titleStr=$item[0];
-	$inputStr=$item[1];
-	$oneset = new stdClass();
-	$oneset->title = $titleStr;
-	if (is_array($inputStr))
-	  {
-	$oneset->input = $inputStr[0];
-	$oneset->help = $inputStr[1];
-	  }
-	else
-	  {
-	$oneset->input = $inputStr;
-	$oneset->help='';
-	  }
-	array_push($mainList,$oneset);
-  }
-  }	
-if (isset($baseList['adv']))
-  {
-foreach ($baseList['adv'] as $item)
-  {
-	$titleStr = $item[0];
-	$inputStr = $item[1];
-	$oneset = new stdClass();
-	$oneset->title = $titleStr;
-	if (is_array($inputStr))
-	  {
-	$oneset->input = $inputStr[0];
-	$oneset->help = $inputStr[1];
-	  }
-	else
-	  {
-	$oneset->input = $inputStr;
-	$oneset->help='';
-	  }
-	array_push($advList,$oneset);
-  }
-  }	
-if (isset($fieldList['main']))
-  {
-foreach ($fieldList['main'] as $item)
-  {
-	$titleStr=$item[0];
-	$inputStr=$item[1];
-	$oneset = new stdClass();
-	$oneset->title = $titleStr;
-	if (is_array($inputStr))
-	  {
-	$oneset->input = $inputStr[0];
-	$oneset->help = $inputStr[1];
-	  }
-	else
-	  {
-	$oneset->input = $inputStr;
-	$oneset->help='';
-	  }
-	array_push($mainList,$oneset);
-  }
-  }
-if (isset($fieldList['adv']))
-  {
-foreach ($fieldList['adv'] as $item)
-  {
-	$titleStr=$item[0];
-	$inputStr=$item[1];
-	$oneset = new stdClass();
-	$oneset->title = $titleStr;
-	if (is_array($inputStr))
-	  {
-	$oneset->input = $inputStr[0];
-	$oneset->help = $inputStr[1];
-	  }
-	else
-	  {
-	$oneset->input = $inputStr;
-	$oneset->help='';
-	  }
-	array_push($advList,$oneset);
-  }
-  }
-	
-$aefield->PostPopulateAdminForm($mainList, $advList);
 $smarty->assign('mainList',$mainList);
 $smarty->assign('advList',$advList);
-return $this->ProcessTemplate('AddEditField.tpl');
 
+#---------------------
+# Output
+#---------------------
 
+echo $this->ProcessTemplate('AddEditField.tpl');
 		
 ?>

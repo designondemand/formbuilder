@@ -9,9 +9,9 @@
 
 class fbTextAreaField extends fbFieldBase {
 
-	function fbTextAreaField(&$form_ptr, &$params)
+	function __construct(fbForm &$FormInstance, &$params)
 	{
-		$this->fbFieldBase($form_ptr, $params);
+		parent::__construct($FormInstance, $params);
 		$this->Type = 'TextAreaField';
 		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(

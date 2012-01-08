@@ -12,9 +12,9 @@ class fbMultiselectField extends fbFieldBase {
 	var $optionCount;
 	var $optionAdd;
 
-	function fbMultiselectField(&$form_ptr, &$params)
+	function __construct(fbForm &$FormInstance, &$params)
 	{
-		parent::fbFieldBase($form_ptr, $params);
+		parent::__construct($FormInstance, $params);
 		$this->Type = 'MultiselectField';
 		$this->DisplayInForm = true;
 		$this->NonRequirableField = false;
@@ -27,19 +27,23 @@ class fbMultiselectField extends fbFieldBase {
 
 	function GetOptionAddButton()
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		return $mod->Lang('add_options');
 	}
 
 	function GetOptionDeleteButton()
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		return $mod->Lang('delete_options');
 	}
 
 	function DoOptionAdd(&$params)
 	{
-		$this->optionAdd = 2;
+		$this->optionAdd = 1;
+		if(!empty($params['fbrp_opt_num'])) {
+	
+			$this->optionAdd = $params['fbrp_opt_num'];
+		}
 	}
 
 	function DoOptionDelete(&$params)
@@ -75,7 +79,7 @@ class fbMultiselectField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		$js = $this->GetOption('javascript','');
 
 		// why all this? Associative arrays are not guaranteed to preserve
@@ -114,7 +118,7 @@ class fbMultiselectField extends fbFieldBase {
 
     function StatusInfo()
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		$opt = $this->GetOption('option_name','');
 		
 		if (is_array($opt))
@@ -135,7 +139,7 @@ class fbMultiselectField extends fbFieldBase {
 	
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 
 		$this->countItems();
 		if ($this->optionAdd > 0)
@@ -143,7 +147,7 @@ class fbMultiselectField extends fbFieldBase {
 			$this->optionCount += $this->optionAdd;
 			$this->optionAdd = 0;
 			}
-		$dests = '<table class="module_fb_table"><tr><th>'.$mod->Lang('title_option_name').'</th><th>'.
+		$dests = '<table class="pagetable module_fb_table"><tr><th>'.$mod->Lang('title_option_name').'</th><th>'.
 			$mod->Lang('title_option_value').'</th><th>'.
 			$mod->Lang('title_delete').'</th></tr>';
 
@@ -168,8 +172,8 @@ class fbMultiselectField extends fbFieldBase {
 
 	function GetHumanReadableValue($as_string=true)
 	{
-		$mod = &$this;
-		$form = $this->form_ptr;
+		$mod = $this->getModuleInstance();
+		$form = $this->getFormInstance();
 		$vals = $this->GetOptionRef('option_value');
 		if ($this->HasValue())
 			{

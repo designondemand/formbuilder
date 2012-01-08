@@ -10,9 +10,9 @@
 class fbDispositionResponseManager extends fbFieldBase {
 
 
-	function fbDispositionResponseManager(&$form_ptr, &$params)
+	function __construct(fbForm &$FormInstance, &$params)
 	{
-		parent::fbFieldBase($form_ptr, $params);
+		parent::__construct($FormInstance, $params);
 		$mod = $form_ptr->module_ptr; //??
 		$this->Type = 'DispositionResponseManager';
 		$this->IsDisposition = true;

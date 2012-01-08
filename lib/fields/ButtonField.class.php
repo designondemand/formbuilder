@@ -9,10 +9,9 @@
 
 class fbButtonField extends fbFieldBase 
 {
-
-  function fbButtonField(&$form_ptr, &$params)
-  {
-    $this->fbFieldBase($form_ptr, $params);
+	function __construct(fbForm &$FormInstance, &$params)
+	{
+		parent::__construct($FormInstance, $params);
     $mod = $form_ptr->module_ptr;
     $this->Type = 'ButtonField';
     $this->DisplayInForm = true;
