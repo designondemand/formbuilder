@@ -10,9 +10,9 @@
 
 class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 
-	function fbDispositionFromEmailAddressField(&$form_ptr, &$params)
+	function __construct(fbForm &$FormInstance, &$params)
 	{
-		$this->fbDispositionEmailBase($form_ptr, $params);
+		parent::__construct($FormInstance, $params);
 		$this->Type = 'DispositionFromEmailAddressField';
 		$this->IsDisposition = true;
 		$this->DisplayInForm = true;

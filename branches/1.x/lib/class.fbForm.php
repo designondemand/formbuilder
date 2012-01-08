@@ -368,6 +368,10 @@ class fbForm {
 		return $index;
 	}
 	
+	public final function getModuleInstance()
+	{
+		return $this->ModuleInstance;
+	}	
 
 	#---------------------
 	# Test methods
@@ -1108,13 +1112,6 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		return $this->ProcessTemplateFromDatabase('fb_'.$this->Id);
 	}
 
-/*	
-  function LoadForm($loadDeep=false)
-  {
-    return $this->Load($this->Id, array(), $loadDeep);
-  }
-*/
-
 	// make own help class for this kind of things, or something.
 	function unmy_htmlentities($val)
 	{
@@ -1199,8 +1196,14 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 					}
 					
 					// Create the field object
-					$this->Fields[$fieldCount] = $this->NewField($thisRes);
-					$fieldCount++;
+					$field = $this->LoadField($thisRes);
+					
+					// Import to fields
+					if(is_object($field)) {
+						
+						$this->Fields[$fieldCount] = $field;
+						$fieldCount++;
+					}
 				}
 			}
 			
@@ -1348,38 +1351,6 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	}
 
 	/**
-	* Makes class name as it says
-	* NOTE: Merge this into NewField method, dosen't need to be separated, or figure something smarter. 
-	*
-	* @deprecated
-	* @access private
-	* @return string
-	*/	
-/*	
-	private final function MakeClassName($type, $classDirPrefix)
-	{
-		// perform rudimentary security, since Type could come in from a form
-		$type = preg_replace("/[\W]|\.\./", "_", $type);
-		if ($type == '' || strlen($type) < 1) {
-		
-			$type = 'Field';
-		}
-		
-		$classFile='';
-		if (strlen($classDirPrefix) > 0) {
-		
-			$classFile = $classDirPrefix .'/'.$type.'.class.php';
-		} else {
-		
-			$classFile = $type.'.class.php';
-		}
-		
-		require_once cms_join_path(dirname(__FILE__), 'fields', $classFile);
-		// class names are prepended with "fb" to prevent namespace clash.
-		return ( 'fb'.$type );
-	}
-*/
-	/**
 	* Makes field type class object
 	* NOTE: Public for now, action.admin_add_edit_field.php requires, change visibility to private when you can.
 	* NOTE: Autoloader handling this now, see module class.
@@ -1388,12 +1359,11 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	* @access public
 	* @return object
 	*/	
-    public final function &NewField(&$params)
+    public final function LoadField(&$params)
     {
 		if(!is_object($this)) return FALSE;
 	
 		$db = cmsms()->GetDb();
-		$field = null;
 		$className = 'fb'; // add fb secure prefix, to avoid namespace collapse.
 		
 		// Try to get type by id first.
@@ -1406,18 +1376,28 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
 				$className .= $type;
 				$field = new $className($this, $params);
-				$field->LoadField($params);  
+				if(is_object($field)) {
+				
+					$field->LoadField($params); 
+
+					return $field;				
+				}
 			}
 		}
 		
-		// No luck, check if we have type.
-		if (!is_object($field) && isset($params['field_type'])) {
+		// No luck, check if we have pure type.
+		if (!empty($params['field_type'])) {
 		
 			$className .= $params['field_type'];
 			$field = new $className($this, $params);
+			
+			if(is_object($field)) {
+			
+				return $field;
+			}
 		}
 		
-		return $field;
+		return null;
     }
 
 	// Not in use atm?????
@@ -1434,171 +1414,6 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		}
 	}	
 */	
-/*	
-  function AddEditField($id, &$aefield, $dispose_only, $returnid, $message='')
-  {
-    $mod = $this->module_ptr;
-		
-    if(!empty($message)) $mod->smarty->assign('message',$mod->ShowMessage($message));
-    $mod->smarty->assign('backtoform_nav',$mod->CreateLink($id, 'admin_add_edit_form', $returnid, $mod->Lang('link_back_to_form'), array('form_id'=>$this->Id)));
-    $mainList = array();
-    $advList = array();
-    $baseList = $aefield->PrePopulateBaseAdminForm($id, $dispose_only);
-    if ($aefield->GetFieldType() == '')
-      {
-	// still need type
-	$mod->smarty->assign('start_form',$mod->CreateFormStart($id, 'admin_add_edit_field', $returnid));			
-	$fieldList = array('main'=>array(),'adv'=>array());
-      }
-    else
-      {
-	// we have our type
-	$mod->smarty->assign('start_form',$mod->CreateFormStart($id, 'admin_add_edit_field', $returnid));	
-	$fieldList = $aefield->PrePopulateAdminForm($id);
-      }
-    $mod->smarty->assign('end_form', $mod->CreateFormEnd());
-    $mod->smarty->assign('tab_start',$mod->StartTabHeaders().
-			 $mod->SetTabHeader('maintab',$mod->Lang('tab_main')).
-			 $mod->SetTabHeader('advancedtab',$mod->Lang('tab_advanced')).
-			 $mod->EndTabHeaders() . $mod->StartTabContent());
-    $mod->smarty->assign('tabs_end',$mod->EndTabContent());
-    $mod->smarty->assign('maintab_start',$mod->StartTab("maintab"));
-    $mod->smarty->assign('advancedtab_start',$mod->StartTab("advancedtab"));
-    $mod->smarty->assign('tab_end',$mod->EndTab());
-    $mod->smarty->assign('notice_select_type',$mod->Lang('notice_select_type'));
-
-    if($aefield->GetId() != -1)
-      {
-	$mod->smarty->assign('op',$mod->CreateInputHidden($id, 'fbrp_op',$mod->Lang('updated')));
-	$mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'fbrp_aef_upd', $mod->Lang('update')));
-      }
-    else
-      {
-	$mod->smarty->assign('op',$mod->CreateInputHidden($id, 'fbrp_op', $mod->Lang('added')));
-	$mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'fbrp_aef_add', $mod->Lang('add')));
-      }
-
-    if ($aefield->HasAddOp())
-      {
-	$mod->smarty->assign('add',$mod->CreateInputSubmit($id,'fbrp_aef_optadd',$aefield->GetOptionAddButton()));
-      }
-    else
-      {
-	$mod->smarty->assign('add','');
-      }
-    if ($aefield->HasDeleteOp())
-      {
-	$mod->smarty->assign('del',$mod->CreateInputSubmit($id,'fbrp_aef_optdel',$aefield->GetOptionDeleteButton()));
-      }
-    else
-      {
-	$mod->smarty->assign('del','');
-      }
-
-
-    $mod->smarty->assign('fb_hidden', $mod->CreateInputHidden($id, 'form_id', $this->Id) . $mod->CreateInputHidden($id, 'field_id', $aefield->GetId()) . $mod->CreateInputHidden($id, 'fbrp_order_by', $aefield->GetOrder()).
-			 $mod->CreateInputHidden($id,'fbrp_set_from_form','1'));
-
-    if (/*!$aefield->IsDisposition() && */ /*!$aefield->IsNonRequirableField())
-     /* {
-	$mod->smarty->assign('requirable',1);
-      }
-    else
-      {
-	$mod->smarty->assign('requirable',0);
-      }
-			
-    if (isset($baseList['main']))
-      {
-	foreach ($baseList['main'] as $item)
-	  {
-	    $titleStr=$item[0];
-	    $inputStr=$item[1];
-	    $oneset = new stdClass();
-	    $oneset->title = $titleStr;
-	    if (is_array($inputStr))
-	      {
-		$oneset->input = $inputStr[0];
-		$oneset->help = $inputStr[1];
-	      }
-	    else
-	      {
-		$oneset->input = $inputStr;
-		$oneset->help='';
-	      }
-	    array_push($mainList,$oneset);
-	  }
-      }	
-    if (isset($baseList['adv']))
-      {
-	foreach ($baseList['adv'] as $item)
-	  {
-	    $titleStr = $item[0];
-	    $inputStr = $item[1];
-	    $oneset = new stdClass();
-	    $oneset->title = $titleStr;
-	    if (is_array($inputStr))
-	      {
-		$oneset->input = $inputStr[0];
-		$oneset->help = $inputStr[1];
-	      }
-	    else
-	      {
-		$oneset->input = $inputStr;
-		$oneset->help='';
-	      }
-	    array_push($advList,$oneset);
-	  }
-      }	
-    if (isset($fieldList['main']))
-      {
-	foreach ($fieldList['main'] as $item)
-	  {
-	    $titleStr=$item[0];
-	    $inputStr=$item[1];
-	    $oneset = new stdClass();
-	    $oneset->title = $titleStr;
-	    if (is_array($inputStr))
-	      {
-		$oneset->input = $inputStr[0];
-		$oneset->help = $inputStr[1];
-	      }
-	    else
-	      {
-		$oneset->input = $inputStr;
-		$oneset->help='';
-	      }
-	    array_push($mainList,$oneset);
-	  }
-      }
-    if (isset($fieldList['adv']))
-      {
-	foreach ($fieldList['adv'] as $item)
-	  {
-	    $titleStr=$item[0];
-	    $inputStr=$item[1];
-	    $oneset = new stdClass();
-	    $oneset->title = $titleStr;
-	    if (is_array($inputStr))
-	      {
-		$oneset->input = $inputStr[0];
-		$oneset->help = $inputStr[1];
-	      }
-	    else
-	      {
-		$oneset->input = $inputStr;
-		$oneset->help='';
-	      }
-	    array_push($advList,$oneset);
-	  }
-      }
-		
-    $aefield->PostPopulateAdminForm($mainList, $advList);
-    $mod->smarty->assign('mainList',$mainList);
-    $mod->smarty->assign('advList',$advList);
-    return $mod->ProcessTemplate('AddEditField.tpl');
-  }
-*/
    
   function SwapFieldsByIndex($src_field_index, $dest_field_index)
   {

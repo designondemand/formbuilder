@@ -9,9 +9,9 @@
 
 class fbFieldsetEnd extends fbFieldBase {
 
-	function fbFieldsetEnd(&$form_ptr, &$params)
+	function __construct(fbForm &$FormInstance, &$params)
 	{
-		parent::fbFieldBase($form_ptr, $params);
+		parent::__construct($FormInstance, $params);
 		$this->Type = 'FieldsetEnd';
 		$this->DisplayInForm = true;
 		$this->DisplayInSubmission = false;

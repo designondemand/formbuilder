@@ -9,9 +9,9 @@
 
 class fbCheckboxField extends fbFieldBase {
 
-	function fbCheckboxField(&$form_ptr, &$params)
+	function __construct(fbForm &$FormInstance, &$params)
 	{
-        parent::fbFieldBase($form_ptr, $params);
+		parent::__construct($FormInstance, $params);
 		$this->Type =  'CheckboxField';
 		$this->DisplayInForm = true;
 		$this->NonRequirableField = false;

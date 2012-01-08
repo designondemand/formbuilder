@@ -27,9 +27,9 @@ class fbPulldownField extends fbFieldBase {
 		return $a2;
 	}
 
-	function fbPulldownField(&$form_ptr, &$params)
+	function __construct(fbForm &$FormInstance, &$params)
 	{
-		parent::fbFieldBase($form_ptr, $params);
+		parent::__construct($FormInstance, $params);
 		$this->Type = 'PulldownField';
 		$this->DisplayInForm = true;
 		$this->HasAddOp = true;

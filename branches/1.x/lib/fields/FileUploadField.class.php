@@ -5,9 +5,9 @@
 
 class fbFileUploadField extends fbFieldBase {
 
-	function fbFileUploadField(&$form_ptr, &$params)
-	{
-		$this->fbFieldBase($form_ptr, $params);
+  function __construct(fbForm &$FormInstance, &$params)
+  {
+    parent::__construct($FormInstance, $params);
 		$this->Type = 'FileUploadField';
 		$this->sortable = false;
 		$this->IsFileUpload = true;	 

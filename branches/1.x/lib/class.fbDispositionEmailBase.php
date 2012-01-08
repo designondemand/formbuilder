@@ -10,9 +10,9 @@
 class fbDispositionEmailBase extends fbFieldBase
 {
 
-  function fbDispositionEmailBase(&$form_ptr, &$params)
-  {
-    $this->fbFieldBase($form_ptr, $params);
+	function __construct(fbForm &$FormInstance, &$params)
+	{
+		parent::__construct($FormInstance, $params);
     $mod = $form_ptr->module_ptr;
     $this->IsDisposition = true;
 	$this->IsEmailDisposition = true;

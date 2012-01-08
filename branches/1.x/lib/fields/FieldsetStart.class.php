@@ -9,9 +9,9 @@
 
 class fbFieldsetStart extends fbFieldBase {
 
-  function fbFieldsetStart(&$form_ptr, &$params)
+  function __construct(fbForm &$FormInstance, &$params)
   {
-    parent::fbFieldBase($form_ptr, $params);
+    parent::__construct($FormInstance, $params);
     $this->Type = 'FieldsetStart';
     $this->DisplayInForm = true;
     $this->DisplayInSubmission = false;

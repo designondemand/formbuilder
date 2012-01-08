@@ -48,6 +48,7 @@ if (isset($params['active_tab'])) {
 	$tab = $params['active_tab'];
 }
 
+// Fast add stuff
 if (isset($params['fbrp_set_field_level'])) {
 
 	$this->SetPreference('show_field_level',$params['fbrp_set_field_level']);
@@ -61,11 +62,38 @@ $form = new fbForm($params, true);
 $contentops = cmsms()->GetContentOperations();
 $usertagops = cmsms()->GetUserTagOperations();
 
+$parms = array();
+$parms['fb_message'] = $this->Lang('form', ($formid != -1 ? $this->Lang('update') : $this->Lang('added')));
+
+#---------------------
+# Submit
+#---------------------
+
+if (isset($params['cancel'])) {
+
+	$this->Redirect($id, 'defaultadmin', $returnid);
+}
+
+if (isset($params['fbrp_submit'])) {
+
+	$parms['form_id'] = $form->Store($params);
+	$parms['active_tab'] = $params['active_tab'];
+	$this->Redirect($id, 'admin_add_edit_form', $returnid, $parms);
+
+} 
+
+if(isset($params['fbrp_save'])) {
+
+	$form->Store($params);
+	$this->Redirect($id, 'defaultadmin', $returnid, $parms);
+		
+} 
+
 #---------------------
 # Smarty assigns
 #---------------------	
 
-$smarty->assign('formstart', $this->CreateFormStart($id, 'admin_store_form', $returnid, 'multipart/form-data', '', false, '', array('form_id'=>$formid)));
+$smarty->assign('formstart', $this->CreateFormStart($id, 'admin_add_edit_form', $returnid, 'post', '', false, '', array('form_id'=>$formid)));
 $smarty->assign('tab_start',$this->StartTabHeaders().
 						$this->SetTabHeader('maintab',$this->Lang('tab_main'),('maintab' == $tab)?true:false).
 						$this->SetTabHeader('submittab',$this->Lang('tab_submit'),('submittab' == $tab)?true:false).
@@ -123,12 +151,12 @@ $smarty->assign('input_form_css_class', $this->CreateInputText($id, 'fbrp_forma_
 $smarty->assign('title_form_fields', $this->Lang('title_form_fields'));
 $smarty->assign('title_form_main', $this->Lang('title_form_main'));
 
-if( $this->GetPreference('show_fieldids',0) != 0 ) {
+if( $this->GetPreference('show_fieldids',0)) {
 	
 	$smarty->assign('title_field_id', $this->Lang('title_field_id'));
 }
 
-if( $this->GetPreference('show_fieldaliases',1) != 0 ) {
+if( $this->GetPreference('show_fieldaliases',1)) {
 
 	$smarty->assign('title_field_alias', $this->Lang('title_field_alias_short'));
 }
@@ -174,8 +202,7 @@ $maxOrder = 1;
 // Old form, load fields
 if($formid > 0) {
   
-	$smarty->assign('fb_hidden', $this->CreateInputHidden($id, 'fbrp_form_op',$this->Lang('updated')) . 
-								$this->CreateInputHidden($id, 'fbrp_sort','','class="fbrp_sort"') . 
+	$smarty->assign('fb_hidden',$this->CreateInputHidden($id, 'fbrp_sort','','class="fbrp_sort"') . 
 								$this->CreateInputHidden($id, 'active_tab','','class="fbr_atab"'));
 	$smarty->assign('save_button', $this->CreateInputSubmit($id, 'fbrp_save', $this->Lang('save')));
 	$smarty->assign('submit_button', $this->CreateInputSubmit($id, 'fbrp_submit', $this->Lang('save_and_continue'),'onclick="jQuery(this).fb_set_tab()"'));
@@ -253,12 +280,12 @@ if($formid > 0) {
 		//$smarty->assign('title_fastadd',$this->Lang('title_fastadd'));
 		if ($this->GetPreference('show_field_level','basic') == 'basic') {
 		
-			$smarty->assign('input_fastadd',$this->CreateInputDropdown($id, 'fbrp_field_type',array_merge(array($this->Lang('select_type')=>''),$this->std_field_types), -1,'', 'onchange="fast_add(this)"').
+			$smarty->assign('input_fastadd',$this->CreateInputDropdown($id, 'field_type',array_merge(array($this->Lang('select_type')=>''),$this->std_field_types), -1,'', 'onchange="fast_add(this)"').
 											$this->Lang('title_switch_advanced').
 											$this->CreateLink($id, 'admin_add_edit_form', $returnid,$this->Lang('title_switch_advanced_link'),array('form_id'=>$formid, 'fbrp_set_field_level'=>'advanced')));
 		} else {
 		
-			$smarty->assign('input_fastadd',$this->CreateInputDropdown($id, 'fbrp_field_type',array_merge(array($this->Lang('select_type')=>''),$this->field_types), -1,'', 'onchange="fast_add(this)"').
+			$smarty->assign('input_fastadd',$this->CreateInputDropdown($id, 'field_type',array_merge(array($this->Lang('select_type')=>''),$this->field_types), -1,'', 'onchange="fast_add(this)"').
 											$this->Lang('title_switch_basic').
 											$this->CreateLink($id, 'admin_add_edit_form', $returnid,$this->Lang('title_switch_basic_link'),array('form_id'=>$formid, 'fbrp_set_field_level'=>'basic')));
 		}
@@ -269,10 +296,10 @@ if($formid > 0) {
 
 	//$smarty->assign('save_button','');
 	$smarty->assign('submit_button', $this->CreateInputSubmit($id, 'fbrp_submit', $this->Lang('add')));
-	$smarty->assign('fb_hidden', $this->CreateInputHidden($id, 'fbrp_form_op',$this->Lang('added')).$this->CreateInputHidden($id, 'fbrp_sort','','id="fbrp_sort"'));
+	$smarty->assign('fb_hidden', $this->CreateInputHidden($id, 'fbrp_sort','','id="fbrp_sort"'));
 }
 
-$smarty->assign('cancel_button', $this->CreateInputSubmit($id, 'fbrp_cancel', $this->Lang('cancel')));
+$smarty->assign('cancel_button', $this->CreateInputSubmit($id, 'cancel', $this->Lang('cancel')));
 
 $smarty->assign('link_notready',"<strong>".$this->Lang('title_not_ready1')."</strong> ".$this->Lang('title_not_ready2')." ".$this->CreateLink($id, 'admin_add_edit_field', $returnid,$this->Lang('title_not_ready_link'),array('form_id'=>$formid, 'fbrp_order_by'=>$maxOrder,'fbrp_dispose_only'=>1), '', false, false,'class="module_fb_link"')." ".$this->Lang('title_not_ready3'));
 $smarty->assign('input_inline_form',$this->CreateInputHidden($id,'fbrp_forma_inline','0'). $this->CreateInputCheckbox($id,'fbrp_forma_inline','1',$form->GetAttr('inline','0')). $this->Lang('title_inline_form_help'));

@@ -9,9 +9,9 @@
 
 class fbStaticTextField extends fbFieldBase {
 
-	function fbStaticTextField(&$form_ptr, &$params)
+	function __construct(fbForm &$FormInstance, &$params)
 	{
-		parent::fbFieldBase($form_ptr, $params);
+		parent::__construct($FormInstance, $params);
 		$this->Type = 'StaticTextField';
 		$this->DisplayInForm = true;
 		$this->DisplayInSubmission = false;
@@ -50,7 +50,8 @@ class fbStaticTextField extends fbFieldBase {
 	
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
+		
 		$main = array(
 				array($mod->Lang('title_text'),
 				$mod->CreateTextArea((get_preference(get_userid(), 'use_wysiwyg')=='1'), $formDescriptor,  $this->GetOption('text',''), 'fbrp_opt_text','pageheadtags'))
