@@ -30,47 +30,34 @@
 #-------------------------------------------------------------------------
 
 if (!isset($gCms)) exit;
+if (!$this->CheckPermission('Modify Forms')) exit;
 
-// Initials
-$configig = cmsms()->GetConfig();
+#---------------------
+# Get all forms
+#---------------------
+
 $forms = $this->GetForms();
-$num_forms = count($forms);
 
 $formArray = array();
 foreach ($forms as $thisForm) {
 
 	$oneset = new stdClass();
-	
-	if ($this->CheckPermission('Modify Forms')) {
-	
-		$oneset->name = $this->CreateLink($id,'admin_add_edit_form', '',$thisForm['name'], array('form_id'=>$thisForm['form_id']));
-		$oneset->xml = $this->CreateLink($id,'exportxml','',"<img src=\"".$config['root_url']."/modules/".$this->GetName()."/images/xml_rss.gif\" class=\"systemicon\" alt=\"Export Form as XML\" />",array('form_id'=>$thisForm['form_id']));
-		$oneset->editlink = $this->CreateLink($id,'admin_add_edit_form', '', cmsms()->variables['admintheme']->DisplayImage('icons/system/edit.gif',$this->Lang('edit'),'','','systemicon'), array('form_id'=>$thisForm['form_id']));
-		$oneset->deletelink = $this->CreateLink($id, 'admin_delete_form', '', $gCms->variables['admintheme']->DisplayImage('icons/system/delete.gif',$this->Lang('delete'),'','','systemicon'), array('form_id'=>$thisForm['form_id']), $this->Lang('are_you_sure_delete_form',$thisForm['name']));
 
-	} else {
-	
-		$oneset->name=$thisForm['name'];
-		$oneset->editlink = '';
-		$oneset->deletelink = '';
-	}
-	
+	$oneset->name = $this->CreateLink($id,'admin_add_edit_form', '',$thisForm['name'], array('form_id'=>$thisForm['form_id']));
+	$oneset->xml = $this->CreateLink($id,'exportxml','',"<img src=\"".$config['root_url']."/modules/".$this->GetName()."/images/xml_rss.gif\" class=\"systemicon\" alt=\"Export Form as XML\" />",array('form_id'=>$thisForm['form_id']));
+	$oneset->editlink = $this->CreateLink($id,'admin_add_edit_form', '', cmsms()->variables['admintheme']->DisplayImage('icons/system/edit.gif',$this->Lang('edit'),'','','systemicon'), array('form_id'=>$thisForm['form_id']));
+	$oneset->deletelink = $this->CreateLink($id, 'admin_delete_form', '', $gCms->variables['admintheme']->DisplayImage('icons/system/delete.gif',$this->Lang('delete'),'','','systemicon'), array('form_id'=>$thisForm['form_id']), $this->Lang('are_you_sure_delete_form',$thisForm['name']));
 	$oneset->usage = $thisForm['alias'];
 	
 	$formArray[] = $oneset;
 }
 
-// Assign everything to smarty
-if ($this->CheckPermission('Modify Forms')) {
+#---------------------
+# Smarty assigns
+#---------------------	
 
-	$this->smarty->assign('addlink',$this->CreateLink($id, 'admin_add_edit_form', '', cmsms()->variables['admintheme']->DisplayImage('icons/system/newobject.gif', $this->Lang('title_add_new_form'),'','','systemicon'), array()));
-	$this->smarty->assign('addform',$this->CreateLink($id, 'admin_add_edit_form', '', $this->Lang('title_add_new_form'), array()));
-	$this->smarty->assign('may_config',1);
-	
-} else {
-
-	$this->smarty->assign('no_permission', $this->Lang('lackpermission'));
-}
+$this->smarty->assign('addlink',$this->CreateLink($id, 'admin_add_edit_form', '', cmsms()->variables['admintheme']->DisplayImage('icons/system/newobject.gif', $this->Lang('title_add_new_form'),'','','systemicon'), array()));
+$this->smarty->assign('addform',$this->CreateLink($id, 'admin_add_edit_form', '', $this->Lang('title_add_new_form'), array()));
 
 $this->smarty->assign_by_ref('forms', $formArray);
 $this->smarty->assign('tabheaders', $this->StartTabHeaders() .
@@ -82,8 +69,6 @@ $this->smarty->assign('start_formtab',$this->StartTab("forms", $params));
 $this->smarty->assign('start_configtab',$this->StartTab("config", $params));
 $this->smarty->assign('end_tab',$this->EndTab());
 $this->smarty->assign('end_tabs',$this->EndTabContent());
-
-$this->smarty->assign('message', isset($params['fbrp_message'])?$params['fbrp_message']:'');
 
 $this->smarty->assign('start_configform',$this->CreateFormStart($id,'admin_update_config', $returnid));
 $this->smarty->assign('input_hide_errors',$this->CreateInputCheckbox($id, 'fbrp_hide_errors', 1, $this->GetPreference('hide_errors','0')). $this->Lang('title_hide_errors_long'));
@@ -106,6 +91,9 @@ $this->smarty->assign('input_xml_to_upload',$this->CreateInputFile($id, 'fbrp_xm
 $this->smarty->assign('input_xml_upload_formname',$this->CreateInputText($id,'fbrp_import_formname','',25));
 $this->smarty->assign('input_xml_upload_formalias',$this->CreateInputText($id,'fbrp_import_formalias','',25));
 
-// Process template, display output
+#---------------------
+# Output
+#---------------------
+
 echo $this->ProcessTemplate('AdminMain.tpl');
 ?>

@@ -30,24 +30,22 @@
 #-------------------------------------------------------------------------
 
 if (!isset($gCms)) exit;
-if (!$this->CheckAccess()) exit; // deprecate
+if (!$this->CheckPermission('Modify Forms')) exit;
 
 // Store data
 $form = new fbForm($params, true);
 
-//$tab = $this->GetActiveTab($params);
-
 if (isset($params['fbrp_submit'])) {
 
 	$parms['form_id'] = $form->Store($params);
-	$parms['tab_message'] = 'updated';
+	$parms['fb_message'] = $this->Lang('form',$params['fbrp_form_op']);
 	$parms['active_tab'] = $params['active_tab'];
 	$this->Redirect($id, 'admin_add_edit_form', $returnid, $parms);
 
 } else if(isset($params['fbrp_save'])) {
 
 	$form->Store($params);
-    $parms['fbrp_message'] = $this->Lang('form',$params['fbrp_form_op']);
+    $parms['fb_message'] = $this->Lang('form',$params['fbrp_form_op']);
 	$this->Redirect($id, 'defaultadmin', $returnid, $parms);
 		
 } else {
