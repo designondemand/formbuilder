@@ -66,7 +66,7 @@ class fbFieldsetStart extends fbFieldBase {
 	
   function PrePopulateAdminForm($formDescriptor)
   {
-	$mod = &$this;	
+	$mod = $this->getModuleInstance();	
     $main = array(
 		  array($mod->Lang('title_legend'),
             		$mod->CreateInputText($formDescriptor,'fbrp_opt_legend',

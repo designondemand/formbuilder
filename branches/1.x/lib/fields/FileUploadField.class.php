@@ -39,10 +39,10 @@ class fbFileUploadField extends fbFieldBase {
 		return $txt;
 	}
 
-	function Load($id, &$params, $loadDeep=false)
+	function Load(&$params, $loadDeep=false)
 	{
 		$mod = &$this;	
-		parent::Load($id,$params,$loadDeep);
+		parent::Load($params,$loadDeep);
 
 		if(isset($_FILES) && isset($_FILES[$mod->module_id.'fbrp__'.$this->Id]) && $_FILES[$mod->module_id.'fbrp__'.$this->Id]['size'] > 0) {
 
@@ -99,90 +99,51 @@ class fbFileUploadField extends fbFieldBase {
 		return $ret;
 	}
   
-  
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$gCms = cmsms();
-		$mod = &$this;	
+		$mod = $this->getModuleInstance();	
+		$form = $this->getFormInstance();
+		$config = cmsms()->GetConfig();
+
 		$ms = $this->GetOption('max_size');
 		$exts = $this->GetOption('permitted_extensions');
 		$show = $this->GetOption('show_details','0');
-		$sendto_uploads = $this->GetOption('sendto_uploads','false');
-		$uploads_category = $this->GetOption('uploads_category');
-		$uploads_destpage = $this->GetOption('uploads_destpage');
 
+		$file_rename_help = $mod->Lang('file_rename_help'). $form->fieldValueTemplate().'<tr><td>$ext</td><td>'.$mod->Lang('original_file_extension').'</td></tr></table>';
+		
+		// Init main tab
 		$main = array(
-			  array($mod->Lang('title_maximum_size'),
-				$mod->CreateInputText($formDescriptor, 
-							  'fbrp_opt_max_size', $ms, 5, 5).
-				' '.$mod->Lang('title_maximum_size_long')),
-			  array($mod->Lang('title_permitted_extensions'),
-				$mod->CreateInputText($formDescriptor, 
-							  'fbrp_opt_permitted_extensions',
-							  $exts,25,80).'<br/>'.
-				$mod->Lang('title_permitted_extensions_long')),
-			  array($mod->Lang('title_show_limitations'),
-				$mod->CreateInputHidden($formDescriptor,'fbrp_opt_show_details','0').
-				$mod->CreateInputCheckbox($formDescriptor, 
-							  'fbrp_opt_show_details', '1', $show).
-				' '.$mod->Lang('title_show_limitations_long')),
-			  array($mod->Lang('title_allow_overwrite'),
-				$mod->CreateInputHidden($formDescriptor,'fbrp_opt_allow_overwrite','0').
-				$mod->CreateInputCheckbox($formDescriptor, 
-							  'fbrp_opt_allow_overwrite', '1', $this->GetOption('allow_overwrite','0')).
-				' '.$mod->Lang('title_allow_overwrite_long'))
-			 );
+			array($mod->Lang('title_maximum_size'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_max_size', $ms, 5, 5).' '.$mod->Lang('title_maximum_size_long')),
+			array($mod->Lang('title_permitted_extensions'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_permitted_extensions',$exts,25,80).'<br/>'.$mod->Lang('title_permitted_extensions_long')),
+			array($mod->Lang('title_show_limitations'),$mod->CreateInputHidden($formDescriptor,'fbrp_opt_show_details','0').$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_show_details', '1', $show).' '.$mod->Lang('title_show_limitations_long')),
+			array($mod->Lang('title_allow_overwrite'),$mod->CreateInputHidden($formDescriptor,'fbrp_opt_allow_overwrite','0').$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_allow_overwrite', '1', $this->GetOption('allow_overwrite','0')).' '.$mod->Lang('title_allow_overwrite_long')),
+			array($mod->Lang('title_remove_file_from_server'), $mod->CreateInputHidden($formDescriptor,'fbrp_opt_remove_file','0'). $mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_remove_file', '1', $this->GetOption('remove_file','0')).$mod->Lang('help_ignored_if_upload')),
+			array($mod->Lang('title_file_destination'), $mod->CreateInputText($formDescriptor,'fbrp_opt_file_destination', $this->GetOption('file_destination',$config['uploads_path']),60,255). $mod->Lang('help_ignored_if_upload'))			
+		);
 
+		// Init advanced tab
+		$adv = array(
+				
+			array($mod->Lang('title_file_rename'),$mod->CreateInputText($formDescriptor,'fbrp_opt_file_rename',$this->GetOption('file_rename',''),60,255).$file_rename_help),
+			array($mod->Lang('title_suppress_filename'),$mod->CreateInputHidden($formDescriptor,'fbrp_opt_suppress_filename','0').$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_suppress_filename', '1', $this->GetOption('suppress_filename','0'))),
+			array($mod->Lang('title_suppress_attachment'),$mod->CreateInputHidden($formDescriptor,'fbrp_opt_suppress_attachment',0).$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_suppress_attachment', 1, $this->GetOption('suppress_attachment',1)))
+
+		);
+		
 		$uploads = $mod->GetModuleInstance('Uploads');
-		$sendto_uploads_list = array($mod->Lang('no')=>0,
-					 $mod->Lang('yes')=>1);
-			$adv = array();
-			
-			$file_rename_help = $mod->Lang('file_rename_help'). $this->form_ptr->fieldValueTemplate().
-			'<tr><td>$ext</td><td>'.$mod->Lang('original_file_extension').'</td></tr></table>';
-			
-			array_push($adv,array($mod->Lang('title_file_rename'),
-				$mod->CreateInputText($formDescriptor,'fbrp_opt_file_rename',
-					$this->GetOption('file_rename',''),60,255).
-				$file_rename_help));
-			array_push($adv, array($mod->Lang('title_suppress_filename'),
-				$mod->CreateInputHidden($formDescriptor,'fbrp_opt_suppress_filename','0').
-				$mod->CreateInputCheckbox($formDescriptor, 
-						  'fbrp_opt_suppress_filename', '1', 
-						  $this->GetOption('suppress_filename','0'))));
-						  
-			array_push($adv, array($mod->Lang('title_suppress_attachment'),
-				$mod->CreateInputHidden($formDescriptor,'fbrp_opt_suppress_attachment',0).
-				$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_suppress_attachment', 1, $this->GetOption('suppress_attachment',1))));					  
-						
-			array_push($main, array($mod->Lang('title_remove_file_from_server'),
-							$mod->CreateInputHidden($formDescriptor,'fbrp_opt_remove_file','0').
-							$mod->CreateInputCheckbox($formDescriptor, 
-									  'fbrp_opt_remove_file', '1', 
-									  $this->GetOption('remove_file','0')).
-									$mod->Lang('help_ignored_if_upload')));
-			array_push($main, array($mod->Lang('title_file_destination'),
-							$mod->CreateInputText($formDescriptor,'fbrp_opt_file_destination',
-								$this->GetOption('file_destination',$gCms->config['uploads_path']),60,255).
-							$mod->Lang('help_ignored_if_upload')));
-
-		if( $uploads )
-		  {
+		if(is_object($uploads)) {
+		
+			$sendto_uploads = $this->GetOption('sendto_uploads','false');
+			$uploads_category = $this->GetOption('uploads_category');
+			$uploads_destpage = $this->GetOption('uploads_destpage');		
+			$sendto_uploads_list = array($mod->Lang('no')=>0,$mod->Lang('yes')=>1);
 			$categorylist = $uploads->getCategoryList();
-			array_push($adv,array($mod->Lang('title_sendto_uploads'),
-				   $mod->CreateInputDropdown($formDescriptor,
-								 'fbrp_opt_sendto_uploads',$sendto_uploads_list,
-								 $sendto_uploads)));
-
-			array_push($adv,array($mod->Lang('title_uploads_category'),
-				   $mod->CreateInputDropdown($formDescriptor,
-								 'fbrp_opt_uploads_category',$categorylist,'',
-								 $uploads_category)));
-			array_push($adv,array($mod->Lang('title_uploads_destpage'),
-				   $mod->CreatePageDropdown($formDescriptor,
-								'opt_uploads_destpage',$uploads_destpage)));
-		  }
-
+			
+			// Push to advanced tab array
+			array_push($adv,array($mod->Lang('title_sendto_uploads'), $mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_sendto_uploads',$sendto_uploads_list, $sendto_uploads)));
+			array_push($adv,array($mod->Lang('title_uploads_category'), $mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_uploads_category',$categorylist,'', $uploads_category)));
+			array_push($adv,array($mod->Lang('title_uploads_destpage'), $mod->CreatePageDropdown($formDescriptor, 'opt_uploads_destpage',$uploads_destpage)));
+		}
 
 		return array('main'=>$main,'adv'=>$adv);
 	} 

@@ -27,7 +27,7 @@ class fbTextField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this;	
+		$mod = $this->getModuleInstance();	
 		$js = $this->GetOption('javascript','');
 		$ro = '';
 		
@@ -50,7 +50,7 @@ class fbTextField extends fbFieldBase {
 
 	function StatusInfo()
 	{
-		$mod = &$this;	
+		$mod = $this->getModuleInstance();	
 		$ret = $mod->Lang('abbreviation_length',$this->GetOption('length','80'));
 		
 		if (strlen($this->ValidationType)>0) {
@@ -69,7 +69,7 @@ class fbTextField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		
 		$main = array(
 			array($mod->Lang('title_maximum_length'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_length',$this->GetOption('length','80'),25,25)),
@@ -92,9 +92,11 @@ class fbTextField extends fbFieldBase {
 
 	function Validate()
 	{
+		$mod = $this->getModuleInstance();	
+
 		$this->validated = true;
 		$this->validationErrorText = '';
-		$mod = &$this;	
+
 		switch ($this->ValidationType)
 		  {
 		  	   case 'none':

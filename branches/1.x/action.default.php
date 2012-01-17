@@ -8,8 +8,6 @@
 */
 if (!isset($gCms)) exit;
 
-print_r($_FILES);
-
 //debug_display($params);
 
 if (! isset($params['form_id']) && isset($params['form']))
@@ -27,8 +25,9 @@ if( (isset($params['inline'])) && preg_match('/t(rue)*|y(yes)*|1/i',$params['inl
 
 
 $fbrp_callcount = 0;
-$aeform = new fbForm($params,true,true);
+$aeform = new fbForm($params,true);
 
+/*
 $fld = $aeform->GetFormBrowserField();
 if ($fld !== false && $fld->GetOption('feu_bind','0')=='1')
 	{
@@ -44,14 +43,14 @@ if ($fld !== false && $fld->GetOption('feu_bind','0')=='1')
 		return;
 		}
 	}
-
+*/
 
 if( !($inline || ($aeform->GetAttr('inline','0')== '1'))) $id = 'cntnt01';
 
 $this->smarty->assign('fb_form_has_validation_errors',0);
 $this->smarty->assign('fb_show_submission_errors',0);
-$this->smarty->assign('fb_form_header', $aeform->RenderFormHeader());
-$this->smarty->assign('fb_form_footer',$aeform->RenderFormFooter());
+//$this->smarty->assign('fb_form_header', $aeform->RenderFormHeader());
+//$this->smarty->assign('fb_form_footer',$aeform->RenderFormFooter());
 
 $finished = false;
 $fieldExpandOp = false;
@@ -104,8 +103,7 @@ if ( !$fieldExpandOp && (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber(
 		if ($ok) {
 
 			$finished = true;
-			//$aeform->manageFileUploads();
-			$results = $aeform->Dispose($returnid);
+			$results = $aeform->Dispose($params);
 		}
 	}
 }

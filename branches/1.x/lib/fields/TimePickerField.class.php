@@ -29,14 +29,14 @@ class fbTimePickerField extends fbFieldBase {
 
     function StatusInfo()
 	{
-		$mod = &$this;	
+		$mod = $this->getModuleInstance();	
 		return ($this->GetOption('24_hour','0') == '0'?$mod->Lang('12_hour'):$mod->Lang('24_hour'));
 	}
 
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this;	
+		$mod = $this->getModuleInstance();	
 		$js = $this->GetOption('javascript','');
 		
        $now = localtime(time(),true);
@@ -132,7 +132,7 @@ class fbTimePickerField extends fbFieldBase {
 
 	function GetHumanReadableValue($as_string=true)
 	{
-		$mod = &$this;	
+		$mod = $this->getModuleInstance();	
 		if ($this->HasValue())
 			{
 			if ($this->GetOption('24_hour','0') == '0')
@@ -163,7 +163,7 @@ class fbTimePickerField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this;	
+		$mod = $this->getModuleInstance();	
 		$main = array(
 			array($mod->Lang('title_24_hour'),
             		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_24_hour',
