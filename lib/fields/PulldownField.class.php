@@ -40,13 +40,13 @@ class fbPulldownField extends fbFieldBase {
 
 	function GetOptionAddButton()
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		return $mod->Lang('add_options');
 	}
 
 	function GetOptionDeleteButton()
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		return $mod->Lang('delete_options');
 	}
 
@@ -88,7 +88,7 @@ class fbPulldownField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		$js = $this->GetOption('javascript','');
 
 		// why all this? Associative arrays are not guaranteed to preserve
@@ -120,7 +120,7 @@ class fbPulldownField extends fbFieldBase {
 
     function StatusInfo()
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		$opt = $this->GetOption('option_name','');
 		
 		if (is_array($opt))
@@ -141,7 +141,7 @@ class fbPulldownField extends fbFieldBase {
 	
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 
 		$this->countItems();
 		if ($this->optionAdd > 0)
@@ -182,7 +182,9 @@ class fbPulldownField extends fbFieldBase {
 
 	function GetHumanReadableValue($as_string=true)
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
+		$form = $this->getFormInstance();
+		
 		if ($this->HasValue())
 			{
 			$ret = $this->GetOptionElement('option_value',($this->Value-1));
@@ -190,7 +192,7 @@ class fbPulldownField extends fbFieldBase {
 		else
 			{
 			//$ret = $mod->Lang('unspecified');
-			$ret = $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
+			$ret = $form->GetAttr('unspecified',$mod->Lang('unspecified'));
 			}
 		if ($as_string)
 			{

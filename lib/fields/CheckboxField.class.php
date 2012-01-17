@@ -24,7 +24,7 @@ class fbCheckboxField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		$label = '';
 		if (strlen($this->GetOption('label','')) > 0)
 			{
@@ -40,7 +40,7 @@ class fbCheckboxField extends fbFieldBase {
 
 	function GetHumanReadableValue($as_string=true)
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		if ($this->Value === false)
 			{
 			$ret = $this->GetOption('unchecked_value',$mod->Lang('value_unchecked'));
@@ -62,7 +62,7 @@ class fbCheckboxField extends fbFieldBase {
 
 	function StatusInfo()
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		$ret =  ($this->GetOption('is_checked','0')=='1'?$mod->Lang('checked_by_default'):$mod->Lang('unchecked_by_default'));
 		if (strlen($this->ValidationType)>0)
 		  {
@@ -73,7 +73,7 @@ class fbCheckboxField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		$main = array(
 			array($mod->Lang('title_checkbox_label'),
             		$mod->CreateInputText($formDescriptor, 'fbrp_opt_label',
@@ -94,7 +94,7 @@ class fbCheckboxField extends fbFieldBase {
 
 	function Validate()
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		$this->validated = true;
 		$this->validationErrorText = '';
 

@@ -26,7 +26,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		$js = $this->GetOption('javascript','');
 		$retstr = '<input type="text" name="'.$id.'fbrp__'.$this->Id.'[]" '.
 			$this->GetCSSIdTag('_1').' value="'.htmlspecialchars($this->Value[0], ENT_QUOTES).
@@ -98,7 +98,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 			}
 	}
 
-	function DisposeForm()
+	function DisposeForm(&$params)
 	{
       if ($this->HasValue() != false && 
 			(
@@ -124,7 +124,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		list($main,$adv) = $this->PrePopulateAdminFormBase($formDescriptor);
 		$opts = array($mod->Lang('option_never')=>'n',$mod->Lang('option_user_choice')=>'c',$mod->Lang('option_always')=>'a');
 		array_push($main,array($mod->Lang('title_send_usercopy'),
@@ -140,15 +140,17 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		$this->RemoveAdminField($mainArray, $mod->Lang('title_email_from_address'));
 	}
 
 
 	function ModifyOtherFields()
 	{
-		$mod = &$this;
-		$others = $this->form_ptr->GetFields();
+		$mod = $this->getModuleInstance();
+		$form = $this->getFormInstance();		
+		
+		$others = $form->GetFields();
 		$htm = $this->GetOption('headers_to_modify','f');
 		if ($this->Value !== false)
 			{
@@ -173,12 +175,13 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 
 	function Validate()
 	{
-
+		$mod = $this->getModuleInstance();
+	
   		$this->validated = true;
   		$this->validationErrorText = '';
 		$result = true;
 		$message = '';
-		$mod = $this->form_ptr->module_ptr;
+
 		if ($this->ValidationType != 'none')
 			{
 		      if ($this->Value !== false &&

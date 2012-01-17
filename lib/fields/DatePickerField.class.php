@@ -40,7 +40,7 @@ class fbDatePickerField extends fbFieldBase {
 
     function StatusInfo()
 	{
-      $mod = &$this;	
+      $mod = $this->getModuleInstance();	
       $today = getdate();
 		return $mod->Lang("date_range",array($this->GetOption('start_year',($today['year']-10)) ,
          $this->GetOption('end_year',($today['year']+10)))).
@@ -48,9 +48,9 @@ class fbDatePickerField extends fbFieldBase {
 	}
 
 
-	function GetFieldInput($id, &$params, $returnid)
+	function GetFieldInput($id, $params, $returnid)
 	{
-		$mod = &$this;	
+		$mod = $this->getModuleInstance();	
        $today = getdate();
        $Days = array(''=>'');
        for ($i=1;$i<32;$i++)
@@ -121,7 +121,7 @@ class fbDatePickerField extends fbFieldBase {
 
 	function GetHumanReadableValue($as_string=true)
 	{
-		$mod = &$this;	
+		$mod = $this->getModuleInstance();	
 		if ($this->HasValue())
 			{
 			// Original:  Day, Month, Year
@@ -171,7 +171,7 @@ class fbDatePickerField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = &$this;	
+		$mod = $this->getModuleInstance();
       $today = getdate();
 		$main = array(
 			array($mod->Lang('title_date_format'),

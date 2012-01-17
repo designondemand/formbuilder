@@ -47,7 +47,7 @@ class fbFieldsetEnd extends fbFieldBase {
 	
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+
 		$main = array();
 		$adv = array();
 		return array('main'=>$main,'adv'=>$adv);
@@ -55,7 +55,7 @@ class fbFieldsetEnd extends fbFieldBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = &$this;
+		$mod = $this->getModuleInstance();
 		$this->RemoveAdminField($advArray, $mod->Lang('title_field_javascript'));
 		$this->CheckForAdvancedTab($advArray);
 	}

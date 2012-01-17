@@ -22,7 +22,7 @@ class fbTextAreaField extends fbFieldBase {
 
 	function GetFieldInput($id, &$params, $returnid)
 	{            
-		$mod = &$this;	
+		$mod = $this->getModuleInstance();	
 		if ($this->GetOption('html5','0') == '1'){
 			$ret = $mod->CreateTextArea(($this->GetOption('wysiwyg','0') == '1'?true:false),$id,$this->Value,
 					'fbrp__'.$this->Id,'',$this->GetCSSId(),'','',$this->GetOption('cols','80'),$this->GetOption('rows','15'),
@@ -60,7 +60,7 @@ class fbTextAreaField extends fbFieldBase {
 
 	function StatusInfo()
 	{
-		$mod = &$this;	
+		$mod = $this->getModuleInstance();	
 		$ret = '';
 
 		if (strlen($this->ValidationType)>0) {
@@ -85,7 +85,7 @@ class fbTextAreaField extends fbFieldBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-	   $mod = &$this;
+	   $mod = $this->getModuleInstance();
 	   $main = array(
          	array($mod->Lang('title_use_wysiwyg'),$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_wysiwyg','0').
 						$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_wysiwyg','1',$this->GetOption('wysiwyg','0'))),
@@ -112,7 +112,7 @@ class fbTextAreaField extends fbFieldBase {
 
 	function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
-		$mod = &$this;	
+		$mod = $this->getModuleInstance();	
 		
 		// hide "javascript"
 		$this->RemoveAdminField($advArray, $mod->Lang('title_field_javascript'));

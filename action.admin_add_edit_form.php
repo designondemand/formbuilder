@@ -79,14 +79,12 @@ if (isset($params['fbrp_submit'])) {
 	$parms['form_id'] = $form->Store($params);
 	$parms['active_tab'] = $params['active_tab'];
 	$this->Redirect($id, 'admin_add_edit_form', $returnid, $parms);
-
 } 
 
 if(isset($params['fbrp_save'])) {
 
 	$form->Store($params);
 	$this->Redirect($id, 'defaultadmin', $returnid, $parms);
-		
 } 
 
 #---------------------

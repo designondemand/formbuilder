@@ -30,7 +30,7 @@
 #-------------------------------------------------------------------------
 
 if (!isset($gCms)) exit;
-if (! $this->CheckAccess()) exit;
+if (!$this->CheckPermission('Modify Forms')) exit;
 
 $form = new fbForm($params, true);
 $form->Delete();

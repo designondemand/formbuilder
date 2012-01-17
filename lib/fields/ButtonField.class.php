@@ -12,19 +12,19 @@ class fbButtonField extends fbFieldBase
 	function __construct(fbForm &$FormInstance, &$params)
 	{
 		parent::__construct($FormInstance, $params);
-    $mod = $form_ptr->module_ptr;
-    $this->Type = 'ButtonField';
-    $this->DisplayInForm = true;
-    $this->DisplayInSubmission = false;
-    $this->NonRequirableField = true;
-    $this->ValidationTypes = array();
-    $this->sortable = false;
+		$mod = $form_ptr->module_ptr;
+		$this->Type = 'ButtonField';
+		$this->DisplayInForm = true;
+		$this->DisplayInSubmission = false;
+		$this->NonRequirableField = true;
+		$this->ValidationTypes = array();
+		$this->sortable = false;
   }
 
 
   function GetFieldInput($id, &$params, $returnid)
   {
-    $mod = $this->form_ptr->module_ptr;
+    $mod = $this->getModuleInstance();
 	$js = $this->GetOption('javascript','');
 	$cssid = $this->GetCSSIdTag();
 
@@ -36,7 +36,7 @@ class fbButtonField extends fbFieldBase
 
   function PrePopulateAdminForm($formDescriptor)
   {
-    $mod = $this->form_ptr->module_ptr;
+    $mod = $this->getModuleInstance();
     $main = array(
 		  array($mod->Lang('title_button_text'),
             		$mod->CreateInputText($formDescriptor,'fbrp_opt_text',

@@ -13,10 +13,9 @@ class fbDispositionEmailBase extends fbFieldBase
 	function __construct(fbForm &$FormInstance, &$params)
 	{
 		parent::__construct($FormInstance, $params);
-    $mod = $form_ptr->module_ptr;
-    $this->IsDisposition = true;
-	$this->IsEmailDisposition = true;
-    $this->ValidationTypes = array();
+		$this->IsDisposition = true;
+		$this->IsEmailDisposition = true;
+		$this->ValidationTypes = array();
 
   }
 
@@ -27,7 +26,7 @@ class fbDispositionEmailBase extends fbFieldBase
 
   function TemplateStatus()
   {
-    $mod = $this->form_ptr->module_ptr;
+    $mod = $this->getModuleInstance();
     if ($this->GetOption('email_template','') == '')
       {
   		return $mod->Lang('email_template_not_set');
@@ -67,8 +66,8 @@ class fbDispositionEmailBase extends fbFieldBase
   // Send off those emails
   function SendForm($destination_array, $subject)
   {
-    $mod = $this->form_ptr->module_ptr;
-    $form = $this->form_ptr;
+    $mod = $this->getModuleInstance();
+    $form = $this->getFormInstance();
 
    if ($mod->GetPreference('enable_antispam',1))
      {
@@ -314,7 +313,8 @@ class fbDispositionEmailBase extends fbFieldBase
 
   function PrePopulateAdminFormBase($formDescriptor)
   {
-    $mod = $this->form_ptr->module_ptr;
+    $mod = $this->getModuleInstance();
+	$form = $this->getFormInstance();
     $message = $this->GetOption('email_template','');
 
 	$parm = array();
@@ -323,7 +323,7 @@ class fbDispositionEmailBase extends fbFieldBase
 	$parm['opt_email_template']['is_email'] = true;
 	if ($this->GetFieldType() == 'DispositionEmailConfirmation')
 		{
-		$this->form_ptr->AddTemplateVariable('confirm_url',$mod->Lang('title_confirmation_url'));
+		$form->AddTemplateVariable('confirm_url',$mod->Lang('title_confirmation_url'));
 		}
 
     return array(
@@ -347,7 +347,7 @@ class fbDispositionEmailBase extends fbFieldBase
            array($mod->CreateTextArea(false, $formDescriptor,
               /*($this->GetOption('html_email','0')=='1'?$message:htmlspecialchars($message))*/
 			 $message,'fbrp_opt_email_template', 'module_fb_area_wide', '','','','80', '15','','html'),
-              $this->form_ptr->AdminTemplateHelp($formDescriptor,$parm))),
+              $form->AdminTemplateHelp($formDescriptor,$parm))),
            array($mod->Lang('title_email_encoding'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_email_encoding',$this->GetOption('email_encoding','utf-8'),25,128))
            )
      );
@@ -355,7 +355,7 @@ class fbDispositionEmailBase extends fbFieldBase
 
   function validateEmailAddr($email)
 	{
-	$mod = $this->form_ptr->module_ptr;
+	$mod = $this->getModuleInstance();
 	$ret = true;
 	$message = '';
 	if (strpos($email,',') !== false)

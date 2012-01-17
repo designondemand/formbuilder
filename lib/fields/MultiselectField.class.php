@@ -199,7 +199,7 @@ class fbMultiselectField extends fbFieldBase {
 			{
 			if ($as_string)
 				{
-				return $mod->Lang('unspecified');
+				return $form->GetAttr('unspecified',$this->Lang('unspecified'));
 				}
 			else
 				{

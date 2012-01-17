@@ -35,17 +35,17 @@ class fbForm {
 	# Attributes
 	#---------------------	
 
-	public $module_ptr = -1; // deprecate
-	private $module_params = -1; // deprecate
+	//public $module_ptr = -1; // deprecate
+	//private $module_params = -1; // deprecate
 	public $Id = -1;
 	public $Name = '';
 	public $Alias = '';
-	public $Attrs;
-	public $Fields;	
-	private $loaded = 'not'; // deprecate
+	public $Attrs = array();
+	public $Fields = array();	
+	//private $loaded = 'not'; // deprecate
 	private $formTotalPages = 0;
 	private $Page;
-	public $formState; // deprecate
+	//public $formState; // deprecate
 	private $sampleTemplateCode; // deprecate, drive to method
 	private $templateVariables; 
 	private static $ModuleInstance;
@@ -53,8 +53,8 @@ class fbForm {
 	#---------------------
 	# Magic methods
 	#---------------------		
-														   // Deprecate
-	public function __construct(&$params, $loadDeep=false, $loadResp=false)
+
+	public function __construct(&$params = array(), $loadDeep = false)
 	{
 	
 		// Initiate class with module instance
@@ -69,10 +69,10 @@ class fbForm {
 		}		
 	
 		//$this->module_ptr = &$this; // deprecate
-		$this->module_params = $params; // deprecate
+		//$this->module_params = $params; // deprecate
 		$this->Fields = array();
 		$this->Attrs = array();
-		$this->formState = 'new'; // deprecate
+		//$this->formState = 'new'; // deprecate
 		
 		// Deprecate
 		// Stikki adding: $id overwrite possible with $param
@@ -142,6 +142,7 @@ class fbForm {
 		
 		// Move to Load method
 		$this->formTotalPages = 1;
+/*		
 		if (isset($params['fbrp_done'])&& $params['fbrp_done']==1) {
 
 			$this->formState = 'submit';
@@ -152,16 +153,16 @@ class fbForm {
 
 			$this->formState = 'confirm';
 		}
-
+*/
 		// Only thing that actually should stay here.
 		if ($this->Id != -1) {
-
+/*
 			if (isset($params['response_id']) && $this->formState == 'submit') {
 				
 				$this->formState = 'update';
 			}
-			
-			$this->Load($this->Id, $params, $loadDeep, $loadResp);
+*/			
+			$this->Load($this->Id, $params, $loadDeep);
 		}
 
 		// Move to Load method
@@ -301,15 +302,17 @@ class fbForm {
 		$ret = false;
 		for ($i=0;$i<count($this->Fields);$i++)
 		{
-		if ($this->Fields[$i]->GetId() == $field_id)
-		{
-		$index = $i;
+			if ($this->Fields[$i]->GetId() == $field_id)
+			{
+				$index = $i;
+			}
 		}
-		}
+		
 		if ($index != -1)
 		{
-		$ret = $this->Fields[$index];
+			$ret = $this->Fields[$index];
 		}
+		
 		return $ret;
 	}
 
@@ -402,6 +405,51 @@ class fbForm {
 		  }
 		return $hasDisp;
 	} 
+
+	#---------------------
+	# Resource methods
+	#---------------------	
+
+	/**
+	* Method to load resources in JSON or XML format to object
+	*
+	* @final
+	* @access public
+	* @return void
+	*/ 	
+	public final function LoadResource($resource, $type = 'json')
+	{
+		switch($type) {
+
+			case 'json':
+				
+				$resource = json_decode((string)$resource);
+		
+			case 'array':
+			
+				foreach((array)$resource as $res) {
+				
+					foreach($this->Fields as &$field) {
+				
+						if($field->getId() == $res->id) {
+						
+							$field->SetValue($res->value);
+							break;
+						}
+					}
+				}
+				
+				break;
+				
+			case 'xml':
+			
+				// XML handling here
+				break;
+				
+			default:
+				die('unknown type');
+		}
+	}
 	
 	#---------------------
 	# General methods
@@ -412,6 +460,7 @@ class fbForm {
 		$this->Page--;
 	}	
 	
+/*
 	// dump params
 	function DebugDisplay($params=array())
 	{
@@ -437,7 +486,7 @@ class fbForm {
 		}
 		$this->module_ptr = $tmp;
 	}
-
+*/
    
   function AddTemplateVariable($name,$def)
   {
@@ -466,7 +515,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
 	function fieldValueTemplate()
 	{
-		$mod = $this->module_ptr;
+		$mod = $this->getModuleInstance();
 		$ret = '<table class="module_fb_legend"><tr><th colspan="2">'.$mod->Lang('help_variables_for_computation').'</th></tr>';
 		$ret .= '<tr><th>'.$mod->Lang('help_php_variable_name').'</th><th>'.$mod->Lang('help_form_field').'</th></tr>';
 		$odd = false;
@@ -684,6 +733,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	*/  
 	public final function Validate()
 	{
+		$mod = $this->getModuleInstance();
 		$gCms = cmsms();
 		$validated = true;
 		$message = array();
@@ -700,24 +750,17 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 			continue;
 		  }
 		  
-		$deny_space_validation = ($this->module_ptr->GetPreference('blank_invalid','0') == '1');
-		/*	  debug_display($this->Fields[$i]->GetName().' '.
-		  ($this->Fields[$i]->HasValue() === false?'False':'true'));
-		  if ($this->Fields[$i]->HasValue())
-			 debug_display($this->Fields[$i]->GetValue());
-		*/
-		if (/*! $this->Fields[$i]->IsNonRequirableField() && */
-			$this->Fields[$i]->IsRequired() &&
-			$this->Fields[$i]->HasValue($deny_space_validation) === false)
-		  {
-			array_push($message,
-				$this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName()));
+		$deny_space_validation = ($mod->GetPreference('blank_invalid','0') == '1');
+
+		if (!$this->Fields[$i]->IsNonRequirableField() && $this->Fields[$i]->IsRequired() && $this->Fields[$i]->HasValue($deny_space_validation) === false) {
+		
+			array_push($message, $this->Lang('please_enter_a_value',$this->Fields[$i]->GetName()));
 			$validated = false;
 			$this->Fields[$i]->SetOption('is_valid',false);
-			$this->Fields[$i]->validationErrorText = $this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName());
+			$this->Fields[$i]->validationErrorText = $this->Lang('please_enter_a_value',$this->Fields[$i]->GetName());
 			$this->Fields[$i]->validated = false;
-		  }
-		else if ($this->Fields[$i]->GetValue() != $this->module_ptr->Lang('unspecified'))
+		}
+		else if ($this->Fields[$i]->GetValue() != $this->Lang('unspecified'))
 		  { 
 			$res = $this->Fields[$i]->Validate();
 			if ($res[0] != true)
@@ -733,7 +776,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		  }
 		$usertagops = $gCms->GetUserTagOperations();
 		$udt = $this->GetAttr('validate_udt','');
-		$unspec = $this->GetAttr('unspecified',$this->module_ptr->Lang('unspecified'));
+		$unspec = $this->GetAttr('unspecified',$this->Lang('unspecified'));
 
 		if( $validated == true && !empty($udt) && "-1" != $udt )
 			{
@@ -778,7 +821,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	* @access public
 	* @return array(boolean, string)
 	*/		
-	public final function Dispose($returnid,$suppress_email=false)
+	public final function Dispose($params = array(), $suppress_email=false)
 	{
 		// first, we run all field methods that will modify other fields
 		$computes = array();
@@ -811,7 +854,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 			
 				if (! ($suppress_email && $this->Fields[$i]->IsEmailDisposition())) {
 				
-					$res = $this->Fields[$i]->DisposeForm($returnid);
+					$res = $this->Fields[$i]->DisposeForm($params);
 					if ($res[0] == false) {
 					
 						$retCode = false;
@@ -844,7 +887,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 
 		return array($retCode,$resArray);
 	}
-
+/*
 	// deprecate
 	function RenderFormHeader()
 	{
@@ -862,7 +905,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		return "\n<!-- End FormBuilder Module -->\n";
 		  }
 	}
-
+*/
 	/**
 	* Renders form. Assigns all smarty variables that are available for form and processes form.
 	*
@@ -872,22 +915,23 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	*/
 	public final function RenderForm($id, &$params, $returnid)
 	{
-		include(dirname(__FILE__) . '/../../../lib/replacement.php');  
-		$mod = $this->module_ptr; // deprecate
+		include(dirname(__FILE__) . '/../../../lib/replacement.php'); 
+		
+		$mod = $this->getModuleInstance();
 		$smarty = cmsms()->GetSmarty();
 		
 		// Check if form id given
-		if ($this->Id == -1)
-		  {
+		if ($this->Id == -1) {
+		
 			return "<!-- no form -->\n";
-		  }
-		  
+		}
+/*		  
 		// Check if show full form
 		if ($this->loaded != 'full')
 		  {
 			$this->Load($this->Id,$params,true);
 		  }
-
+*/
 		// Usual crap
 		$reqSymbol = $this->GetAttr('required_field_symbol','*');
 
@@ -1039,8 +1083,8 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 			$oneset->alias = $name_alias;
 			}
 
-		$fields[$oneset->input_id] = $oneset;
-		//array_push($fields,$oneset);
+			$fields[$oneset->input_id] = $oneset;
+
 		  }
 		  
 		$smarty->assign_by_ref('fb_hidden',$hidden);
@@ -1092,7 +1136,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		  }
 		else
 		  {
-		  $captcha = $mod->getModuleInstance('Captcha');
+		  $captcha = $mod->GetModuleInstance('Captcha');
 		  if ($this->GetAttr('use_captcha','0')== '1' && $captcha != null)
 			 {
 			 $smarty->assign('graphic_captcha',$captcha->getCaptcha());
@@ -1109,7 +1153,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 			$smarty->assign('submit','<input class="cms_submit fbsubmit" name="'.$id.'fbrp_submit" id="'.$id.'fbrp_submit" value="'.$this->GetAttr('submit_button_text').'" type="submit" '.$js.' />');  		 
 		  }
 
-		return $this->ProcessTemplateFromDatabase('fb_'.$this->Id);
+		return $mod->ProcessTemplateFromDatabase('fb_'.$this->Id);
 	}
 
 	// make own help class for this kind of things, or something.
@@ -1145,7 +1189,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	{
 
 		$db = cmsms()->GetDb();
-		$mod = $this->module_ptr;
+		$mod = $this->getModuleInstance();
 
 		$sql = 'SELECT * FROM '.cms_db_prefix().'module_fb_form WHERE form_id=?';
 		$row = $db->GetRow($sql, array($formId));
@@ -1175,7 +1219,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 			$this->Attrs[$result['name']] = $result['value'];
 		}
 			  
-		$this->loaded = 'summary';
+		//$this->loaded = 'summary';
 
 		if ($loadDeep) {
 
@@ -1188,7 +1232,8 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 				foreach($result as $thisRes) {
 									
 					// Merge down $params and $thisRes, any allowed input ($params overwrites $thisRes)
-					if ((isset($thisRes['field_id']) && (isset($params['fbrp__'.$thisRes['field_id']]) || isset($params['fbrp___'.$thisRes['field_id']]))) ||
+					if ((isset($thisRes['field_id']) && (isset($params['fbrp__'.$thisRes['field_id']]) || isset($params['fbrp___'.$thisRes['field_id']]))) || isset($params['fbrp_hidden__'.$thisRes['field_id']]) ||
+						isset($params['fbrp_delete__'.$thisRes['field_id']]) ||
 						(isset($thisRes['field_id']) && isset($params['value_'.$thisRes['name']])) || (isset($thisRes['field_id']) && isset($params['value_fld'.$thisRes['field_id']])) ||
 						(isset($params['field_id']) && isset($thisRes['field_id']) && $params['field_id'] == $thisRes['field_id'])) {
 						
@@ -1207,7 +1252,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 				}
 			}
 			
-			$this->loaded = 'full';
+			//$this->loaded = 'full';
 			
 		} // end of loadDeep
 
@@ -1325,12 +1370,12 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		
 			return false;
 		}
-		
+		/*
 		if ($this->loaded != 'full') {
 		
 			$this->Load($this->Id,array(),true);
 		}
-		
+		*/
 		foreach ($this->Fields as $field) {
 		
 			$field->Delete();
@@ -1378,9 +1423,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 				$field = new $className($this, $params);
 				if(is_object($field)) {
 				
-					$field->LoadField($params); 
-
-					return $field;				
+					return $field;
 				}
 			}
 		}
@@ -1452,6 +1495,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
       }
   }
 
+ /* 
   // FormBrowser >= 0.3 Response load method. This populates the Field values directly
   // (as opposed to LoadResponseValues, which places the values into the $params array)
   function LoadResponse($response_id)
@@ -1535,8 +1579,8 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 			}
 		}
 	}
-
-
+*/
+/*
   // FormBrowser >= 0.3 Response load method. This populates the $params array for later processing/combination
   // (as opposed to LoadResponse, which places the values into the Field values directly)
   function LoadResponseValues(&$params, &$types)
@@ -1586,7 +1630,8 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		}
 	return true;
   }
-
+*/
+/*
   // FormBrowser < 0.3 Response load method  
   function LoadResponseValuesOld(&$params)
   {
@@ -1627,7 +1672,8 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	return false;
       }
   }   
-
+*/
+/*
   // FBR methods, or atleast should be.
   // Validation stuff action.validate.php
   function CheckResponse($form_id, $response_id, $code)
@@ -1643,7 +1689,8 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
       }
     return false;
   }
-
+*/
+/*
   // FBR methods
   // Master response inputter
   function StoreResponse($response_id=-1,$approver='',&$formBuilderDisposition)
@@ -1763,6 +1810,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	//return array(true,''); Stikki replaced: instead of true, return actual data, didn't saw any side effects.
 	return $output;
   }
+*/
 
   // Converts form to XML
   function &ResponseToXML()
@@ -1777,6 +1825,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
    return $xml;
   }
 
+/*  
   // FBR methods
   // Inserts parsed XML data to database
   function StoreResponseXML($response_id=-1,$newrec=false,$approver='',$sortfield1,
@@ -1826,7 +1875,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		return substr($dt,1,strlen($dt)-2);
 	}
   
-  
+*/  
 	/**
 	* Form XML import method
 	* NOTE: Check WTF this actually does.
@@ -2062,7 +2111,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		
 		return $xmlstr;
 	}
-  
+ /* 
   // deprecate
   function GetFormBrowsersForForm()
 	{
@@ -2080,7 +2129,8 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	      	}
 		return $browsers;
 	}
-
+*/
+/*
   function AddToSearchIndex($response_id)
 	{	
 	// find browsers keyed to this
@@ -2107,11 +2157,11 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 			}
       }
 	}
-
+*/
 	// Move to action.add_edit_form.php
   function setFinishedFormSmarty($htmlemail=false)
 	{
-		$mod = $this->module_ptr;
+		$mod = $this->getModuleInstance();
 	   
 	    $theFields = $this->GetFields();
 	    $unspec = $this->GetAttr('unspecified',$mod->Lang('unspecified'));

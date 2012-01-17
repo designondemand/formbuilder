@@ -39,9 +39,10 @@ abstract class fbFieldBase {
 	var $FormId=-1;
 	var $Name;
 	var $Type;
-	var $Required=-1;
+	var $Options;
+	var $Required;
 	var $OrderBy;
-	var $HideLabel=-1;
+	var $HideLabel;
 	var $HasLabel=1;
 	var $NeedsDiv=1;
 	var $SmartyEval;
@@ -68,7 +69,6 @@ abstract class fbFieldBase {
 
 	var $Value=false;
 	var $form_ptr;
-	var $Options;
 	var $loaded;
 	var $sortable;
 	private static $FormInstance;
@@ -123,72 +123,71 @@ abstract class fbFieldBase {
 		$this->sortable = true;
 		$this->IsComputedOnSubmission = false;
 		$this->IsFileUpload = false;
+		$this->FormId = $FormInstance->getId();
 
-		// Useless? can get from From instance
+		/*// Useless? can get from From instance
 		if (isset($params['form_id'])) {
 
-		$this->FormId = $params['form_id'];
+			$this->FormId = $params['form_id'];
 		}
-
+		*/
 		if (isset($params['field_id'])) {
 
-		$this->Id = $params['field_id'];
+			$this->Id = $params['field_id'];
 		}
 
 		if (isset($params['fbrp_field_name'])) {
 
-		$this->Name = $params['fbrp_field_name'];
+			$this->Name = $params['fbrp_field_name'];
 		}
 
 		if (isset($params['fbrp_field_type'])) {
 
-		$this->Type = $params['fbrp_field_type'];
+			$this->Type = $params['fbrp_field_type'];
 		} else {
 
-		$this->Type = '';
+			$this->Type = '';
 		}
 
 		if (isset($params['fbrp_order_by'])) {
 
-		$this->OrderBy = $params['fbrp_order_by'];
+			$this->OrderBy = $params['fbrp_order_by'];
 		}
 
 		if (isset($params['fbrp_hide_label'])) {
 
-		$this->HideLabel = $params['fbrp_hide_label'];
+			$this->HideLabel = 1;
 		} elseif (isset($params['fbrp_set_from_form'])) {
-
-		$this->HideLabel = 0;
+		//} else {
+		
+			$this->HideLabel = 0;
 		}
 
 		if (isset($params['fbrp_required'])) {
 
-		$this->Required = $params['fbrp_required'];
+			$this->Required = 1;
 		} elseif (isset($params['fbrp_set_from_form'])) {
-
-		$this->Required = 0;
+		//} else {
+		
+			$this->Required = 0;
 		}
 
 		if (isset($params['fbrp_validation_type'])) {
 
-		$this->ValidationType = $params['fbrp_validation_type'];
+			$this->ValidationType = $params['fbrp_validation_type'];
 		}
 
 		foreach ($params as $thisParamKey=>$thisParamVal) {
 
-		if (substr($thisParamKey,0,9) == 'fbrp_opt_') {
+			if (substr($thisParamKey,0,9) == 'fbrp_opt_') {
 
-		$thisParamKey = substr($thisParamKey,9);
-		$this->Options[$thisParamKey] = $thisParamVal;
+				$thisParamKey = substr($thisParamKey,9);
+				$this->Options[$thisParamKey] = $thisParamVal;
+			}
 		}
-		}
-
-		// Check value setup against $params
-		if (isset($params['fbrp__'.$this->Id]) && (is_array($params['fbrp__'.$this->Id]) || strlen($params['fbrp__'.$this->Id]) > 0)) {
-
-		$this->SetValue($params['fbrp__'.$this->Id]);
-		}
-
+		
+		$this->Load($params, true);
+		
 	} // end of __construct()
 
 	#---------------------
@@ -222,7 +221,7 @@ abstract class fbFieldBase {
 	
 	public final function getFormInstance()
 	{
-		return $this->ModuleInstance;
+		return $this->FormInstance;
 	}		
   
   function HasMultipleFormComponents()
@@ -510,7 +509,7 @@ abstract class fbFieldBase {
 
   function IsRequired()
   {
-    return ($this->Required == 1?true:false);
+    return ($this->Required == 1 ? true : false);
   }
 
   function SetRequired($required)
@@ -578,61 +577,57 @@ abstract class fbFieldBase {
 	
 		$mod = $this->getModuleInstance();
 
-	
-	// Init main tab	
-	$main = array(
-		array($mod->Lang('title_field_name'),$mod->CreateInputText($formDescriptor, 'fbrp_field_name', $this->GetName(), 50))
-	);
+		// Init main tab	
+		$main = array(
+			array($mod->Lang('title_field_name'),$mod->CreateInputText($formDescriptor, 'fbrp_field_name', $this->GetName(), 50))
+		);
 
-	// Init advanced tab
-	$adv = array();
+		// Init advanced tab
+		$adv = array();
 
-	// if we know our type, we can load up with additional options
-	if ($this->Type != '') {
+		// if we know our type, we can load up with additional options
+		if ($this->Type != '') {
 
-	// validation types?
-	if (count($this->GetValidationTypes()) > 1) {
+		// validation types?
+		if (count($this->GetValidationTypes()) > 1) {
 
-	$validInput = $mod->CreateInputDropdown($formDescriptor, 'fbrp_validation_type', $this->GetValidationTypes(), -1, $this->GetValidationType());
-	} else {
+		$validInput = $mod->CreateInputDropdown($formDescriptor, 'fbrp_validation_type', $this->GetValidationTypes(), -1, $this->GetValidationType());
+		} else {
 
-	$validInput = $mod->Lang('automatic');
-	}
+		$validInput = $mod->Lang('automatic');
+		}
 
-	if (!$this->IsNonRequirableField()) {
-	array_push($main, array($mod->Lang('title_field_required'),$mod->CreateInputCheckbox($formDescriptor, 'fbrp_required', 1, $this->IsRequired()).$mod->Lang('title_field_required_long')));
-	}
+		if (!$this->IsNonRequirableField()) {
+		
+			array_push($main, array($mod->Lang('title_field_required'),$mod->CreateInputCheckbox($formDescriptor, 'fbrp_required', 1, $this->IsRequired()).$mod->Lang('title_field_required_long')));
+		}
 
-	array_push($main, array($mod->Lang('title_field_validation'),$validInput));
+		array_push($main, array($mod->Lang('title_field_validation'),$validInput));
 
-	if( $this->HasLabel == 1 ) {
+		if( $this->HasLabel == 1 ) {
 
-	array_push($adv, array($mod->Lang('title_hide_label'),$mod->CreateInputCheckbox($formDescriptor, 'fbrp_hide_label', 1, $this->HideLabel()).$mod->Lang('title_hide_label_long')));
-	}
+		array_push($adv, array($mod->Lang('title_hide_label'),$mod->CreateInputCheckbox($formDescriptor, 'fbrp_hide_label', 1, $this->HideLabel()).$mod->Lang('title_hide_label_long')));
+		}
 
-	$alias = $this->GetOption('field_alias','');
-	if ($alias == '') {
-	$alias = 'fld'.$this->GetId();
-	}
+		$alias = $this->GetOption('field_alias','');
+		if ($alias == '') {
+		$alias = 'fld'.$this->GetId();
+		}
 
-	array_push($adv, array($mod->Lang('title_field_alias'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_field_alias', $this->GetOption('field_alias'), 50)));			
+		array_push($adv, array($mod->Lang('title_field_alias'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_field_alias', $this->GetOption('field_alias'), 50)));			
 
-	if ($this->DisplayInForm()) {
-	array_push($adv,array($mod->Lang('title_field_css_class'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_css_class', $this->GetOption('css_class'), 50)));
-	array_push($adv,array($mod->Lang('title_field_helptext'),$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('helptext',''), 'fbrp_opt_helptext','module_fb_area_short')));
-	array_push($adv,array($mod->Lang('title_field_javascript'),$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('javascript',''), 
-	'fbrp_opt_javascript','module_fb_area_short','','', '', '80', '15','','js').'<br />'.$mod->Lang('title_field_javascript_long')));
-	array_push($adv,array($mod->Lang('title_field_logic'),$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('field_logic',''), 
-	'fbrp_opt_field_logic','module_fb_area_short','','', '', '80', '15').'<br />'.$mod->Lang('title_field_logic_long')));
-	}
+		if ($this->DisplayInForm()) {
+		array_push($adv,array($mod->Lang('title_field_css_class'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_css_class', $this->GetOption('css_class'), 50)));
+		array_push($adv,array($mod->Lang('title_field_helptext'),$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('helptext',''), 'fbrp_opt_helptext','module_fb_area_short')));
+		array_push($adv,array($mod->Lang('title_field_javascript'),$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('javascript',''), 
+		'fbrp_opt_javascript','module_fb_area_short','','', '', '80', '15','','js').'<br />'.$mod->Lang('title_field_javascript_long')));
+		array_push($adv,array($mod->Lang('title_field_logic'),$mod->CreateTextArea(false, $formDescriptor, $this->GetOption('field_logic',''), 
+		'fbrp_opt_field_logic','module_fb_area_short','','', '', '80', '15').'<br />'.$mod->Lang('title_field_logic_long')));
+		}
 
-	} else {
+		} 
 
-	// no advanced options until we know our type
-	//array_push($adv,array($mod->Lang('tab_advanced'),$mod->Lang('notice_select_type')));
-	}
-
-	return array('main'=>$main, 'adv'=>$adv);
+		return array('main'=>$main, 'adv'=>$adv);
 	}
 	
 	
@@ -696,27 +691,26 @@ abstract class fbFieldBase {
   // clear fields unused by invisible dispositions
   function HiddenDispositionFields(&$mainArray, &$advArray, $hideReq=true)
   {
-	$mod = $this->form_ptr->module_ptr;
 
 	// remove the "required" field
     if ($hideReq) {
-      $this->RemoveAdminField($mainArray, $mod->Lang('title_field_required'));
+      $this->RemoveAdminField($mainArray, $this->Lang('title_field_required'));
     }
 	
     // remove the "hide name" field
-    $this->RemoveAdminField($advArray, $mod->Lang('title_hide_label'));
+    $this->RemoveAdminField($advArray, $this->Lang('title_hide_label'));
 	
     // remove the "css" field
-    $this->RemoveAdminField($advArray, $mod->Lang('title_field_css_class'));
+    $this->RemoveAdminField($advArray, $this->Lang('title_field_css_class'));
 	
     // hide "javascript"
-    $this->RemoveAdminField($advArray, $mod->Lang('title_field_javascript'));
+    $this->RemoveAdminField($advArray, $this->Lang('title_field_javascript'));
 	
     // hide "logic"
-    $this->RemoveAdminField($advArray, $mod->Lang('title_field_logic'));	
+    $this->RemoveAdminField($advArray, $this->Lang('title_field_logic'));	
 	
     // hide "help text"
-    $this->RemoveAdminField($advArray, $mod->Lang('title_field_helptext'));
+    $this->RemoveAdminField($advArray, $this->Lang('title_field_helptext'));
 
     $this->CheckForAdvancedTab($advArray);
   }
@@ -735,14 +729,15 @@ abstract class fbFieldBase {
   // override me!
   function GetHumanReadableValue($as_string=true)
   {
-    $mod = $this->form_ptr->module_ptr;
+    $form = $this->getFormInstance();
+	
     if ($this->Value !== false)
       {
 		$ret = $this->Value;
       }
     else
       {
-	  $ret = $this->form_ptr->GetAttr('unspecified',$mod->Lang('unspecified'));
+	  $ret = $form->GetAttr('unspecified',$this->Lang('unspecified'));
 	  }
 	if ($as_string)
 		{
@@ -855,7 +850,7 @@ abstract class fbFieldBase {
   {
 
   //error_log($this->GetName().':'.print_r($valStr,true));
-    $fm = $this->form_ptr;
+    $fm =& $this->getFormInstance();
     if ($this->Value === false)
       {
       if (is_array($valStr))
@@ -1135,17 +1130,16 @@ abstract class fbFieldBase {
   		$this->Options[$optionName] = $val;
   		}
   }
-
+/*
+	// Form method: LoadField uses this
   // deprecate
   function LoadField(&$params)
   {
-    if ($this->Id > 0)
-      {
-	$this->Load($this->Id, $params, true);
-      }
+
+	$this->Load($params, true);
     return;
   }
-
+*/
 	// This shit dosen't belong here at all, seriously remove this, after it's safe to do so.
 	// customized version of API function CreateTextInput. This doesn't throw in an ID that's the same as the field name.
 	function TextField($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
@@ -1167,10 +1161,8 @@ abstract class fbFieldBase {
 	return $text;
 	}
 
-
-	// @param $id - deprecated
 	// loadDeep also loads all options for a field.
-	function Load($id, &$params, $loadDeep=false)
+	function Load(&$params, $loadDeep = false)
 	{
 		$db = cmsms()->GetDb();  
 
@@ -1191,12 +1183,12 @@ abstract class fbFieldBase {
 			$this->Type = $result['type'];
 			$this->OrderBy = $result['order_by'];
 		
-			if ($this->Required == -1) {
+			if (!isset($this->Required)) {
 			
 				$this->Required = $result['required'];
 			}
 			
-			if ($this->HideLabel == -1) {
+			if (!isset($this->HideLabel)) {
 			
 				$this->HideLabel = $result['hide_label'];
 			}
@@ -1233,6 +1225,12 @@ abstract class fbFieldBase {
 			
 			$this->Options = array_merge($tmpOpts,$this->Options);
 
+			// Check value setup against $params
+			if (isset($params['fbrp__'.$this->Id]) && (is_array($params['fbrp__'.$this->Id]) || strlen($params['fbrp__'.$this->Id]) > 0)) {
+
+				$this->SetValue($params['fbrp__'.$this->Id]);
+			}			
+			
 			// Regular import style
 			if (isset($params['value_'.$this->Name]) && (is_array($params['value_'.$this->Name]) || strlen($params['value_'.$this->Name]) > 0)) {
 			
@@ -1244,7 +1242,10 @@ abstract class fbFieldBase {
 			
 				$this->SetValue($params['value_fld'.$this->Id]);
 			}
+			
 		}
+		
+		
 
 		return true;
 	}
@@ -1258,11 +1259,11 @@ abstract class fbFieldBase {
 		
 			$this->Id = $db->GenID(cms_db_prefix().'module_fb_field_seq'); // Change to auto_increament (MySQL)
 			$sql = 'INSERT INTO ' .cms_db_prefix().'module_fb_field (field_id, form_id, name, type, required, validation_type, hide_label, order_by) VALUES (?,?,?,?,?,?,?,?)';
-			$db->Execute($sql,array($this->Id, $this->FormId, $this->Name, $this->Type, ($this->Required?1:0), $this->ValidationType, $this->HideLabel, $this->OrderBy));
+			$db->Execute($sql,array($this->Id, $this->FormId, $this->Name, $this->Type, $this->Required, $this->ValidationType, $this->HideLabel, $this->OrderBy));
 		} else {
 		
 			$sql = 'UPDATE ' . cms_db_prefix() .'module_fb_field set name=?, type=?, required=?, validation_type=?, order_by=?, hide_label=? where field_id=?';
-			$db->Execute($sql, array($this->Name, $this->Type, ($this->Required?1:0), $this->ValidationType, $this->OrderBy, $this->HideLabel, $this->Id));
+			$db->Execute($sql, array($this->Name, $this->Type, $this->Required, $this->ValidationType, $this->OrderBy, $this->HideLabel, $this->Id));
 		}
 
 		if ($storeDeep) {
@@ -1312,9 +1313,11 @@ abstract class fbFieldBase {
 	// Overwrite me if neccery
 	function HandleFileUpload()
 	{
+	
+		global $id;
 
-		$mod = $this->form_ptr->module_ptr;
-		$_id = $mod->module_id.'fbrp__'.$this->Id;
+		$mod = $this->getModuleInstance();
+		$_id = $id.'fbrp__'.$this->Id;
 		
 		if(isset($_FILES[$_id]) && $_FILES[$_id]['size'] > 0) {
 		

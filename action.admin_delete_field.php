@@ -7,10 +7,11 @@
   This project's homepage is: http://www.cmsmadesimple.org
 */
 if (!isset($gCms)) exit;
-if (! $this->CheckAccess()) exit;
 
-        $aeform = new fbForm($this, $params, true);
-        $aeform->DeleteField($params['field_id']);
-		echo $aeform->AddEditForm($id, $returnid, $this->Lang('field_deleted'));
+$form = new fbForm($params, true);
+$form->DeleteField($params['field_id']);
+
+$parms['fb_message'] = $this->Lang('field_deleted');
+$this->Redirect($id, 'defaultadmin', $returnid, $parms);
 ?>
 

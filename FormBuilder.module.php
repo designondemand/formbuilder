@@ -35,10 +35,10 @@ class FormBuilder extends CMSModule
 	# Attributes
 	#---------------------	
 
-	var $disp_field_types; // deprecate
-	var $module_ptr; // deprecate
+	//var $disp_field_types; // deprecate
+	//var $module_ptr; // deprecate
 	var $module_id; // deprecate
-	var $dbHandle; // deprecate
+	//var $dbHandle; // deprecate
 	
 	public $field_types;
 	public $std_field_types;
@@ -56,8 +56,8 @@ class FormBuilder extends CMSModule
 		spl_autoload_register(array(&$this,'autoload'));	
 		parent::__construct();
 
-		$this->module_ptr = &$this; // needed?
-		$this->dbHandle =  $this->GetDb(); // needed?
+		//$this->module_ptr = &$this; // needed?
+		//$this->dbHandle =  $this->GetDb(); // needed?
 		$this->field_types = array();
 		$this->std_field_types = array();
 		$this->all_validation_types = array();
@@ -244,7 +244,7 @@ class FormBuilder extends CMSModule
 		$smarty->assign('actionid',$id);
 		$smarty->assign('returnid',$returnid);		
 		
-		$this->module_id = $id; // deprecate
+		$this->module_id = $id; // deprecate (FileUpload fields still need this)
 		
 		if(isset($params['fb_message'])) {
 		
@@ -331,17 +331,7 @@ class FormBuilder extends CMSModule
 		$this->_initialized = true;
 	}
 
-	// deprecate
-	function CheckAccess($permission='Modify Forms')
-	{
-		$access = $this->CheckPermission($permission);
-		if (!$access)  {
-			echo "<p class=\"error\">".$this->Lang('you_need_permission',$permission)."</p>";
-			return false;
-		}
-		else return true;
-	}
-
+	// Change this method or deprecate
 	public final function GetForms($order_by='name')
 	{
 		$db = cmsms()->GetDb();
@@ -349,12 +339,30 @@ class FormBuilder extends CMSModule
 		$sql = "SELECT * FROM ".cms_db_prefix().'module_fb_form ORDER BY ?';
 		$rs = $db->Execute($sql, array($order_by));
 		
-		$result = array();
+		$result = array();			
 		if($rs && $rs->RecordCount() > 0) {
+		
 			$result = $rs->GetArray();
 		}
 		return $result;
 	}
+	
+	public final function GetFormsToArray()
+	{
+		$db = cmsms()->GetDb();
+		
+		$sql = "SELECT form_id, name FROM ".cms_db_prefix().'module_fb_form';
+		$rs = $db->Execute($sql);
+		
+		$result = array();
+		
+		while($rs && $row = $rs->FetchRow()) {
+		
+			  $result[$row['name']] = $row['form_id'];
+		}
+			
+		return $result;
+	}	
 
 	public final function GetFormIDFromAlias($form_alias)
 	{

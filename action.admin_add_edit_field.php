@@ -139,6 +139,7 @@ if(is_object($field)) {
 
 	// Set parms for form
 	$parms['fbrp_order_by'] = $field->GetOrder();
+	$parms['fbrp_set_from_form'] = 1;
 
 	// Change to use list when you have time.
 	$baselist = $field->PrePopulateBaseAdminForm($id);

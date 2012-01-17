@@ -1286,6 +1286,11 @@ of the license for the full disclaimer.</p>
 <p>Copyright &copy; 2009, Samuel Goldstein <a href=\"mailto:sjg@cmsmodules.com\">&lt;sjg@cmsmodules.com&gt;</a>. All Rights Are Reserved.</p>
 <p>This module has been released under the <a href=\"http://www.gnu.org/licenses/licenses.html#GPL\">GNU Public License</a>. You must agree to this license before using the module.</p>";
 
+// Job manager stuff, move to job manager, when field register functionality is ready
+$lang['field_type_DispositionJobManager'] = '* Dispose data to Job Manager module';
+$lang['field_type_JobManagerUploadField'] = 'Job Manager Upload';
 
+$lang['title_response_name']='Response name';
+$lang['title_response_desc']='Response description';
 
 ?>
