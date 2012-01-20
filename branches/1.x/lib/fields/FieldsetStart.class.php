@@ -9,69 +9,64 @@
 
 class fbFieldsetStart extends fbFieldBase {
 
-  function __construct(fbForm &$FormInstance, &$params)
-  {
-    parent::__construct($FormInstance, $params);
-    $this->Type = 'FieldsetStart';
-    $this->DisplayInForm = true;
-    $this->DisplayInSubmission = false;
-    $this->NonRequirableField = true;
-    $this->ValidationTypes = array();    
-    $this->HasLabel = 0;
-    $this->NeedsDiv = 0;
-    $this->sortable = false;
-  }
+	function __construct(fbForm &$FormInstance, &$params)
+	{
+		parent::__construct($FormInstance, $params);
+		$this->Type = 'FieldsetStart';
+		$this->DisplayInForm = true;
+		$this->DisplayInSubmission = false;
+		$this->NonRequirableField = true;
+		$this->ValidationTypes = array();    
+		$this->HasLabel = 0;
+		$this->NeedsDiv = 0;
+		$this->sortable = false;
+	}
 
-  function GetFieldInput($id, &$params, $returnid)
-  {
-    $js = $this->GetOption('javascript','');
-    $str = '<fieldset';
-    $class = $this->GetOption('css_class');
-    $legend = $this->GetOption('legend');
-	$str .= $this->GetCSSIdTag();
-    if( $class != '' )
-      {
-	$str .= " class=\"$class\"";
-      }
-    if ($js != '')
-		{
-		$str .= ' '.$js;
-		}
-    $str .= '>';
-    if( $legend != '' )
-      {
-	$str .= '<legend>'.$legend.'</legend>';
-      }
-    return $str;
-  }
+	function GetFieldInput($id, &$params, $returnid)
+	{
+		$js = $this->GetOption('javascript','');
+		$str = '<fieldset';
+		$class = $this->GetOption('css_class');
+		$legend = $this->GetOption('legend');
+		$str .= $this->GetCSSIdTag();
+		if( $class != '' )
+		  {
+		$str .= " class=\"$class\"";
+		  }
+		if ($js != '')
+			{
+			$str .= ' '.$js;
+			}
+		$str .= '>';
+		if( $legend != '' )
+		  {
+		$str .= '<legend>'.$legend.'</legend>';
+		  }
+		return $str;
+	}
 
-  function StatusInfo()
-  {
-    return '';
-  }
 
-  function GetHumanReadableValue($as_string=true)
-  {
-    // there's nothing human readable about a fieldset.
-    $ret = '[Begin Fieldset: '.$this->Value.']';
-	if ($as_string)
+	function GetHumanReadableValue($as_string=true)
+	{
+		// there's nothing human readable about a fieldset.
+		$ret = '[Begin Fieldset: '.$this->Value.']';
+		if ($as_string)
 		{
-		return $ret;
+			return $ret;
 		}
-	else
+		else
 		{
-		return array($ret);
+			return array($ret);
 		}
-  }
+	}
 	
   function PrePopulateAdminForm($formDescriptor)
   {
 	$mod = $this->getModuleInstance();	
-    $main = array(
-		  array($mod->Lang('title_legend'),
-            		$mod->CreateInputText($formDescriptor,'fbrp_opt_legend',
-					      $this->GetOption('legend',''), 50)));
+	
+    $main = array(array($mod->Lang('title_legend'), $mod->CreateInputText($formDescriptor,'fbrp_opt_legend', $this->GetOption('legend',''), 50)));
     $adv = array();
+	
     return array('main'=>$main,'adv'=>$adv);
   }
 

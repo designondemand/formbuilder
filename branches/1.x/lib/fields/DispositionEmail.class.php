@@ -7,17 +7,16 @@
   This project's homepage is: http://www.cmsmadesimple.org
 */
 
-require_once(dirname(__FILE__).'/DispositionEmailBase.class.php');
+//require_once(dirname(__FILE__).'/DispositionEmailBase.class.php');
 
 class fbDispositionEmail extends fbDispositionEmailBase {
 
 	var $addressCount;
 	var $addressAdd;
 
-	function fbDispositionEmail(&$form_ptr, &$params)
+	function __construct(fbForm &$FormInstance, &$params)
 	{
-        $this->fbDispositionEmailBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
+		parent::__construct($FormInstance, $params);
 		$this->Type = 'DispositionEmail';
 		$this->DisplayInForm = false;
 		$this->DisplayInSubmission = false;
@@ -25,25 +24,27 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 		$this->IsDisposition = true;
 		$this->HasAddOp = true;
 		$this->HasDeleteOp = true;
-		$this->ValidationTypes = array(
-       		);
     }
 
 	function GetOptionAddButton()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = $this->getModuleInstance();
 		return $mod->Lang('add_address');
 	}
 
 	function GetOptionDeleteButton()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = $this->getModuleInstance();
 		return $mod->Lang('delete_address');
 	}
 
 	function DoOptionAdd(&$params)
 	{
 		$this->addressAdd = 1;
+		if(!empty($params['fbrp_opt_num'])) {
+	
+			$this->addressAdd = $params['fbrp_opt_num'];
+		}
 	}
 
 	function DoOptionDelete(&$params)
@@ -59,11 +60,9 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 			}
 	}
 
-
-
     function StatusInfo()
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = $this->getModuleInstance();
 		$opt = $this->GetOption('destination_address','');
 		$ret= $mod->Lang('to').": ";
 		if (is_array($opt))
@@ -117,7 +116,7 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = $this->getModuleInstance();
 
 		$this->countAddresses();
 		if ($this->addressAdd > 0)
@@ -125,7 +124,7 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 			$this->addressCount += $this->addressAdd;
 			$this->addressAdd = 0;
 			}
-		$dests = '<table  class="module_fb_table"><tr><th>'.$mod->Lang('title_destination_address').'</th><th>'.
+		$dests = '<table cellspacing="0" cellpadding="0" class="pagetable module_fb_table"><tr><th>'.$mod->Lang('title_destination_address').'</th><th>'.
 			$mod->Lang('title_delete').'</th></tr>';
 
 
@@ -151,7 +150,7 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 
 	function AdminValidate()
     {
-		$mod = $this->form_ptr->module_ptr;
+		$mod = $this->getModuleInstance();
     	$opt = $this->GetOptionRef('destination_address');
   		list($ret, $message) = $this->DoesFieldHaveName();
 		if ($ret)
