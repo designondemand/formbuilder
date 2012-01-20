@@ -9,43 +9,39 @@
 
 class fbFromEmailNameField extends fbFieldBase {
 
-	function fbFromEmailNameField(&$form_ptr, &$params)
+	function __construct(fbForm &$FormInstance, &$params)
 	{
-        $this->fbFieldBase($form_ptr, $params);
-        $mod = $form_ptr->module_ptr;
+		parent::__construct($FormInstance, $params);
 		$this->Type = 'FromEmailNameField';
 		$this->DisplayInForm = true;
-		$this->ValidationTypes = array(
-            );
-	   $this->modifiesOtherFields = true;
+		$this->modifiesOtherFields = true;
 	}
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
+		$mod = $this->getModuleInstance();
 		$js = $this->GetOption('javascript','');
 		
-		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,
-			htmlspecialchars($this->Value, ENT_QUOTES),
-           25,128,$js.$this->GetCSSIdTag());
+		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id, htmlspecialchars($this->Value, ENT_QUOTES), 25,128,$js.$this->GetCSSIdTag());
 	}
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		$mod = $this->form_ptr->module_ptr;
-      $main = array();
-      $adv = array();
+		$mod = $this->getModuleInstance();
+		$main = array();
+		$adv = array();
 		$hopts = array($mod->Lang('option_from')=>'f',$mod->Lang('option_reply')=>'r',$mod->Lang('option_both')=>'b');
-		array_push($main,array($mod->Lang('title_headers_to_modify'),
-			$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_headers_to_modify', $hopts, -1, $this->GetOption('headers_to_modify','b'))));
+		
+		array_push($main,array($mod->Lang('title_headers_to_modify'), $mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_headers_to_modify', $hopts, -1, $this->GetOption('headers_to_modify','b'))));
 
 		return array('main'=>$main,'adv'=>$adv);
 	}
 
 	function ModifyOtherFields()
 	{
-		$mod = $this->form_ptr->module_ptr;
-		$others = $this->form_ptr->GetFields();
+		$mod = $this->getModuleInstance();
+		$form = $this->getFormInstance();
+		$others = $form->GetFields();
 		$htm = $this->GetOption('headers_to_modify','b');
 
 		if ($this->Value !== false)
@@ -67,11 +63,6 @@ class fbFromEmailNameField extends fbFieldBase {
 					}
 				}
 			}
-	}
-
-	function StatusInfo()
-	{
-		return '';
 	}
 
 }

@@ -147,7 +147,7 @@ class fbMultiselectField extends fbFieldBase {
 			$this->optionCount += $this->optionAdd;
 			$this->optionAdd = 0;
 			}
-		$dests = '<table class="pagetable module_fb_table"><tr><th>'.$mod->Lang('title_option_name').'</th><th>'.
+		$dests = '<table cellspacing="0" cellpadding="0" class="pagetable module_fb_table"><tr><th>'.$mod->Lang('title_option_name').'</th><th>'.
 			$mod->Lang('title_option_value').'</th><th>'.
 			$mod->Lang('title_delete').'</th></tr>';
 

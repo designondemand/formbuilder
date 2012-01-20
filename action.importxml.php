@@ -30,8 +30,7 @@
 #-------------------------------------------------------------------------
 
 if (!isset($gCms)) exit;
-
-if (!$this->CheckAccess()) exit;
+if (!$this->CheckPermission('Modify Forms')) exit;
 
 $params['fbrp_xml_file'] = $_FILES[$id.'fbrp_xmlfile']['tmp_name'];
 
