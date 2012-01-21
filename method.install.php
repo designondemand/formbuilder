@@ -216,10 +216,6 @@ if(file_exists($fn)) {
 	$obj->media_type = 'screen';
 
 	$obj->Save();
-	
-	//$css_id = $db->GenID(cms_db_prefix().'css_seq');
-	//$sql = 'INSERT INTO '.cms_db_prefix().'css (css_id, css_name, css_text, media_type, create_date) values (?,?,?,?,?)';
-	//$db->Execute($sql, array($css_id,'FormBuilder Default Style',$css,'screen',date('Y-m-d')));
 }
 
 # Insert sample forms
