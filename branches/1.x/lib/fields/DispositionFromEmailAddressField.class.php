@@ -8,7 +8,7 @@
 */
 //require_once(dirname(__FILE__).'/DispositionEmailBase.class.php'); // autoloader handling this.
 
-class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
+class fbDispositionFromEmailAddressField extends fbDispositionEmailBase implements fbDisposition {
 
 	function __construct(fbForm &$FormInstance, &$params)
 	{

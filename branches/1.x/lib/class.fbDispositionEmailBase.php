@@ -32,13 +32,13 @@ class fbDispositionEmailBase extends fbFieldBase
   		return $mod->Lang('email_template_not_set');
       }
   }
-
+/*
   // override me!
   function DisposeForm()
   {
     return array(true,'');
   }
-
+*/
   // override me as necessary
   function SetFromAddress()
   {
