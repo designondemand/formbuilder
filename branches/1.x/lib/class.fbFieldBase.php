@@ -123,14 +123,14 @@ abstract class fbFieldBase {
 		$this->sortable = true;
 		$this->IsComputedOnSubmission = false;
 		$this->IsFileUpload = false;
-		$this->FormId = $FormInstance->getId();
+		//$this->FormId = $FormInstance->getId();
 
-		/*// Useless? can get from From instance
+		// Useless? can get from From instance
 		if (isset($params['form_id'])) {
 
 			$this->FormId = $params['form_id'];
 		}
-		*/
+		
 		if (isset($params['field_id'])) {
 
 			$this->Id = $params['field_id'];
@@ -1257,12 +1257,21 @@ abstract class fbFieldBase {
 
 		if ($this->Id == -1) {
 		
+			$sql = 'SELECT MAX(field_id) + 1 AS new_id FROM '.cms_db_prefix().'module_fb_field WHERE form_id = ?';
+			$newid = $db->GetOne($sql, array($this->FormId));
+			if(!$newid) {
+			
+				$newid = 1; // SQL statement failed, no entrys, let's initiate it manually.
+			}
+		
+			//$this->Id = $newid;
 			$this->Id = $db->GenID(cms_db_prefix().'module_fb_field_seq'); // Change to auto_increament (MySQL)
 			$sql = 'INSERT INTO ' .cms_db_prefix().'module_fb_field (field_id, form_id, name, type, required, validation_type, hide_label, order_by) VALUES (?,?,?,?,?,?,?,?)';
 			$db->Execute($sql,array($this->Id, $this->FormId, $this->Name, $this->Type, $this->Required, $this->ValidationType, $this->HideLabel, $this->OrderBy));
+			
 		} else {
 		
-			$sql = 'UPDATE ' . cms_db_prefix() .'module_fb_field set name=?, type=?, required=?, validation_type=?, order_by=?, hide_label=? where field_id=?';
+			$sql = 'UPDATE '.cms_db_prefix().'module_fb_field set name=?, type=?, required=?, validation_type=?, order_by=?, hide_label=? WHERE field_id=?';
 			$db->Execute($sql, array($this->Name, $this->Type, $this->Required, $this->ValidationType, $this->OrderBy, $this->HideLabel, $this->Id));
 		}
 
@@ -1273,12 +1282,7 @@ abstract class fbFieldBase {
 			$db->Execute($sql, array($this->Id));
 
 			foreach ($this->Options as $thisOptKey=>$thisOptValueList) {
-			/*
-				if (!is_array($thisOptValueList)) {
-				
-					$thisOptValueList = array($thisOptValueList);
-				}
-			*/	
+	
 				foreach ((array)$thisOptValueList as $thisOptValue)
 				{
 					$optId = $db->GenID(cms_db_prefix().'module_fb_field_opt_seq'); // Change to auto_increament (MySQL)
@@ -1287,6 +1291,7 @@ abstract class fbFieldBase {
 				}
 			}
 		}
+		
 		return true; // Neccery?
 	}
 

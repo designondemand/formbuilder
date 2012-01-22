@@ -1892,145 +1892,160 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 		$parser = xml_parser_create('');
 		xml_parser_set_option( $parser, XML_OPTION_CASE_FOLDING, 0 );
 		xml_parser_set_option( $parser, XML_OPTION_SKIP_WHITE, 0 ); // was 1
-		if (isset($params['fbrp_xml_file']) && ! empty($params['fbrp_xml_file']))
-		{
-		xml_parse_into_struct($parser, file_get_contents($params['fbrp_xml_file']), $values);
+		
+		if (isset($params['fbrp_xml_file']) && ! empty($params['fbrp_xml_file'])) {
+		
+			xml_parse_into_struct($parser, file_get_contents($params['fbrp_xml_file']), $values);
 		}
-		elseif (isset($params['xml_string']) && ! empty($params['xml_string']))
-		{
-		xml_parse_into_struct($parser, $params['xml_string'], $values);
+		elseif (isset($params['xml_string']) && ! empty($params['xml_string'])) {
+		
+			xml_parse_into_struct($parser, $params['xml_string'], $values);
 		}
-		else
-		{
-		return false;
+		else {
+		
+			return false;
 		}
+		
 		xml_parser_free($parser);
 		$elements = array();
 		$stack = array();
 		$fieldMap = array();
+		
 		foreach ( $values as $tag )
 		{
-		$index = count( $elements );
-		if ( $tag['type'] == "complete" || $tag['type'] == "open" )
-		{
-		$elements[$index] = array();
-		$elements[$index]['name'] = $tag['tag'];
-		$elements[$index]['attributes'] = empty($tag['attributes']) ? "" : $tag['attributes'];
-		$elements[$index]['content']    = empty($tag['value']) ? "" : $tag['value'];
-		if ( $tag['type'] == "open" )
-		{
-		# push
-		$elements[$index]['children'] = array();
-		$stack[count($stack)] = &$elements;
-		$elements = &$elements[$index]['children'];
+			$index = count( $elements );
+			if ( $tag['type'] == "complete" || $tag['type'] == "open" ) {
+			
+				$elements[$index] = array();
+				$elements[$index]['name'] = $tag['tag'];
+				$elements[$index]['attributes'] = empty($tag['attributes']) ? "" : $tag['attributes'];
+				$elements[$index]['content']    = empty($tag['value']) ? "" : $tag['value'];
+				
+				if ( $tag['type'] == "open" ) {
+				
+				# push
+				$elements[$index]['children'] = array();
+				$stack[count($stack)] = &$elements;
+				$elements = &$elements[$index]['children'];
+				}
+			}
+			
+			if ( $tag['type'] == "close" ) {    
+			
+				# pop
+				$elements = &$stack[count($stack) - 1];
+				unset($stack[count($stack) - 1]);
+			}
 		}
-		}
-		if ( $tag['type'] == "close" )
-		{    # pop
-		$elements = &$stack[count($stack) - 1];
-		unset($stack[count($stack) - 1]);
-		}
-		}
-		//debug_display($elements);
+		
 		if (!isset($elements[0]) || !isset($elements[0]) || !isset($elements[0]['attributes']))
 		{
-		//parsing failed, or invalid file.
-		return false;
+			//parsing failed, or invalid file.
+			return false;
 		}
+		
 		$params['form_id'] = -1; // override any form_id values that may be around
 		$formAttrs = &$elements[0]['attributes'];
 
 		if (isset($params['fbrp_import_formalias']) && !empty($params['fbrp_import_formalias']))
 		{
-		$this->SetAlias($params['fbrp_import_formalias']);
+			$this->SetAlias($params['fbrp_import_formalias']);
 		}
 		else if ($this->inXML($formAttrs['alias']))
 		{
-		$this->SetAlias($formAttrs['alias']);
+			$this->SetAlias($formAttrs['alias']);
 		}
+		
 		if (isset($params['fbrp_import_formname']) && !empty($params['fbrp_import_formname']))
 		{
-		$this->SetName($params['fbrp_import_formname']);
+			$this->SetName($params['fbrp_import_formname']);
 		}
+		
 		$foundfields = false;
 		// populate the attributes and field name first. When we see a field, we save the form and then start adding the fields to it.
 
 		foreach ($elements[0]['children'] as $thisChild)
 		{
-			if ($thisChild['name'] == 'form_name')
-			{
-			$curname =  $this->GetName();
-			if (empty($curname))
-			{
-			$this->SetName($thisChild['content']);
+			if ($thisChild['name'] == 'form_name') {
+			
+				$curname =  $this->GetName();
+				if (empty($curname)) {
+				
+					$this->SetName($thisChild['content']);
+				}
 			}
-			}
-			elseif ($thisChild['name'] == 'attribute')
-			{
-			$this->SetAttr($thisChild['attributes']['key'], $thisChild['content']);
-			}
-			else
-			{
-			// we got us a field
-			if (! $foundfields)
-			{
-			// first field
-			$foundfields = true;
-			if( isset($params['fbrp_import_formname']) && 
-			trim($params['fbrp_import_formname']) != '')
-			{
-			$this->SetName(trim($params['fbrp_import_formname']));
-			}
-			if( isset($params['fbrp_import_formalias']) &&
-			trim($params['fbrp_import_formname']) != '')
-			{
-			$this->SetAlias(trim($params['fbrp_import_formalias']));
-			}
-			$this->Store($params);
-			$params['form_id'] = $this->GetId();
-			}
-			//debug_display($thisChild);
-			$fieldAttrs = &$thisChild['attributes'];
-			//$className = $this->MakeClassName($fieldAttrs['type'], '');
-			$className = 'fb'.$fieldAttrs['type'];
-			//debug_display($className);
-			$newField = new $className($this, $params);
-			$oldId = $fieldAttrs['id'];
+			elseif ($thisChild['name'] == 'attribute') {
+			
+				$this->SetAttr($thisChild['attributes']['key'], $thisChild['content']);
+			} 
+			else {
+			
+				// we got us a field
+				if (! $foundfields) {
+				
+					// first field
+					$foundfields = true;
+					if( isset($params['fbrp_import_formname']) && trim($params['fbrp_import_formname']) != '')
+					{
+						$this->SetName(trim($params['fbrp_import_formname']));
+					}
+					
+					if( isset($params['fbrp_import_formalias']) && trim($params['fbrp_import_formname']) != '')
+					{
+						$this->SetAlias(trim($params['fbrp_import_formalias']));
+					}
+					
+					$this->Store($params);
+					$params['form_id'] = $this->GetId();
+				}
+				
+				// Set fields
+				$fieldAttrs = &$thisChild['attributes'];
+				$className = 'fb'.$fieldAttrs['type'];
+				$newField = new $className($this, $params);
+				$oldId = $fieldAttrs['id'];
 
-			if ($this->inXML($fieldAttrs['alias']))
-			{
-			$newField->SetAlias($fieldAttrs['alias']);
-			}
-			$newField->SetValidationType($fieldAttrs['validation_type']);
-			if ($this->inXML($fieldAttrs['order_by']))
-			{
-			$newField->SetOrder($fieldAttrs['order_by']);
-			}
-			if ($this->inXML($fieldAttrs['required']))
-			{
-			$newField->SetRequired($fieldAttrs['required']);
-			}
-			if ($this->inXML($fieldAttrs['hide_label']))
-			{
-			$newField->SetHideLabel($fieldAttrs['hide_label']);
-			}
-			foreach ($thisChild['children'] as $thisOpt)
-			{	
-			if ($thisOpt['name'] == 'field_name')
-			{
-			$newField->SetName($thisOpt['content']);
-			}
-			if ($thisOpt['name'] == 'options')
-			{
-			foreach ($thisOpt['children'] as $thisOption)
-			{
-			$newField->OptionFromXML($thisOption);
-			}
-			}
-			}
-			$newField->Store(true);
-			array_push($this->Fields,$newField);
-			$fieldMap[$oldId] = $newField->GetId();
+				$newField->SetValidationType($fieldAttrs['validation_type']);			
+				
+				if ($this->inXML($fieldAttrs['alias'])) {
+				
+					$newField->SetAlias($fieldAttrs['alias']);
+				}
+				
+				if ($this->inXML($fieldAttrs['order_by'])) {
+				
+					$newField->SetOrder($fieldAttrs['order_by']);
+				}
+				
+				if ($this->inXML($fieldAttrs['required'])) {
+				
+					$newField->SetRequired($fieldAttrs['required']);
+				}
+				
+				if ($this->inXML($fieldAttrs['hide_label'])) {
+				
+					$newField->SetHideLabel($fieldAttrs['hide_label']);
+				}
+				
+				foreach ($thisChild['children'] as $thisOpt) {
+				
+					if ($thisOpt['name'] == 'field_name') {
+					
+						$newField->SetName($thisOpt['content']);
+					}
+					
+					if ($thisOpt['name'] == 'options') {
+					
+						foreach ($thisOpt['children'] as $thisOption) {
+						
+							$newField->OptionFromXML($thisOption);
+						}
+					}
+				}
+				
+				$newField->Store(true);
+				array_push($this->Fields,$newField);
+				$fieldMap[$oldId] = $newField->GetId();
 			}
 		}
 
