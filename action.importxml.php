@@ -39,10 +39,10 @@ $res = $form->ImportXML($params);
 
 if ($res) {
 
-	$params['fbrp_message'] = $this->Lang('form_imported');
+	$params['fb_message'] = $this->Lang('form_imported');
 } else {
 
-	$params['fbrp_message'] = $this->Lang('form_import_failed');
+	$params['fb_message'] = $this->Lang('form_import_failed');
 }
 
 // Change to Redirect
