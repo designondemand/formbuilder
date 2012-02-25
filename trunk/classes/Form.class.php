@@ -599,69 +599,51 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
   // element 1 is an array of reasons, in the event of failure.
   function Dispose($returnid,$suppress_email=false)
   {
-	// first, we run all field methods that will modify other fields
-	$computes = array();
-	for($i=0;$i<count($this->Fields);$i++) {
-	
-		if ($this->Fields[$i]->ModifiesOtherFields()) {
-		
-			$this->Fields[$i]->ModifyOtherFields();
-		}
-		
-		if ($this->Fields[$i]->ComputeOnSubmission()) {
-		
-			$computes[$i] = $this->Fields[$i]->ComputeOrder();
-		}
-	}
+    // first, we run all field methods that will modify other fields
+    $computes = array();
+    for($i=0;$i<count($this->Fields);$i++)
+      {
+		if ($this->Fields[$i]->ModifiesOtherFields())
+	  	{
+	    	$this->Fields[$i]->ModifyOtherFields();
+	  	}
+	  if ($this->Fields[$i]->ComputeOnSubmission())
+	  	{
+	  		$computes[$i] = $this->Fields[$i]->ComputeOrder();
+	  	}
+      }
+      
+    asort($computes);
+    foreach($computes as $cKey=>$cVal)
+    	{
+    	$this->Fields[$cKey]->Compute();
+    	}
 
-	asort($computes);
-	foreach($computes as $cKey=>$cVal) {
-	
-		$this->Fields[$cKey]->Compute();
-	}
-
-	// Do actual disposition
-	$resArray = array();
-	$retCode = true;
-	// for each form disposition pseudo-field, dispose the form results
-	for($i=0;$i<count($this->Fields);$i++) {
-	
-		if ($this->Fields[$i]->IsDisposition() && $this->Fields[$i]->DispositionIsPermitted()) {
-		
-			if (! ($suppress_email && $this->Fields[$i]->IsEmailDisposition())) {
-			
-				$res = $this->Fields[$i]->DisposeForm($returnid);
-				if ($res[0] == false) {
-				
-					$retCode = false;
-					array_push($resArray,$res[1]);
-				}
+    $resArray = array();
+    $retCode = true;
+    // for each form disposition pseudo-field, dispose the form results
+    for($i=0;$i<count($this->Fields);$i++)
+      {
+	if ($this->Fields[$i]->IsDisposition() && $this->Fields[$i]->DispositionIsPermitted())
+	  {
+		if (! ($suppress_email && $this->Fields[$i]->IsEmailDisposition()))
+			{
+		    $res = $this->Fields[$i]->DisposeForm($returnid);
+		    if ($res[0] == false)
+		      {
+			$retCode = false;
+			array_push($resArray,$res[1]);
+		      }
 			}
-		}
-	}
-	
-	// Manage file uploads
-	for($i=0;$i<count($this->Fields);$i++) {
-	
-		if ($this->Fields[$i]->IsFileUpload()) {
-		
-			$res2 = $this->Fields[$i]->HandleFileUpload();
-			if ($res[0] == false) {
-			
-				$retCode = false;
-				array_push($resArray,$res2[1]);
-			}			
-			
-		}
-	}
+	  }
+      }
 
 	// handle any last cleanup functions
-	for($i=0;$i<count($this->Fields);$i++) {
-	
+    for($i=0;$i<count($this->Fields);$i++)
+      {
 		$this->Fields[$i]->PostDispositionAction();
-	}
-	
-	return array($retCode,$resArray);
+	  }
+    return array($retCode,$resArray);
   }
 
   function RenderFormHeader()
@@ -830,7 +812,6 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	$oneset->multiple_parts = $thisField->HasMultipleFormComponents()?1:0;
 	$oneset->label_parts = $thisField->LabelSubComponents()?1:0;
 	$oneset->type = $thisField->GetDisplayType();
-	$oneset->friendlytype = $thisField->GetDisplayFriendlyType();
 	$oneset->input_id = $thisField->GetCSSId();
 
 	// Added by Stikki STARTS
@@ -1600,7 +1581,7 @@ $mod->cms->variables['admintheme']->DisplayImage('icons/system/info.gif','true',
 	      {
 			$oneset->id = $mod->CreateLink($id, 'admin_add_edit_field', '', $thisField->GetId(), array('field_id'=>$thisField->GetId(),'form_id'=>$this->Id));
 	      }
-	    $oneset->type = $thisField->GetDisplayFriendlyType();
+	    $oneset->type = $thisField->GetDisplayType();
 	    $oneset->alias = $thisField->GetAlias();
 		$oneset->id = $thisField->GetID();
 
@@ -2158,7 +2139,8 @@ function fast_add(field_type)
 	$db = $this->module_ptr->dbHandle;
 		
 	$oneset = new StdClass();
-	$res = $db->Execute('SELECT response, form_id FROM '.cms_db_prefix().'module_fb_formbrowser WHERE fbr_id=?', array($response_id));
+	$res = $db->Execute('SELECT response, form_id FROM '.cms_db_prefix().
+					'module_fb_formbrowser WHERE fbr_id=?', array($response_id));
 
 	if ($res && $row=$res->FetchRow())
 		{
@@ -2633,7 +2615,6 @@ function fast_add(field_type)
 	    $mod->smarty->assign('fb_version',$mod->GetVersion());
 	    $mod->smarty->assign('TAB',"\t");
 	} 
-/*	Moved to FieldBase, see also self::Dispose()
 	
 	function manageFileUploads()
 	{
@@ -2796,8 +2777,8 @@ function fast_add(field_type)
 	      	}
 		return array(true,'');
 	}
-*/
 
-} // end of class
+
+}
 
 ?>

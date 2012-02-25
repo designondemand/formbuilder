@@ -7,7 +7,7 @@
   This project's homepage is: http://www.cmsmadesimple.org
 */
 
-abstract class fbFieldBase {
+class fbFieldBase {
 
   var $Id=-1;
   var $FormId;
@@ -28,7 +28,6 @@ abstract class fbFieldBase {
   var $DisplayInForm;
   var $DisplayInSubmission;
   var $DispositionPermitted;
-  var $IsDisposition;
   var $IsComputedOnSubmission;
   var $NonRequirableField;
   var $HasAddOp;
@@ -38,7 +37,6 @@ abstract class fbFieldBase {
   var $modifiesOtherFields;
   var $hasMultipleFormComponents;
   var $labelSubComponents;
-  var $IsFileUpload;
 
   var $Value=false;
   var $form_ptr;
@@ -70,7 +68,6 @@ abstract class fbFieldBase {
 	$this->labelSubComponents = true;
 	$this->sortable = true;
 	$this->IsComputedOnSubmission = false;
-	$this->IsFileUpload = false;
 
     if (isset($params['form_id'])) {
 	
@@ -462,23 +459,13 @@ abstract class fbFieldBase {
   	return $this->validationErrorText;
   }
 
-  function IsFileUpload()
-  {
-  	return $this->IsFileUpload;
-  }
-  
+
   // override me with a displayable type
   function GetDisplayType()
   {
-    return $this->Type;
-  }
-
-  // override me with a displayable type
-  function GetDisplayFriendlyType()
-  {
     return $this->form_ptr->module_ptr->Lang('field_type_'.$this->Type);
   }
-  
+
 
   // Base backended fields configuration
   function PrePopulateBaseAdminForm($formDescriptor,$disposeOnly=0)
@@ -1230,45 +1217,6 @@ abstract class fbFieldBase {
 							  array($this->Id));
     return true;
   }
-
-	// Overwrite me if neccery
-	function HandleFileUpload()
-	{
-
-		$mod = $this->form_ptr->module_ptr;
-		$_id = $mod->module_id.'fbrp__'.$this->Id;
-		
-		if(isset($_FILES[$_id]) && $_FILES[$_id]['size'] > 0) {
-		
-			$thisFile =& $_FILES[$_id];
-			$destination_name = $thisFile['name'];
-			$src = $thisFile['tmp_name'];						
-			$dest_path = cmsms()->config['uploads_path'];						
-			$dest = $dest_path.DIRECTORY_SEPARATOR.$destination_name;
-
-			if (!move_uploaded_file($src,$dest)) {
-				
-				audit(-1, $mod->GetName(), $mod->Lang('submit_error',''));
-				return array(false, $mod->Lang('uploads_error',''));
-			} else {
-			
-				if (strpos($dest_path,cmsms()->config['root_path']) !== FALSE) {
-				
-					$url = str_replace(cmsms()->config['root_path'],'',$dest_path).'/'.$destination_name;
-				} else {
-				
-					$url = $mod->Lang('uploaded_outside_webroot',$destination_name);
-				}
-					 
-				$this->ResetValue();
-				$this->SetValue(array($dest,$url));
-			}
-				
-		}
-	    		  	
-		return array(true,'');
-	}  
-  
-} // end of class
+}
 
 ?>
