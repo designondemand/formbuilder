@@ -29,31 +29,30 @@ class fbModuleInterfaceField extends fbFieldBase
   }
 
 
-  function GetFieldInput($id, &$params, $returnid){
-    $mod = &$this->form_ptr->module_ptr;
-	
-	$v = $this->GetOption('value','');
+	function GetFieldInput($id, &$params, $returnid)
+	{
+		$mod = &$this->form_ptr->module_ptr;
+		$v = $this->GetOption('value','');
 
-	/* REMOVED BY Stikki - totally useless that i can see.
-	$val = array();
-	if( $this->Value !== false ){
-		
-		$val = $this->Value;
-		
-		if( !is_array( $this->Value ) ){
-			$val = array($this->Value);
+		/* REMOVED BY Stikki - totally useless that i can see.
+		$val = array();
+		if( $this->Value !== false ){
+			
+			$val = $this->Value;
+			
+			if( !is_array( $this->Value ) ){
+				$val = array($this->Value);
+			}
 		}
+		*/
+
+		cmsms()->GetSmarty()->assign('FBid',$id.'fbrp__'.$this->Id);
+		// for selected... what to do here  
+		// for things like checked="checked" on the back page
+		cmsms()->GetSmarty()->assign('FBvalue',$this->Value);
+
+		return $mod->ProcessTemplateFromData($v);
 	}
-	*/
-	
-	global $gCms;
-	$gCms->smarty->assign('FBid',$id.'fbrp__'.$this->Id);
-	// for selected... what to do here  
-	// for things like checked="checked" on the back page
-	$gCms->smarty->assign('FBvalue',$this->Value);
-	
-    return $mod->ProcessTemplateFromData($v);;
-  }
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
