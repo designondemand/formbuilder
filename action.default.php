@@ -8,7 +8,7 @@
 */
 if (!isset($gCms)) exit;
 
-print_r($_FILES);
+print_r($params);
 
 //debug_display($params);
 
@@ -104,7 +104,7 @@ if ( !$fieldExpandOp && (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber(
 		if ($ok) {
 
 			$finished = true;
-			//$aeform->manageFileUploads();
+			$aeform->manageFileUploads();
 			$results = $aeform->Dispose($returnid);
 		}
 	}
