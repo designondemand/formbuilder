@@ -30,8 +30,7 @@ class fbDispositionUniqueFile extends fbFieldBase
 
 	function Compute()
 	{
-		global $gCms;
-		$config = $gCms->GetConfig();
+		$config = cmsms()->GetConfig();
 		$mod=$this->form_ptr->module_ptr;
 		$form=$this->form_ptr;
 		$form->setFinishedFormSmarty();
@@ -43,11 +42,11 @@ class fbDispositionUniqueFile extends fbFieldBase
 		}
 		$evald_filename = preg_replace("/[^\w\d\.]|\.\./", "_", $mod->ProcessTemplateFromData($filespec));
 		$filespec = $this->GetOption('fileroot',$config['uploads_path']).'/'.$evald_filename;
-		if (strpos($filespec,$gCms->config['root_path']) !== FALSE)
+		if (strpos($filespec,$config['root_path']) !== FALSE)
 		{
-			$relurl = str_replace($gCms->config['root_path'],'',$filespec);
+			$relurl = str_replace($config['root_path'],'',$filespec);
 		}
-		$url = $gCms->config['root_url'].$relurl;
+		$url = $config['root_url'].$relurl;
 		$url = str_replace("\\", "/", $url);
 		$this->SetValue(array($filespec, $url, $relurl, $evald_filename));
 	}
@@ -60,8 +59,7 @@ class fbDispositionUniqueFile extends fbFieldBase
 
 	function DisposeForm($returnid)
 	{
-		global $gCms;
-		$config = $gCms->GetConfig();
+		$config = cmsms()->GetConfig();
 		$mod=$this->form_ptr->module_ptr;
 		$form=$this->form_ptr;
 		$count = 0;
@@ -205,11 +203,11 @@ class fbDispositionUniqueFile extends fbFieldBase
 			$put = file_put_contents($filespec, $rtf_content);
 		}
 
-		if (strpos($filespec,$gCms->config['root_path']) !== FALSE)
+		if (strpos($filespec,$config['root_path']) !== FALSE)
 		{
-			$relurl = str_replace($gCms->config['root_path'],'',$filespec);
+			$relurl = str_replace($config['root_path'],'',$filespec);
 		}
-		$url = $gCms->config['root_url'].$relurl;
+		$url = $config['root_url'].$relurl;
 		$url = str_replace("\\", "/", $url);
 
 		$this->SetValue(array($filespec, $url, $relurl, $evald_filename));
@@ -286,9 +284,8 @@ class fbDispositionUniqueFile extends fbFieldBase
 
 	function PrePopulateAdminForm($formDescriptor)
 	{
-		global $gCms;
 		$mod = $this->form_ptr->module_ptr;
-		$config = $gCms->GetConfig();
+		$config = cmsms()->GetConfig();
 		$file_type = $this->GetOption('file_type','false');
 		$rtf_template_type = $this->GetOption('rtf_template_type','false');
 
@@ -308,7 +305,7 @@ class fbDispositionUniqueFile extends fbFieldBase
 
 		array_push($main,array($mod->Lang('title_file_name'),
 			array($mod->CreateInputText($formDescriptor, 'fbrp_opt_filespec',
-					$this->GetOption('filespec','form_submissions.txt'),80,255),
+					$this->GetOption('filespec',''),80,255),
 				$this->form_ptr->AdminTemplateHelp($formDescriptor,$parmMain))));
 
 		array_push($main,array($mod->Lang('title_newline_replacement'),
