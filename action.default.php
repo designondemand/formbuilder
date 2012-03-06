@@ -8,10 +8,6 @@
 */
 if (!isset($gCms)) exit;
 
-print_r($params);
-
-//debug_display($params);
-
 if (! isset($params['form_id']) && isset($params['form']))
   {
     // get the form by name, not ID
