@@ -13,38 +13,24 @@
 class fbModuleInterfaceField extends fbFieldBase 
 {
 
-  function fbModuleInterfaceField(&$form_ptr, &$params)
-  {
-    $this->fbFieldBase($form_ptr, $params);
-    $mod = &$form_ptr->module_ptr;
-    $this->Type = 'ModuleInterfaceField';
-    $this->DisplayInForm = true;
-    //$this->NonRequirableField = true; REMOVED BY Stikki
-    $this->ValidationTypes = array();
-    $this->HasLabel = 0;
-    $this->NeedsDiv = 0; 
-    $this->sortable = false;
-	$this->DisplayInSubmission = true;
-    //$this->hasMultipleFormComponents = true;	
-  }
+	function fbModuleInterfaceField(&$form_ptr, &$params)
+	{
+		$this->fbFieldBase($form_ptr, $params);
+		$mod = &$form_ptr->module_ptr;
+		$this->Type = 'ModuleInterfaceField';
+		$this->DisplayInForm = true;
+		$this->ValidationTypes = array();
+		$this->HasLabel = 0;
+		$this->NeedsDiv = 0; 
+		$this->sortable = false;
+		$this->DisplayInSubmission = true;	
+	}
 
 
 	function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = &$this->form_ptr->module_ptr;
 		$v = $this->GetOption('value','');
-
-		/* REMOVED BY Stikki - totally useless that i can see.
-		$val = array();
-		if( $this->Value !== false ){
-			
-			$val = $this->Value;
-			
-			if( !is_array( $this->Value ) ){
-				$val = array($this->Value);
-			}
-		}
-		*/
 
 		cmsms()->GetSmarty()->assign('FBid',$id.'fbrp__'.$this->Id);
 		// for selected... what to do here  
@@ -67,37 +53,36 @@ class fbModuleInterfaceField extends fbFieldBase
 		return array('main'=>$main,'adv'=>$adv);
 	}
 	
-function GetHumanReadableValue($as_string=true)
-  {
-    $mod = $this->form_ptr->module_ptr;
-    $form = $this->form_ptr;
-	
-    if ($this->HasValue()) {
-		
-		$fieldRet = array();
-		if (!is_array($this->Value)) {
-		
-			$this->Value = array($this->Value);
-		}
-		
-		if ($as_string) {
-			return join($form->GetAttr('list_delimiter',','),$this->Value);
-		} else {
-			return array($this->Value);
-		}
-		
-    } else {
-		
-		if ($as_string) {
-			return $mod->Lang('unspecified');
-		} else {
-		
-			return array($mod->Lang('unspecified'));
-		}
-    }
-	
-  }
+	function GetHumanReadableValue($as_string=true)
+	{
+		$mod = $this->form_ptr->module_ptr;
+		$form = $this->form_ptr;
 
+		if ($this->HasValue()) {
+			
+			$fieldRet = array();
+			if (!is_array($this->Value)) {
+			
+				$this->Value = array($this->Value);
+			}
+			
+			if ($as_string) {
+				return join($form->GetAttr('list_delimiter',','),$this->Value);
+			} else {
+				return array($this->Value);
+			}
+			
+		} else {
+			
+			if ($as_string) {
+				return $mod->Lang('unspecified');
+			} else {
+			
+				return array($mod->Lang('unspecified'));
+			}
+		}
+
+	}
 
 }
 
