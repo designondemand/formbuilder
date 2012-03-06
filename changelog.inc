@@ -1,4 +1,12 @@
 <ul>
+<li>Version 0.7.2
+  <ul>
+    <li>Many bug fixes.</li>
+    <li>Last version of 0.x series.</li>
+    <li>Fixing compability with 1.10.x series.</li>
+    <li>Fixing problems with Form Browser.</li>
+  </ul>
+</li>
 <li>Version 0.7.1 - (calguy1000)
   <ul>
     <li>Fixes the search for fields to not show backup files etc.</li>
