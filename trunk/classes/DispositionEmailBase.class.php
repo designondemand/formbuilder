@@ -212,8 +212,9 @@ class fbDispositionEmailBase extends fbFieldBase
 					else if (strlen($thisAtt) > 0)
 						{ // Fix for Bug 4307
 							// If this doesn't break anything, we can merge it with the code above.
-						$filepath = getcwd();
-						$filepath .= $thisAtt;
+						//$filepath = getcwd(); <- Filepath can't be relative to CWD dir. NEVER use this again, always get path from config or object. -Stikki-
+						$filepath = $theFields[$i]->GetOption('file_destination');
+						$filepath = cms_join_path($filepath, $thisAtt);
 						
 						if (function_exists('finfo_open'))
 							{
