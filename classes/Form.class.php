@@ -269,10 +269,10 @@ class fbForm {
     $jsCode = "<script type=\"text/javascript\">\n
 /* <![CDATA[ */
 function populate".$fldAlias."(formname)
-    {
-    var fname = 'IDfbrp_".$fieldName."';
-    formname[fname].value=|TEMPLATE|;
-    }
+{
+	var fname = 'IDfbrp_".$fieldName."';
+	$(formname[fname]).val(|TEMPLATE|).change();
+}
 /* ]]> */
 </script>";
 	$jsCode .= "<input type=\"button\" value=\"".
