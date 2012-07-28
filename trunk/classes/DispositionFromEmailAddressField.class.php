@@ -99,7 +99,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 			}
 	}
 
-	function DisposeForm()
+	function DisposeForm($returnid)
 	{
       if ($this->HasValue() != false && 
 			(

@@ -9,15 +9,15 @@
 if (!isset($gCms)) exit;
 if (! $this->CheckAccess()) exit;
 
-		if (isset($params['fbrp_set_field_level']))
-			{
-			$this->SetPreference('show_field_level',$params['fbrp_set_field_level']);
-			}
-			
-		$tab = $this->GetActiveTab($params);
-		
-		$aeform = new fbForm($this, $params, true);
-		
-		echo $aeform->AddEditForm($id, $returnid, $tab, isset($params['fbrp_message'])?$params['fbrp_message']:'');
+if (isset($params['fbrp_set_field_level']))
+	{
+	$this->SetPreference('show_field_level',$params['fbrp_set_field_level']);
+	}
+	
+$tab = $this->GetActiveTab($params);
+
+$aeform = new fbForm($this, $params, true);
+
+echo $aeform->AddEditForm($id, $returnid, $tab, isset($params['fbrp_message'])?$params['fbrp_message']:'');
 
 ?>

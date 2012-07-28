@@ -18,7 +18,7 @@ jQuery(document).ready(function($) {
 				}
 				
 				$('.fbrp_sort').val(sortstr);
-				$('.reordermessage').show();
+				//$('.reordermessage').show();
 		}
 	});
     jQuery(".updown").hide();

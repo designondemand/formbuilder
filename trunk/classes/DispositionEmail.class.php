@@ -109,7 +109,7 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 
 
     // Send off those emails
-	function DisposeForm()
+	function DisposeForm($returnid)
 	{
 		$tmp = $this->GetOptionRef('destination_address');
 		return $this->SendForm($tmp,$this->GetOption('email_subject'));
@@ -125,7 +125,7 @@ class fbDispositionEmail extends fbDispositionEmailBase {
 			$this->addressCount += $this->addressAdd;
 			$this->addressAdd = 0;
 			}
-		$dests = '<table  class="module_fb_table"><tr><th>'.$mod->Lang('title_destination_address').'</th><th>'.
+		$dests = '<table  class="pagetable module_fb_table"><tr><th>'.$mod->Lang('title_destination_address').'</th><th>'.
 			$mod->Lang('title_delete').'</th></tr>';
 
 

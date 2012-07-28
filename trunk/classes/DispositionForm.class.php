@@ -28,7 +28,7 @@ class fbDispositionForm extends  fbFieldBase
     return $this->GetOption('method').' '.$this->GetOption('url');
   }
 
-  function DisposeForm($returnid)
+	function DisposeForm($returnid)
   {
     $mod=$this->form_ptr->module_ptr;
     $fptr=$this->form_ptr;

@@ -34,7 +34,7 @@ class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
            25,128,$js.$this->GetCSSIdTag());
 	}
 
-	function DisposeForm()
+	function DisposeForm($returnid)
 	{
       if ($this->HasValue() != false)
          {

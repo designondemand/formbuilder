@@ -140,7 +140,7 @@ class fbDispositionEmailFromFEUProperty extends fbDispositionEmailBase
   }
 
 
-  function DisposeForm()
+	function DisposeForm($returnid)
   {
     $mod = $this->form_ptr->module_ptr;
     $feu = $mod->GetModuleInstance('FrontEndUsers');

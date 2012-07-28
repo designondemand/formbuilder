@@ -28,7 +28,7 @@ class fbDispositionFile extends fbFieldBase
     return $this->GetOption('filespec',$mod->Lang('unspecified'));
   }
 
-  function DisposeForm($returnid)
+	function DisposeForm($returnid)
   {
 	global $gCms;
 	$options = $gCms->GetConfig();

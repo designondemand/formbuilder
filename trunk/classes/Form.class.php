@@ -1680,6 +1680,8 @@ function fast_add(field_type)
 			     $mod->CreateInputHidden($id, 'fbrp_form_op',$mod->Lang('added')).$mod->CreateInputHidden($id, 'fbrp_sort','','id="fbrp_sort"'));
 	$mod->smarty->assign('adding',1);
       }
+
+	$mod->smarty->assign('cancel_button', $mod->CreateInputSubmit($id, 'fbrp_cancel', $mod->Lang('cancel')));		
     $mod->smarty->assign('link_notready',"<strong>".$mod->Lang('title_not_ready1')."</strong> ".$mod->Lang('title_not_ready2')." ".$mod->CreateLink($id, 'admin_add_edit_field', $returnid,$mod->Lang('title_not_ready_link'),array('form_id'=>$this->Id, 'fbrp_order_by'=>$maxOrder,'fbrp_dispose_only'=>1), '', false, false,'class="module_fb_link"')." ".$mod->Lang('title_not_ready3')
 			 );
 
@@ -1873,12 +1875,14 @@ function fast_add(field_type)
 	$mod->smarty->assign('op',$mod->CreateInputHidden($id, 'fbrp_op',$mod->Lang('updated')));
 	$mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'fbrp_aef_upd', $mod->Lang('update')));
       }
-    else
+    else if($aefield->GetFieldType() != '')
       {
 	$mod->smarty->assign('op',$mod->CreateInputHidden($id, 'fbrp_op', $mod->Lang('added')));
 	$mod->smarty->assign('submit',$mod->CreateInputSubmit($id, 'fbrp_aef_add', $mod->Lang('add')));
       }
 
+	$mod->smarty->assign('cancel',$mod->CreateInputSubmit($id, 'fbrp_cancel', $mod->Lang('cancel')));	  
+	  
     if ($aefield->HasAddOp())
       {
 	$mod->smarty->assign('add',$mod->CreateInputSubmit($id,'fbrp_aef_optadd',$aefield->GetOptionAddButton()));
