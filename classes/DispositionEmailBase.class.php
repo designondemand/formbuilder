@@ -35,7 +35,7 @@ class fbDispositionEmailBase extends fbFieldBase
   }
 
   // override me!
-  function DisposeForm()
+	function DisposeForm($returnid)
   {
     return array(true,'');
   }

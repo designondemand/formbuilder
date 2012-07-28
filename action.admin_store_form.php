@@ -7,7 +7,11 @@
   This project's homepage is: http://www.cmsmadesimple.org
 */
 if (!isset($gCms)) exit;
-if (! $this->CheckAccess()) exit;
+
+if (isset($params['fbrp_cancel'])) {
+
+	$this->Redirect($id, 'defaultadmin', $returnid);
+}
 
 // Store data
 $aeform = new fbForm($this, $params, true);

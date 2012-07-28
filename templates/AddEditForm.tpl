@@ -82,7 +82,7 @@
 				{/foreach}
 				</tbody>
             </table>
-			<div class="reordermessage pagemcontainer" style="display:none"><p class="pagemessage">{$title_must_save_order}</p></div>
+			{*<div class="reordermessage pagemcontainer" style="display:none"><p class="pagemessage">{$title_must_save_order}</p></div>*}	
 			<br />
 			{$add_field_link}
         </div>
@@ -146,9 +146,6 @@
 	</div>
 {$tab_end}{$udttab_start}
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_see_also_udt}</p>
-	</div>
-	<div class="pageoverflow">
 		<p class="pagetext">{$title_form_predisplay_udt}:</p>
 		<p class="pageinput">{$input_form_predisplay_udt}</p>
 	</div>
@@ -204,7 +201,6 @@
 {$tabs_end}
 	<div class="pageoverflow">
 		<p class="pagetext">&nbsp;</p>
-		<p class="pageinput">{$save_button}{$submit_button}</p>
+		<p class="pageinput">{$save_button}{$submit_button}{$cancel_button}</p>
 	</div>
 {$form_end}
-{$back}

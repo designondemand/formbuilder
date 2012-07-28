@@ -142,7 +142,7 @@ class fbDispositionDirector extends fbDispositionEmailBase {
 			$this->addressCount += $this->addressAdd;
 			$this->addressAdd = 0;
 			}
-		$dests = '<table class="module_fb_table"><tr><th>'.$mod->Lang('title_selection_subject').'</th><th>'.
+		$dests = '<table class="pagetable module_fb_table"><tr><th>'.$mod->Lang('title_selection_subject').'</th><th>'.
 			$mod->Lang('title_destination_address').'</th><th>'.
 			$mod->Lang('title_delete').'</th></tr>';
 

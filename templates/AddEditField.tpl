@@ -1,7 +1,7 @@
 {if isset($message)}{$message}{/if}
 
 {$backtoform_nav}<br />
-{$start_form}{$fb_hidden}{$op}{$tab_start}
+{$start_form}{$fb_hidden}{if isset($op)}{$op}{/if}{$tab_start}
 {$maintab_start}
 	{foreach from=$mainList item=entry}
 		<div class="pageoverflow">
@@ -29,6 +29,6 @@
 {/if}
 	<div class="pageoverflow">
 		<p class="pagetext">&nbsp;</p>
-		<p class="pageinput">{$submit}</p>
+		<p class="pageinput">{if isset($submit)}{$submit}{/if}{$cancel}</p>
 	</div>
 {$end_form}

@@ -43,7 +43,7 @@ class fbDispositionEmailBasedFrontendFields extends fbDispositionEmailBase {
 
 
     // Send off those emails
-	function DisposeForm()
+	function DisposeForm($returnid)
 	{
 	
 		$mod = $this->form_ptr->module_ptr;

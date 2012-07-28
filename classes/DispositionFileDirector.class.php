@@ -113,7 +113,7 @@ class fbDispositionFileDirector extends fbFieldBase
     return $ret;
   }
 
-  function DisposeForm($returnid)
+	function DisposeForm($returnid)
   {
 	global $gCms;
 	$options = $gCms->GetConfig();

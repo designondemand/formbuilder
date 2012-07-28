@@ -857,7 +857,7 @@ class fbFieldBase {
   // it returns an array, where the first element is true on success,
   // or false on failure, and the second element is explanatory
   // text for the failure
-  function DisposeForm()
+  function DisposeForm($returnid)
   {
     return array(true, '');
   }	
