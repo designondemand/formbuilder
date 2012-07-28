@@ -1,4 +1,14 @@
 <ul>
+<li>Version 0.7.3
+  <ul>
+    <li>Compatibility release for 1.11.</li>
+    <li>Adding cancel buttons to form and field instances.</li>
+    <li>Removing ugly go back link.</li>
+    <li>Ensuring usability in PHP strict mode.</li>
+    <li>Some template fixes.</li>
+    <li>NOTE: This is not feature or bug release, this is compatibility release as we ain't working with anything else than maintaining certain compatibility with this module. Stay tuned for FormBuilder2 within this year.</li>
+  </ul>
+</li>
 <li>Version 0.7.2
   <ul>
     <li>Many bug fixes.</li>

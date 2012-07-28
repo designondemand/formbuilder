@@ -120,17 +120,17 @@ class FormBuilder extends CMSModule
 
 	function GetVersion()
 	{
-		return '0.7.2';
+		return '0.7.3';
 	}
 
 	function GetAuthor()
 	{
-		return 'SjG';
+		return 'Stikki';
 	}
 
 	function GetAuthorEmail()
 	{
-		return 'sjg@cmsmodules.com';
+		return 'stikki@cmsmadesimple.org';
 	}
 
 	function GetAdminDescription($lang = 'en_US')
