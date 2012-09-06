@@ -24,12 +24,30 @@ class fbFromEmailSubjectField extends fbFieldBase {
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
-		
+		$html5 = $this->GetOption('html5','0') == '1' ? ' placeholder="'.$this->GetOption('default').'"' : '';
+		$default = $html5 ? '' : htmlspecialchars($this->GetOption('default'), ENT_QUOTES);
+
 		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,
-			htmlspecialchars($this->Value, ENT_QUOTES),
-           25,128,$js.$this->GetCSSIdTag());
+			($this->HasValue()?htmlspecialchars($this->Value, ENT_QUOTES):$default),
+			25,128,$html5.$js.$this->GetCSSIdTag());
 	}
-	
+
+	function PrePopulateAdminForm($formDescriptor)
+	{
+		$mod = $this->form_ptr->module_ptr;
+		$main = array();
+		$adv = array(
+			array($mod->Lang('title_field_default_value'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_default',$this->GetOption('default'),25,1024)),
+			array($mod->Lang('title_html5'),$mod->CreateInputHidden($formDescriptor,'fbrp_opt_html5','0').
+						$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_html5','1',$this->GetOption('html5','0')))	
+		);
+		$hopts = array($mod->Lang('option_from')=>'f',$mod->Lang('option_reply')=>'r',$mod->Lang('option_both')=>'b');
+		array_push($main,array($mod->Lang('title_headers_to_modify'),
+			$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_headers_to_modify', $hopts, -1, $this->GetOption('headers_to_modify','f'))));
+
+		return array('main'=>$main,'adv'=>$adv);
+	}
+
 	function ModifyOtherFields()
 	{
 		$mod = $this->form_ptr->module_ptr;
