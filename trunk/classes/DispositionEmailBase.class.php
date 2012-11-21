@@ -79,14 +79,15 @@ class fbDispositionEmailBase extends fbFieldBase
     $dbresult = $db->GetOne($query, array($_SERVER['REMOTE_ADDR'],
                trim($db->DBTimeStamp(time() - 3600),"'")));
 
-    if ($dbresult && $dbresult['sent'] > 9)
-      {
-      // too many from this IP address. Kill it.
-        $msg = '<hr />'.$mod->Lang('suspected_spam'). '<hr />';
-      audit(-1, $mod->GetName(),$mod->Lang('log_suspected_spam',$_SERVER['REMOTE_ADDR']));
-      return array(false,$msg);
-      }
-    }
+       if ($dbresult && $dbresult > 9) {
+
+         // too many from this IP address. Kill it.
+         $msg = '<hr />' . $mod->Lang('suspected_spam') . '<hr />';
+         audit(-1, $mod->GetName(), $mod->Lang('log_suspected_spam', $_SERVER['REMOTE_ADDR']));
+         return array(false, $msg);
+
+       }
+     }
 
     $mail = $mod->GetModuleInstance('CMSMailer');
     if ($mail == FALSE)
