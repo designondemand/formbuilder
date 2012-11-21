@@ -1,4 +1,15 @@
 <ul>
+    <li>Version 0.7.4
+        <ul>
+            <li>Fixed bugs #8510, #7408</li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li>Leaving the selection text blank in pulldown menus now defaults to first option</li>
+        </ul>
+    </li>
+
 <li>Version 0.7.3
   <ul>
     <li>Compatibility release for 1.11.</li>
