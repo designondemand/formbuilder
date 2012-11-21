@@ -46,7 +46,7 @@ class FormBuilder extends CMSModule
 		parent::__construct();
 
 		$this->module_ptr = &$this;
-		$this->dbHandle =  $this->GetDb();
+		$this->dbHandle =  cmsms()->GetDb();
 		$this->module_id = '';
 		$this->email_regex = "/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i";
 		$this->email_regex_relaxed="/^([\w\d\.\-\_])+\@([\w\d\.\-\_])+$/i";
@@ -677,7 +677,7 @@ class FormBuilder extends CMSModule
 		         	{
 					foreach ($fnames as $id=>$name)
 						{
-		            	$fnames[$i] = strip_tags($fnames[$i]);
+		            	$fnames[$id] = strip_tags($fnames[$id]);
 		            	}
 		         	}
 				fputs ($fh, $this->Lang('title_submit_date')."\t".
@@ -765,18 +765,18 @@ class FormBuilder extends CMSModule
 	// For a given form, returns an array of response objects
 	function ListResponses($form_id, $sort_order='submitted')
 	{
-		$db = $this->GetDb();
+		$db = cmsms()->GetDb();
 		$ret = array();
 		$sql = 'SELECT * FROM '.cms_db_prefix().
 				'module_fb_resp WHERE form_id=? ORDER BY ?';
-		$dbresult = $db->Execute($query, array($form_id,$sort_order));
+		$dbresult = $db->Execute($sql, array($form_id,$sort_order));
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
 			$oneset = new stdClass();
-			$oneset->id = $result['resp_id'];
-			$oneset->user_approved = $db->UnixTimeStamp($result['user_approved']); 
-			$oneset->admin_approved = $db->UnixTimeStamp($result['admin_approved']); 
-			$oneset->submitted = $db->UnixTimeStamp($result['submitted']); 
+			$oneset->id = $row['resp_id'];
+			$oneset->user_approved = $db->UnixTimeStamp($row['user_approved']);
+			$oneset->admin_approved = $db->UnixTimeStamp($row['admin_approved']);
+			$oneset->submitted = $db->UnixTimeStamp($row['submitted']);
 			array_push($ret,$oneset);
 		}
 		return $ret;
