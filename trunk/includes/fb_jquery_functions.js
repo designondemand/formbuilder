@@ -62,8 +62,9 @@ jQuery.fn.fb_admin_update_field_required = function() {
 	var current = jQuery(this);
 	
 	jQuery.ajax({
-		type: "GET",
+		type: "POST",
 		url: url,
+		data: '&showtemplate=false',
 		error: function() {
 				
 			alert('Sorry. There was an error.');
