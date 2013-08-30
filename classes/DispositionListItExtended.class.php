@@ -7,8 +7,7 @@
  * This project's homepage is: http://www.cmsmadesimple.org
  */
 
-class fbDispositionListItExtended extends fbFieldBase
-{
+class fbDispositionListItExtended extends fbFieldBase {
 
 	public function __construct(&$form_ptr, &$params)
 	{
