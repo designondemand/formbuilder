@@ -1,12 +1,11 @@
 <ul>
     <li>Version 0.7.4
         <ul>
-            <li>Fixed bugs #8510, #7408</li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
+            <li>Fixed bugs #8510, #7408, #9296, #9129, #9360, #8893</li>
+            <li>Adds a disposition to allow saving to ListItExtended</li>
+            <li>Full support of HTML5 input fields and the required attribute</li>
             <li>Leaving the selection text blank in pulldown menus now defaults to first option</li>
+            <li>Allow for prepopulation of all inputs including pulldowns via tag param</li>
         </ul>
     </li>
 
@@ -32,7 +31,7 @@
   <ul>
     <li>Fixes the search for fields to not show backup files etc.</li>
     <li>Fixes a CMS Version comparison.</li>
-    <li>Adds a disposition to allow selecting users to email based on an FEU property.   Also assigns smarty variables with info about matching usess.</li>
+    <li>Adds a disposition to allow selecting users to email based on an FEU property. Also assigns smarty variables with info about matching usess.</li>
   </ul>
 </li>
 	<li>Version 0.7.
