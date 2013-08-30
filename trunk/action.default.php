@@ -66,41 +66,46 @@ foreach($params as $pKey=>$pVal)
       }
    }
 
-if ( !$fieldExpandOp && (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber() > 0) || (isset($params['fbrp_done'])&& $params['fbrp_done']==1))) {
-    
+if ( !$fieldExpandOp && (($aeform->GetPageCount() > 1 && $aeform->GetPageNumber() > 0) || (isset($params['fbrp_done'])&& $params['fbrp_done']==1)))
+{
+	$ok = true;
+
 	// Validate form
 	$res = $aeform->Validate();
-    
-	// We have validate errors
-    if ($res[0] === false) {
+	if ($res[0] === false)
+	{
+    	$ok = false;
 
 		$this->smarty->assign('fb_form_validation_errors',$res[1]);
 		$this->smarty->assign('fb_form_has_validation_errors',1);
 
 		$aeform->PageBack();
-	
-	// No validate errors, proceed
-    } else if (isset($params['fbrp_done']) && $params['fbrp_done']==1) {
-      
+    }
+
+    // Manage fileuploads
+    $res = $aeform->manageFileUploads();
+    if ($res[0] === false)
+	{
+    	$ok = false;
+
+		$this->smarty->assign('fb_form_validation_errors',$res[1]);
+		$this->smarty->assign('fb_form_has_validation_errors',1);
+
+		$aeform->PageBack();
+    }
+
+    if ($ok && isset($params['fbrp_done']) && $params['fbrp_done']==1)
+    {
 		// Check captcha, if installed
-		$ok = true;
 		$captcha = $this->getModuleInstance('Captcha');
-		if ($aeform->GetAttr('use_captcha','0')== '1' && $captcha != null) {
-		
-			if (! $captcha->CheckCaptcha($params['fbrp_captcha_phrase'])) {
-			
-				$this->smarty->assign('captcha_error',$aeform->GetAttr('captcha_wrong',$this->Lang('wrong_captcha')));
-
-				$aeform->PageBack();
-				$ok = false;
-			}
+		if (($aeform->GetAttr('use_captcha','0')== '1' && $captcha != null) && !$captcha->CheckCaptcha($params['fbrp_captcha_phrase']))
+		{
+			$this->smarty->assign('captcha_error',$aeform->GetAttr('captcha_wrong',$this->Lang('wrong_captcha')));
+			$aeform->PageBack();
 		}
-		
-		// All ok, dispose form and manage fileuploads
-		if ($ok) {
-
+		else
+		{
 			$finished = true;
-			$aeform->manageFileUploads();
 			$results = $aeform->Dispose($returnid);
 		}
 	}
