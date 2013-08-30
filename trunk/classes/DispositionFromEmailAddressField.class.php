@@ -11,7 +11,7 @@ require_once(dirname(__FILE__).'/DispositionEmailBase.class.php');
 
 class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 
-	function __construct(&$form_ptr, &$params)
+	public function __construct(&$form_ptr, &$params)
 	{
 		parent::__construct($form_ptr, $params);
 		$mod = $form_ptr->module_ptr;
@@ -26,57 +26,31 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		$this->NonRequirableField = false;
 	}
 
-	function GetFieldInput($id, &$params, $returnid)
+	public function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
-		$retstr = '<input type="text" name="'.$id.'fbrp__'.$this->Id.'[]" '.
-		$this->GetCSSIdTag('_1').' value="'.htmlspecialchars($this->Value[0], ENT_QUOTES).
-			'" size="25" maxlength="128" '.$js.'/>';
+		$input = $mod->CreateInputEmail($id, 'fbrp__'.$this->Id.'[]', htmlspecialchars($this->Value[0], ENT_QUOTES), 25, 128, $js);
 		if ($this->GetOption('send_user_copy','n') == 'c')
 		{
-			$retstr .= $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id.'[]', 1,
-			0,$this->GetCSSIdTag('_2'),'email');
-			$retstr .= '<label for="'.$this->GetCSSId('_2').'" class="label">'.$this->GetOption('send_user_label',
-			$mod->Lang('title_send_me_a_copy')).'</label>';
+			$input .= $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id.'[]', 1,0);
+			$input .= '<label for="'.$this->GetCSSId('_2').'" class="label">'.
+				$this->GetOption('send_user_label', $mod->Lang('title_send_me_a_copy')).'</label>';
 		}
-		return $retstr;
+		return $input;
 	}
 
-	function GetCSSId($suffix='')
-	{
-		$alias = $this->GetAlias();
-		if (empty($alias))
-		{
-			$cssid = 'fbrp__'.$this->Id;
-		}
-		else
-		{
-			$cssid = $alias;
-		}
-
-		if (empty($suffix))
-		{
-			$cssid .= '_1';
-		}
-		else
-		{
-			$cssid .= $suffix;
-		}
-		return $cssid;
-	}
-
-	function HasValue($deny_blank_responses=false)
+	public function HasValue($deny_blank_responses=false)
 	{
 		return ($this->Value[0] !== false && !empty($this->Value[0]));
 	}
 
-	function GetValue()
+	public function GetValue()
 	{
 		return $this->Value[0];
 	}
 
-	function SetValue($valStr)
+	public function SetValue($valStr)
 	{
 		if (! is_array($valStr))
 		{
@@ -88,7 +62,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		}
 	}
 
-	function GetHumanReadableValue($as_string=true)
+	public function GetHumanReadableValue($as_string=true)
 	{
 		if (is_array($this->Value))
 		{
@@ -100,7 +74,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		}
 	}
 
-	function DisposeForm($returnid)
+	public function DisposeForm($returnid)
 	{
 		if ($this->HasValue() != false &&
 			(
@@ -118,13 +92,12 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		}
 	}
 
-
-	function StatusInfo()
+	public function StatusInfo()
 	{
 		return $this->TemplateStatus();
 	}
 
-	function PrePopulateAdminForm($formDescriptor)
+	public function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = $this->form_ptr->module_ptr;
 		list($main,$adv) = $this->PrePopulateAdminFormBase($formDescriptor);
@@ -140,14 +113,13 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		return array('main'=>$main,'adv'=>$adv);
 	}
 
-	function PostPopulateAdminForm(&$mainArray, &$advArray)
+	public function PostPopulateAdminForm(&$mainArray, &$advArray)
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$this->RemoveAdminField($mainArray, $mod->Lang('title_email_from_address'));
 	}
 
-
-	function ModifyOtherFields()
+	public function ModifyOtherFields()
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$others = $this->form_ptr->GetFields();
@@ -173,7 +145,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		}
 	}
 
-	function Validate()
+	public function Validate()
 	{
 
 		$this->validated = true;
