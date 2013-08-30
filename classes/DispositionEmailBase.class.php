@@ -167,75 +167,71 @@ abstract class fbDispositionEmailBase extends fbFieldBase
 
 		for($i=0;$i<count($theFields);$i++)
 		{
-			if (strtolower(get_class($theFields[$i])) == 'fbfileuploadfield' )
+			if (strtolower(get_class($theFields[$i])) == 'fbfileuploadfield'
+					&& !$theFields[$i]->GetOption('suppress_attachment')
+					&& !$theFields[$i]->GetOption('sendto_uploads')
+				)
 			{
-					
-				if( !$theFields[$i]->GetOption('suppress_attachment') ) {
-						
-					if( !$theFields[$i]->GetOption('sendto_uploads') )
+				// we have a file we wish to attach
+				$thisAtt = $theFields[$i]->GetHumanReadableValue(false);
+
+				if (is_array($thisAtt))
+				{
+					if (function_exists('finfo_open'))
 					{
-						// we have a file we wish to attach
-						$thisAtt = $theFields[$i]->GetHumanReadableValue(false);
+						$finfo = finfo_open(FILEINFO_MIME); // return mime type ala mimetype extension
+						$thisType = finfo_file($finfo, $thisAtt[0]);
+						finfo_close($finfo);
+					}
+					else if (function_exists('mime_content_type'))
+					{
+						$thisType = mime_content_type($thisAtt[0]);
+					}
+					else
+					{
+						$thisType = 'application/octet-stream';
+					}
+					$thisNames = split('[/:\\]',$thisAtt[0]);
+					$thisName = array_pop($thisNames);
+					if (! $mail->AddAttachment($thisAtt[0], $thisName, "base64", $thisType))
+					{
+						// failed upload kills the send.
+						audit(-1, (isset($name)?$name:""), $mod->Lang('submit_error',$mail->GetErrorInfo()));
+						return array($res, $mod->Lang('upload_attach_error',
+						array($thisAtt[0],$thisAtt[0] ,$thisType)));
+					}
+				}
+				else if (strlen($thisAtt) > 0)
+				{ // Fix for Bug 4307
+					// If this doesn't break anything, we can merge it with the code above.
+					//$filepath = getcwd(); <- Filepath can't be relative to CWD dir. NEVER use this again, always get path from config or object. -Stikki-
+					$filepath = $theFields[$i]->GetOption('file_destination');
+					$filepath = cms_join_path($filepath, $thisAtt);
 
-						if (is_array($thisAtt))
-						{
-							if (function_exists('finfo_open'))
-							{
-								$finfo = finfo_open(FILEINFO_MIME); // return mime type ala mimetype extension
-								$thisType = finfo_file($finfo, $thisAtt[0]);
-								finfo_close($finfo);
-							}
-							else if (function_exists('mime_content_type'))
-							{
-								$thisType = mime_content_type($thisAtt[0]);
-							}
-							else
-							{
-								$thisType = 'application/octet-stream';
-							}
-							$thisNames = split('[/:\\]',$thisAtt[0]);
-							$thisName = array_pop($thisNames);
-							if (! $mail->AddAttachment($thisAtt[0], $thisName, "base64", $thisType))
-							{
-								// failed upload kills the send.
-								audit(-1, (isset($name)?$name:""), $mod->Lang('submit_error',$mail->GetErrorInfo()));
-								return array($res, $mod->Lang('upload_attach_error',
-								array($thisAtt[0],$thisAtt[0] ,$thisType)));
-							}
-						}
-						else if (strlen($thisAtt) > 0)
-						{ // Fix for Bug 4307
-							// If this doesn't break anything, we can merge it with the code above.
-							//$filepath = getcwd(); <- Filepath can't be relative to CWD dir. NEVER use this again, always get path from config or object. -Stikki-
-							$filepath = $theFields[$i]->GetOption('file_destination');
-							$filepath = cms_join_path($filepath, $thisAtt);
+					if (function_exists('finfo_open'))
+					{
+						$finfo = finfo_open(FILEINFO_MIME); // return mime type ala mimetype extension
+						$thisType = finfo_file($finfo, $filepath);
+						finfo_close($finfo);
+					}
+					else if (function_exists('mime_content_type'))
+					{
+						$thisType = mime_content_type($filepath);
+					}
+					else
+					{
+						$thisType = 'application/octet-stream';
+					}
 
-							if (function_exists('finfo_open'))
-							{
-								$finfo = finfo_open(FILEINFO_MIME); // return mime type ala mimetype extension
-								$thisType = finfo_file($finfo, $filepath);
-								finfo_close($finfo);
-							}
-							else if (function_exists('mime_content_type'))
-							{
-								$thisType = mime_content_type($filepath);
-							}
-							else
-							{
-								$thisType = 'application/octet-stream';
-							}
+					$thisNames = split('[/:\\]',$filepath);
+					$thisName = array_pop($thisNames);
 
-							$thisNames = split('[/:\\]',$filepath);
-							$thisName = array_pop($thisNames);
-
-							if (! $mail->AddAttachment($filepath, $thisName, "base64", $thisType))
-							{
-								// failed upload kills the send.
-								audit(-1, (isset($name)?$name:""), $mod->Lang('submit_error',$mail->GetErrorInfo()));
-								return array($res, $mod->Lang('upload_attach_error',
-								array($filepath,$filepath ,$thisType)));
-							}
-						}
+					if (! $mail->AddAttachment($filepath, $thisName, "base64", $thisType))
+					{
+						// failed upload kills the send.
+						audit(-1, (isset($name)?$name:""), $mod->Lang('submit_error',$mail->GetErrorInfo()));
+						return array($res, $mod->Lang('upload_attach_error',
+						array($filepath,$filepath ,$thisType)));
 					}
 				}
 			}
