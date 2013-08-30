@@ -1,88 +1,70 @@
 <?php
-/* 
-   FormBuilder. Copyright (c) 2005-2006 Samuel Goldstein <sjg@cmsmodules.com>
-   More info at http://dev.cmsmadesimple.org/projects/formbuilder
-   
-   A Module for CMS Made Simple, Copyright (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
-  This project's homepage is: http://www.cmsmadesimple.org
-*/
+/*
+ * FormBuilder. Copyright (c) 2005-2006 Samuel Goldstein <sjg@cmsmodules.com>
+ * More info at http://dev.cmsmadesimple.org/projects/formbuilder
+ *
+ * A Module for CMS Made Simple, Copyright (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
+ * This project's homepage is: http://www.cmsmadesimple.org
+ */
 
 class fbPasswordAgainField extends fbFieldBase {
 
-	function fbPasswordAgainField(&$form_ptr, &$params)
+	public function __construct(&$form_ptr, &$params)
 	{
-		$this->fbFieldBase($form_ptr, $params);
+		parent::__construct($form_ptr, $params);
 		$mod = $form_ptr->module_ptr;
 		$this->Type = 'PasswordAgainField';
 		$this->DisplayInForm = true;
-		$this->ValidationTypes = array(
-			);
+		$this->ValidationTypes = array();
 		$this->modifiesOtherFields = false;
 	}
 
-	function GetFieldInput($id, &$params, $returnid)
+	public function GetFieldInput($id, &$params, $returnid)
 	{
-	  $mod = $this->form_ptr->module_ptr;
-	  $js = $this->GetOption('javascript','');
-     if ($this->GetOption('hide','1') == '0')
-       {
-	     return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,
-				    ($this->Value?$this->Value:''),
-            $this->GetOption('length'),
-            255,
-			$js.$this->GetCSSIdTag());
-        }
-      else
-         {
-         return $mod->CreateInputPassword($id, 'fbrp__'.$this->Id,
-            ($this->Value?$this->Value:''), $this->GetOption('length'),
-            255, $js.$this->GetCSSIdTag());
-         }
-   }
+		$mod = $this->form_ptr->module_ptr;
+		$js = $this->GetOption('javascript','');
+		if ($this->GetOption('hide','1') == '0')
+		{
+			return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,($this->Value?$this->Value:''),$this->GetOption('length'),255,$js.$this->GetCSSIdTag());
+		}
+		else
+		{
+			return $mod->CreateInputPassword($id, 'fbrp__'.$this->Id,($this->Value?$this->Value:''), $this->GetOption('length'),255, $js);
+		}
+	}
 
-	function StatusInfo()
+	public function StatusInfo()
 	{
 		$mod = $this->form_ptr->module_ptr;
 		return $mod->Lang('title_field_id') . ': ' . $this->GetOption('field_to_validate','');
 	}
-	
-	function PrePopulateAdminForm($formDescriptor)
+
+	public function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$flds = $this->form_ptr->GetFields();
 		$opts = array();
 		foreach ($flds as $tf)
-			{
+		{
 			if ($tf->GetFieldType() == 'PasswordField')
-            {
-			   $opts[$tf->GetName()]=$tf->GetName();
-			   }
+			{
+				$opts[$tf->GetName()]=$tf->GetName();
 			}
+		}
 		$main = array(
 			array(
 				$mod->Lang('title_field_to_validate'),
-			$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_field_to_validate', $opts, -1, $this->GetOption('field_to_validate'))
-			),
-			array($mod->Lang('title_display_length'),
-			      $mod->CreateInputText($formDescriptor,
-						    'fbrp_opt_length',
-			         $this->GetOption('length','12'),25,25)),
-			array($mod->Lang('title_minimum_length'),
-			      $mod->CreateInputText($formDescriptor,
-						    'fbrp_opt_min_length',
-			         $this->GetOption('min_length','8'),25,25)),
-			array($mod->Lang('title_hide'),
-			      $mod->CreateInputHidden($formDescriptor, 'fbrp_opt_hide','0').
-            		$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_hide',
-            		'1',$this->GetOption('hide','1')).$mod->Lang('title_hide_help')),
-
+				$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_field_to_validate', $opts, -1, $this->GetOption('field_to_validate'))),
+			array($mod->Lang('title_display_length'),$mod->CreateInputText($formDescriptor,'fbrp_opt_length',$this->GetOption('length','12'),25,25)),
+			array($mod->Lang('title_minimum_length'),$mod->CreateInputText($formDescriptor,'fbrp_opt_min_length',$this->GetOption('min_length','8'),25,25)),
+			array($mod->Lang('title_hide'),$mod->CreateInputHidden($formDescriptor, 'fbrp_opt_hide','0').
+				$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_hide','1',$this->GetOption('hide','1')).$mod->Lang('title_hide_help')),
 		);
 
 		return array('main'=>$main);
 	}
 
-
-	function Validate()
+	public function Validate()
 	{
 		$this->validated = true;
 		$this->validationErrorText = '';

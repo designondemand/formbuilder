@@ -11,7 +11,7 @@ require_once(dirname(__FILE__).'/DispositionEmailBase.class.php');
 
 class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
 
-	function __construct(&$form_ptr, &$params)
+	public function __construct(&$form_ptr, &$params)
 	{
 		parent::__construct($form_ptr, $params);
 		$mod = $form_ptr->module_ptr;
@@ -23,14 +23,14 @@ class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
 		$this->modifiesOtherFields = false;
 	}
 
-	function GetFieldInput($id, &$params, $returnid)
+	public function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
-		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,htmlspecialchars($this->Value, ENT_QUOTES),25,128,$js.$this->GetCSSIdTag());
+		return $mod->CreateInputEmail($id, 'fbrp__'.$this->Id, $this->Value, 25, 128, $js);
 	}
 
-	function DisposeForm($returnid)
+	public function DisposeForm($returnid)
 	{
 		if ($this->HasValue() != false)
 		{
@@ -42,19 +42,18 @@ class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
 		}
 	}
 
-
-	function StatusInfo()
+	public function StatusInfo()
 	{
 		return $this->TemplateStatus();
 	}
 
-	function PrePopulateAdminForm($formDescriptor)
+	public function PrePopulateAdminForm($formDescriptor)
 	{
 		list($main,$adv) = $this->PrePopulateAdminFormBase($formDescriptor);
 		return array('main'=>$main,'adv'=>$adv);
 	}
 
-	function Validate()
+	public function Validate()
 	{
 
 		$this->validated = true;
@@ -62,8 +61,8 @@ class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
 		$result = true;
 		$message = '';
 		$mod = $this->form_ptr->module_ptr;
-		if ($this->Value !== false &&
-			! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $this->Value))
+		if ($this->Value !== false
+			&& !preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $this->Value))
 		{
 			$this->validated = false;
 			$this->validationErrorText = $mod->Lang('please_enter_an_email',$this->Name);
@@ -72,5 +71,4 @@ class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
 		return array($this->validated, $this->validationErrorText);
 	}
 }
-
 ?>

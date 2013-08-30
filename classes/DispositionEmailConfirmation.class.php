@@ -11,7 +11,7 @@ require_once('DispositionEmailBase.class.php');
 
 class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 
-	function __construct(&$form_ptr, &$params)
+	public function __construct(&$form_ptr, &$params)
 	{
 		parent::__construct($form_ptr, $params);
 		$mod = $form_ptr->module_ptr;
@@ -23,22 +23,21 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 		$this->ValidationTypes = array();
 		$this->ValidationType = 'email';
 		$this->modifiesOtherFields = true;
-		$this->form_ptr->AddTemplateVariable('confirm_url',
-		$mod->Lang('title_confirmation_url'));
+		$this->form_ptr->AddTemplateVariable('confirm_url', $mod->Lang('title_confirmation_url'));
 		$this->approvedToGo = false;
 	}
 
-	function StatusInfo()
+	public function StatusInfo()
 	{
 		return $this->TemplateStatus();
 	}
 
-	function ApproveToGo($response_id)
+	public function ApproveToGo($response_id)
 	{
 		$this->approvedToGo = true;
 	}
 
-	function ModifyOtherFields()
+	public function ModifyOtherFields()
 	{
 		$mod = $this->form_ptr->module_ptr;
 
@@ -65,16 +64,14 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 		$this->SetDispositionPermission(true);
 	}
 
-	function GetFieldInput($id, &$params, $returnid)
+	public function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = $this->form_ptr->module_ptr;
-		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,
-		htmlspecialchars($this->Value, ENT_QUOTES),25,80,$this->GetCSSIdTag(),'email');
+		return $mod->CreateInputEmail($id, 'fbrp__'.$this->Id, $this->Value, 25, 80);
 	}
 
-
 	// Send off those emails
-	function DisposeForm($returnid)
+	public function DisposeForm($returnid)
 	{
 		$mod = $this->form_ptr->module_ptr;
 		if (! $this->approvedToGo)
@@ -84,8 +81,7 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 			list($rid,$code) = $this->form_ptr->StoreResponse(-1,'',$fbrf);
 				
 			$mod->smarty->assign('confirm_url',$mod->CreateFrontendLink('', $returnid,
-				'validate', '', array('fbrp_f'=>$this->form_ptr->GetId(),'fbrp_r'=>$rid,'fbrp_c'=>$code), '',
-			true,false,'',true));
+				'validate', '', array('fbrp_f'=>$this->form_ptr->GetId(),'fbrp_r'=>$rid,'fbrp_c'=>$code), '',true,false,'',true));
 			return $this->SendForm($this->GetValue(),$this->GetOption('email_subject'));
 		}
 		else
@@ -94,12 +90,10 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 		}
 	}
 
-	function PrePopulateAdminForm($formDescriptor)
+	public function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = $this->form_ptr->module_ptr;
-		 
-		global $gCms;
-		$contentops = $gCms->GetContentOperations();
+		$contentops = cmsms()->GetContentOperations();
 
 		list($main,$adv) = $this->PrePopulateAdminFormBase($formDescriptor);
 		array_push($main,array($mod->Lang('redirect_after_approval'),
@@ -107,7 +101,7 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 		return array('main'=>$main,'adv'=>$adv);
 	}
 
-	function Validate()
+	public function Validate()
 	{
 		$this->validated = true;
 		$this->validationErrorText = '';
@@ -115,8 +109,8 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 		switch ($this->ValidationType)
 		{
 			case 'email':
-				if ($this->Value !== false &&
-				! preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $this->Value))
+				if ($this->Value !== false
+					&& !preg_match(($mod->GetPreference('relaxed_email_regex','0')==0?$mod->email_regex:$mod->email_regex_relaxed), $this->Value))
 				{
 					$this->validated = false;
 					$this->validationErrorText = $mod->Lang('please_enter_an_email',$this->Name);
@@ -126,7 +120,5 @@ class fbDispositionEmailConfirmation extends fbDispositionEmailBase {
 		return array($this->validated, $this->validationErrorText);
 	}
 
-
 }
-
 ?>
