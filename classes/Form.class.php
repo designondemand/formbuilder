@@ -879,6 +879,7 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
 	$mod->smarty->assign('prev','');
       }
 
+      $mod->smarty->assign('has_captcha','0');
     if ($this->Page < $formPageCount)
       {
 
@@ -894,11 +895,6 @@ $button_text."\" onclick=\"javascript:populate".$fldAlias."(this.form)\" />";
          $mod->smarty->assign('input_captcha',$mod->CreateInputText($id, 'fbrp_captcha_phrase',''));
          $mod->smarty->assign('has_captcha','1');
          }
-      else
-         {
-         $mod->smarty->assign('has_captcha','0');
-         }
-		 
 		 
 		$mod->smarty->assign('submit','<input class="cms_submit fbsubmit" name="'.$id.'fbrp_submit" id="'.$id.'fbrp_submit" value="'.$this->GetAttr('submit_button_text').'" type="submit" '.$js.' />');  		 
       }
@@ -2707,7 +2703,7 @@ function fast_add(field_type)
 							array ('upload_id' => $res[1]), '', true);
 
 						$url = str_replace('admin/moduleinterface.php?','index.php?',$url);
-	
+
 						$theFields[$i]->ResetValue();
 	        			$theFields[$i]->SetValue($url);
 	      				}
