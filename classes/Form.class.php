@@ -2773,7 +2773,7 @@ function fast_add(field_type)
 								$url = $mod->Lang('uploaded_outside_webroot',$destination_name);
 								}
 							$theFields[$i]->ResetValue();
-							$theFields[$i]->SetValue($destination_name);
+							$theFields[$i]->SetValue(array($dest, $destination_name));
 							}
 	      				}
 	        		}
