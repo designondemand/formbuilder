@@ -63,9 +63,9 @@ class fbTextFieldExpandable extends fbFieldBase {
 				if ($pts[2] == $this->Id || $pts[2] == $sibling_id)
 				{
 					// delete row
-					if (isset($this->Value[$pts[2]]))
+					if (isset($this->Value[$pts[3]]))
 					{
-						array_splice($this->Value, $pts[2], 1);
+						array_splice($this->Value, $pts[3], 1);
 					}
 					$vals--;
 				}
