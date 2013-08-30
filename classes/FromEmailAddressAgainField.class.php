@@ -26,12 +26,29 @@ class fbFromEmailAddressAgainField extends fbFieldBase {
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
-		$html5 = $this->GetOption('html5','0') == '1' ? ' placeholder="'.$this->GetOption('default').'"' : '';
-		$default = $html5 ? '' : htmlspecialchars($this->GetOption('default'), ENT_QUOTES);
+		$val = '';
+		$rq = '';
+		$html5 = '';
 
-		return $mod->CreateInputEmail($id, 'fbrp__'.$this->Id,
-			($this->HasValue()?htmlspecialchars($this->Value, ENT_QUOTES):$default),
-			25,128,$html5.$js);
+		if ($this->GetOption('html5','0') == '1')
+		{
+			$val = $this->Value;
+			$html5 = ' placeholder="'.$this->GetOption('default').'"';
+		}
+		else
+		{
+			$val = $this->HasValue() ? $this->Value : $this->GetOption('default');
+			if($this->GetOption('clear_default','0') == 1)
+			{
+				$js .= ' onfocus="if(this.value==this.defaultValue) this.value=\'\';" onblur="if(this.value==\'\') this.value=this.defaultValue;"';
+			}
+		}
+
+		if ($this->IsRequired()) {
+			$rq = ' required="required"';
+		}
+
+		return $mod->CreateInputEmail($id, 'fbrp__'.$this->Id, $val, 25, 128, $js.$html5.$rq);
 	}
 
 	public function StatusInfo()

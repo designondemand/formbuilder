@@ -30,13 +30,36 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 	{
 		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
-		$input = $mod->CreateInputEmail($id, 'fbrp__'.$this->Id.'[]', htmlspecialchars($this->Value[0], ENT_QUOTES), 25, 128, $js);
+		$val = '';
+		$rq = '';
+		$html5 = '';
+
+		if ($this->GetOption('html5','0') == '1')
+		{
+			$val = $this->Value[0];
+			$html5 = ' placeholder="'.$this->GetOption('default').'"';
+		}
+		else
+		{
+			$val = $this->Value[0] ? $this->$this->Value[0] : $this->GetOption('default');
+			if($this->GetOption('clear_default','0') == 1)
+			{
+				$js .= ' onfocus="if(this.value==this.defaultValue) this.value=\'\';" onblur="if(this.value==\'\') this.value=this.defaultValue;"';
+			}
+		}
+
+		if ($this->IsRequired()) {
+			$rq = ' required="required"';
+		}
+
+		$input = $mod->CreateInputEmail($id, 'fbrp__'.$this->Id.'[]', $val, 25, 128, $js.$html5.$rq);
+
 		if ($this->GetOption('send_user_copy','n') == 'c')
 		{
-			$input .= $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id.'[]', 1,0);
-			$input .= '<label for="'.$this->GetCSSId('_2').'" class="label">'.
-				$this->GetOption('send_user_label', $mod->Lang('title_send_me_a_copy')).'</label>';
+			$input .= $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id.'[]', 1, 0);
+			$input .= $mod->CreateLabelForInput($id, 'fbrp__'.$this->Id.'[]', $this->GetOption('send_user_label', $mod->Lang('title_send_me_a_copy')));
 		}
+
 		return $input;
 	}
 
@@ -100,17 +123,29 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 	public function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = $this->form_ptr->module_ptr;
-		list($main,$adv) = $this->PrePopulateAdminFormBase($formDescriptor);
 		$opts = array($mod->Lang('option_never')=>'n',$mod->Lang('option_user_choice')=>'c',$mod->Lang('option_always')=>'a');
-		array_push($main,array($mod->Lang('title_send_usercopy'),
-			$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_send_user_copy', $opts, -1, $this->GetOption('send_user_copy','n'))));
-		array_push($main,array($mod->Lang('title_send_usercopy_label'),
-			$mod->CreateInputText($formDescriptor, 'fbrp_opt_send_user_label', $this->GetOption('send_user_label',
-				$mod->Lang('title_send_me_a_copy')),25,125)));
 		$hopts = array($mod->Lang('option_from')=>'f',$mod->Lang('option_reply')=>'r',$mod->Lang('option_both')=>'b');
-		array_push($main,array($mod->Lang('title_headers_to_modify'),
-			$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_headers_to_modify', $hopts, -1, $this->GetOption('headers_to_modify','f'))));
-		return array('main'=>$main,'adv'=>$adv);
+
+		$main = array(
+			array($mod->Lang('title_send_usercopy'),
+				$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_send_user_copy', $opts, -1, $this->GetOption('send_user_copy','n'))),
+			array($mod->Lang('title_send_usercopy_label'),
+				$mod->CreateInputText($formDescriptor, 'fbrp_opt_send_user_label', $this->GetOption('send_user_label',
+				$mod->Lang('title_send_me_a_copy')),25,125)),
+			array($mod->Lang('title_headers_to_modify'),
+				$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_headers_to_modify', $hopts, -1, $this->GetOption('headers_to_modify','f'))),
+		);
+		$adv = array(
+			array($mod->Lang('title_field_default_value'),$mod->CreateInputText($formDescriptor, 'fbrp_opt_default',$this->GetOption('default'),25,1024)),
+			array($mod->Lang('title_html5'),$mod->CreateInputHidden($formDescriptor,'fbrp_opt_html5','0').
+				$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_html5','1',$this->GetOption('html5','0'))),
+			array($mod->Lang('title_clear_default'),$mod->CreateInputHidden($formDescriptor,'fbrp_opt_clear_default','0').
+				$mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_clear_default','1',$this->GetOption('clear_default','0')).'<br />'.
+				$mod->Lang('title_clear_default_help'))
+		);
+
+		$base = $this->PrePopulateAdminFormBase($formDescriptor);
+		return array('main' => array_merge($base[0], $main), 'adv' => array_merge($adv, $base[1]));
 	}
 
 	public function PostPopulateAdminForm(&$mainArray, &$advArray)

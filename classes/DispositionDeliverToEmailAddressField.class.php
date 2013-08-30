@@ -18,7 +18,9 @@ class fbDispositionDeliverToEmailAddressField extends fbDispositionEmailBase {
 		$this->Type = 'DispositionDeliverToEmailAddressField';
 		$this->IsDisposition = true;
 		$this->DisplayInForm = true;
-		$this->ValidationTypes = array($mod->Lang('validation_email_address')=>'email',);
+		$this->ValidationTypes = array(
+			$mod->Lang('validation_email_address')=>'email',
+		);
 		$this->ValidationType = 'email';
 		$this->modifiesOtherFields = false;
 	}
