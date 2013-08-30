@@ -486,6 +486,7 @@ function populate".$fldAlias."(formname)
 
 	public function Validate()
 	{
+		// Foaly: this should call the fields' method Validate
 		$validated = true;
 		$message = array();
 		$formPageCount=1;
@@ -722,6 +723,17 @@ function populate".$fldAlias."(formname)
 			}
 			if ($formPageCount != $this->Page)
 			{
+				$testIndex = 'value_'.$this->Fields[$i]->GetAlias();
+				if (isset($params[$testIndex]))
+				{
+					$hidden .= $mod->CreateInputHidden($id, $testIndex, $this->unmy_htmlentities($params[$testIndex]));
+				}
+				$testIndex = 'value_fld'.$this->Fields[$i]->GetId();
+				if (isset($params[$testIndex]))
+				{
+					$hidden .= $mod->CreateInputHidden($id, $testIndex, $this->unmy_htmlentities($params[$testIndex]));
+				}
+
 				$testIndex = 'fbrp__'.$this->Fields[$i]->GetId();
 
 				// Ryan's ugly fix for Bug 4307
@@ -1014,22 +1026,19 @@ function populate".$fldAlias."(formname)
 				foreach($result as $thisRes)
 				{
 					//error_log("Instantiating Field. usage ".memory_get_usage());
-					$className = $this->MakeClassName($thisRes['type'], '');
 			    	// create the field object
 			    	if ((isset($thisRes['field_id']) && (isset($params['fbrp__'.$thisRes['field_id']]) || isset($params['fbrp___'.$thisRes['field_id']]))) ||
-				    (isset($thisRes['field_id']) && isset($params['value_'.$thisRes['name']])) || (isset($thisRes['field_id']) && isset($params['value_fld'.$thisRes['field_id']])) ||
-				    (isset($params['field_id']) && isset($thisRes['field_id']) && $params['field_id'] == $thisRes['field_id'])) {
-			
+					    (isset($thisRes['field_id']) && isset($params['value_'.$thisRes['name']])) || (isset($thisRes['field_id']) && isset($params['value_fld'.$thisRes['field_id']])) ||
+					    (isset($params['field_id']) && isset($thisRes['field_id']) && $params['field_id'] == $thisRes['field_id']))
+				    {
 				    	$thisRes = array_merge($thisRes,$params);
 				    }
-			
 				    $this->Fields[$fieldCount] = $this->NewField($thisRes);
 				    $fieldCount++;
 			    }
 			}
 			$this->loaded = 'full';
 		}
-
 
 		for ($i=0; $i < count($this->Fields); $i++)
 		{

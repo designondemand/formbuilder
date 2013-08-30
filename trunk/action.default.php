@@ -30,7 +30,7 @@ if ($fld !== false && $fld->GetOption('feu_bind','0')=='1')
 	$feu = $this->GetModuleInstance('FrontEndUsers');
 	if ($feu == false)
 	{
-		debug_display("FAILED to instatiate FEU!");
+		debug_display("FAILED to instantiate FEU!");
 		return;
 	}
 	if ($feu->LoggedInId() === false)

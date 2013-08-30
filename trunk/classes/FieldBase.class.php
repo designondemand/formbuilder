@@ -7,14 +7,14 @@
  * This project's homepage is: http://www.cmsmadesimple.org
  */
 
-abstract class fbFieldBase {
+class fbFieldBase {
 
 	// should be made protected as soon as there are getters and setters
-	protected $Id=-1;
+	public $Id=-1;
 	var $FormId;
-	protected $Name;
+	public $Name;
 	var $Type;
-	protected $Required=-1;
+	public $Required=-1;
 	var $OrderBy;
 	var $HideLabel=-1;
 	var $HasLabel=1;
@@ -22,8 +22,8 @@ abstract class fbFieldBase {
 	var $SmartyEval;
 
 	var $ValidationTypes;
-	protected $ValidationType;
-	protected $validated = true;
+	public $ValidationType;
+	public $validated = true;
 	var $validationErrorText;
 
 	var $DisplayInForm;
@@ -468,23 +468,26 @@ abstract class fbFieldBase {
 		$mod = $this->form_ptr->module_ptr;
 
 		// Do the field type check
-		if ($this->Type == '') {
-			if ($disposeOnly == 1) {
-
+		if ($this->Type == '')
+		{
+			if ($disposeOnly == 1)
+			{
 				$typeInput = $mod->CreateInputDropdown($formDescriptor, 'fbrp_field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->disp_field_types), -1,'', 'onchange="this.form.submit()"');
-			} else {
-
+			}
+			else
+			{
 				$typeInput = $mod->CreateInputDropdown($formDescriptor, 'fbrp_field_type',array_merge(array($mod->Lang('select_type')=>''),$mod->field_types), -1,'', 'onchange="this.form.submit()"');
 			}
-		} else {
-
+		}
+		else
+		{
 			$typeInput = $this->GetDisplayType().$mod->CreateInputHidden($formDescriptor, 'fbrp_field_type', $this->Type);
 		}
 
 		// Init main tab
 		$main = array(
-		array($mod->Lang('title_field_name'),$mod->CreateInputText($formDescriptor, 'fbrp_field_name', $this->GetName(), 50)),
-		array($mod->Lang('title_field_type'),$typeInput)
+			array($mod->Lang('title_field_name'),$mod->CreateInputText($formDescriptor, 'fbrp_field_name', $this->GetName(), 50)),
+			array($mod->Lang('title_field_type'),$typeInput)
 		);
 
 		// Init advanced tab
@@ -779,10 +782,10 @@ abstract class fbFieldBase {
 				$valStr = $fm->unmy_htmlentities($valStr);
 			}
 			if (! is_array($this->Value))
-	  {
-	  	$this->Value = array($this->Value);
-	  }
-	  array_push($this->Value,$valStr);
+			{
+				$this->Value = array($this->Value);
+			}
+			array_push($this->Value,$valStr);
 		}
 	}
 
@@ -806,8 +809,7 @@ abstract class fbFieldBase {
 		if ($mod->GetPreference('unique_fieldnames','1') == '1' &&
 		$this->form_ptr->HasFieldNamed($this->GetName()) != $this->Id)
 		{
-			return array(false,$mod->Lang('field_name_in_use',$this->GetName()).
-		'<br />');
+			return array(false,$mod->Lang('field_name_in_use',$this->GetName()).'<br />');
 		}
 		return array(true,'');
 	}
@@ -1030,7 +1032,7 @@ abstract class fbFieldBase {
 		}
 	}
 
-	function LoadField(&$params)
+	public function LoadField(&$params)
 	{
 		if ($this->Id > 0)
 		{
@@ -1039,51 +1041,30 @@ abstract class fbFieldBase {
 		return;
 	}
 
-	// customized version of API function CreateTextInput. This doesn't throw in an ID that's the same as the field name.
-	function TextField($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
-	{
-		$value = cms_htmlentities(html_entity_decode($value));
-		$id = cms_htmlentities(html_entity_decode($id));
-		$name = cms_htmlentities(html_entity_decode($name));
-		$size = ($size!=''?cms_htmlentities($size):10);
-		$maxlength = ($maxlength!=''?cms_htmlentities($maxlength):255);
-
-		$value = str_replace('"', '&quot;', $value);
-
-		$text = '<input type="text" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
-		if ($addttext != '')
-		{
-			$text .= ' ' . $addttext;
-		}
-		$text .= " />\n";
-		return $text;
-	}
-
-
 	// loadDeep also loads all options for a field.
-	function Load($id, &$params, $loadDeep=false)
+	public function Load($id, &$params, $loadDeep=false)
 	{
 		$sql = 'SELECT * FROM ' . cms_db_prefix() . 'module_fb_field WHERE field_id=?';
 		if($result = $this->form_ptr->module_ptr->dbHandle->GetRow($sql, array($this->Id)))
 		{
 			if (strlen($this->Name) < 1)
-	  {
-	  	$this->Name = $result['name'];
-	  }
-	  if (strlen($this->ValidationType) < 1)
-	  {
-	  	$this->ValidationType = $result['validation_type'];
-	  }
-	  $this->Type = $result['type'];
-	  $this->OrderBy = $result['order_by'];
-	  if ($this->Required == -1)
-	  {
-	  	$this->Required = $result['required'];
-	  }
-	  if ($this->HideLabel == -1)
-	  {
-	  	$this->HideLabel = $result['hide_label'];
-	  }
+			{
+				$this->Name = $result['name'];
+			}
+			if (strlen($this->ValidationType) < 1)
+			{
+				$this->ValidationType = $result['validation_type'];
+			}
+			$this->Type = $result['type'];
+			$this->OrderBy = $result['order_by'];
+			if ($this->Required == -1)
+			{
+				$this->Required = $result['required'];
+			}
+			if ($this->HideLabel == -1)
+			{
+				$this->HideLabel = $result['hide_label'];
+			}
 		}
 		else
 		{
@@ -1092,41 +1073,36 @@ abstract class fbFieldBase {
 		$this->loaded = true;
 		if ($loadDeep)
 		{
-			$sql = 'SELECT name, value FROM ' . cms_db_prefix() .
-	  'module_fb_field_opt WHERE field_id=? ORDER BY option_id';
+			$sql = 'SELECT name, value FROM ' . cms_db_prefix() . 'module_fb_field_opt WHERE field_id=? ORDER BY option_id';
 			$rs = $this->form_ptr->module_ptr->dbHandle->Execute($sql,
 			array($this->Id));
 			$tmpOpts = array();
 			while ($rs && $results = $rs->FetchRow())
-	  {
-	  	if (isset($tmpOpts[$results['name']]))
-	  	{
-	  		if (! is_array($tmpOpts[$results['name']]))
-	  		{
-		    $tmpOpts[$results['name']] = array($tmpOpts[$results['name']]);
-	  		}
-	  		array_push($tmpOpts[$results['name']],$results['value']);
-	  	}
-	  	else
-	  	{
-	  		$tmpOpts[$results['name']]=$results['value'];
-	  	}
-	  }
-	  $this->Options = array_merge($tmpOpts,$this->Options);
+			{
+				if (isset($tmpOpts[$results['name']]))
+				{
+					if (! is_array($tmpOpts[$results['name']]))
+					{
+						$tmpOpts[$results['name']] = array($tmpOpts[$results['name']]);
+					}
+					array_push($tmpOpts[$results['name']],$results['value']);
+				}
+				else
+				{
+					$tmpOpts[$results['name']]=$results['value'];
+				}
+			}
+			$this->Options = array_merge($tmpOpts,$this->Options);
 
-	  if (isset($params['value_'.$this->Name]) &&
-	  (is_array($params['value_'.$this->Name]) ||
-	  strlen($params['value_'.$this->Name]) > 0))
-	  {
-	  	$this->SetValue($params['value_'.$this->Name]);
-	  }
-
-	  if (isset($params['value_fld'.$this->Id]) &&
-	  (is_array($params['value_fld'.$this->Id]) ||
-	  strlen($params['value_fld'.$this->Id]) > 0))
-	  {
-	  	$this->SetValue($params['value_fld'.$this->Id]);
-	  }
+			if (isset($params['value_'.$this->Name]) && (is_array($params['value_'.$this->Name]) || strlen($params['value_'.$this->Name]) > 0))
+			{
+				$this->SetValue($params['value_'.$this->Name]);
+			}
+	
+			if (isset($params['value_fld'.$this->Id]) && (is_array($params['value_fld'.$this->Id]) || strlen($params['value_fld'.$this->Id]) > 0))
+			{
+				$this->SetValue($params['value_fld'.$this->Id]);
+			}
 		}
 
 		return true;
@@ -1139,53 +1115,38 @@ abstract class fbFieldBase {
 		if ($this->Id == -1)
 		{
 			$this->Id = $mod->dbHandle->GenID(cms_db_prefix().'module_fb_field_seq');
-			$sql = 'INSERT INTO ' .cms_db_prefix().
-	  'module_fb_field (field_id, form_id, name, type, ' .
-	  'required, validation_type, hide_label, order_by) '.
-	  ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+			$sql = 'INSERT INTO ' .cms_db_prefix().'module_fb_field (field_id, form_id, name, type, required, validation_type, hide_label, order_by) '.
+				' VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
 			$res = $mod->dbHandle->Execute($sql,
-			array($this->Id, $this->FormId, $this->Name,
-			$this->Type, ($this->Required?1:0),
-			$this->ValidationType, $this->HideLabel, $this->OrderBy));
+				array($this->Id, $this->FormId, $this->Name,$this->Type, ($this->Required?1:0),$this->ValidationType, $this->HideLabel, $this->OrderBy));
 		}
 		else
 		{
-			$sql = 'UPDATE ' . cms_db_prefix() .
-	  'module_fb_field set name=?, type=?,'.
-	  'required=?, validation_type=?, order_by=?, '.
-	  'hide_label=? where field_id=?';
+			$sql = 'UPDATE '.cms_db_prefix().'module_fb_field set name=?, type=?, required=?, validation_type=?, order_by=?, hide_label=? where field_id=?';
 			$res = $mod->dbHandle->Execute($sql,
-			array($this->Name, $this->Type, ($this->Required?1:0),
-			$this->ValidationType,
-			$this->OrderBy, $this->HideLabel, $this->Id));
+				array($this->Name, $this->Type, ($this->Required?1:0),$this->ValidationType,$this->OrderBy, $this->HideLabel, $this->Id));
 		}
 
 		if ($storeDeep)
 		{
 			// drop old options
-			$sql = 'DELETE FROM ' . cms_db_prefix() .
-	  'module_fb_field_opt where field_id=?';
+			$sql = 'DELETE FROM ' . cms_db_prefix() .'module_fb_field_opt where field_id=?';
 			$res = $mod->dbHandle->Execute($sql,
 			array($this->Id));
 
 			foreach ($this->Options as $thisOptKey=>$thisOptValueList)
-	  {
-	  	if (! is_array($thisOptValueList))
-	  	{
-	  		$thisOptValueList = array($thisOptValueList);
-	  	}
-	  	foreach ($thisOptValueList as $thisOptValue)
-	  	{
-	  		$optId = $mod->dbHandle->GenID(
-	  		cms_db_prefix().'module_fb_field_opt_seq');
-	  		$sql = 'INSERT INTO ' . cms_db_prefix().
-		  'module_fb_field_opt (option_id, field_id, form_id, '.
-		  'name, value) VALUES (?, ?, ?, ?, ?)';
-	  		$res = $mod->dbHandle->Execute($sql,
-	  		array($optId, $this->Id, $this->FormId, $thisOptKey,
-	  		$thisOptValue));
-	  	}
-	  }
+			{
+				if (! is_array($thisOptValueList))
+				{
+					$thisOptValueList = array($thisOptValueList);
+				}
+				foreach ($thisOptValueList as $thisOptValue)
+				{
+					$optId = $mod->dbHandle->GenID(cms_db_prefix().'module_fb_field_opt_seq');
+					$sql = 'INSERT INTO ' . cms_db_prefix().'module_fb_field_opt (option_id, field_id, form_id, '.'name, value) VALUES (?, ?, ?, ?, ?)';
+					$res = $mod->dbHandle->Execute($sql,array($optId, $this->Id, $this->FormId, $thisOptKey,$thisOptValue));
+				}
+			}
 		}
 		return $res;
 	}
@@ -1197,11 +1158,9 @@ abstract class fbFieldBase {
 			return false;
 		}
 		$sql = 'DELETE FROM ' . cms_db_prefix() . 'module_fb_field where field_id=?';
-		$res = $this->form_ptr->module_ptr->dbHandle->Execute($sql,
-		array($this->Id));
+		$res = $this->form_ptr->module_ptr->dbHandle->Execute($sql,array($this->Id));
 		$sql = 'DELETE FROM ' . cms_db_prefix() . 'module_fb_field_opt where field_id=?';
-		$res = $this->form_ptr->module_ptr->dbHandle->Execute($sql,
-		array($this->Id));
+		$res = $this->form_ptr->module_ptr->dbHandle->Execute($sql,array($this->Id));
 		return true;
 	}
 }
