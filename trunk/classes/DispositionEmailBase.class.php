@@ -168,37 +168,34 @@ abstract class fbDispositionEmailBase extends fbFieldBase
 		for($i=0;$i<count($theFields);$i++)
 		{
 			if (strtolower(get_class($theFields[$i])) == 'fbfileuploadfield'
-					&& !$theFields[$i]->GetOption('suppress_attachment')
-					&& !$theFields[$i]->GetOption('sendto_uploads')
-				)
+				&& !$theFields[$i]->GetOption('suppress_attachment')
+				&& !$theFields[$i]->GetOption('sendto_uploads')
+			)
 			{
 				// we have a file we wish to attach
-				$thisAtt = $theFields[$i]->GetHumanReadableValue(false);
-
-				if (is_array($thisAtt))
+				$filepath = cms_join_path($theFields[$i]->GetOption('file_destination'), $theFields[$i]->GetHumanReadableValue());
+				if (function_exists('finfo_open'))
 				{
-					if (function_exists('finfo_open'))
-					{
-						$finfo = finfo_open(FILEINFO_MIME); // return mime type ala mimetype extension
-						$thisType = finfo_file($finfo, $thisAtt[0]);
-						finfo_close($finfo);
-					}
-					else if (function_exists('mime_content_type'))
-					{
-						$thisType = mime_content_type($thisAtt[0]);
-					}
-					else
-					{
-						$thisType = 'application/octet-stream';
-					}
-					$thisNames = explode('/',$thisAtt[0]);
-					$thisName = array_pop($thisNames);
-					if (! $mail->AddAttachment($thisAtt[0], $thisName, "base64", $thisType))
-					{
-						// failed upload kills the send.
-						audit(-1, (isset($name)?$name:""), $mod->Lang('submit_error',$mail->GetErrorInfo()));
-						return array($res, $mod->Lang('upload_attach_error', array($thisAtt[0],$thisAtt[0] ,$thisType)));
-					}
+					$finfo = finfo_open(FILEINFO_MIME); // return mime type ala mimetype extension
+					$thisType = finfo_file($finfo, $filepath);
+					finfo_close($finfo);
+				}
+				else if (function_exists('mime_content_type'))
+				{
+					$thisType = mime_content_type($filepath);
+				}
+				else
+				{
+					$thisType = 'application/octet-stream';
+				}
+				$thisNames = explode('/', $filepath);
+				$thisName = array_pop($thisNames);
+				if (! $mail->AddAttachment($filepath, $thisName, "base64", $thisType))
+				{
+					// failed upload kills the send.
+					audit(-1, (isset($name)?$name:""), $mod->Lang('submit_error',$mail->GetErrorInfo()));
+					return array($res, $mod->Lang('upload_attach_error',
+					array($filepath, $filepath ,$thisType)));
 				}
 			}
 		}
