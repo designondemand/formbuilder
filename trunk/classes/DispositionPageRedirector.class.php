@@ -12,9 +12,9 @@ class fbDispositionPageRedirector extends fbFieldBase {
 	var $addressCount;
 	var $addressAdd;
 
-	function fbDispositionPageRedirector(&$form_ptr, &$params)
+	function __construct(&$form_ptr, &$params)
 	{
- 		$this->fbFieldBase($form_ptr, $params);
+ 		parent::__construct($form_ptr, $params);
         $mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionPageRedirector';
 		$this->DisplayInForm = true;

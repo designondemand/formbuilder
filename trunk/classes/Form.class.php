@@ -771,7 +771,7 @@ function populate".$fldAlias."(formname)
 			$oneset->helptext = $thisField->GetOption('helptext');
 			$oneset->field_helptext_id = 'fbrp_ht_'.$thisField->GetID();
 			//	$oneset->valid = $thisField->GetOption('is_valid',true)?1:0;
-			$oneset->valid = $thisField->validated?1:0;
+			$oneset->valid = $thisField->IsValid();
 			$oneset->error = $thisField->GetOption('is_valid',true)?'':$thisField->validationErrorText;
 			$oneset->hide_name = 0;
 			if( ((!$thisField->HasLabel()) || $thisField->HideLabel()) && ($thisField->GetOption('fbr_edit','0') == '0' || $params['in_admin'] != 1) )
@@ -2562,7 +2562,7 @@ function fast_add(field_type)
 				// if the option is not checked, then the file is merely uploaded to
 				// the "uploads" directory
 
-				$_id = $mod->module_id.'fbrp__'.$theFields[$i]->Id;
+				$_id = $mod->module_id.'fbrp__'.$theFields[$i]->GetId();
 				if( isset( $_FILES[$_id] ) && $_FILES[$_id]['size'] > 0 )
 				{
 					$thisFile =& $_FILES[$_id];
