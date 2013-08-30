@@ -7,9 +7,9 @@ class fbStatePickerField extends fbFieldBase {
 
 	var $States;
 	
-	function fbStatePickerField(&$form_ptr, &$params)
+	function __construct(&$form_ptr, &$params)
 	{
-        $this->fbFieldBase($form_ptr, $params);
+        parent::__construct($form_ptr, $params);
         $mod = $form_ptr->module_ptr;
 		$this->Type = 'StatePickerField';
 		$this->DisplayInForm = true;

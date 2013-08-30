@@ -11,9 +11,9 @@ class fbTimePickerField extends fbFieldBase {
 
 	var $flag12hour;
 	
-	function fbTimePickerField(&$form_ptr, &$params)
+	function __construct(&$form_ptr, &$params)
 	{
-        $this->fbFieldBase($form_ptr, $params);
+        parent::__construct($form_ptr, $params);
         $mod = $form_ptr->module_ptr;
 		$this->Type = 'TimePickerField';
 		$this->DisplayInForm = true;

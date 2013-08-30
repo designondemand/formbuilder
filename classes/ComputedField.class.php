@@ -10,9 +10,9 @@
 class fbComputedField extends fbFieldBase 
 {
 
-  function fbComputedField(&$form_ptr, &$params)
+  function __construct(&$form_ptr, &$params)
   {
-    $this->fbFieldBase($form_ptr, $params);
+    parent::__construct($form_ptr, $params);
     $mod = $form_ptr->module_ptr;
     $this->Type = 'ComputedField';
     $this->DisplayInForm = false;

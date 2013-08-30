@@ -12,24 +12,9 @@ class fbPulldownField extends fbFieldBase {
 	var $optionCount;
 	var $optionAdd;
 
-    function array_sort_by_key($input)
+	function __construct(&$form_ptr, &$params)
 	{
-		if( !is_array($input) ) return;
-		$a1 = array();
-		foreach( $input as $k => $v ) {
-			$a1[$v] = $k;
-		}
-		asort($a1);
-		$a2 = array();
-		foreach( $a1 as $k => $v ) {
-			$a2[$v] = $k;
-		}
-		return $a2;
-	}
-
-	function fbPulldownField(&$form_ptr, &$params)
-	{
-		$this->fbFieldBase($form_ptr, $params);
+		parent::__construct($form_ptr, $params);
         $mod = $form_ptr->module_ptr;
 		$this->Type = 'PulldownField';
 		$this->DisplayInForm = true;

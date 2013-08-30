@@ -10,9 +10,9 @@
 class fbUniqueIntegerField extends fbFieldBase 
 {
 
-	function fbUniqueIntegerField(&$form_ptr, &$params)
+	function __construct(&$form_ptr, &$params)
 	{
-		$this->fbFieldBase($form_ptr, $params);
+		parent::__construct($form_ptr, $params);
 		$mod = $form_ptr->module_ptr;
 		$this->Type = 'UniqueIntegerField';
 		$this->DisplayInForm = true;

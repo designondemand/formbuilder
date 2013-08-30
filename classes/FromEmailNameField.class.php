@@ -9,9 +9,9 @@
 
 class fbFromEmailNameField extends fbFieldBase {
 
-	public function fbFromEmailNameField(&$form_ptr, &$params)
+	public function __construct(&$form_ptr, &$params)
 	{
-		$this->fbFieldBase($form_ptr, $params);
+		parent::__construct($form_ptr, $params);
 		$mod = $form_ptr->module_ptr;
 		$this->Type = 'FromEmailNameField';
 		$this->DisplayInForm = true;
