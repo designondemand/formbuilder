@@ -188,7 +188,6 @@ class FormBuilder extends CMSModule
 		$tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/fb_jquery.js"></script>';
 		
         return $this->ProcessTemplateFromData($tmpl);
-		
 	}
 	
 	function SetParameters()
@@ -305,12 +304,14 @@ class FormBuilder extends CMSModule
 		return new fbForm($this, $params, $loadDeep);
 	}
 
-	
-	function GetHelp($lang = 'en_US')
+	public function GetHelp()
 	{
-		return $this->Lang('help');
-	}
+		$smarty = cmsms()->GetSmarty();
+		$smarty->assign('mod', $this);
 
+		return $this->ProcessTemplate('help.tpl');
+	}		
+	
 	function GetResponse($form_id,$response_id,$field_list=array(), $dateFmt='d F y')
 	{
 		$names = array();
