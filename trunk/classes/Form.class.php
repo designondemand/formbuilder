@@ -1510,11 +1510,10 @@ function populate".$fldAlias."(formname)
 		if($this->Id > 0)
 		{
 			$mod->smarty->assign('fb_hidden', $mod->CreateInputHidden($id, 'fbrp_form_op',$mod->Lang('updated')).
-				$mod->CreateInputHidden($id, 'fbrp_sort','','class="fbrp_sort"'));
+				$mod->CreateInputHidden($id, 'fbrp_sort','','class="fbrp_sort"') . $mod->CreateInputHidden($id, 'active_tab','','class="fbr_atab"'));
 			$mod->smarty->assign('adding',0);
 			$mod->smarty->assign('save_button', $mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('save')));
-			$mod->smarty->assign('submit_button', $mod->CreateInputHidden($id, 'active_tab', '', 'id="fbr_atab"').
-				$mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('save_and_continue'),'onclick="jQuery(this).fb_set_tab()"'));
+			$mod->smarty->assign('submit_button', $mod->CreateInputSubmit($id, 'fbrp_submit', $mod->Lang('save_and_continue'),'onclick="jQuery(this).fb_set_tab()"'));
 
 			$fieldList = array();
 			$currow = "row1";
