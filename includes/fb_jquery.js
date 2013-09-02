@@ -1,4 +1,4 @@
-jQuery(document).ready(function($) {
+jQuery(function($){
 
 	//run sortable function
 	$(".module_fb_table tbody").sortable({
