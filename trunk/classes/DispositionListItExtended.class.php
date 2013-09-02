@@ -12,11 +12,12 @@ class fbDispositionListItExtended extends fbFieldBase {
 	public function __construct(&$form_ptr, &$params)
 	{
 		parent::__construct($form_ptr, $params);
-		$mod = $form_ptr->module_ptr;
+
 		$this->Type = 'DispositionListItExtended';
 		$this->IsDisposition = true;
 		$this->NonRequirableField = true;
 		$this->DisplayInForm = false;
+		$this->DisplayInSubmission = false;
 		$this->sortable = false;
 	}
 
@@ -27,7 +28,6 @@ class fbDispositionListItExtended extends fbFieldBase {
 
 	public function DisposeForm($returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
 		$fptr = $this->form_ptr;
 		$theFields = $fptr->GetFields();
 		$listitmod = cmsms()->GetModuleInstance($this->GetOption('instance'));
@@ -45,7 +45,7 @@ class fbDispositionListItExtended extends fbFieldBase {
 				$item->$key = $theFields[$i]->GetHumanReadableValue();
 			}
 		}
-		$item->active = 0;
+		$item->active = $this->GetOption('state', 0);
 		$listitmod->SaveItem($item);
 
 		return array(true, '');
@@ -54,7 +54,6 @@ class fbDispositionListItExtended extends fbFieldBase {
 
 	public function PrePopulateAdminForm($formDescriptor)
 	{
-		global $gCms;
 		$mod = $this->form_ptr->module_ptr;
 		$fpt = $this->form_ptr;
 		$listit = cmsms()->GetModuleInstance('ListIt2');
@@ -73,13 +72,15 @@ class fbDispositionListItExtended extends fbFieldBase {
 			{
 				$instances[$listitmod->module_name] = $listitmod->module_name;
 			}
+			
 			array_push($main, array(
 				$mod->Lang('title_listit2_instance'),
 				$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_instance', $instances, -1, $this->GetOption('instance'))
-			));
+			));		
+			
 			if(!$this->GetOption('instance'))
 			{
-				array_push($adv, array($mod->Lang('title_select_instance'), ''));
+				array_push($main, array($mod->Lang('notice'), '<div class="red">'. $mod->Lang('content_select_instance') .'</div>'));
 			}
 			else
 			{
@@ -88,19 +89,23 @@ class fbDispositionListItExtended extends fbFieldBase {
 					$mod->Lang('none') => '',
 					$listitmod->GetPreference('item_title') => 'title',
 				);
+				
 				$item = $listitmod->InitiateItem();
 				foreach($item->fielddefs as $fielddef) {
 					$listitfields[$fielddef->name] = $fielddef->GetId();
 				}
+				
 				$fields = $fpt->GetFields();
 				foreach($fields as $tf)
 				{
+					if(!$tf->DisplayInSubmission)
+						continue;
+				
 					$al = $tf->GetAlias();
 					if (empty($al))
-					{
 						$al = $tf->GetVariableName();
-					}
-					array_push($adv, array(
+					
+					array_push($main, array(
 						$mod->Lang('title_maps_to_field', $tf->GetName()),
 						$mod->CreateInputDropdown($formDescriptor, 'fbrp_opt_fld_' . $tf->GetId(), $listitfields, -1,
 							$this->GetOption('fld_' . $tf->GetId(), $al)
@@ -108,7 +113,13 @@ class fbDispositionListItExtended extends fbFieldBase {
 					));
 				}
 			}
+			
+			array_push($adv, array(
+				$mod->Lang('title_listit2_state'),
+				$mod->CreateInputHidden($formDescriptor,'fbrp_opt_state',0) . $mod->CreateInputCheckbox($formDescriptor, 'fbrp_opt_state', 1, $this->GetOption('state'))
+			));
 		}
+		
 		return array('main' => $main, 'adv' => $adv);
 	}
 
