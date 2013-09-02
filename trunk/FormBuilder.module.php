@@ -183,7 +183,7 @@ class FormBuilder extends CMSModule
 		  {
 		    $tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/jquery-1.4.2.min.js"></script>';
 		  }
-		$tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/jquery.tablednd.js"></script>';		
+		//$tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/jquery.tablednd.js"></script>';		
 		$tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/fb_jquery_functions.js"></script>';
 		$tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/fb_jquery.js"></script>';
 		

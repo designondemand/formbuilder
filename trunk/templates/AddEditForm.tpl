@@ -43,41 +43,38 @@
 		<p class="pagetext">{$title_form_fields}</p>
 		<div class="pageinput">
 			<table class="module_fb_table pagetable" cellpadding="0" cellspacing="0">
-				<thead><tr>
-	       	{if isset($title_field_id)}
-                <th width="20">{$title_field_id}</th>
-		{/if}
-    				<th width="20%">{$title_field_name}</th>
-        {if isset($title_field_alias)}
-    				<th width="10%">{$title_field_alias}</th>
-		{/if}
-                	<th width="20%">{$title_field_type}</th>
-                	{*<th width="20">{$title_field_required_abbrev}</th>*}
-                	<th>{$title_information}</th>
- 					<th width="20" class="updown">&nbsp;</th>
-					<th width="20" class="updown">&nbsp;</th>
-					<th class="pageicon">&nbsp;</th>
-					<th class="pageicon">&nbsp;</th>
-                    <th class="pageicon">&nbsp;</th>
+				<thead>
+					<tr>
+						{if isset($title_field_id)}<th width="20">{$title_field_id}</th>{/if}
+						<th width="20%">{$title_field_name}</th>
+						{if isset($title_field_alias)}<th width="10%">{$title_field_alias}</th>{/if}
+						<th width="20%">{$title_field_type}</th>
+						{*<th width="20">{$title_field_required_abbrev}</th>*}
+						<th>{$title_information}</th>
+						<th width="20" class="updown">&nbsp;</th>
+						<th width="20" class="updown">&nbsp;</th>
+						<th class="pageicon">&nbsp;</th>
+						<th class="pageicon">&nbsp;</th>
+						<th class="pageicon">&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody>
 				{foreach from=$fields item=entry}
 					<tr id="fbrp_{$entry->id}" class="{$entry->rowclass}">
-				{if isset($title_field_id)}
-					<td>{$entry->id}</td>
-				{/if}
-					<td>{$entry->name}</td>
-					{if isset($title_field_alias)}
-						<td>{$entry->alias}</td>
-					{/if}
-					<td>{$entry->type}</td>
-					<td>{$entry->field_status}</td>						
-					<td class="updown">{$entry->up}</td>
-					<td class="updown">{$entry->down}</td>				
-					<td>{$entry->disposition}</td>					
-					<td>{$entry->editlink}</td>
-					<td>{$entry->deletelink}</td>
+						{if isset($title_field_id)}
+							<td>{$entry->id}</td>
+						{/if}
+						<td>{$entry->name}</td>
+						{if isset($title_field_alias)}
+							<td>{$entry->alias}</td>
+						{/if}
+						<td>{$entry->type}</td>
+						<td>{$entry->field_status}</td>						
+						<td class="updown">{$entry->up}</td>
+						<td class="updown">{$entry->down}</td>				
+						<td>{$entry->disposition}</td>					
+						<td>{$entry->editlink}</td>
+						<td>{$entry->deletelink}</td>
 					</tr>
 				{/foreach}
 				</tbody>
