@@ -17,7 +17,6 @@ jQuery.fn.fb_delete_field = function(message) {
 				parent.fadeOut("1000", function() {
 
 					parent.remove();
-					var totalrows = jQuery(".module_fb_table").find("tbody tr").size();
 				
 					jQuery(".module_fb_table").find("tbody tr").removeClass();
 					jQuery(".module_fb_table").find("tbody tr:nth-child(2n+1)").addClass("row1");
