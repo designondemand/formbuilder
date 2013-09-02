@@ -47,11 +47,11 @@
 	       	{if isset($title_field_id)}
                 <th width="20">{$title_field_id}</th>
 		{/if}
-    				<th width="120">{$title_field_name}</th>
+    				<th width="20%">{$title_field_name}</th>
         {if isset($title_field_alias)}
-    				<th width="60">{$title_field_alias}</th>
+    				<th width="10%">{$title_field_alias}</th>
 		{/if}
-                	<th width="150">{$title_field_type}</th>
+                	<th width="20%">{$title_field_type}</th>
                 	{*<th width="20">{$title_field_required_abbrev}</th>*}
                 	<th>{$title_information}</th>
  					<th width="20" class="updown">&nbsp;</th>
