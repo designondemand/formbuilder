@@ -46,7 +46,7 @@ class fbTextAreaField extends fbFieldBase {
 			$rq = ' required="required"';
 		}
 
-		return $mod->CreateTextArea($wysiwyg, $id, $val, 'fbrp__'.$this->Id, '', $this->GetCSSId(), '', '',
+		return $mod->CreateTextArea($wysiwyg, $id, $val, 'fbrp__'.$this->Id, '', $id.$this->GetCSSId(), '', '',
 			$this->GetOption('cols','80'), $this->GetOption('rows','15'), '', '', $js.$html5.$rq);
 	}
 
