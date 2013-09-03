@@ -801,7 +801,7 @@ function populate".$fldAlias."(formname)
 			$oneset->multiple_parts = $thisField->HasMultipleFormComponents()?1:0;
 			$oneset->label_parts = $thisField->LabelSubComponents()?1:0;
 			$oneset->type = $thisField->GetDisplayType();
-			$oneset->input_id = $thisField->GetCSSId();
+			$oneset->input_id = $id.$thisField->GetCSSId();
 
 			// Added by Stikki STARTS
 			$name_alias = $thisField->GetName();

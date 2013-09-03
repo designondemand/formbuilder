@@ -313,18 +313,10 @@ class fbFieldBase {
 
 	function GetCSSId($suffix='')
 	{
-		$alias = $this->GetAlias();
-		if (empty($alias))
+		$cssid = 'fbrp__'.$this->Id;
+		if ($this->HasMultipleFormComponents())
 		{
-			$cssid = 'fbrp__'.$this->Id;
-			if ($this->HasMultipleFormComponents())
-			{
-				$cssid .= '_1';
-			}
-		}
-		else
-		{
-			$cssid = $alias;
+			$cssid .= '_1';
 		}
 		$cssid .= $suffix;
 		return $cssid;
