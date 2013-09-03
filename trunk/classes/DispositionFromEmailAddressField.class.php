@@ -120,6 +120,13 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		return $this->TemplateStatus();
 	}
 
+	public function GetCSSId($suffix='')
+	{
+		$cssid = 'fbrp__'.$this->Id.'[]';
+		$cssid .= $suffix;
+		return $cssid;
+	}
+
 	public function PrePopulateAdminForm($formDescriptor)
 	{
 		$mod = $this->form_ptr->module_ptr;
