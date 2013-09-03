@@ -15,10 +15,7 @@ class fbTextAreaField extends fbFieldBase {
 		$mod = $form_ptr->module_ptr;
 		$this->Type = 'TextAreaField';
 		$this->DisplayInForm = true;
-		$this->ValidationTypes = array(
-			$mod->Lang('validation_none')=>'none',
-			$mod->Lang('validation_length')=>'length'
-		);
+		$this->ValidationTypes = array();
 	}
 
 	public function GetFieldInput($id, &$params, $returnid)
@@ -58,8 +55,10 @@ class fbTextAreaField extends fbFieldBase {
 		$this->validationErrorText = '';
 		$mod = $this->form_ptr->module_ptr;
 		$length = $this->GetOption('length','');
-		if(is_numeric($length) && $length > 0){
-			if((strlen($this->Value)-1) > $length){
+		if(is_numeric($length) && $length > 0)
+		{
+			if((strlen($this->Value)-1) > $length)
+			{
 				$this->validated = false;
 				$this->validationErrorText = $mod->Lang('please_enter_no_longer', $length);
 			}
