@@ -48,11 +48,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 			}
 		}
 
-		if ($this->IsRequired()) {
-			$rq = ' required="required"';
-		}
-
-		$input = $mod->CreateInputEmail($id, 'fbrp__'.$this->Id.'[]', $val, 25, 128, $js.$html5.$rq);
+		$input = $mod->fbCreateInputText($id, 'fbrp__'.$this->Id.'[]', $val, 25, 128, $js.$html5, 'email', $this->IsRequired());
 
 		if ($this->GetOption('send_user_copy','n') == 'c')
 		{
