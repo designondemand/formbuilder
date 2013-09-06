@@ -41,7 +41,7 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		}
 		else
 		{
-			$val = $this->Value[0] ? $this->$this->Value[0] : $this->GetOption('default');
+			$val = $this->Value[0] ? $this->Value[0] : $this->GetOption('default');
 			if($this->GetOption('clear_default','0') == 1)
 			{
 				$js .= ' onfocus="if(this.value==this.defaultValue) this.value=\'\';" onblur="if(this.value==\'\') this.value=this.defaultValue;"';
