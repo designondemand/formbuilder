@@ -541,22 +541,22 @@ function populate".$fldAlias."(formname)
 			{
 				$parms = $params;
 				$others = $this->GetFields();
-				for($i=0;$i<count($others);$i++)
+				for($n=0;$n<count($others);$n++)
 				{
 					$replVal = '';
-					if ($others[$i]->DisplayInSubmission())
+					if ($others[$n]->DisplayInSubmission())
 					{
-						$replVal = $others[$i]->GetHumanReadableValue();
+						$replVal = $others[$n]->GetHumanReadableValue();
 						if ($replVal == '')
 						{
 							$replVal = $unspec;
 						}
 					}
-					$name = $others[$i]->GetVariableName();
+					$name = $others[$n]->GetVariableName();
 					$parms[$name] = $replVal;
-					$id = $others[$i]->GetId();
+					$id = $others[$n]->GetId();
 					$parms['fld_'.$id] = $replVal;
-					$alias = $others[$i]->GetAlias();
+					$alias = $others[$n]->GetAlias();
 					if (!empty($alias))
 					{
 						$parms[$alias] = $replVal;
