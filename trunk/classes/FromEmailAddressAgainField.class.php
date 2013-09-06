@@ -25,9 +25,8 @@ class fbFromEmailAddressAgainField extends fbFieldBase {
 	public function GetFieldInput($id, &$params, $returnid)
 	{
 		$mod = $this->form_ptr->module_ptr;
-		$js = $this->GetOption('javascript','');
 		$val = '';
-		$rq = '';
+		$js = $this->GetOption('javascript','');
 		$html5 = '';
 
 		if ($this->GetOption('html5','0') == '1')
@@ -44,11 +43,7 @@ class fbFromEmailAddressAgainField extends fbFieldBase {
 			}
 		}
 
-		if ($this->IsRequired()) {
-			$rq = ' required="required"';
-		}
-
-		return $mod->CreateInputEmail($id, 'fbrp__'.$this->Id, $val, 25, 128, $js.$html5.$rq);
+		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id, $val, 25, 128, $js.$html5, 'email', $this->IsRequired());
 	}
 
 	public function StatusInfo()
