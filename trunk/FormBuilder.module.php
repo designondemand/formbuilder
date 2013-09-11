@@ -983,29 +983,6 @@ class FormBuilder extends CMSModule
       return $plain;
       }
 
-	public function fbCreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $type='text', $required=false)
-	{
-		$value = cms_htmlentities($value);
-		$id = cms_htmlentities($id);
-		$name = cms_htmlentities($name);
-		$size = cms_htmlentities($size);
-		$maxlength = cms_htmlentities($maxlength);
-
-		$value = str_replace('"', '&quot;', $value);
-
-		$text = '<input type="'.$type.'" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
-		if ($addttext != '')
-		{
-			$text .= ' '.$addttext;
-		}
-		if ($required)
-		{
-			$text .= ' required="required"';
-		}
-		$text .= " />\n";
-		return $text;
-	}
-
 	function fbCreateInputSubmit($id, $name, $value='', $addttext='', $image='', $confirmtext='')
 	{
 	  $id = cms_htmlentities($id);

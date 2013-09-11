@@ -314,10 +314,6 @@ class fbFieldBase {
 	function GetCSSId($suffix='')
 	{
 		$cssid = 'fbrp__'.$this->Id;
-		if ($this->HasMultipleFormComponents())
-		{
-			$cssid .= '_1';
-		}
 		$cssid .= $suffix;
 		return $cssid;
 	}
@@ -671,6 +667,7 @@ class fbFieldBase {
 			$def = $this->GetOption('default','');
 			if ($this->Value !== false && ($def == '' || $this->Value != $def))
 			{
+				// should also test for blanks in arrays
 				if ($deny_blank_responses && !is_array($this->Value) && preg_match('/^\s+$/',$this->Value))
 				{
 					return false;
@@ -678,7 +675,7 @@ class fbFieldBase {
 				return true;
 			}
 		}
-		elseif ($this->Value !== false && (is_array($this->Value) && strlen(implode('', $this->Value)) > 0))
+		elseif ($this->Value !== false && (!is_array($this->Value) || strlen(implode('', $this->Value)) > 0))
 		{
 			if ($deny_blank_responses && (!is_array($this->Value) && preg_match('/^\s+$/',$this->Value)))
 			{

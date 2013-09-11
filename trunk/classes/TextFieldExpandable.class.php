@@ -73,9 +73,10 @@ class fbTextFieldExpandable extends fbFieldBase {
 		$ret = array();
 		for ($i=0;$i<$vals;$i++)
 		{
+			$length = $this->GetOption('length') < 25 ? $this->GetOption('length') : 25;
 			$thisRow = new stdClass();
-			$thisRow->input = $mod->fbCreateInputText($id, 'fbrp__'.$this->Id.'[]',$this->Value[$i],$this->GetOption('length')<25?$this->GetOption('length'):25,
-			$this->GetOption('length'),$js.$this->GetCSSIdTag('_'.$i));
+			$thisRow->input = formbuilder_utils::create_input_text($id, $this->GetCSSId().'[]', $this->Value[$i], $length,
+				$this->GetOption('length'), $js, 'text', false, $i);
 			if(!$hidebuttons)
 			{
 				$thisRow->op = $mod->fbCreateInputSubmit($id, 'fbrp_FeD_'.$this->Id.'_'.$i, $this->GetOption('del_button','X'), $this->GetCSSIdTag('_del_'.$i).($vals==1?' disabled="disabled"':''));
