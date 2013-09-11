@@ -21,7 +21,6 @@ class fbFromEmailNameField extends fbFieldBase {
 
 	public function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
 		$val = '';
 		$js = $this->GetOption('javascript','');
 		$html5 = '';

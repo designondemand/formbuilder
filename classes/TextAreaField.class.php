@@ -20,13 +20,10 @@ class fbTextAreaField extends fbFieldBase {
 
 	public function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
-		$input = '';
 		$wysiwyg = $this->GetOption('wysiwyg','0') == '1';
 		$val = '';
 		$js = $this->GetOption('javascript','');
 		$html5 = '';
-		$rq = '';
 
 		if ($this->GetOption('html5','0') == '1')
 		{
@@ -42,12 +39,8 @@ class fbTextAreaField extends fbFieldBase {
 			}
 		}
 
-		if ($this->IsRequired()) {
-			$rq = ' required="required"';
-		}
-
-		return $mod->CreateTextArea($wysiwyg, $id, $val, 'fbrp__'.$this->Id, '', $id.$this->GetCSSId(), '', '',
-			$this->GetOption('cols','80'), $this->GetOption('rows','15'), '', '', $js.$html5.$rq);
+		return formbuilder_utils::create_textarea($wysiwyg, $id, $this->GetCSSId(), $val, $this->GetOption('cols','80'), $this->GetOption('rows','15'),
+			$js.$html5, $this->IsRequired());
 	}
 
 	public function Validate(){
