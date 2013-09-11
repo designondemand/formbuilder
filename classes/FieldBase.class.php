@@ -669,21 +669,18 @@ class fbFieldBase {
 		{
 			// fields with defaults
 			$def = $this->GetOption('default','');
-			if ($this->Value !== false &&
-			($def == '' || $this->Value != $def))
+			if ($this->Value !== false && ($def == '' || $this->Value != $def))
 			{
-				if ($deny_blank_responses && !is_array($this->Value)
-				&& preg_match('/^\s+$/',$this->Value))
+				if ($deny_blank_responses && !is_array($this->Value) && preg_match('/^\s+$/',$this->Value))
 				{
 					return false;
 				}
 				return true;
 			}
 		}
-		else if ($this->Value !== false)
+		elseif ($this->Value !== false && (is_array($this->Value) && strlen(implode('', $this->Value)) > 0))
 		{
-			if ($deny_blank_responses && !is_array($this->Value)
-			&& preg_match('/^\s+$/',$this->Value))
+			if ($deny_blank_responses && (!is_array($this->Value) && preg_match('/^\s+$/',$this->Value)))
 			{
 				return false;
 			}

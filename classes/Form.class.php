@@ -503,17 +503,15 @@ function populate".$fldAlias."(formname)
 			}
 
 			$deny_space_validation = ($this->module_ptr->GetPreference('blank_invalid','0') == '1');
-			/*	  debug_display($this->Fields[$i]->GetName().' '.
-			 ($this->Fields[$i]->HasValue() === false?'False':'true'));
-			 if ($this->Fields[$i]->HasValue())
-			 debug_display($this->Fields[$i]->GetValue());
-			 */
-			if (/*! $this->Fields[$i]->IsNonRequirableField() && */
-			$this->Fields[$i]->IsRequired() &&
-			$this->Fields[$i]->HasValue($deny_space_validation) === false)
+
+//			debug_display($this->Fields[$i]->GetName().' - HasValue: '.($this->Fields[$i]->HasValue() === false?'false':'true'));
+//			if ($this->Fields[$i]->HasValue()) {
+//				debug_display($this->Fields[$i]->GetValue());
+//			}
+
+			if ($this->Fields[$i]->IsRequired() && $this->Fields[$i]->HasValue($deny_space_validation) === false)
 			{
-				array_push($message,
-				$this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName()));
+				array_push($message, $this->module_ptr->Lang('please_enter_a_value', $this->Fields[$i]->GetName()));
 				$validated = false;
 				$this->Fields[$i]->SetOption('is_valid',false);
 				$this->Fields[$i]->validationErrorText = $this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName());
@@ -530,7 +528,7 @@ function populate".$fldAlias."(formname)
 				}
 				else
 				{
-				$this->Fields[$i]->SetOption('is_valid',true);
+					$this->Fields[$i]->SetOption('is_valid',true);
 				}
 			}
 			$usertagops = cmsms()->GetUserTagOperations();
@@ -539,7 +537,7 @@ function populate".$fldAlias."(formname)
 
 			if( $validated == true && !empty($udt) && "-1" != $udt )
 			{
-				$parms = $params;
+				$parms = $this->module_params;
 				$others = $this->GetFields();
 				for($n=0;$n<count($others);$n++)
 				{
@@ -786,7 +784,7 @@ function populate".$fldAlias."(formname)
 			$oneset->valid = $thisField->IsValid();
 			$oneset->error = $thisField->GetOption('is_valid',true)?'':$thisField->validationErrorText;
 			$oneset->hide_name = 0;
-			if( ((!$thisField->HasLabel()) || $thisField->HideLabel()) && ($thisField->GetOption('fbr_edit','0') == '0' || $params['in_admin'] != 1) )
+			if( ((!$thisField->HasLabel()) || $thisField->HideLabel()) && ($thisField->GetOption('fbr_edit','0') == '0' || !$params['in_admin']) )
 			{
 				$oneset->hide_name = 1;
 			}
