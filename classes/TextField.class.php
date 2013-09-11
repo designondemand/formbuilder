@@ -57,15 +57,15 @@ class fbTextField extends fbFieldBase {
 
 		switch($this->ValidationType) {
 			default:
-				return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id, $val, $length, $this->GetOption('length'), $js.$ro.$html5, 'text', $this->IsRequired());
+				return formbuilder_utils::create_input_text($id, $this->GetCSSId(), $val, $length, $this->GetOption('length'), $js.$ro.$html5, 'text', $this->IsRequired());
 				break;
 
 			case 'usphone':
-				return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id, $val, $length, $this->GetOption('length'), $js.$ro.$html5, 'tel', $this->IsRequired());
+				return formbuilder_utils::create_input_text($id, $this->GetCSSId(), $val, $length, $this->GetOption('length'), $js.$ro.$html5, 'tel', $this->IsRequired());
 				break;
 
 			case 'email':
-				return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id, $val, $length, $this->GetOption('length'), $js.$ro.$html5, 'email', $this->IsRequired());
+				return formbuilder_utils::create_input_text($id, $this->GetCSSId(), $val, $length, $this->GetOption('length'), $js.$ro.$html5, 'email', $this->IsRequired());
 				break;
 		}
 	}

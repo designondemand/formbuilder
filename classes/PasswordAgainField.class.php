@@ -21,15 +21,19 @@ class fbPasswordAgainField extends fbFieldBase {
 
 	public function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
 		$js = $this->GetOption('javascript','');
+		$val = '';
+		if($this->Value) {
+			$val = $this->Value;
+		}
+
 		if ($this->GetOption('hide','1') == '0')
 		{
-			return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id,($this->Value?$this->Value:''),$this->GetOption('length'),255,$js.$this->GetCSSIdTag());
+			return formbuilder_utils::create_input_text($id, $this->GetCSSId(), $val, $this->GetOption('length'), 255, $js, 'text', $this->isRequired());
 		}
 		else
 		{
-			return $mod->CreateInputPassword($id, 'fbrp__'.$this->Id,($this->Value?$this->Value:''), $this->GetOption('length'),255, $js);
+			return formbuilder_utils::create_input_text($id, $this->GetCSSId(), $val, $this->GetOption('length'), 255, $js, 'password', $this->isRequired());
 		}
 	}
 

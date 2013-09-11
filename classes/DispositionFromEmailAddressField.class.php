@@ -48,12 +48,12 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 			}
 		}
 
-		$input = $mod->fbCreateInputText($id, 'fbrp__'.$this->Id.'[]', $val, 25, 128, $js.$html5, 'email', $this->IsRequired());
+		$input = formbuilder_utils::create_input_text($id, $this->GetCSSId().'[]', $val, 25, 128, $js.$html5, 'email', $this->IsRequired());
 
 		if ($this->GetOption('send_user_copy','n') == 'c')
 		{
-			$input .= $mod->CreateInputCheckbox($id, 'fbrp__'.$this->Id.'[]', 1, 0);
-			$input .= $mod->CreateLabelForInput($id, 'fbrp__'.$this->Id.'[]', $this->GetOption('send_user_label', $mod->Lang('title_send_me_a_copy')));
+			$input .= formbuilder_utils::create_input_checkbox($id, $this->GetCSSId().'[]', 1, 0);
+			$input .= $mod->CreateLabelForInput($id, $this->GetCSSId().'[]', $this->GetOption('send_user_label', $mod->Lang('title_send_me_a_copy')));
 		}
 
 		return $input;

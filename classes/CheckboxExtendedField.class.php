@@ -57,9 +57,15 @@ class fbCheckboxExtendedField extends fbFieldBase {
 
 		if($this->GetOption('show_textfield'))
 		{
+			$val = '';
+			if($check_value['text'])
+			{
+				$val = $this->Value['text'];
+			}
+			
 			$obj = new stdClass();
 			$obj->name = $text_label;
-			$obj->input = $mod->fbCreateInputText($id, 'fbrp__'.$this->Id.'[text]',_($check_value['text']?$this->Value['text']:''),25,25,$js.$this->GetCSSIdTag('_1'));
+			$obj->input = formbuilder_utils::create_input_text($id, $this->GetCSSId().'[text]', $val, 25, 25, $js, 'text', $this->isRequired(), 1);
 				
 			$output[] = $obj;
 		}

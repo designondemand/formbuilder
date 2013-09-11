@@ -780,7 +780,6 @@ function populate".$fldAlias."(formname)
 			$oneset->css_class = $thisField->GetOption('css_class');
 			$oneset->helptext = $thisField->GetOption('helptext');
 			$oneset->field_helptext_id = 'fbrp_ht_'.$thisField->GetID();
-			//	$oneset->valid = $thisField->GetOption('is_valid',true)?1:0;
 			$oneset->valid = $thisField->IsValid();
 			$oneset->error = $thisField->GetOption('is_valid',true)?'':$thisField->validationErrorText;
 			$oneset->hide_name = 0;
@@ -799,7 +798,7 @@ function populate".$fldAlias."(formname)
 			$oneset->multiple_parts = $thisField->HasMultipleFormComponents()?1:0;
 			$oneset->label_parts = $thisField->LabelSubComponents()?1:0;
 			$oneset->type = $thisField->GetDisplayType();
-			$oneset->input_id = $id.$thisField->GetCSSId();
+			$oneset->input_id = $thisField->GetCSSId();
 
 			// Added by Stikki STARTS
 			$name_alias = $thisField->GetName();

@@ -40,7 +40,7 @@ class fbFromEmailNameField extends fbFieldBase {
 			}
 		}
 
-		return $mod->fbCreateInputText($id, 'fbrp__'.$this->Id, $val, 25, 128, $js.$html5, 'text', $this->IsRequired());
+		return formbuilder_utils::create_input_text($id, $this->GetCSSId(), $val, 25, 128, $js.$html5, 'text', $this->IsRequired());
 	}
 
 	public function PrePopulateAdminForm($formDescriptor)
