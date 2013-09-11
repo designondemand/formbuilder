@@ -82,4 +82,42 @@ class formbuilder_utils {
 		}
 		return create_textarea($enablewysiwyg, $text, $id.$name, 'cms_textarea', $name, $encoding, $stylesheet, $cols, $rows,$forcewysiwyg,$wantedsyntax,$addtext);
 	}
+
+	static final public function create_input_dropdown($id, $name, $items, $selectedindex, $selectedvalue, $addttext='', $required=false)
+	{
+		$id = cms_htmlentities($id);
+		$name = cms_htmlentities($name);
+		$selectedindex = cms_htmlentities($selectedindex);
+		$selectedvalue = cms_htmlentities($selectedvalue);
+
+		$text = '<select class="cms_dropdown" name="'.$id.$name.'" id="'.$name.'"';
+		if(!empty($addttext))
+		{
+			$text .= ' ' . $addttext;
+		}
+		if($required)
+		{
+			$text .= ' required="required"';
+		}
+		$text .= '>';
+		$count = 0;
+		if (is_array($items) && count($items) > 0)
+		{
+			foreach ($items as $key=>$value)
+			{
+				$text .= '<option value="'.$value.'"';
+				if ($selectedindex == $count || $selectedvalue == $value)
+				{
+					$text .= ' ' . 'selected="selected"';
+				}
+				$text .= '>';
+				$text .= $key;
+				$text .= '</option>';
+				$count++;
+			}
+		}
+		$text .= '</select>'."\n";
+
+		return $text;
+	}
 }
