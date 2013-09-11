@@ -21,7 +21,6 @@ class fbFromEmailSubjectField extends fbFieldBase {
 
 	public function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
 		$val = '';
 		$js = $this->GetOption('javascript','');
 		$html5 = '';
@@ -40,7 +39,7 @@ class fbFromEmailSubjectField extends fbFieldBase {
 			}
 		}
 
-		return formbuilder_utils::create_input_text($id, 'fbrp__'.$this->Id, $val, 25, 128, $js.$html5, 'text', $this->IsRequired());
+		return formbuilder_utils::create_input_text($id, $this->GetCSSId(), $val, 25, 128, $js.$html5, 'text', $this->IsRequired());
 	}
 
 	public function PrePopulateAdminForm($formDescriptor)

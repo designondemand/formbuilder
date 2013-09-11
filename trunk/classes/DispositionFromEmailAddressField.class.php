@@ -17,13 +17,11 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 		$mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionFromEmailAddressField';
 		$this->IsDisposition = true;
-		$this->DisplayInForm = true;
 		$this->ValidationTypes = array(
 			$mod->Lang('validation_none')=>'none',
 			$mod->Lang('validation_email_address')=>'email',
 		);
 		$this->modifiesOtherFields = true;
-		$this->NonRequirableField = false;
 	}
 
 	public function GetFieldInput($id, &$params, $returnid)
@@ -48,12 +46,12 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 			}
 		}
 
-		$input = formbuilder_utils::create_input_text($id, $this->GetCSSId().'[]', $val, 25, 128, $js.$html5, 'email', $this->IsRequired());
+		$input = formbuilder_utils::create_input_text($id, $this->GetCSSId(), $val, 25, 128, $js.$html5, 'email', $this->IsRequired());
 
 		if ($this->GetOption('send_user_copy','n') == 'c')
 		{
-			$input .= formbuilder_utils::create_input_checkbox($id, $this->GetCSSId().'[]', 1, 0);
-			$input .= $mod->CreateLabelForInput($id, $this->GetCSSId().'[]', $this->GetOption('send_user_label', $mod->Lang('title_send_me_a_copy')));
+			$input .= formbuilder_utils::create_input_checkbox($id, $this->GetCSSId(), 1, 0, '', 1);
+			$input .= formbuilder_utils::create_label($id, $this->GetCSSId('_1'), $this->GetOption('send_user_label', $mod->Lang('title_send_me_a_copy')));
 		}
 
 		return $input;
@@ -95,13 +93,10 @@ class fbDispositionFromEmailAddressField extends fbDispositionEmailBase {
 
 	public function DisposeForm($returnid)
 	{
-		if ($this->HasValue() != false &&
-			(
-				$this->GetOption('send_user_copy','n') == 'a'
-				||
+		if ($this->HasValue() != false && (
+				$this->GetOption('send_user_copy','n') == 'a' ||
 				($this->GetOption('send_user_copy','n') == 'c' && isset($this->Value[1]) && $this->Value[1] == 1)
-			)
-		)
+		))
 		{
 			return $this->SendForm($this->Value[0],$this->GetOption('email_subject'));
 		}

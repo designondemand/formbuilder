@@ -28,18 +28,11 @@ class fbTextField extends fbFieldBase {
 
 	public function GetFieldInput($id, &$params, $returnid)
 	{
-		$mod = $this->form_ptr->module_ptr;
-		$input = '';
 		$val = '';
 		$length = $this->GetOption('length') < 25 ? $this->GetOption('length') : 25;
 		$js = $this->GetOption('javascript','');
 		$ro = '';
 		$html5 = '';
-
-		if ($this->GetOption('readonly','0') == '1')
-		{
-			$ro = ' readonly="readonly"';
-		}
 
 		if ($this->GetOption('html5','0') == '1')
 		{
@@ -53,6 +46,11 @@ class fbTextField extends fbFieldBase {
 			{
 				$js .= ' onfocus="if(this.value==this.defaultValue) this.value=\'\';" onblur="if(this.value==\'\') this.value=this.defaultValue;"';
 			}
+		}
+
+		if ($this->GetOption('readonly','0') == '1')
+		{
+			$ro = ' readonly="readonly"';
 		}
 
 		switch($this->ValidationType) {

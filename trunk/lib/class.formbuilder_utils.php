@@ -37,14 +37,20 @@ class formbuilder_utils {
 		return $text;
 	}
 
-	static final public function create_input_checkbox($id, $name, $value='', $selectedvalue='', $addttext='')
+	static final public function create_input_checkbox($id, $name, $value='', $selectedvalue='', $addttext='', $n=null)
 	{
 		$id = cms_htmlentities($id);
 		$name = cms_htmlentities($name);
+	
+		$cssid = $name;
+		if(intval($n))
+		{
+			$cssid .= '_' . intval($n);
+		}
 		$value = cms_htmlentities($value);
 		$selectedvalue = cms_htmlentities($selectedvalue);
 
-		$text = '<input type="checkbox" class="cms_checkbox" name="'.$id.$name.'" id="'.$name.'" value="'.$value.'"';
+		$text = '<input type="checkbox" class="cms_checkbox" name="'.$id.$name.'" id="'.$cssid.'" value="'.$value.'"';
 		if ($selectedvalue == $value)
 		{
 			$text .= ' ' . 'checked="checked"';
@@ -55,5 +61,25 @@ class formbuilder_utils {
 		}
 		$text .= " />\n";
 		return $text;
+	}
+
+	static final public function create_label($id, $name, $labeltext='', $addttext='')
+	{
+		$text = '<label class="cms_label" for="'.$name.'"';
+		if ($addttext != '')
+		{
+			$text .= ' ' . $addttext;
+		}
+		$text .= '>'.$labeltext.'</label>'."\n";
+		return $text;
+	}
+
+	static final public function create_textarea($enablewysiwyg, $id, $name, $text, $cols='80', $rows='15', $addtext='', $required=false)
+	{
+		if($required)
+		{
+			$addtext .= ' required="required"';
+		}
+		return create_textarea($enablewysiwyg, $text, $id.$name, 'cms_textarea', $name, $encoding, $stylesheet, $cols, $rows,$forcewysiwyg,$wantedsyntax,$addtext);
 	}
 }
