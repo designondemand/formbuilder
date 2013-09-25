@@ -503,15 +503,17 @@ function populate".$fldAlias."(formname)
 			}
 
 			$deny_space_validation = ($this->module_ptr->GetPreference('blank_invalid','0') == '1');
-
-//			debug_display($this->Fields[$i]->GetName().' - HasValue: '.($this->Fields[$i]->HasValue() === false?'false':'true'));
-//			if ($this->Fields[$i]->HasValue()) {
-//				debug_display($this->Fields[$i]->GetValue());
-//			}
-
-			if ($this->Fields[$i]->IsRequired() && $this->Fields[$i]->HasValue($deny_space_validation) === false)
+			/*	  debug_display($this->Fields[$i]->GetName().' '.
+			 ($this->Fields[$i]->HasValue() === false?'False':'true'));
+			 if ($this->Fields[$i]->HasValue())
+			 debug_display($this->Fields[$i]->GetValue());
+			 */
+			if (/*! $this->Fields[$i]->IsNonRequirableField() && */
+			$this->Fields[$i]->IsRequired() &&
+			$this->Fields[$i]->HasValue($deny_space_validation) === false)
 			{
-				array_push($message, $this->module_ptr->Lang('please_enter_a_value', $this->Fields[$i]->GetName()));
+				array_push($message,
+				$this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName()));
 				$validated = false;
 				$this->Fields[$i]->SetOption('is_valid',false);
 				$this->Fields[$i]->validationErrorText = $this->module_ptr->Lang('please_enter_a_value',$this->Fields[$i]->GetName());
@@ -528,7 +530,7 @@ function populate".$fldAlias."(formname)
 				}
 				else
 				{
-					$this->Fields[$i]->SetOption('is_valid',true);
+				$this->Fields[$i]->SetOption('is_valid',true);
 				}
 			}
 			$usertagops = cmsms()->GetUserTagOperations();
@@ -537,24 +539,24 @@ function populate".$fldAlias."(formname)
 
 			if( $validated == true && !empty($udt) && "-1" != $udt )
 			{
-				$parms = $this->module_params;
+				$parms = $params;
 				$others = $this->GetFields();
-				for($n=0;$n<count($others);$n++)
+				for($i=0;$i<count($others);$i++)
 				{
 					$replVal = '';
-					if ($others[$n]->DisplayInSubmission())
+					if ($others[$i]->DisplayInSubmission())
 					{
-						$replVal = $others[$n]->GetHumanReadableValue();
+						$replVal = $others[$i]->GetHumanReadableValue();
 						if ($replVal == '')
 						{
 							$replVal = $unspec;
 						}
 					}
-					$name = $others[$n]->GetVariableName();
+					$name = $others[$i]->GetVariableName();
 					$parms[$name] = $replVal;
-					$id = $others[$n]->GetId();
+					$id = $others[$i]->GetId();
 					$parms['fld_'.$id] = $replVal;
-					$alias = $others[$n]->GetAlias();
+					$alias = $others[$i]->GetAlias();
 					if (!empty($alias))
 					{
 						$parms[$alias] = $replVal;
@@ -780,10 +782,11 @@ function populate".$fldAlias."(formname)
 			$oneset->css_class = $thisField->GetOption('css_class');
 			$oneset->helptext = $thisField->GetOption('helptext');
 			$oneset->field_helptext_id = 'fbrp_ht_'.$thisField->GetID();
+			//	$oneset->valid = $thisField->GetOption('is_valid',true)?1:0;
 			$oneset->valid = $thisField->IsValid();
 			$oneset->error = $thisField->GetOption('is_valid',true)?'':$thisField->validationErrorText;
 			$oneset->hide_name = 0;
-			if( ((!$thisField->HasLabel()) || $thisField->HideLabel()) && ($thisField->GetOption('fbr_edit','0') == '0' || !$params['in_admin']) )
+			if( ((!$thisField->HasLabel()) || $thisField->HideLabel()) && ($thisField->GetOption('fbr_edit','0') == '0' || $params['in_admin'] != 1) )
 			{
 				$oneset->hide_name = 1;
 			}

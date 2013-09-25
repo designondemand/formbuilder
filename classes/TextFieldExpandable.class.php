@@ -15,6 +15,9 @@ class fbTextFieldExpandable extends fbFieldBase {
 		$mod = $form_ptr->module_ptr;
 		$this->Type = 'TextFieldExpandable';
 		$this->DisplayInForm = true;
+		$this->HasUserAddOp = true;
+		$this->HasUserDeleteOp = true;
+		$this->NonRequirableField = false;
 		$this->ValidationTypes = array(
 			$mod->Lang('validation_none')=>'none',
 			$mod->Lang('validation_numeric')=>'numeric',
@@ -73,23 +76,25 @@ class fbTextFieldExpandable extends fbFieldBase {
 		$ret = array();
 		for ($i=0;$i<$vals;$i++)
 		{
-			$length = $this->GetOption('length') < 25 ? $this->GetOption('length') : 25;
 			$thisRow = new stdClass();
-			$thisRow->input = formbuilder_utils::create_input_text($id, $this->GetCSSId().'[]', $this->Value[$i], $length,
-				$this->GetOption('length'), $js, 'text', false, $i);
-			if(!$hidebuttons)
-			{
-				$thisRow->op = $mod->fbCreateInputSubmit($id, 'fbrp_FeD_'.$this->Id.'_'.$i, $this->GetOption('del_button','X'), $this->GetCSSIdTag('_del_'.$i).($vals==1?' disabled="disabled"':''));
-			}
+
+			//$thisRow->name = '';
+			//$thisRow->title = '';
+			$thisRow->input = $mod->fbCreateInputText($id, 'fbrp__'.$this->Id.'[]',$this->Value[$i],$this->GetOption('length')<25?$this->GetOption('length'):25,
+			$this->GetOption('length'),$js.$this->GetCSSIdTag('_'.$i));
+				
+			if(!$hidebuttons) $thisRow->op = $mod->fbCreateInputSubmit($id, 'fbrp_FeD_'.$this->Id.'_'.$i, $this->GetOption('del_button','X'), $this->GetCSSIdTag('_del_'.$i).($vals==1?' disabled="disabled"':''));
+
 			array_push($ret, $thisRow);
 		}
 
 		// Add button
 		$thisRow = new stdClass();
-		if(!$hidebuttons)
-		{
-			$thisRow->op = $mod->fbCreateInputSubmit($id, 'fbrp_FeX_'.$this->Id.'_'.$i, $this->GetOption('add_button','+'), $this->GetCSSIdTag('_add_'.$i));
-		}
+		//$thisRow->name = '';
+		//$thisRow->title = '';
+		//$thisRow->input = '';
+		if(!$hidebuttons) $thisRow->op = $mod->fbCreateInputSubmit($id, 'fbrp_FeX_'.$this->Id.'_'.$i, $this->GetOption('add_button','+'), $this->GetCSSIdTag('_add_'.$i));
+
 		array_push($ret, $thisRow);
 
 		return $ret;
@@ -155,7 +160,7 @@ class fbTextFieldExpandable extends fbFieldBase {
 		$this->validated = true;
 		$this->validationErrorText = '';
 		$mod = $this->form_ptr->module_ptr;
-		if (!is_array($this->Value))
+		if (! is_array($this->Value))
 		{
 			$this->Value = array($this->Value);
 		}
@@ -203,10 +208,10 @@ class fbTextFieldExpandable extends fbFieldBase {
 					break;
 			}
 
-			if ($this->GetOption('length', 0) > 0 && strlen($thisVal) > $this->GetOption('length', 0))
+			if ($this->GetOption('length',0) > 0 && strlen($thisVal) > $this->GetOption('length',0))
 			{
 				$this->validated = false;
-				$this->validationErrorText = $mod->Lang('please_enter_no_longer', $this->GetOption('length',0));
+				$this->validationErrorText = $mod->Lang('please_enter_no_longer',$this->GetOption('length',0));
 			}
 		}
 

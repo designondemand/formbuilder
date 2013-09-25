@@ -28,11 +28,19 @@ class fbTextField extends fbFieldBase {
 
 	public function GetFieldInput($id, &$params, $returnid)
 	{
+		$mod = $this->form_ptr->module_ptr;
+		$input = '';
 		$val = '';
 		$length = $this->GetOption('length') < 25 ? $this->GetOption('length') : 25;
 		$js = $this->GetOption('javascript','');
 		$ro = '';
 		$html5 = '';
+		$rq = '';
+
+		if ($this->GetOption('readonly','0') == '1')
+		{
+			$ro = ' readonly="readonly"';
+		}
 
 		if ($this->GetOption('html5','0') == '1')
 		{
@@ -48,22 +56,21 @@ class fbTextField extends fbFieldBase {
 			}
 		}
 
-		if ($this->GetOption('readonly','0') == '1')
-		{
-			$ro = ' readonly="readonly"';
+		if ($this->IsRequired()) {
+			$rq = ' required="required"';
 		}
 
 		switch($this->ValidationType) {
 			default:
-				return formbuilder_utils::create_input_text($id, $this->GetCSSId(), $val, $length, $this->GetOption('length'), $js.$ro.$html5, 'text', $this->IsRequired());
+				return $mod->CreateInputText($id, 'fbrp__'.$this->Id, $val, $length, $this->GetOption('length'), $js.$ro.$html5.$rq);
 				break;
 
 			case 'usphone':
-				return formbuilder_utils::create_input_text($id, $this->GetCSSId(), $val, $length, $this->GetOption('length'), $js.$ro.$html5, 'tel', $this->IsRequired());
+				return $mod->CreateInputTel($id, 'fbrp__'.$this->Id, $val, $length, $this->GetOption('length'), $js.$ro.$html5.$rq);
 				break;
 
 			case 'email':
-				return formbuilder_utils::create_input_text($id, $this->GetCSSId(), $val, $length, $this->GetOption('length'), $js.$ro.$html5, 'email', $this->IsRequired());
+				return $mod->CreateInputEmail($id, 'fbrp__'.$this->Id, $val, $length, $this->GetOption('length'), $js.$ro.$html5.$rq);
 				break;
 		}
 	}

@@ -313,7 +313,19 @@ class fbFieldBase {
 
 	function GetCSSId($suffix='')
 	{
-		$cssid = 'fbrp__'.$this->Id;
+		$alias = $this->GetAlias();
+		if (empty($alias))
+		{
+			$cssid = 'fbrp__'.$this->Id;
+			if ($this->HasMultipleFormComponents())
+			{
+				$cssid .= '_1';
+			}
+		}
+		else
+		{
+			$cssid = $alias;
+		}
 		$cssid .= $suffix;
 		return $cssid;
 	}
@@ -665,19 +677,21 @@ class fbFieldBase {
 		{
 			// fields with defaults
 			$def = $this->GetOption('default','');
-			if ($this->Value !== false && ($def == '' || $this->Value != $def))
+			if ($this->Value !== false &&
+			($def == '' || $this->Value != $def))
 			{
-				// should also test for blanks in arrays
-				if ($deny_blank_responses && !is_array($this->Value) && preg_match('/^\s+$/',$this->Value))
+				if ($deny_blank_responses && !is_array($this->Value)
+				&& preg_match('/^\s+$/',$this->Value))
 				{
 					return false;
 				}
 				return true;
 			}
 		}
-		elseif ($this->Value !== false && (!is_array($this->Value) || strlen(implode('', $this->Value)) > 0))
+		else if ($this->Value !== false)
 		{
-			if ($deny_blank_responses && (!is_array($this->Value) && preg_match('/^\s+$/',$this->Value)))
+			if ($deny_blank_responses && !is_array($this->Value)
+			&& preg_match('/^\s+$/',$this->Value))
 			{
 				return false;
 			}

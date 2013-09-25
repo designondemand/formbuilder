@@ -81,27 +81,29 @@ class fbPulldownField extends fbFieldBase {
 		// order, except in "chronological" creation order.
 		$sorted =array();
 		$subjects = $this->GetOptionRef('option_name');
-		if (count($subjects) > 1)
-		{
-			for($i=0;$i<count($subjects);$i++)
-			{
+		if (count($subjects) > 1) {
+			for($i=0;$i<count($subjects);$i++) {
 				$sorted[$subjects[$i]]=($i+1);
 			}
-			if( $this->GetOption('sort') == '1' )
-			{
+			if( $this->GetOption('sort') == '1' ) {
 				ksort($sorted);
 			}
 		}
-		else
-		{
+		else {
 			$sorted[$subjects] = '1';
 		}
 
 		if ($this->GetOption('select_one','') != '') {
 			$sorted = array(' '.$this->GetOption('select_one','')=>'') + $sorted;
 		}
-
-		return formbuilder_utils::create_input_dropdown($id, $this->GetCSSId(), $sorted, -1, $this->Value, $js, $this->isRequired());
+		else {
+			//$sorted = array(' '.$mod->Lang('select_one')=>'') + $sorted;
+		}
+		$values = $this->GetAllHumanReadableValues();
+		if($values) {
+			$this->Value = array_search($this->Value, $values)+1;
+		}
+		return $mod->CreateInputDropdown($id, 'fbrp__'.$this->Id, $sorted, -1, $this->Value, $js);
 	}
 
 	public function StatusInfo()
