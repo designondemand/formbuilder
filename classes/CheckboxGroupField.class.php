@@ -11,10 +11,11 @@ class fbCheckboxGroupField extends fbFieldBase {
 
 	var $boxCount;
 	var $boxAdd;
-
-	function __construct(&$form_ptr, &$params)
+	
+	// Constructor
+	function fbCheckboxGroupField(&$form_ptr, &$params)
 	{
-        parent::__construct($form_ptr, $params);
+        $this->fbFieldBase($form_ptr, $params);
         $mod = $form_ptr->module_ptr;
 		$this->Type = 'CheckboxGroupField';
 		$this->DisplayInForm = true;

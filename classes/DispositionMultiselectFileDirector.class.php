@@ -18,9 +18,9 @@ class fbDispositionMultiselectFileDirector extends  fbFieldBase
   var $sampleHeader;
   var $dflt_filepath;
 
-  function __construct(&$form_ptr, &$params)
+  function fbDispositionMultiselectFileDirector(&$form_ptr, &$params)
   {
-    parent::__construct($form_ptr, $params);
+    $this->fbFieldBase($form_ptr, $params);
     $mod = $form_ptr->module_ptr;
     $this->Type = 'DispositionMultiselectFileDirector';
     $this->IsDisposition = true;

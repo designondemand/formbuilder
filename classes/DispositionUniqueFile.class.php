@@ -10,9 +10,9 @@
 class fbDispositionUniqueFile extends fbFieldBase
 {
 
-	function __construct(&$form_ptr, &$params)
+	function fbDispositionUniqueFile(&$form_ptr, &$params)
 	{
-		parent::__construct($form_ptr, $params);
+		$this->fbFieldBase($form_ptr, $params);
 		$mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionUniqueFile';
 		$this->IsDisposition = true;

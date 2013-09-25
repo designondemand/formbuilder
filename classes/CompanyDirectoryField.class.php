@@ -18,9 +18,9 @@ class fbCompanyDirectoryField extends fbFieldBase {
   var $optionCount;
   var $optionAdd;
 
-  function __construct(&$form_ptr, &$params)
+  function fbCompanyDirectoryField(&$form_ptr, &$params)
   {
-    parent::__construct($form_ptr, $params);
+    $this->fbFieldBase($form_ptr, $params);
     $mod = $form_ptr->module_ptr;
     $this->Type = 'CompanyDirectoryField';
     $this->DisplayInForm = true;

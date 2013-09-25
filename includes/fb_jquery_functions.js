@@ -17,6 +17,7 @@ jQuery.fn.fb_delete_field = function(message) {
 				parent.fadeOut("1000", function() {
 
 					parent.remove();
+					var totalrows = jQuery(".module_fb_table").find("tbody tr").size();
 				
 					jQuery(".module_fb_table").find("tbody tr").removeClass();
 					jQuery(".module_fb_table").find("tbody tr:nth-child(2n+1)").addClass("row1");
@@ -61,9 +62,8 @@ jQuery.fn.fb_admin_update_field_required = function() {
 	var current = jQuery(this);
 	
 	jQuery.ajax({
-		type: "POST",
+		type: "GET",
 		url: url,
-		data: '&showtemplate=false',
 		error: function() {
 				
 			alert('Sorry. There was an error.');
@@ -95,7 +95,6 @@ jQuery.fn.fb_admin_update_field_required = function() {
 };
 
 jQuery.fn.fb_set_tab = function() {
-
 	var active = jQuery('#page_tabs > .active');
-	jQuery('.fbr_atab').val(active.attr('id'));
+	jQuery('#fbr_atab').val(active.attr('id'));
 }

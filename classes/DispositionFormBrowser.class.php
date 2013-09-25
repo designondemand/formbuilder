@@ -11,9 +11,9 @@ class fbDispositionFormBrowser extends fbFieldBase {
 
 	var $approvedBy;
 
-	function __construct(&$form_ptr, &$params)
+	function fbDispositionFormBrowser(&$form_ptr, &$params)
 	{
-      parent::__construct($form_ptr, $params);
+      $this->fbFieldBase($form_ptr, $params);
       $mod = $form_ptr->module_ptr;
 		$this->Type = 'DispositionFormBrowser';
 		$this->IsDisposition = true;

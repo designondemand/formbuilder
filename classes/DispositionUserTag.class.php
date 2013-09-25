@@ -10,9 +10,9 @@
 class fbDispositionUserTag extends  fbFieldBase 
 {
 
-  function __construct(&$form_ptr, &$params)
+  function fbDispositionUserTag(&$form_ptr, &$params)
   {
-    parent::__construct($form_ptr, $params);
+    $this->fbFieldBase($form_ptr, $params);
     $mod = $form_ptr->module_ptr;
     $this->Type = 'DispositionUserTag';
     $this->IsDisposition = true;

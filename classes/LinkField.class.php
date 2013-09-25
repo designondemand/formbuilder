@@ -9,9 +9,9 @@
 
 class fbLinkField extends fbFieldBase {
 
-	function __construct(&$form_ptr, &$params)
+	function fbLinkField(&$form_ptr, &$params)
 	{
-        parent::__construct($form_ptr, $params);
+        $this->fbFieldBase($form_ptr, $params);
         $mod = $form_ptr->module_ptr;
 		$this->Type =  'LinkField';
 		$this->DisplayInForm = true;
@@ -40,14 +40,15 @@ class fbLinkField extends fbFieldBase {
 		$thisBox = new stdClass();
 		$thisBox->name = '<label for="'.$id.'fbrp__'.$this->Id.'_1">'.$mod->Lang('link_destination').'</label>';
 		$thisBox->title = $mod->Lang('link_destination');
-		$thisBox->input = $mod->CreateInputText($id, 'fbrp__'.$this->Id.'[]', $val[0], 10, 255, $js);
+		$thisBox->input = $this->TextField($id, 'fbrp__'.$this->Id.'[]', $val[0],'','',$js.$this->GetCSSIdTag('_1'));
 		array_push($fieldDisp, $thisBox);
 		$thisBox = new stdClass();
 		$thisBox->name = '<label for="'.$id.'fbrp__'.$this->Id.'_2">'.$mod->Lang('link_label').'</label>';
 		$thisBox->title = $mod->Lang('link_label');
-		$thisBox->input = $mod->CreateInputText($id, 'fbrp__'.$this->Id.'[]', $val[1], 10, 255, $js);
+		$thisBox->input = $this->TextField($id, 'fbrp__'.$this->Id.'[]', $val[1],'','',$js.$this->GetCSSIdTag('_2'));
 		array_push($fieldDisp, $thisBox);			
 		return $fieldDisp;
+		
 	}
 
 	function GetHumanReadableValue($as_string=true)

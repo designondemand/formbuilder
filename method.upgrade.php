@@ -6,15 +6,15 @@
    A Module for CMS Made Simple, Copyright (c) 2007 by Ted Kulp (wishy@cmsmadesimple.org)
   This project's homepage is: http://www.cmsmadesimple.org
 */
-if (!function_exists("cmsms")) exit;
+if (!isset($gCms)) exit;
 if (! $this->CheckAccess()) exit;
 
 		$this->initialize();
-		$db = cmsms()->GetDb();
+		$db = $this->GetDb();
 		$current_version = $oldversion;
 		$dict = NewDataDictionary($db);
 		$taboptarray = array('mysql' => 'TYPE=MyISAM');
-		//debug_display('Current-version: '.$current_version);
+		debug_display('Current-version: '.$current_version);
 		switch($current_version)
 		{
 			case "0.1":

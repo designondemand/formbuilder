@@ -46,7 +46,7 @@ class FormBuilder extends CMSModule
 		parent::__construct();
 
 		$this->module_ptr = &$this;
-		$this->dbHandle =  cmsms()->GetDb();
+		$this->dbHandle =  $this->GetDb();
 		$this->module_id = '';
 		$this->email_regex = "/^([\w\d\.\-\_])+\@([\w\d\.\-\_]+)\.(\w+)$/i";
 		$this->email_regex_relaxed="/^([\w\d\.\-\_])+\@([\w\d\.\-\_])+$/i";
@@ -120,7 +120,7 @@ class FormBuilder extends CMSModule
 
 	function GetVersion()
 	{
-		return '0.7.4';
+		return '0.7.3';
 	}
 
 	function GetAuthor()
@@ -183,11 +183,12 @@ class FormBuilder extends CMSModule
 		  {
 		    $tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/jquery-1.4.2.min.js"></script>';
 		  }
-	
+		$tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/jquery.tablednd.js"></script>';		
 		$tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/fb_jquery_functions.js"></script>';
 		$tmpl .= '<script type="text/javascript" src="'.$gCms->config['root_url'].'/modules/'.$this->GetName().'/includes/fb_jquery.js"></script>';
 		
         return $this->ProcessTemplateFromData($tmpl);
+		
 	}
 	
 	function SetParameters()
@@ -304,14 +305,12 @@ class FormBuilder extends CMSModule
 		return new fbForm($this, $params, $loadDeep);
 	}
 
-	public function GetHelp()
-	{
-		$smarty = cmsms()->GetSmarty();
-		$smarty->assign('mod', $this);
-
-		return $this->ProcessTemplate('help.tpl');
-	}		
 	
+	function GetHelp($lang = 'en_US')
+	{
+		return $this->Lang('help');
+	}
+
 	function GetResponse($form_id,$response_id,$field_list=array(), $dateFmt='d F y')
 	{
 		$names = array();
@@ -678,7 +677,7 @@ class FormBuilder extends CMSModule
 		         	{
 					foreach ($fnames as $id=>$name)
 						{
-		            	$fnames[$id] = strip_tags($fnames[$id]);
+		            	$fnames[$i] = strip_tags($fnames[$i]);
 		            	}
 		         	}
 				fputs ($fh, $this->Lang('title_submit_date')."\t".
@@ -766,18 +765,18 @@ class FormBuilder extends CMSModule
 	// For a given form, returns an array of response objects
 	function ListResponses($form_id, $sort_order='submitted')
 	{
-		$db = cmsms()->GetDb();
+		$db = $this->GetDb();
 		$ret = array();
 		$sql = 'SELECT * FROM '.cms_db_prefix().
 				'module_fb_resp WHERE form_id=? ORDER BY ?';
-		$dbresult = $db->Execute($sql, array($form_id,$sort_order));
+		$dbresult = $db->Execute($query, array($form_id,$sort_order));
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
 			$oneset = new stdClass();
-			$oneset->id = $row['resp_id'];
-			$oneset->user_approved = $db->UnixTimeStamp($row['user_approved']);
-			$oneset->admin_approved = $db->UnixTimeStamp($row['admin_approved']);
-			$oneset->submitted = $db->UnixTimeStamp($row['submitted']);
+			$oneset->id = $result['resp_id'];
+			$oneset->user_approved = $db->UnixTimeStamp($result['user_approved']); 
+			$oneset->admin_approved = $db->UnixTimeStamp($result['admin_approved']); 
+			$oneset->submitted = $db->UnixTimeStamp($result['submitted']); 
 			array_push($ret,$oneset);
 		}
 		return $ret;
@@ -982,6 +981,25 @@ class FormBuilder extends CMSModule
       mcrypt_module_close ($td);
       return $plain;
       }
+
+  function fbCreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $type='text')
+	{
+  	$value = cms_htmlentities($value);
+  	$id = cms_htmlentities($id);
+  	$name = cms_htmlentities($name);
+  	$size = cms_htmlentities($size);
+  	$maxlength = cms_htmlentities($maxlength);
+
+  	$value = str_replace('"', '&quot;', $value);
+
+  	$text = '<input type="'.$type.'" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+  	if ($addttext != '')
+    	{
+      	$text .= ' ' . $addttext;
+    	}
+  	$text .= " />\n";
+  	return $text;
+	}
 
 	function fbCreateInputSubmit($id, $name, $value='', $addttext='', $image='', $confirmtext='')
 	{

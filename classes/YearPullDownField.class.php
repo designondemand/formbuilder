@@ -6,14 +6,14 @@
    A Module for CMS Made Simple, Copyright (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
    This project's homepage is: http://www.cmsmadesimple.org
    
-   This Field written by Tapio "Stikki" Lï¿½ytty <tapsa@blackmilk.fi>
+   This Field written by Tapio "Stikki" Löytty <tapsa@blackmilk.fi>
 */
 
 class fbYearPulldownField extends fbFieldBase {
 
-	function __construct(&$form_ptr, &$params)
+	function fbYearPulldownField(&$form_ptr, &$params)
 	{
-		parent::__construct($form_ptr, $params);
+		$this->fbFieldBase($form_ptr, $params);
         $mod = $form_ptr->module_ptr;
 		$this->Type = 'YearPullDownField';
 		$this->DisplayInForm = true;

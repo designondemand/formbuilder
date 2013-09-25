@@ -9,9 +9,9 @@
 
 class fbSiteAdminField extends fbFieldBase {
 
-	function __construct(&$form_ptr, &$params)
+	function fbSiteAdminField(&$form_ptr, &$params)
 	{
-    parent::__construct($form_ptr, $params);
+    $this->fbFieldBase($form_ptr, $params);
 		$this->Type = 'SiteAdminField';
 		$this->DisplayInForm = true;
 		$this->IsDisposition = false;

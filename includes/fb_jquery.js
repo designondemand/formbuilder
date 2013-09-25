@@ -1,28 +1,25 @@
-jQuery(function($){
+jQuery(document).ready(function($) {
 
-	//run sortable function
-	$(".module_fb_table tbody").sortable({
-		helper: function(event, ui) {
-			ui.children().each(function() {
-				$(this).width($(this).width());
-			});
-			return ui;
-		},
-        update: function(event, ui) {
-		
-			$(this).find("tr").removeClass();
-			$(this).find("tr:odd").addClass("row2");
-			$(this).find("tr:even").addClass("row1");
-			
-			var rows = $(this).find("tr").toArray();
-			var sortstr = rows[0].id;
-			for (var i=1; i<rows.length; i++) {
-				sortstr += ","+rows[i].id;
-			}
-			
-			$('.fbrp_sort').val(sortstr);
-        }
-	});	
+	$(".module_fb_table").tableDnD({
 	
-    $(".updown").hide();
+		onDragClass: "row1hover",
+		onDrop: function(table, row) {
+		
+				var totalrows = jQuery(".module_fb_table").find("tbody tr").size();
+				
+				jQuery(".module_fb_table").find("tbody tr").removeClass();
+				jQuery(".module_fb_table").find("tbody tr:nth-child(2n+1)").addClass("row1");
+				jQuery(".module_fb_table").find("tbody tr:nth-child(2n)").addClass("row2");
+				
+				var rows = table.tBodies[0].rows;
+				var sortstr = rows[0].id;
+				for (var i=1; i<rows.length; i++) {
+					sortstr += ","+rows[i].id;
+				}
+				
+				$('.fbrp_sort').val(sortstr);
+				//$('.reordermessage').show();
+		}
+	});
+    jQuery(".updown").hide();
 });
