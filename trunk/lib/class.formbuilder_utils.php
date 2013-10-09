@@ -80,7 +80,7 @@ class formbuilder_utils {
 		{
 			$addtext .= ' required="required"';
 		}
-		return create_textarea($enablewysiwyg, $text, $id.$name, 'cms_textarea', $name, $encoding, $stylesheet, $cols, $rows,$forcewysiwyg,$wantedsyntax,$addtext);
+		return create_textarea($enablewysiwyg, $text, $id.$name, 'cms_textarea', $name, '', '', $cols, $rows, '', '',$addtext);
 	}
 
 	static final public function create_input_dropdown($id, $name, $items, $selectedindex, $selectedvalue, $addttext='', $required=false)
