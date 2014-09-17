@@ -531,45 +531,48 @@ function populate".$fldAlias."(formname)
 					$this->Fields[$i]->SetOption('is_valid',true);
 				}
 			}
-			$usertagops = cmsms()->GetUserTagOperations();
-			$udt = $this->GetAttr('validate_udt','');
-			$unspec = $this->GetAttr('unspecified',$this->module_ptr->Lang('unspecified'));
+		}
 
-			if( $validated == true && !empty($udt) && "-1" != $udt )
+		// UDT Validation (if active)
+		$usertagops = cmsms()->GetUserTagOperations();
+		$udt = $this->GetAttr('validate_udt','');
+		$unspec = $this->GetAttr('unspecified',$this->module_ptr->Lang('unspecified'));
+
+		if( $validated == true && !empty($udt) && "-1" != $udt )
+		{
+			$parms = $this->module_params;
+			$others = $this->GetFields();
+			for($n=0;$n<count($others);$n++)
 			{
-				$parms = $this->module_params;
-				$others = $this->GetFields();
-				for($n=0;$n<count($others);$n++)
+				$replVal = '';
+				if ($others[$n]->DisplayInSubmission())
 				{
-					$replVal = '';
-					if ($others[$n]->DisplayInSubmission())
+					$replVal = $others[$n]->GetHumanReadableValue();
+					if ($replVal == '')
 					{
-						$replVal = $others[$n]->GetHumanReadableValue();
-						if ($replVal == '')
-						{
-							$replVal = $unspec;
-						}
-					}
-					$name = $others[$n]->GetVariableName();
-					$parms[$name] = $replVal;
-					$id = $others[$n]->GetId();
-					$parms['fld_'.$id] = $replVal;
-					$alias = $others[$n]->GetAlias();
-					if (!empty($alias))
-					{
-						$parms[$alias] = $replVal;
+						$replVal = $unspec;
 					}
 				}
-				$res = $usertagops->CallUserTag($udt,$parms);
-				if ($res[0] != true)
+				$name = $others[$n]->GetVariableName();
+				$parms[$name] = $replVal;
+				$id = $others[$n]->GetId();
+				$parms['fld_'.$id] = $replVal;
+				$alias = $others[$n]->GetAlias();
+				if (!empty($alias))
 				{
-					if ( $res[1] !== '' )
-						array_push($message,$res[1]);
-
-					$validated = false;
+					$parms[$alias] = $replVal;
 				}
 			}
+			$res = $usertagops->CallUserTag($udt,$parms);
+			if ($res[0] != true)
+			{
+				if ( $res[1] !== '' )
+					array_push($message,$res[1]);
+
+				$validated = false;
+			}
 		}
+
 		return array($validated, $message);
 	}
 
