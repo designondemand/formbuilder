@@ -563,7 +563,9 @@ function populate".$fldAlias."(formname)
 				$res = $usertagops->CallUserTag($udt,$parms);
 				if ($res[0] != true)
 				{
-					array_push($message,$res[1]);
+					if ( $res[1] !== '' )
+						array_push($message,$res[1]);
+
 					$validated = false;
 				}
 			}
