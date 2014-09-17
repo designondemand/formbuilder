@@ -538,7 +538,7 @@ function populate".$fldAlias."(formname)
 		$udt = $this->GetAttr('validate_udt','');
 		$unspec = $this->GetAttr('unspecified',$this->module_ptr->Lang('unspecified'));
 
-		if( $validated == true && !empty($udt) && "-1" != $udt )
+		if( !empty($udt) && "-1" != $udt )
 		{
 			$parms = $this->module_params;
 			$others = $this->GetFields();
