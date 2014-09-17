@@ -569,6 +569,31 @@ function populate".$fldAlias."(formname)
 				if ( $res[1] !== '' )
 					array_push($message,$res[1]);
 
+				// Per field errors
+				if ( count( $res ) > 2 )
+				{
+					for($n=0;$n<count($this->Fields);$n++)
+					{
+						$fldid = 'fld_'.$this->Fields[$n]->GetId();
+						$fldalias = $this->Fields[$n]->GetAlias();
+
+						if ( array_key_exists( $fldid, $res[2] ) )
+						{
+							array_push($message,$res[2][$fldid]);
+							$this->Fields[$n]->SetOption('is_valid',false);
+							$this->Fields[$n]->validationErrorText = $res[2][$fldid];
+							$this->Fields[$n]->validated = false;
+						}
+						elseif ( !empty($fldalias) && array_key_exists( $fldalias, $res[2] ) )
+						{
+							array_push($message,$res[2][$fldalias]);
+							$this->Fields[$n]->SetOption('is_valid',false);
+							$this->Fields[$n]->validationErrorText = $res[2][$fldalias];
+							$this->Fields[$n]->validated = false;
+						}
+					}
+				}
+
 				$validated = false;
 			}
 		}
@@ -838,22 +863,22 @@ function populate".$fldAlias."(formname)
 		{
 			$jsStr = '<script type="text/javascript">
 	/* <![CDATA[ */
-    var submitted = 0;
-    function LockButton ()
-       {
-       var ret = false;
-       if ( ! submitted )
-          {
-           var item = document.getElementById("'.$id.'fbrp_submit");
-           if (item != null)
-             {
-             setTimeout(function() {item.disabled = true}, 0);
-             }
-           submitted = 1;
-           ret = true;
-          }
-        return ret;
-        }
+	var submitted = 0;
+	function LockButton ()
+	   {
+	   var ret = false;
+	   if ( ! submitted )
+		  {
+		   var item = document.getElementById("'.$id.'fbrp_submit");
+		   if (item != null)
+			 {
+			 setTimeout(function() {item.disabled = true}, 0);
+			 }
+		   submitted = 1;
+		   ret = true;
+		  }
+		return ret;
+		}
 /* ]]> */
 </script>';
 			$jsTrigger = " onclick='return LockButton()'";
@@ -1019,25 +1044,25 @@ function populate".$fldAlias."(formname)
 			/*$result = array();
 			if ($rs && $rs->RecordCount() > 0)
 			{
-		    	$result = $rs->GetArray();
-		    }
-		    */
+				$result = $rs->GetArray();
+			}
+			*/
 			$fieldCount = 0;
 			if (count($result) > 0)
 			{
 				foreach($result as $thisRes)
 				{
 					//error_log("Instantiating Field. usage ".memory_get_usage());
-			    	// create the field object
-			    	if ((isset($thisRes['field_id']) && (isset($params['fbrp__'.$thisRes['field_id']]) || isset($params['fbrp___'.$thisRes['field_id']]))) ||
-					    (isset($thisRes['field_id']) && isset($params['value_'.$thisRes['name']])) || (isset($thisRes['field_id']) && isset($params['value_fld'.$thisRes['field_id']])) ||
-					    (isset($params['field_id']) && isset($thisRes['field_id']) && $params['field_id'] == $thisRes['field_id']))
-				    {
-				    	$thisRes = array_merge($thisRes,$params);
-				    }
-				    $this->Fields[$fieldCount] = $this->NewField($thisRes);
-				    $fieldCount++;
-			    }
+					// create the field object
+					if ((isset($thisRes['field_id']) && (isset($params['fbrp__'.$thisRes['field_id']]) || isset($params['fbrp___'.$thisRes['field_id']]))) ||
+						(isset($thisRes['field_id']) && isset($params['value_'.$thisRes['name']])) || (isset($thisRes['field_id']) && isset($params['value_fld'.$thisRes['field_id']])) ||
+						(isset($params['field_id']) && isset($thisRes['field_id']) && $params['field_id'] == $thisRes['field_id']))
+					{
+						$thisRes = array_merge($thisRes,$params);
+					}
+					$this->Fields[$fieldCount] = $this->NewField($thisRes);
+					$fieldCount++;
+				}
 			}
 			$this->loaded = 'full';
 		}
