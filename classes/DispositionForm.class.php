@@ -33,10 +33,17 @@ class fbDispositionForm extends  fbFieldBase
     $mod=$this->form_ptr->module_ptr;
     $fptr=$this->form_ptr;
     $msg = '';
-    $submission = $this->GetOption('url');
+    $url = $this->GetOption('url');
     $payload = array();
 	 $theFields = $fptr->GetFields();
 	 $unspec = $fptr->GetAttr('unspecified',$mod->Lang('unspecified'));
+
+   // Convert relative urls to absolute
+   if ( strpos( $url, '/' ) === 0 )
+   {
+    $config = cmsms()->GetConfig();
+    $url = $config['root_url'] . $url;
+   }
 
 	 for($i=0;$i<count($theFields);$i++)
       {
@@ -54,7 +61,7 @@ class fbDispositionForm extends  fbFieldBase
     $send_payload = implode('&',$payload);
     if ($this->GetOption('method','POST') == 'POST')
          {
-         $ch = curl_init($this->GetOption('url'));
+         $ch = curl_init($url);
          curl_setopt($ch, CURLOPT_POST,1);
          curl_setopt($ch, CURLOPT_POSTFIELDS,$send_payload);
          curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1);
@@ -68,7 +75,6 @@ class fbDispositionForm extends  fbFieldBase
          }
       else
          {
-         $url = $this->GetOption('url');
          if (strpos($url,'?'))
             {
             $url .= '&'.$send_payload;
